@@ -1,0 +1,483 @@
+-- phpMyAdmin SQL Dump
+-- version 3.3.10.4
+-- http://www.phpmyadmin.net
+--
+-- Host: mysql.gleycetour.com.br
+-- Generation Time: Sep 26, 2011 at 05:22 AM
+-- Server version: 5.1.53
+-- PHP Version: 5.2.17
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `restaurante_biro`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `administrador`
+--
+
+CREATE TABLE IF NOT EXISTS `administrador` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(200) NOT NULL,
+  `login` varchar(50) NOT NULL,
+  `senha` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `administrador`
+--
+
+INSERT INTO `administrador` (`id`, `nome`, `login`, `senha`) VALUES
+(1, 'Paulo Egito', 'pvegito', '3691308f2a4c2f6983f2880d32e29c84'),
+(2, 'Rodolfo Freire', 'rodfre1', '1fbd9d35fbeccae461d4a9a521f331af');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bairro`
+--
+
+CREATE TABLE IF NOT EXISTS `bairro` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  `id_cidade` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_cidade` (`id_cidade`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+
+--
+-- Dumping data for table `bairro`
+--
+
+INSERT INTO `bairro` (`id`, `nome`, `id_cidade`) VALUES
+(1, 'Ponta Negra', 1),
+(2, 'Capim Macio', 1),
+(3, 'Lagoa Nova', 1),
+(4, 'Candel&aacute;ria', 1),
+(5, 'Alecrim', 1),
+(6, 'Barro Vermelho', 1),
+(9, 'Igap&oacute;', 1),
+(10, 'Lagoa Seca', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cidade`
+--
+
+CREATE TABLE IF NOT EXISTS `cidade` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `cidade`
+--
+
+INSERT INTO `cidade` (`id`, `nome`) VALUES
+(1, 'Natal'),
+(2, 'Jo&atilde;o Pessoa'),
+(3, 'Recife'),
+(4, 'Campina Grande');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `consumidor`
+--
+
+CREATE TABLE IF NOT EXISTS `consumidor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(500) NOT NULL,
+  `endereco` varchar(1000) NOT NULL,
+  `id_cidade` int(11) NOT NULL,
+  `id_bairro` int(11) NOT NULL,
+  `telefone` varchar(30) NOT NULL,
+  `desativado` tinyint(1) NOT NULL DEFAULT '0',
+  `login` varchar(500) NOT NULL,
+  `senha` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_cidade` (`id_cidade`),
+  KEY `id_bairro` (`id_bairro`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `consumidor`
+--
+
+INSERT INTO `consumidor` (`id`, `nome`, `endereco`, `id_cidade`, `id_bairro`, `telefone`, `desativado`, `login`, `senha`) VALUES
+(3, 'Paulo Egito', 'Rua Miss. Joel Carlson, 1883', 1, 2, '99114309', 0, 'pvegito@hotmail.com', '3691308f2a4c2f6983f2880d32e29c84'),
+(4, 'Rodolfo Freire', 'Rua dos Muleque, 71', 1, 1, '88994433', 0, 'rodolfo_freire@hotmail.com', '3691308f2a4c2f6983f2880d32e29c84'),
+(5, 'Cesar Rocha', 'Rua do Trabalho, 555', 1, 4, '8888-0000', 0, 'cesar@agenciabiro.com.br', '3691308f2a4c2f6983f2880d32e29c84');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pedido`
+--
+
+CREATE TABLE IF NOT EXISTS `pedido` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_consumidor` int(11) NOT NULL,
+  `id_restaurante` int(11) NOT NULL,
+  `quando` datetime NOT NULL,
+  `forma_pagamento` varchar(50) NOT NULL,
+  `preco` int(11) NOT NULL,
+  `troco` int(11) NOT NULL,
+  `cupom` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_consumidor` (`id_consumidor`),
+  KEY `id_restaurante` (`id_restaurante`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `pedido`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pedido_tem_produto`
+--
+
+CREATE TABLE IF NOT EXISTS `pedido_tem_produto` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pedido` int(11) NOT NULL,
+  `id_produto` int(11) NOT NULL,
+  `qtd` int(11) NOT NULL,
+  `obs` varchar(500) NOT NULL,
+  `tamanho` varchar(20) NOT NULL,
+  `id_produto2` int(11) NOT NULL COMMENT 'usado geralmente pra segundo sabor de pizzas',
+  PRIMARY KEY (`id`),
+  KEY `id_pedido` (`id_pedido`),
+  KEY `id_produto` (`id_produto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `pedido_tem_produto`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pedido_tem_produto_adicional`
+--
+
+CREATE TABLE IF NOT EXISTS `pedido_tem_produto_adicional` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_pedido_tem_produto` int(11) NOT NULL,
+  `id_produto_adicional` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_pedido_tem_produto` (`id_pedido_tem_produto`),
+  KEY `id_produto_adicional` (`id_produto_adicional`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `pedido_tem_produto_adicional`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `produto`
+--
+
+CREATE TABLE IF NOT EXISTS `produto` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(200) NOT NULL,
+  `preco` int(11) NOT NULL,
+  `disponivel` tinyint(1) NOT NULL,
+  `esta_em_promocao` tinyint(1) NOT NULL,
+  `preco_promocional` int(11) NOT NULL,
+  `descricao` varchar(2000) NOT NULL,
+  `qtd_acompanhamentos` int(11) NOT NULL,
+  `id_restaurante` int(11) NOT NULL,
+  `codigo` varchar(100) NOT NULL,
+  `texto_promocao` varchar(500) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_restaurante` (`id_restaurante`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `produto`
+--
+
+INSERT INTO `produto` (`id`, `nome`, `preco`, `disponivel`, `esta_em_promocao`, `preco_promocional`, `descricao`, `qtd_acompanhamentos`, `id_restaurante`, `codigo`, `texto_promocao`) VALUES
+(1, 'BigMac', 1000, 1, 0, 0, 'Grande BigMac!!!', 0, 2, '4405', ''),
+(2, 'Quarteir&atilde;o', 600, 1, 0, 0, 'Sanduiche Gigantesco!!!', 0, 2, '4507', ''),
+(3, 'Pizza Mussarela', 2000, 1, 0, 1500, 'Pizza feita com queijo mussarela.', 0, 1, '333', ''),
+(4, 'Pizza Frango Catupiry', 3000, 1, 0, 2200, 'Pizza feita com queijo mussarela, frango e catupiry.', 0, 1, '334', ''),
+(5, 'Pizza Calabresa', 2400, 1, 0, 2000, 'Pizza feita com queijo mussarela e calabresa.', 0, 1, '335', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `produto_adicional`
+--
+
+CREATE TABLE IF NOT EXISTS `produto_adicional` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(200) NOT NULL,
+  `preco_adicional` int(11) NOT NULL,
+  `disponivel` int(11) NOT NULL,
+  `quantas_unidades_ocupa` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `produto_adicional`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `produto_tem_produto_adicional`
+--
+
+CREATE TABLE IF NOT EXISTS `produto_tem_produto_adicional` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_produto_adicional` int(11) NOT NULL,
+  `id_produto` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_produto_adicional` (`id_produto_adicional`),
+  KEY `id_produto` (`id_produto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `produto_tem_produto_adicional`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `produto_tem_tipo`
+--
+
+CREATE TABLE IF NOT EXISTS `produto_tem_tipo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_tipo` int(11) NOT NULL,
+  `id_protudo` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_tipo` (`id_tipo`),
+  KEY `id_protudo` (`id_protudo`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `produto_tem_tipo`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `restaurante`
+--
+
+CREATE TABLE IF NOT EXISTS `restaurante` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(200) NOT NULL,
+  `id_cidade` int(11) NOT NULL,
+  `endereco` varchar(1000) NOT NULL,
+  `senha` varchar(32) NOT NULL COMMENT 'provisorio isso aqui',
+  `id_administrador_cadastrou` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_cidade` (`id_cidade`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Dumping data for table `restaurante`
+--
+
+INSERT INTO `restaurante` (`id`, `nome`, `id_cidade`, `endereco`, `senha`, `id_administrador_cadastrou`) VALUES
+(1, 'Bari Palesi', 1, 'Av. Engenheiro Roberto Freire, 564 - Capim Macio', '3691308f2a4c2f6983f2880d32e29c84', 1),
+(2, 'MC Donalds', 1, 'Rua Salgado Filho, numero 6576 - Natal Shopping - Candel&aacute;ria', '3691308f2a4c2f6983f2880d32e29c84', 1),
+(3, 'Bobs', 1, 'Av. Salgado Filho, 670 - Lagoa Nova', '', 0),
+(4, 'Pastel Paulista', 1, 'Av. Eng. Roberto Freire, 800 - Capim Macio', '3691308f2a4c2f6983f2880d32e29c84', 1),
+(5, 'Pastelao do Jorjão', 1, 'Av. do Inferno - Lagoa Seca', '3691308f2a4c2f6983f2880d32e29c84', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `restaurante_atende_bairro`
+--
+
+CREATE TABLE IF NOT EXISTS `restaurante_atende_bairro` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_restaurante` int(11) NOT NULL,
+  `id_bairro` int(11) NOT NULL,
+  `preco_entrega` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_restaurante` (`id_restaurante`),
+  KEY `id_bairro` (`id_bairro`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `restaurante_atende_bairro`
+--
+
+INSERT INTO `restaurante_atende_bairro` (`id`, `id_restaurante`, `id_bairro`, `preco_entrega`) VALUES
+(1, 1, 1, 500),
+(2, 1, 2, 400),
+(3, 1, 3, 300),
+(4, 1, 4, 400),
+(5, 2, 3, 200),
+(6, 2, 4, 800),
+(7, 2, 5, 300),
+(8, 2, 6, 400);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `restaurante_tem_tipo`
+--
+
+CREATE TABLE IF NOT EXISTS `restaurante_tem_tipo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_restaurante` int(11) NOT NULL,
+  `id_tipo` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_restaurante` (`id_restaurante`),
+  KEY `id_tipo` (`id_tipo`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `restaurante_tem_tipo`
+--
+
+INSERT INTO `restaurante_tem_tipo` (`id`, `id_restaurante`, `id_tipo`) VALUES
+(1, 2, 2),
+(2, 1, 1),
+(3, 1, 3),
+(4, 1, 4);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tipo_produto`
+--
+
+CREATE TABLE IF NOT EXISTS `tipo_produto` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `tipo_produto`
+--
+
+INSERT INTO `tipo_produto` (`id`, `nome`) VALUES
+(1, 'Sanduiche'),
+(2, 'Pizza'),
+(3, 'Comida'),
+(4, 'Comida Italiana');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tipo_restaurante`
+--
+
+CREATE TABLE IF NOT EXISTS `tipo_restaurante` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `tipo_restaurante`
+--
+
+INSERT INTO `tipo_restaurante` (`id`, `nome`) VALUES
+(1, 'Pizzaria'),
+(2, 'Sanduicheria'),
+(3, 'Restaurante'),
+(4, 'Comida Italiana');
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `bairro`
+--
+ALTER TABLE `bairro`
+  ADD CONSTRAINT `bairro_ibfk_1` FOREIGN KEY (`id_cidade`) REFERENCES `cidade` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `consumidor`
+--
+ALTER TABLE `consumidor`
+  ADD CONSTRAINT `consumidor_ibfk_2` FOREIGN KEY (`id_bairro`) REFERENCES `bairro` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `consumidor_ibfk_1` FOREIGN KEY (`id_cidade`) REFERENCES `cidade` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pedido`
+--
+ALTER TABLE `pedido`
+  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`id_restaurante`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_consumidor`) REFERENCES `consumidor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pedido_tem_produto`
+--
+ALTER TABLE `pedido_tem_produto`
+  ADD CONSTRAINT `pedido_tem_produto_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedido_tem_produto_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `pedido_tem_produto_adicional`
+--
+ALTER TABLE `pedido_tem_produto_adicional`
+  ADD CONSTRAINT `pedido_tem_produto_adicional_ibfk_2` FOREIGN KEY (`id_produto_adicional`) REFERENCES `produto_adicional` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedido_tem_produto_adicional_ibfk_1` FOREIGN KEY (`id_pedido_tem_produto`) REFERENCES `pedido_tem_produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `produto`
+--
+ALTER TABLE `produto`
+  ADD CONSTRAINT `produto_ibfk_1` FOREIGN KEY (`id_restaurante`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `produto_tem_produto_adicional`
+--
+ALTER TABLE `produto_tem_produto_adicional`
+  ADD CONSTRAINT `produto_tem_produto_adicional_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `pedido` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `produto_tem_produto_adicional_ibfk_1` FOREIGN KEY (`id_produto_adicional`) REFERENCES `produto_adicional` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `produto_tem_tipo`
+--
+ALTER TABLE `produto_tem_tipo`
+  ADD CONSTRAINT `produto_tem_tipo_ibfk_2` FOREIGN KEY (`id_protudo`) REFERENCES `produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `produto_tem_tipo_ibfk_1` FOREIGN KEY (`id_tipo`) REFERENCES `tipo_produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `restaurante`
+--
+ALTER TABLE `restaurante`
+  ADD CONSTRAINT `restaurante_ibfk_1` FOREIGN KEY (`id_cidade`) REFERENCES `cidade` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `restaurante_atende_bairro`
+--
+ALTER TABLE `restaurante_atende_bairro`
+  ADD CONSTRAINT `restaurante_atende_bairro_ibfk_2` FOREIGN KEY (`id_bairro`) REFERENCES `bairro` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `restaurante_atende_bairro_ibfk_1` FOREIGN KEY (`id_restaurante`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `restaurante_tem_tipo`
+--
+ALTER TABLE `restaurante_tem_tipo`
+  ADD CONSTRAINT `restaurante_tem_tipo_ibfk_2` FOREIGN KEY (`id_tipo`) REFERENCES `tipo_restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `restaurante_tem_tipo_ibfk_1` FOREIGN KEY (`id_restaurante`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
