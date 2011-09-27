@@ -17,11 +17,11 @@ $cidades = Cidade::all();
 
 					$.getJSON('php/controller/list_bairros.php', {'id': idCidade}, function(data) {
 						if(data.length) {
-							$('ul', linhaCidade).remove();
-							linhaCidade.append($('<ul/>'));
+							$('ul', linhaCidade.parent()).remove();
+							linhaCidade.parent().append($('<ul/>'));
 
 							$.each(data, function(key, value) {
-								$('ul', linhaCidade).append($('<li>' + value + '</li>'));
+								$('ul', linhaCidade.parent()).append($('<li>' + value + '</li>'));
 							});
 						}
 					});
