@@ -45,7 +45,7 @@ $cidades = Cidade::all();
 			} else {
 			?>
 
-			<li>Nenhuma cidade cadastrada</li>
+			<li>Nenhuma cidade no banco de dados</li>
 
 			<? } ?>
 		</ul>
