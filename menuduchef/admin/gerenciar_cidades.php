@@ -16,11 +16,6 @@ if($data) {
 	}
 
 	if($action) {
-		if($action == "create" || $action == "update") {
-			if($obj->is_invalid()) {
-				$msgError = $obj->errors->full_messages();
-			}
-		}
 		switch($action) {
 			case "create":
 				$obj = new Cidade($data);
@@ -37,6 +32,10 @@ if($data) {
 
 			default:
 				break;
+		}
+
+		if($obj->is_invalid()) {
+			$msgError = $obj->errors->full_messages();
 		}
 
 		$obj = new Cidade();
@@ -68,9 +67,9 @@ $itens = Cidade::all(array("order" => "nome asc"));
 
 		<h2>Gerenciar Cidades</h2>
 		<form action="" method="post">
-			Nome<br />
 			<input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
 			<input type="hidden" name="id" value="<?= $obj->id ?>" />
+			Nome<br />
 			<input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
 			<input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 		</form>

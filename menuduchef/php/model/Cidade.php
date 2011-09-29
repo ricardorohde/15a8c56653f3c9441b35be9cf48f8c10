@@ -13,6 +13,10 @@ class Cidade extends ActiveRecord\Model {
 		array('nome', 'message' => 'obrigatório')
 	);
 
+	static $validates_uniqueness_of = array(
+		array('nome', 'message' => 'já existe')
+	);
+
 }
 
 ?>
