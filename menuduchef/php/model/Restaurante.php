@@ -10,7 +10,11 @@ class Restaurante extends ActiveRecord\Model {
 	    array("pedidos", "foreign_key" => "id_restaurante", "class_name" => "Pedido"),
             array("produtos", "foreign_key" => "id_restaurante", "class_name" => "Produto"),
             array("bairros_atendidos", "foreign_key" => "id_restaurante", "class_name" => "Restaurante_Atende_Bairro"),
-            array("tipos", "foreign_key" => "id_restaurante", "class_name" => "Tipo_Restaurante")
+            array("restaurante_tem_tipos", "foreign_key" => "id_restaurante", "class_name" => "Restaurante_Tem_Tipo"),
+            array("bairros_atendidos"),
+            array("bairros", 'through' => 'bairros_atendidos', "foreign_key" => "id_restaurante", "class_name" => "Bairro"),
+            array("restaurante_tem_tipos"),
+            array("tipos", 'through' => 'restaurante_tem_tipos', "foreign_key" => "id_restaurante", "class_name" => "Tipo_Restaurante")
 	);
 }
 

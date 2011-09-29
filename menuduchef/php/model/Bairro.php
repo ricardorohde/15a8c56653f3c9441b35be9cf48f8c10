@@ -7,7 +7,10 @@ class Bairro extends ActiveRecord\Model {
 	);
         static $has_many = array(
 	    array("consumidores", "foreign_key" => "id_bairro", "class_name" => "Consumidor"),
-            array("pedidos", "foreign_key" => "id_bairro", "class_name" => "Pedido")
+            array("pedidos", "foreign_key" => "id_bairro", "class_name" => "Pedido"),
+            array("restaurantes_que_atendem", "foreign_key" => "id_bairro", "class_name" => "Restaurante_Atende_Bairro"),
+            array("restaurantes_que_atendem"),
+            array("restaurantes", 'through' => 'restaurantes_que_atendem', "foreign_key" => "id_bairro", "class_name" => "Restaurante")
 	);
 }
 
