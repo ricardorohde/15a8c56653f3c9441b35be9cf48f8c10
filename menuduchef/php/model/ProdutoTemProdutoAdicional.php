@@ -1,6 +1,6 @@
 <?
 
-class Produto_Tem_Produto_Adicional extends ActiveRecord\Model {
+class ProdutoTemProdutoAdicional extends ActiveRecord\Model {
 	static $table_name = "produto_tem_produto_adicional";
 	static $belongs_to = array(
 		array("produto", "foreign_key" => "id_produto"),

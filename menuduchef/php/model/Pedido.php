@@ -8,7 +8,7 @@ class Pedido extends ActiveRecord\Model {
                 array("restaurante", "foreign_key" => "id_restaurante")
 	);
         static $has_many = array(
-	    array("pedido_tem_produtos", "foreign_key" => "id_pedido", "class_name" => "Pedido_Tem_Produto"),
+	    array("pedido_tem_produtos", "foreign_key" => "id_pedido", "class_name" => "PedidoTemProduto"),
             array("pedido_tem_produtos"),
             array("produtos", 'through' => 'pedido_tem_produtos', "foreign_key" => "id_pedido", "class_name" => "Produto")
 	);
