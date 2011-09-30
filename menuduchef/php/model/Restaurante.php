@@ -9,9 +9,8 @@ class Restaurante extends ActiveRecord\Model {
         static $has_many = array(
 	    array("pedidos", "foreign_key" => "id_restaurante", "class_name" => "Pedido"),
             array("produtos", "foreign_key" => "id_restaurante", "class_name" => "Produto"),
-            array("bairros_atendidos", "foreign_key" => "id_restaurante", "class_name" => "RestauranteAtendeBairro"),
             array("restaurante_tem_tipos", "foreign_key" => "id_restaurante", "class_name" => "RestauranteTemTipo"),
-            array("bairros_atendidos"),
+            array("bairros_atendidos", "foreign_key" => "id_restaurante", "class_name" => "RestauranteAtendeBairro"),
             array("bairros", 'through' => 'bairros_atendidos', "foreign_key" => "id_restaurante", "class_name" => "Bairro"),
             array("restaurante_tem_tipos"),
             array("tipos", 'through' => 'restaurante_tem_tipos', "foreign_key" => "id_restaurante", "class_name" => "TipoRestaurante")
