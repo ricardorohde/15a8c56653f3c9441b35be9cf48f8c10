@@ -45,6 +45,8 @@ if($data) {
 
 $itens = TipoProduto::all(array("order" => "nome asc"));
 
+$rests = Restaurante::all(array("order" => "nome asc"));
+
 ?>
 
 <html>
@@ -74,7 +76,20 @@ $itens = TipoProduto::all(array("order" => "nome asc"));
 			Nome: 
 			<input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br />
                         Restaurante: 
-			<input type="text" name="nome" value="<?= $obj->id_restaurante ?>" maxlength="100" /><br />
+			<select name="id_restaurante" maxlength="100" >
+                            <? if($rests) {
+				foreach($rests as $index => $res) {
+                                        $sel = "";
+                                        if($obj->id_restaurante==$res->id){
+                                               $sel = "selected";                                     
+                                        }
+					echo "<option value='$res->id' $sel>";
+					echo "$res->nome";
+					echo "</option>";
+				}
+                            } ?>
+                            
+                        </select></<br />
                         <br />
 			<input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 		</form>
@@ -83,7 +98,7 @@ $itens = TipoProduto::all(array("order" => "nome asc"));
 		<table>
 			<tr>
 				<th>Tipo de Produto</th>
-                                <th>Id_Restaurante</th>
+                                <th>Restaurante</th>
 				<th>Modificar</th>
 				<th>Excluir</th>
 			</tr>
@@ -93,7 +108,7 @@ $itens = TipoProduto::all(array("order" => "nome asc"));
 					?>
 					<tr>
 						<td><?= $item->nome ?></td>
-                                                <td><?= $item->id_restaurante ?></td>
+                                                <td><?= $item->restaurante->nome ?></td>
 						<td><a href="?id=<?= $item->id ?>">Modificar</a></td>
 						<td><a href="?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 					</tr>
