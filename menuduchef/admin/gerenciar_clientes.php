@@ -46,7 +46,7 @@ if($data) {
 $itens = Consumidor::all(array("order" => "nome asc"));
 
 $bairros = Bairro::all(array("order" => "nome asc"));
-$cidades = Cidades::all(array("order" => "nome asc"));
+$cidades = Cidade::all(array("order" => "nome asc"));
 
 ?>
 

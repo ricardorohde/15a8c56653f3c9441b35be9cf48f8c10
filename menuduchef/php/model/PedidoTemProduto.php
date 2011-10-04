@@ -9,7 +9,6 @@ class PedidoTemProduto extends ActiveRecord\Model {
 	);
         static $has_many = array(
 	    array("pedido_tem_produtos_adicionais", "foreign_key" => "id_pedido_tem_produto", "class_name" => "PedidoTemProdutoAdicional"),
-            array("pedido_tem_produtos_adicionais"),
             array("produtos_adicionais", 'through' => 'pedido_tem_produtos_adicionais', "foreign_key" => "id_pedido_tem_produto", "class_name" => "ProdutoAdicional")
 	);
 }
