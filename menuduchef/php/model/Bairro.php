@@ -9,7 +9,6 @@ class Bairro extends ActiveRecord\Model {
 	    array("consumidores", "foreign_key" => "id_bairro", "class_name" => "Consumidor"),
             array("pedidos", "foreign_key" => "id_bairro", "class_name" => "Pedido"),
             array("restaurantes_que_atendem", "foreign_key" => "id_bairro", "class_name" => "RestauranteAtendeBairro"),
-            array("restaurantes_que_atendem"),
             array("restaurantes", 'through' => 'restaurantes_que_atendem', "foreign_key" => "id_bairro", "class_name" => "Restaurante")
 	);
 }
