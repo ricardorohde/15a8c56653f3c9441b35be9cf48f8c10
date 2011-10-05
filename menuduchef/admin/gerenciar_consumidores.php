@@ -10,7 +10,11 @@ $msgError = "";
 if($data) {
         $id = array_key_exists("id", $data) ? $data["id"] : 0;
         $action = array_key_exists("action", $data) ? $data["action"] : 0;
+        $antiga_senha = array_key_exists("antiga_senha", $data) ? $data["antiga_senha"] : 0;
+        $nova_senha = array_key_exists("senha", $data) ? $data["senha"] : 0;
         unset($data["action"]);
+        unset($data["antiga_senha"]);
+        unset($data["id_cidade"]);
     
         if($id) {
 		$obj = Consumidor::find($id);
@@ -19,11 +23,17 @@ if($data) {
         if($action) {
                 switch($action) {
                         case "create":
+                                if($nova_senha!=$antiga_senha){
+                                    $data["senha"] = md5($nova_senha);
+                                }
 				$obj = new Consumidor($data);
 				$obj->save();
 				break;
 
 			case "update":
+                                if($nova_senha!=$antiga_senha){
+                                    $data["senha"] = md5($nova_senha);
+                                }
 				$obj->update_attributes($data);
 				break;
 
@@ -45,15 +55,33 @@ if($data) {
 
 $itens = Consumidor::all(array("order" => "nome asc"));
 
-$bairros = Bairro::all(array("order" => "nome asc"));
+
 $cidades = Cidade::all(array("order" => "nome asc"));
+if($obj->bairro->cidade->id){
+    $idcid = $obj->bairro->cidade->id;
+} 
+else {
+    $primeira_cidade = Cidade::all(array("order" => "nome asc","limit" => 1));
+    foreach($primeira_cidade as $pc) {   
+            $idcid = $pc->id;
+    }
+}
+
+$bairros = Bairro::all(array('conditions' => array('id_cidade = ?', $idcid)));
 
 ?>
 
 <html>
 	<head>
 		<title>Menu du Chef</title>
-		<script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
+		<script type="text/javascript" src="../js/jquery-1.6.4.min.js"></script>
+                <script>
+                $(document).ready(function(){
+                    $('#cidades').change(function(){
+                        $('#bairros').load('../php/controller/combobox_bairros.php?cidade='+$('#cidades').val() );
+                    });
+                });
+                </script>
 		<style type="text/css">
 			table { border-collapse: collapse; }
 			table tr td, table tr th { border: #000 solid 1px; }
@@ -74,14 +102,15 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 		<form action="" method="post">
 			<input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
 			<input type="hidden" name="id" value="<?= $obj->id ?>" />
+                        <input type="hidden" name="antiga_senha" value="<?= $obj->senha ?>" />
 			Nome: 
 			<input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br />
                         Cidade: 
-			<select name="id_cidade" maxlength="100" >
+			<select id="cidades" name="id_cidade" maxlength="100" >
                             <? if($cidades) {
 				foreach($cidades as $index => $cid) {
                                         $sel = "";
-                                        if($obj->id_cidade==$cid->id){
+                                        if($obj->bairro->cidade->id==$cid->id){
                                                $sel = "selected";                                     
                                         }
 					echo "<option value='$cid->id' $sel>";
@@ -92,7 +121,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
                             
                         </select><br />
                         Bairro: 
-			<select name="id_bairro" maxlength="100" >
+			<select id="bairros" name="id_bairro" maxlength="100" >
                             <? if($bairros) {
 				foreach($bairros as $index => $bai) {
                                         $sel = "";
@@ -106,6 +135,16 @@ $cidades = Cidade::all(array("order" => "nome asc"));
                             } ?>
                             
                         </select><br />
+                        Endere&ccedil;o: 
+			<input type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br />
+                        Telefone: 
+			<input type="text" name="telefone" value="<?= $obj->telefone ?>" maxlength="100" /><br />
+                        Desativado: 
+			<input type="text" name="desativado" value="<?= $obj->desativado ?>" maxlength="100" /><br />
+                        Login: 
+			<input type="text" name="login" value="<?= $obj->login ?>" maxlength="100" /><br />
+                        Senha: 
+			<input type="text" name="senha" value="<?= $obj->senha ?>" maxlength="100" /><br />
                         <br />
 			<input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 		</form>
@@ -130,7 +169,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 					?>
 					<tr>
 						<td><?= $item->nome ?></td>
-                                                <td><?= $item->cidade->nome ?></td>
+                                                <td><?= $item->bairro->cidade->nome ?></td>
                                                 <td><?= $item->bairro->nome ?></td>
                                                 <td><?= $item->endereco ?></td>
                                                 <td><?= $item->telefone ?></td>
