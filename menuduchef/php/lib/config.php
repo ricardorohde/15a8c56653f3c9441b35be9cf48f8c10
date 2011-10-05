@@ -1,5 +1,5 @@
 <?
-require("constant.php");
+require_once("constant.php");
 require("HttpUtil.php");
 require("php-activerecord/ActiveRecord.php");
 

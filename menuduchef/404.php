@@ -5,7 +5,6 @@
         <title></title>
     </head>
     <body>
-		Página não encontrada.<br />
-		Você veio de <a href="<?= header("referer") ?>"><?= header("referer") ?></a>
+		404 - Página não encontrada
     </body>
 </html>
