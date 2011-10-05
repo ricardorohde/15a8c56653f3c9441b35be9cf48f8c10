@@ -25,10 +25,9 @@ RewriteRule .*robots\.txt - [F,L]
 RewriteCond %{REQUEST_FILENAME} !-f   
 RewriteCond %{REQUEST_FILENAME} !-d 
 
-RewriteRule ^admin/(\w+)/controller/?$ php/controller/$1.php
-RewriteRule ^(.+/)([^\.]+)/(\d+)/?$ $1$2.php?id=$3
-RewriteRule ^(.+/)([^\.]+)/?$ $1$2.php
-RewriteRule ([\w]+)\.css css/$1.css [L]
+RewriteRule ^admin/(\w+)/controller/?$ php/controller/$1.php [L]
+RewriteRule ^(.+/)([^\.^/]+)/(\d+)/?$ $1$2.php?id=$3 [L]
+RewriteRule ^(.+/)([^\.^/]+)/?$ $1$2.php [L]
 
 <IfModule mod_expires.c> 
     ExpiresActive On 

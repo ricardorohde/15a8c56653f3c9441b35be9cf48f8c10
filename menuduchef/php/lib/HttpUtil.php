@@ -25,6 +25,18 @@ class HttpUtil {
 	$_SESSION[DEFAULT_WARNING_SESSION_ATTRIBUTE_NAME] = $arrayMessages;
     }
 
+    static function startZlib() {
+	if (extension_loaded('zlib')) {
+	    ob_start('ob_gzhandler');
+	}
+    }
+
+    static function finishZlib() {
+	if (extension_loaded('zlib')) {
+	    ob_end_flush();
+	}
+    }
+
 }
 
 ?>
