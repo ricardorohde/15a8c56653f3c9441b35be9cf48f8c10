@@ -1,0 +1,49 @@
+Options +FollowSymLinks
+
+RewriteEngine On
+RewriteBase /menuduchef/
+
+DirectoryIndex index.html
+DirectoryIndex index.php
+
+Options All -Indexes
+
+<Limit GET POST>
+	order deny,allow
+	deny from all
+	allow from all
+</Limit>
+
+<Limit PUT DELETE>
+	order deny,allow
+	deny from all
+</Limit>
+
+RewriteCond %{THE_REQUEST} ^.+$ [NC]
+RewriteRule .*robots\.txt - [F,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^([\w]+)/?$ $1.php [L]
+
+RewriteRule ^([a-zA-Z]+)/([a-zA-Z0-9+,_-]+)/?$ $1/$2.php [L]
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+   	ExpiresByType application/x-javascript "access plus 1 month"
+   	ExpiresByType application/x-shockwave-flash "access plus 1 month"
+   	ExpiresByType text/ecmascript "access plus 1 month"
+   	#ExpiresByType text/php "access plus 1 hour"
+	#Remover ETag
+   	FileETag none
+</IfModule>
+
+ErrorDocument 404 /404.php

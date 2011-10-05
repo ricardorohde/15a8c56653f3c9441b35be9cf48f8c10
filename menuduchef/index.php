@@ -15,7 +15,7 @@ $cidades = Cidade::all();
 					var linhaCidade = $(this);
 					var idCidade = linhaCidade.attr('href').replace('#cidade', '');
 
-					$.getJSON('php/controller/list_bairros.php', {'id': idCidade}, function(data) {
+					$.getJSON('php/controller/list_bairros_controller.php', {'id': idCidade}, function(data) {
 						if(data.length) {
 							$('ul', linhaCidade.parent()).remove();
 							linhaCidade.parent().append($('<ul/>'));

@@ -1,0 +1,48 @@
+-- phpMyAdmin SQL Dump
+-- version 3.3.10.4
+-- http://www.phpmyadmin.net
+--
+-- Host: mysql.gleycetour.com.br
+-- Generation Time: Sep 30, 2011 at 07:43 AM
+-- Server version: 5.1.53
+-- PHP Version: 5.2.17
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+--
+-- Database: `restaurante_biro`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tipo_produto`
+--
+
+CREATE TABLE IF NOT EXISTS `tipo_produto` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  `id_restaurante` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_restaurante` (`id_restaurante`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `tipo_produto`
+--
+
+INSERT INTO `tipo_produto` (`id`, `nome`, `id_restaurante`) VALUES
+(1, 'Sanduiche', 1),
+(2, 'Pizza', 1),
+(3, 'Comida', 1),
+(4, 'Comida Italiana', 1);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `tipo_produto`
+--
+ALTER TABLE `tipo_produto`
+  ADD CONSTRAINT `tipo_produto_ibfk_1` FOREIGN KEY (`id_restaurante`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

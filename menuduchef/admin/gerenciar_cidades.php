@@ -1,10 +1,9 @@
 <?
 require("../php/lib/config.php");
 
-$obj = new Cidade();
-
-$data = $_POST ? $_POST : ($_GET ? $_GET : 0);
-$msgError = "";
+$class = "Cidade";
+$obj = new $class();
+$data = HttpUtil::getParameterArray();
 
 if($data) {
 	$id = array_key_exists("id", $data) ? $data["id"] : 0;
@@ -12,13 +11,13 @@ if($data) {
 	unset($data["action"]);
 
 	if($id) {
-		$obj = Cidade::find($id);
+		$obj = $class::find($id);
 	}
 
 	if($action) {
 		switch($action) {
 			case "create":
-				$obj = new Cidade($data);
+				$obj = new $class($data);
 				$obj->save();
 				break;
 
@@ -38,35 +37,25 @@ if($data) {
 			$msgError = $obj->errors->full_messages();
 		}
 
-		$obj = new Cidade();
+		$obj = new $class();
 	}
 }
 
-$itens = Cidade::all(array("order" => "nome asc"));
+$itens = $class::all(array("order" => "nome asc"));
 ?>
 
 <html>
 	<head>
 		<title>Menu du Chef</title>
 		<script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
-		<style type="text/css">
-			table { border-collapse: collapse; }
-			table tr td, table tr th { border: #000 solid 1px; }
-			.error { float: left; width: 50%; background-color: red; color: white; font-weight: bold; padding: 2px; }
-		</style>
+		<link rel="stylesheet" type="text/css" href="../css/style.css" />
 	</head>
 	<body>
 
-		<? if($msgError) {
-			foreach($msgError as $msg) {
-		?>
-		<div class="error"><?= $msg ?></div>
-		<? } ?>
-		<br clear="all" />
-		<? } ?>
+		<? include("../include/messages.php"); ?>
 
 		<h2>Gerenciar Cidades</h2>
-		<form action="" method="post">
+		<form action="<?= HttpUtil::getControllerFromCurrentPage() ?>" method="post">
 			<input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
 			<input type="hidden" name="id" value="<?= $obj->id ?>" />
 			Nome<br />

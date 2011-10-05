@@ -1,22 +1,29 @@
 <?
-require_once("php-activerecord/ActiveRecord.php");
+require("constant.php");
+require("HttpUtil.php");
+require("php-activerecord/ActiveRecord.php");
+
+/**
+ * Comandos de inicialização
+ */
+session_start();
 
 ActiveRecord\Config::initialize(function($cfg) {
 
-	$directoryArray = array("php/model", "../php/model", "../../php/model", "model", "../model", "../../model");
+	$modelDirectoryArray = array("php/model", "../php/model", "../../php/model", "model", "../model", "../../model");
 
-	foreach($directoryArray as $directory) {
+	foreach($modelDirectoryArray as $directory) {
 		if(is_dir($directory)) {
 			$modelDirectory = $directory;
 		}
 	}
 
-	if($modelDirectory) {
+	if(isset($modelDirectory)) {
 		$cfg->set_model_directory($modelDirectory);
 
 		$cfg->set_connections(array(
-			'development' => 'mysql://menuduchef:menuduchef@localhost/menuduchef',
-			'production' => ''
+			"development" => "mysql://" . DATABASE_USER_DEVELOPMENT . ":". DATABASE_PASS_DEVELOPMENT ."@" . DATABASE_HOST_DEVELOPMENT ."/" . DATABASE_SCHEMA_DEVELOPMENT . "",
+			"production" => "mysql://" . DATABASE_USER_PRODUCTION . ":". DATABASE_PASS_PRODUCTION ."@" . DATABASE_HOST_PRODUCTION ."/" . DATABASE_SCHEMA_PRODUCTION . ""
 		));
 
 		$cfg->set_default_connection('development');
