@@ -6,6 +6,9 @@
 	<h1>Área Administrativa</h1>
 	<ul>
 	    <li>
+		<a href="administrador/list" title="Administradores">Administradores</a>
+	    </li>
+	    <li>
 		<a href="cidade/list" title="Cidades">Cidades</a>
 	    </li>
 	    <li>

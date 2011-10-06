@@ -26,13 +26,13 @@ class HttpUtil {
     }
 
     static function startZlib() {
-	if (extension_loaded('zlib')) {
-	    ob_start('ob_gzhandler');
+	if (extension_loaded("zlib")) {
+	    ob_start("ob_gzhandler");
 	}
     }
 
     static function finishZlib() {
-	if (extension_loaded('zlib')) {
+	if (extension_loaded("zlib")) {
 	    ob_end_flush();
 	}
     }

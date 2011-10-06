@@ -18,7 +18,7 @@ define("DEFAULT_ERROR_SESSION_ATTRIBUTE_NAME", "msg_error");
 define("DEFAULT_INFO_SESSION_ATTRIBUTE_NAME", "msg_info");
 define("DEFAULT_WARNING_SESSION_ATTRIBUTE_NAME", "msg_warning");
 
-define("URL_PRODUCTION", "http://www.menuduchef.com.br/");
+define("URL_PRODUCTION", "http://www.agenciabiro.com.br/menuduchef/");
 define("SITE_TITLE", "Menu du Chef");
 
 ?>
