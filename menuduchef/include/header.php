@@ -1,4 +1,14 @@
 <?
+$libDirectoryArray = array("php/lib", "../php/lib", "../../php/lib");
+
+foreach ($libDirectoryArray as $directory) {
+    if (is_dir($directory)) {
+	$libDirectory = $directory;
+    }
+}
+
+require_once("{$libDirectory}/constant.php");
+
 if (($_SERVER['HTTP_HOST'] == 'servidor') || ($_SERVER['HTTP_HOST'] == 'localhost') || ($_SERVER['HTTP_HOST'] == '127.0.0.1')) {
     $baseHref = "http://{$_SERVER['HTTP_HOST']}/menuduchef/";
 } else {
