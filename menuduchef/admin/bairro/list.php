@@ -1,21 +1,22 @@
 <?
 require("../../php/lib/config.php");
 
-$itens = Cidade::all(array("order" => "nome asc"));
+$itens = Bairro::all(array("order" => "nome asc"));
 ?>
 
 <? include("../../include/header.php"); ?>
 
-<h2>Gerenciar Cidades</h2>
+<h2>Gerenciar Bairros</h2>
 
 <a href="admin/" title="Menu principal">Menu principal</a>
 <br /><br />
 
-<a href="admin/cidade/form" title="Criar">Criar</a>
+<a href="admin/bairro/form" title="Criar">Criar</a>
 <br /><br />
 
 <table>
     <tr>
+	<th>Bairro</th>
 	<th>Cidade</th>
 	<th>Modificar</th>
 	<th>Excluir</th>
@@ -26,8 +27,9 @@ $itens = Cidade::all(array("order" => "nome asc"));
 	    ?>
 	    <tr>
 		<td><?= $item->nome ?></td>
-		<td><a href="admin/cidade/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/cidade/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><?= $item->cidade->nome ?></td>
+		<td><a href="admin/bairro/form/<?= $item->id ?>">Modificar</a></td>
+		<td><a href="admin/bairro/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

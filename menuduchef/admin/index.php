@@ -8,6 +8,9 @@
 	    <li>
 		<a href="cidade/list" title="Cidades">Cidades</a>
 	    </li>
+	    <li>
+		<a href="bairro/list" title="Bairros">Bairros</a>
+	    </li>
 	</ul>
     </body>
 </html>

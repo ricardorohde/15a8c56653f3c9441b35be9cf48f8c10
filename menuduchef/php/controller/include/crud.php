@@ -10,9 +10,6 @@ if ($data) {
     $action = array_key_exists("action", $data) ? $data["action"] : 0;
     unset($data["action"]);
 
-    print_r($data);
-    print_r($action);
-
     if ($id) {
 	$obj = $class::find($id);
     }
