@@ -1,5 +1,5 @@
 <?
-require_once("../lib/config.php");
+include_once("../lib/config.php");
 
 $data = HttpUtil::getParameterArray();
 

@@ -1,5 +1,5 @@
 <?
-require("../../php/lib/config.php");
+include_once("../../php/lib/config.php");
 
 $obj = new Bairro();
 $cidades = Cidade::all(array("order" => "nome asc"));

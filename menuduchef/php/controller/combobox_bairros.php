@@ -1,5 +1,5 @@
 <?php
-require("../lib/config.php");
+include_once("../lib/config.php");
 
 $id = $_GET['cidade'];
 $cidade = Cidade::find($id);

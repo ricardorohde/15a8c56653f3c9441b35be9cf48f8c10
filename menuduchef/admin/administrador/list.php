@@ -1,5 +1,5 @@
 <?
-require("../../php/lib/config.php");
+include_once("../../php/lib/config.php");
 
 $itens = Administrador::all(array("order" => "nome asc"));
 ?>
