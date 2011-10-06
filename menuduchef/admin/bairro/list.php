@@ -36,7 +36,7 @@ $itens = Bairro::all(array("order" => "nome asc"));
     } else {
 	?>
     <tr>
-	<td colspan="3">Nenhuma cidade cadastrada</td>
+	<td colspan="3">Nenhum bairro cadastrado</td>
     </tr>
     <? } ?>
 </table>
