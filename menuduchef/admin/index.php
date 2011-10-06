@@ -6,10 +6,10 @@
 	<h1>Área Administrativa</h1>
 	<ul>
 	    <li>
-		<a href="cidade/list" title="Cidades">Cidades</a>
+		<a href="cidade/list.php" title="Cidades">Cidades</a>
 	    </li>
 	    <li>
-		<a href="bairro/list" title="Bairros">Bairros</a>
+		<a href="bairro/list.php" title="Bairros">Bairros</a>
 	    </li>
 	</ul>
     </body>
