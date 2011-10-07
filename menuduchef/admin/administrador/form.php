@@ -1,5 +1,6 @@
 <?
 include_once("../../php/lib/config.php");
+
 $obj = new Administrador();
 
 if ($_GET["id"]) {
@@ -18,11 +19,11 @@ if ($_GET["id"]) {
     <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Nome:
-    <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br />
+    <input type="text" name="nome" autocomplete="off" value="<?= $obj->nome ?>" maxlength="100" /><br />
     Login:
-    <input type="text" name="login" value="<?= $obj->login ?>" maxlength="100" /><br />
+    <input type="text" name="login" autocomplete="off" value="<?= $obj->login ?>" maxlength="100" /><br />
     Senha:
-    <input type="text" name="senha" value="<?= $obj->senha ?>" maxlength="100" /><br /><br />
+    <input type="password" name="senha" autocomplete="off" value="<?= $obj->senha ?>" maxlength="100" /><br /><br />
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 

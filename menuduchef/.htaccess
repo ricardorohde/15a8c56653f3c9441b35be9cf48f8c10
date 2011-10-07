@@ -1,5 +1,5 @@
-Options +FollowSymLinks
-
+#Options +FollowSymLinks
+RewriteEngine Off
 RewriteEngine On
 RewriteBase /menuduchef/
 
@@ -19,17 +19,18 @@ Options All -Indexes
     deny from all
 </Limit>
 
-RewriteCond %{THE_REQUEST} ^.+$ [NC]
-RewriteRule .*robots\.txt - [F,L]
+#RewriteCond %{THE_REQUEST} ^.+$ [NC]
+#RewriteRule .*robots\.txt - [F,L]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
 
 RewriteRule ^admin/(\w+)/controller/?$ php/controller/$1.php [L]
-RewriteRule ^admin/(\w+)/(\w+)/(\d+)/?$ admin/$1/$2.php?id=$3 [L]
+#RewriteRule ^admin/(\w+)/formulario/([0-9]+)/?$ admin/$1/form.php?id=$2 [L]
+#RewriteRule ^admin/(\w+)/form/([0-9]+)/?$ admin/$1/form.php?id=$2 [L]
 #RewriteRule ^admin/(\w+)/(\w+)/?$ admin/$1/$2.php [L]
 #RewriteRule ^(.+/)([^\.^/]+)/(\d+)/?$ $1$2.php?id=$3 [L]
-#RewriteRule ^(.+/)([^\.^/]+)/?$ $1$2.php [L]
+RewriteRule ^(.+/)(.+\.php/)([\d]+)/?$ $1$2?id=$3 [R]
 
 <IfModule mod_expires.c>
     ExpiresActive On
