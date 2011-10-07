@@ -18,8 +18,11 @@ class Administrador extends ActiveRecord\Model {
 	array("login", "message" => "já existe")
     );
     
-    public function set_senha($senha) {
-	$this->assign_attribute("senha", md5($senha));
+    static $before_save = array("encrypt_senha");
+    
+    public function encrypt_senha() {
+	//echo $this->senha;exit;
+	$this->senha = md5($this->senha);
     }
 
 }

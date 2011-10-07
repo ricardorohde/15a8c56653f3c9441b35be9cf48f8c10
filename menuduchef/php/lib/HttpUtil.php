@@ -9,7 +9,7 @@ class HttpUtil {
     }
 
     static function getCurrentPage() {
-	$fileNameArray = explode("/", $_SERVER['PHP_SELF']);
+	$fileNameArray = explode("/", $_SERVER["PHP_SELF"]);
 	return str_replace(".php", "", $fileNameArray[sizeof($fileNameArray) - 1]);
     }
 
@@ -35,6 +35,10 @@ class HttpUtil {
 	if (extension_loaded("zlib")) {
 	    ob_end_flush();
 	}
+    }
+    
+    static function isLocalhost() {
+	return $_SERVER["HTTP_HOST"] == "localhost" || $_SERVER["HTTP_HOST"] == "127.0.0.1";
     }
 
 }

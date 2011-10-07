@@ -7,9 +7,9 @@ foreach ($libDirectoryArray as $directory) {
     }
 }
 
-require_once("{$libDirectory}/constant.php");
+include_once("{$libDirectory}/config.php");
 
-if (($_SERVER['HTTP_HOST'] == 'servidor') || ($_SERVER['HTTP_HOST'] == 'localhost') || ($_SERVER['HTTP_HOST'] == '127.0.0.1')) {
+if(HttpUtil::isLocalhost()) {
     $baseHref = "http://{$_SERVER['HTTP_HOST']}/menuduchef/";
 } else {
     $baseHref = URL_PRODUCTION;

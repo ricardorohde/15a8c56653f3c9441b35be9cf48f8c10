@@ -1,5 +1,5 @@
 <?
-require_once("constant.php");
+include_once("constant.php");
 require("HttpUtil.php");
 require("php-activerecord/ActiveRecord.php");
 
@@ -26,7 +26,7 @@ ActiveRecord\Config::initialize(function($cfg) {
 			"production" => "mysql://" . DATABASE_USER_PRODUCTION . ":". DATABASE_PASS_PRODUCTION ."@" . DATABASE_HOST_PRODUCTION ."/" . DATABASE_SCHEMA_PRODUCTION . ""
 		));
 
-		$cfg->set_default_connection('development');
+		$cfg->set_default_connection(HttpUtil::isLocalhost() ? "development" : "production");
 	} else {
 		die("O diretório das classes do modelo não é válido");
 	}
