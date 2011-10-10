@@ -35,6 +35,9 @@
             <li>
 		<a href="produto_adicional/" title="Produtos Adicionais">Produtos Adicionais</a>
 	    </li>
+            <li>
+		<a href="pedido/" title="Pedidos">Pedidos</a>
+	    </li>
 	</ul>
     </body>
 </html>

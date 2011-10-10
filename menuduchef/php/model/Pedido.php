@@ -11,6 +11,12 @@ class Pedido extends ActiveRecord\Model {
 	    array("pedido_tem_produtos", "foreign_key" => "id_pedido", "class_name" => "PedidoTemProduto"),
             array("produtos", 'through' => 'pedido_tem_produtos', "foreign_key" => "id_pedido", "class_name" => "Produto")
 	);
+        
+        static $before_save = array("set_current_date");
+
+        public function set_current_date() {
+        $this->quando = date();
+}
 }
 
 ?>
