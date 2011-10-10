@@ -32,6 +32,9 @@
             <li>
 		<a href="produto/" title="Produtos">Produtos</a>
 	    </li>
+            <li>
+		<a href="produto_adicional/" title="Produtos Adicionais">Produtos Adicionais</a>
+	    </li>
 	</ul>
     </body>
 </html>
