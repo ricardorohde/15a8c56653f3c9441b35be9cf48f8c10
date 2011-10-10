@@ -4,7 +4,7 @@
 
 <form action="admin/" method="post">
     <?// Apagar depois a linha abaixo ?>
-    <font color="red"><strong>Login ainda não foi implementado. Pode clicar direto em "Entrar".</strong></font><br /><br />
+    <font color="red"><strong>Login ainda não foi implementado. Para entrar no sistema, basta clicar em "Entrar" sem preencher os campos.</strong></font><br /><br />
     Login:
     <input type="text" name="login" maxlength="100" /><br />
     Senha:
