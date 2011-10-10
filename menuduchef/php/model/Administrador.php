@@ -21,7 +21,6 @@ class Administrador extends ActiveRecord\Model {
     static $before_save = array("encrypt_senha");
     
     public function encrypt_senha() {
-	//echo $this->senha;exit;
 	$this->senha = md5($this->senha);
     }
 

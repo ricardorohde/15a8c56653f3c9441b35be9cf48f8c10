@@ -1,5 +1,4 @@
-#Options +FollowSymLinks
-RewriteEngine Off
+Options +FollowSymLinks
 RewriteEngine On
 RewriteBase /menuduchef/
 
@@ -19,18 +18,14 @@ Options All -Indexes
     deny from all
 </Limit>
 
-#RewriteCond %{THE_REQUEST} ^.+$ [NC]
-#RewriteRule .*robots\.txt - [F,L]
+RewriteCond %{THE_REQUEST} ^.+$ [NC]
+RewriteRule .*robots\.txt - [F,L]
 
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+/)(\w+)/controller/?$ php/controller/$2.php [L]
+RewriteRule ^(.+/)(\w+\.php/)(\d+)/?$ $1$2?id=$3 [R,L]
 
-RewriteRule ^admin/(\w+)/controller/?$ php/controller/$1.php [L]
-#RewriteRule ^admin/(\w+)/formulario/([0-9]+)/?$ admin/$1/form.php?id=$2 [L]
-#RewriteRule ^admin/(\w+)/form/([0-9]+)/?$ admin/$1/form.php?id=$2 [L]
-#RewriteRule ^admin/(\w+)/(\w+)/?$ admin/$1/$2.php [L]
-#RewriteRule ^(.+/)([^\.^/]+)/(\d+)/?$ $1$2.php?id=$3 [L]
-RewriteRule ^(.+/)(.+\.php/)([\d]+)/?$ $1$2?id=$3 [R]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+/)([a-zA-Z]+)/?(\d*)/?$ $1$2.php?id=$3 [L]
 
 <IfModule mod_expires.c>
     ExpiresActive On
@@ -47,4 +42,4 @@ RewriteRule ^(.+/)(.+\.php/)([\d]+)/?$ $1$2?id=$3 [R]
     FileETag none
 </IfModule>
 
-#ErrorDocument 404 /menuduchef/404.php
+ErrorDocument 404 /menuduchef/404.php

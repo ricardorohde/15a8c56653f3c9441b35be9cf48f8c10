@@ -1,23 +1,22 @@
 <?
 include_once("../../php/lib/config.php");
 
-$itens = Administrador::all(array("order" => "nome asc"));
+$itens = TipoRestaurante::all(array("order" => "nome asc"));
 ?>
 
 <? include("../../include/header.php"); ?>
 
-<h2>Gerenciar Administradores</h2>
+<h2>Gerenciar Tipos de Restaurante</h2>
 
 <a href="admin/" title="Menu principal">Menu principal</a>
 <br /><br />
 
-<a href="admin/administrador/form" title="Criar">Criar</a>
+<a href="admin/tipo_restaurante/form" title="Criar">Criar</a>
 <br /><br />
 
 <table>
     <tr>
 	<th>Nome</th>
-	<th>Login</th>
 	<th>Modificar</th>
 	<th>Excluir</th>
     </tr>
@@ -27,16 +26,15 @@ $itens = Administrador::all(array("order" => "nome asc"));
 	    ?>
 	    <tr>
 		<td><?= $item->nome ?></td>
-		<td><?= $item->login ?></td>
-		<td><a href="admin/administrador/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/administrador/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/tipo_restaurante/form/<?= $item->id ?>">Modificar</a></td>
+		<td><a href="admin/tipo_restaurante/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}
     } else {
 	?>
     <tr>
-	<td colspan="3">Nenhum administrador cadastrado</td>
+	<td colspan="3">Nenhum tipo de restaurante cadastrado</td>
     </tr>
     <? } ?>
 </table>

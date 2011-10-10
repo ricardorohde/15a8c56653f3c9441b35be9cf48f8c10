@@ -13,7 +13,7 @@ if($_GET["id"]) {
 
 <h2>Gerenciar Bairros</h2>
 
-<a href="admin/bairro/list" title="Cancelar">Cancelar</a>
+<a href="admin/bairro/" title="Cancelar">Cancelar</a>
 <br /><br />
 
 <form action="admin/bairro/controller" method="post">

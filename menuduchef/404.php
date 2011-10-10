@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title></title>
-    </head>
-    <body>
-		404 - Página não encontrada
-    </body>
-</html>
+<? include("include/header.php"); ?>
+
+<h2>404 - Página não encontrada - <u><?= $_SERVER["REQUEST_URI"] ?></u></h2>
+<a href="" title="Ir para a página inicial">Ir para a página inicial</a>
+
+<? include("include/footer.php"); ?>

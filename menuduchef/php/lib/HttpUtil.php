@@ -36,9 +36,19 @@ class HttpUtil {
 	    ob_end_flush();
 	}
     }
-    
+
     static function isLocalhost() {
 	return $_SERVER["HTTP_HOST"] == "localhost" || $_SERVER["HTTP_HOST"] == "127.0.0.1";
+    }
+
+    static function validateRepeatedParameter($parameter, $repeatedParameter, $message) {
+	$data = self::getParameterArray();
+
+	if($data[$parameter] != $data[$repeatedParameter]) {
+	    HttpUtil::showErrorMessages(array($message));
+	    header("Location: {$_SERVER["HTTP_REFERER"]}");
+	    exit;
+	}
     }
 
 }

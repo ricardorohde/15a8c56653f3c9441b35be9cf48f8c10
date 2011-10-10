@@ -1,21 +1,21 @@
 <?
 include_once("../../php/lib/config.php");
 
-$obj = new Cidade();
+$obj = new TipoProduto();
 
 if($_GET["id"]) {
-    $obj = Cidade::find($_GET["id"]);
+    $obj = TipoProduto::find($_GET["id"]);
 }
 ?>
 
 <? include("../../include/header.php"); ?>
 
-<h2>Gerenciar Cidades</h2>
+<h2>Gerenciar Tipos de Produto</h2>
 
-<a href="admin/cidade/" title="Cancelar">Cancelar</a>
+<a href="admin/tipo_produto/" title="Cancelar">Cancelar</a>
 <br /><br />
 
-<form action="admin/cidade/controller" method="post">
+<form action="admin/tipo_produto/controller" method="post">
     <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Nome<br />

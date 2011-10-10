@@ -6,13 +6,25 @@
 	<h1>Área Administrativa</h1>
 	<ul>
 	    <li>
-		<a href="administrador/list" title="Administradores">Administradores</a>
+		<a href="administrador/" title="Administradores">Administradores</a>
 	    </li>
 	    <li>
-		<a href="cidade/list" title="Cidades">Cidades</a>
+		<a href="cidade/" title="Cidades">Cidades</a>
 	    </li>
 	    <li>
-		<a href="bairro/list" title="Bairros">Bairros</a>
+		<a href="bairro/" title="Bairros">Bairros</a>
+	    </li>
+	    <li>
+		<a href="restaurante/" title="Restaurantes">Restaurantes</a>
+	    </li>
+	    <li>
+		<a href="consumidor/" title="Consumidores">Consumidores</a>
+	    </li>
+	    <li>
+		<a href="tipo_produto/" title="Tipos de Produto">Tipos de Produto</a>
+	    </li>
+	    <li>
+		<a href="tipo_restaurante/" title="Tipos de Restaurante">Tipos de Restaurante</a>
 	    </li>
 	</ul>
     </body>

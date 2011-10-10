@@ -1,7 +1,7 @@
 <?
 include_once("constant.php");
-require("HttpUtil.php");
-require("php-activerecord/ActiveRecord.php");
+require_once("HttpUtil.php");
+require_once("php-activerecord/ActiveRecord.php");
 
 /**
  * Comandos de inicialização
