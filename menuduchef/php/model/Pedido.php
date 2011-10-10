@@ -15,7 +15,7 @@ class Pedido extends ActiveRecord\Model {
         static $before_save = array("set_current_date");
 
         public function set_current_date() {
-        $this->quando = date();
+        $this->quando = date('Y-m-d H:i:s');
 }
 }
 
