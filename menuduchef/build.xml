@@ -1,0 +1,40 @@
+<project name="Menu du Chef" default="dist" basedir=".">
+    <property file="build.properties" />
+    <property name="dist" location="dist" />
+
+    <target name="dist">
+	<mkdir dir="${dist}" />
+	<mkdir dir="temp" />
+	
+	<copy todir="temp">
+	    <fileset dir="${basedir}" />
+	</copy>
+	
+	<copy todir="${dist}">
+	    <fileset file="unzip.php" />
+	</copy>
+
+	<replace file="temp/.htaccess" token="/menuduchef/" value="${context}"/>
+	
+	<delete file="${dist}/${product}-${version}.tar.gz" />
+	
+	<tar destfile="${dist}/${product}-${version}.tar.gz" compression="gzip">
+	    <tarfileset dir="${basedir}/temp">
+		<include name="*/**" />
+		<exclude name="**/.svn/**"/>
+		<exclude name="_docs/" />
+		<exclude name="dist/" />
+		<exclude name="nbproject/" />
+		<exclude name="temp" />
+		<exclude name=".settings/" />
+		<exclude name=".project" />
+		<exclude name=".buildpath" />
+		<exclude name="build.properties" />
+		<exclude name="build.xml" />
+		<exclude name="unzip.php" />
+	    </tarfileset>
+	</tar>
+	
+	<delete dir="temp" />
+    </target>
+</project>
