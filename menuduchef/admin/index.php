@@ -26,6 +26,12 @@
 	    <li>
 		<a href="tipo_restaurante/" title="Tipos de Restaurante">Tipos de Restaurante</a>
 	    </li>
+            <li>
+                <a href="usuario_restaurante/" title="Usu&aacute;rios de Restaurante">Usu&aacute;rios de Restaurante</a>
+	    </li>
+            <li>
+		<a href="produto/" title="Produtos">Produtos</a>
+	    </li>
 	</ul>
     </body>
 </html>
