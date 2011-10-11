@@ -44,6 +44,12 @@
             <li>
 		<a href="pedido_tem_produto_adicional/" title="Produtos Adicionais inclusos em Pedidos">Produtos Adicionais inclusos em Pedidos</a>
 	    </li>
+            <li>
+		<a href="produto_tem_produto_adicional/" title="Produtos Adicionais pertencentes a Produtos">Produtos Adicionais pertencentes a Produtos</a>
+	    </li>
+            <li>
+		<a href="produto_tem_tipo/" title="Produtos Adicionais pertencentes a Produtos">Produtos Adicionais pertencentes a Produtos</a>
+	    </li>
 	</ul>
     </body>
 </html>
