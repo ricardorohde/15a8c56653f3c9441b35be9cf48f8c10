@@ -1,10 +1,8 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $itens = Produto::all(array("order" => "nome asc"));
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Produtos</h2>
 

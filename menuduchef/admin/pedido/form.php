@@ -1,5 +1,5 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $obj = new Pedido();
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
@@ -10,8 +10,6 @@ if ($_GET["id"]) {
     $obj = Pedido::find($_GET["id"]);
 }
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Pedidos</h2>
 

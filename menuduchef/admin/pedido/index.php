@@ -1,10 +1,8 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $itens = Pedido::all(array("order" => "quando asc"));
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Pedidos</h2>
 
@@ -36,7 +34,7 @@ $itens = Pedido::all(array("order" => "quando asc"));
 	    <tr>
 		<td><?= $item->consumidor->nome ?></td>
 		<td><?= $item->restaurante->nome ?></td>
-		<td><?= $item->quando->format('Y-m-d H:i:s') ?></td>
+		<td><?= $item->quando ?></td>
                 <td><?= $item->pagamento_efetuado ?></td>
                 <td><?= $item->forma_pagamento ?></td>
                 <td><?= $item->preco ?></td>

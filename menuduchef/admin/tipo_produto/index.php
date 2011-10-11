@@ -1,10 +1,8 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $itens = TipoProduto::all(array("order" => "nome asc"));
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Tipos de Produto</h2>
 

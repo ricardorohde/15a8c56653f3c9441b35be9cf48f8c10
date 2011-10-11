@@ -1,5 +1,5 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $obj = new UsuarioRestaurante();
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
@@ -9,8 +9,6 @@ if ($_GET["id"]) {
     $obj = UsuarioRestaurante::find($_GET["id"]);
 }
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Usu&aacute;rios de Restaurantes</h2>
 

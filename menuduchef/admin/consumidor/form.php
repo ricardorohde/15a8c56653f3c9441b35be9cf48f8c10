@@ -1,31 +1,26 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $obj = new Consumidor();
-
 $cidades = Cidade::all(array("order" => "nome asc"));
-if ($obj->bairro->cidade->id) {
-    $idcid = $obj->bairro->cidade->id;
-} else {
-    $primeira_cidade = Cidade::all(array("order" => "nome asc", "limit" => 1));
-    foreach ($primeira_cidade as $pc) {
-	$idcid = $pc->id;
-    }
-}
-
-$bairros = Bairro::all(array('conditions' => array('id_cidade = ?', $idcid)));
 
 if ($_GET["id"]) {
     $obj = Consumidor::find($_GET["id"]);
 }
 ?>
 
-<? include("../../include/header.php"); ?>
-
 <script>
-    $(document).ready(function(){
+    /*$(document).ready(function(){
 	$('#cidades').change(function(){
 	    $('#bairros').load('php/controller/combobox_bairros.php?cidade='+$('#cidades').val() );
+	});
+    });
+    */
+    $(function() {
+	autoCompleteBairros(<?= $obj->bairro->id_cidade ?: 0 ?>, <?= $obj->id_bairro ?: 0 ?>);
+	    
+	$('#cidades').change(function() {
+	    autoCompleteBairros($(this).val());
 	});
     });
 </script>
@@ -44,7 +39,7 @@ if ($_GET["id"]) {
     <input type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br /><br />
     Cidade<br />
     <select id="cidades" name="id_cidade" maxlength="100" >
-	<?
+	<?/*
 	if ($cidades) {
 	    foreach ($cidades as $index => $cid) {
 		$sel = "";
@@ -56,25 +51,18 @@ if ($_GET["id"]) {
 		echo "</option>";
 	    }
 	}
+	*/?>
+	<option value="">-- Selecione --</option>
+	<?
+	if($cidades) {
+	    foreach($cidades as $cidade) {
 	?>
+	<option value="<?= $cidade->id ?>" <? if($cidade->id == $obj->bairro->cidade->id) { ?>selected="true"<? } ?>><?= $cidade->nome ?></option>
+	<? } } ?>
     </select>
     <br /><br />
     Bairro<br />
-    <select id="bairros" name="id_bairro" maxlength="100" >
-	<?
-	if ($bairros) {
-	    foreach ($bairros as $index => $bai) {
-		$sel = "";
-		if ($obj->id_bairro == $bai->id) {
-		    $sel = "selected";
-		}
-		echo "<option value='$bai->id' $sel>";
-		echo "$bai->nome";
-		echo "</option>";
-	    }
-	}
-	?>
-    </select>
+    <select id="bairros" name="id_bairro"></select>
     <br /><br />
     Telefone<br />
     <input type="text" name="telefone" value="<?= $obj->telefone ?>" maxlength="100" /><br /><br />

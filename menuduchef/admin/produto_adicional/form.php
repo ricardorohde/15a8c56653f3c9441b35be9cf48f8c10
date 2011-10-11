@@ -1,5 +1,5 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $obj = new ProdutoAdicional();
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
@@ -9,8 +9,6 @@ if ($_GET["id"]) {
     $obj = ProdutoAdicional::find($_GET["id"]);
 }
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Produtos Adicionais</h2>
 

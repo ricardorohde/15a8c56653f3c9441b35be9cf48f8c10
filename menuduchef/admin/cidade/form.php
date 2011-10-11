@@ -1,5 +1,5 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $obj = new Cidade();
 
@@ -7,8 +7,6 @@ if($_GET["id"]) {
     $obj = Cidade::find($_GET["id"]);
 }
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Cidades</h2>
 

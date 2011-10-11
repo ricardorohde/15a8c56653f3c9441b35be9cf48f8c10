@@ -1,10 +1,8 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $itens = TipoRestaurante::all(array("order" => "nome asc"));
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Tipos de Restaurante</h2>
 
