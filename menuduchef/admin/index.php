@@ -53,6 +53,12 @@
             <li>
 		<a href="restaurante_tem_tipo/" title="Restaurantes tem Tipo">Restaurantes tem Tipo</a>
 	    </li>
+            <li>
+		<a href="restaurante_tem_tipo_produto/" title="Restaurantes tem Tipo Produto">Restaurantes tem Tipo Produto</a>
+	    </li>
+            <li>
+		<a href="restaurante_atende_bairro/" title="Restaurantes Atendem Bairros">Restaurantes Atendem Bairros</a>
+	    </li>
 	</ul>
     </body>
 </html>
