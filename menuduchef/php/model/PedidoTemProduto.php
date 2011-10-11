@@ -5,7 +5,7 @@ class PedidoTemProduto extends ActiveRecord\Model {
 	static $belongs_to = array(
 		array("pedido", "foreign_key" => "id_pedido"),
                 array("produto", "foreign_key" => "id_produto"),
-                array("produto2", "foreign_key" => "id_produto2")
+                array("produto2", "foreign_key" => "id_produto2", "class_name" => "Produto")
 	);
         static $has_many = array(
 	    array("pedido_tem_produtos_adicionais", "foreign_key" => "id_pedido_tem_produto", "class_name" => "PedidoTemProdutoAdicional"),
