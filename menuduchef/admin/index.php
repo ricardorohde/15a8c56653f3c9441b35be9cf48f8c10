@@ -48,7 +48,10 @@
 		<a href="produto_tem_produto_adicional/" title="Produtos Adicionais pertencentes a Produtos">Produtos Adicionais pertencentes a Produtos</a>
 	    </li>
             <li>
-		<a href="produto_tem_tipo/" title="Produtos Adicionais pertencentes a Produtos">Produtos Adicionais pertencentes a Produtos</a>
+		<a href="produto_tem_tipo/" title="Produtos tem Tipo">Produtos tem Tipo</a>
+	    </li>
+            <li>
+		<a href="restaurante_tem_tipo/" title="Restaurantes tem Tipo">Restaurantes tem Tipo</a>
 	    </li>
 	</ul>
     </body>

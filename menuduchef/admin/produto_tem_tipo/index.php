@@ -25,7 +25,7 @@ $itens = ProdutoTemTipo::all(array("order" => "id_produto asc"));
 	    ?>
 	    <tr>
 		<td><?= $item->produto->nome ?></td>
-		<td><?= $item->tipo->nome ?></td>
+		<td><?= $item->tipo_produto->nome ?></td>
                               
 		<td><a href="admin/produto_tem_tipo/form/<?= $item->id ?>">Modificar</a></td>
 		<td><a href="admin/produto_tem_tipo/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
