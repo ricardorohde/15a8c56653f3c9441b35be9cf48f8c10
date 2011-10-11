@@ -36,7 +36,7 @@ $itens = Pedido::all(array("order" => "quando asc"));
 	    <tr>
 		<td><?= $item->consumidor->nome ?></td>
 		<td><?= $item->restaurante->nome ?></td>
-		<td><?= $item->quando ?></td>
+		<td><?= $item->quando->format('Y-m-d H:i:s') ?></td>
                 <td><?= $item->pagamento_efetuado ?></td>
                 <td><?= $item->forma_pagamento ?></td>
                 <td><?= $item->preco ?></td>
