@@ -6,7 +6,7 @@ $itens = RestauranteAtendeBairro::all(array("order" => "id_restaurante asc"));
 
 <? include("../../include/header.php"); ?>
 
-<h2>Gerenciar Restaurantes atende Bairros</h2>
+<h2>Gerenciar Restaurantes atendem Bairros</h2>
 
 <a href="admin/" title="Menu principal">Menu principal</a>
 <br /><br />
@@ -18,6 +18,7 @@ $itens = RestauranteAtendeBairro::all(array("order" => "id_restaurante asc"));
     <tr>
 	<th>Restaurante</th>
 	<th>Bairro</th>
+        <th>Taxa de Entrega</th>
 	<th>Modificar</th>
 	<th>Excluir</th>
     </tr>
@@ -28,7 +29,7 @@ $itens = RestauranteAtendeBairro::all(array("order" => "id_restaurante asc"));
 	    <tr>
 		<td><?= $item->restaurante->nome ?></td>
 		<td><?= $item->bairro->nome ?></td>
-                              
+                <td><?= $item->preco_entrega ?></td>       
 		<td><a href="admin/restaurante_atende_bairro/form/<?= $item->id ?>">Modificar</a></td>
 		<td><a href="admin/restaurante_atende_bairro/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>

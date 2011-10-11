@@ -12,7 +12,7 @@ if ($_GET["id"]) {
 ?>
 
 
-<h2>Gerenciar Restaurante atende Bairros</h2>
+<h2>Gerenciar Restaurantes atendem Bairros</h2>
 
 <a href="admin/restaurante_atende_bairro/" title="Cancelar">Cancelar</a>
 <br /><br />
@@ -42,6 +42,8 @@ if ($_GET["id"]) {
 	} ?>
     </select>
     <br /><br />
+    Taxa de Entrega<br />
+    <input type="text" name="preco_entrega" value="<?= $obj->preco_entrega ?>" maxlength="100" /><br /><br />
         
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
