@@ -11,7 +11,6 @@ if ($_GET["id"]) {
 }
 ?>
 
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Restaurantes tem Tipos</h2>
 
