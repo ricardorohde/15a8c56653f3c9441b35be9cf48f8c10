@@ -1,5 +1,5 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $obj = new ProdutoTemTipo();
 $produtos = Produto::all(array("order" => "nome asc"));
@@ -10,8 +10,6 @@ if ($_GET["id"]) {
     $obj = ProdutoTemTipo::find($_GET["id"]);
 }
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Produtos tem Tipos</h2>
 

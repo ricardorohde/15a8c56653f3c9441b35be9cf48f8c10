@@ -1,5 +1,5 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $obj = new PedidoTemProdutoAdicional();
 $pedido_tem_produtos = PedidoTemProduto::all(array("order" => "id asc"));
@@ -10,8 +10,6 @@ if ($_GET["id"]) {
     $obj = PedidoTemProdutoAdicional::find($_GET["id"]);
 }
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 

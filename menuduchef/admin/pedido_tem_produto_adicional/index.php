@@ -1,10 +1,8 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $itens = PedidoTemProdutoAdicional::all(array("order" => "id_pedido_tem_produto asc"));
 ?>
-
-<? include("../../include/header.php"); ?>
 
 <h2>Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 
