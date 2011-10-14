@@ -15,16 +15,20 @@ $produtos = Produto::all(array("order" => "nome asc"));
 <form action="admin/pedido_tem_produto/controller" method="post">
     <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
-    Pedido<br />
+    Pedido<br /><? if($obj->id_pedido){
+            echo $obj->id_pedido." (".$obj->pedido->restaurante->nome.", ".$obj->pedido->consumidor->nome.")";
+        }else{ ?>
     <select name="id_pedido">-- Selecione --</option>
-	<?
-	if ($pedidos) {
-	    foreach ($pedidos as $pedido) {
-		?>
-		<option value="<?= $pedido->id ?>" <? if ($pedido->id == $obj->id_pedido) { ?>selected="true"<? } ?>><?= $pedido->id." (".$pedido->restaurante->nome.", ".$pedido->consumidor->nome.")" ?></option>
-	    <? }
-	} ?>
+	<?        
+            if ($pedidos) {
+                foreach ($pedidos as $pedido) {
+                    ?>
+                    <option value="<?= $pedido->id ?>" <? if ($pedido->id == $obj->id_pedido) { ?>selected="true"<? } ?>><?= $pedido->id." (".$pedido->restaurante->nome.", ".$pedido->consumidor->nome.")" ?></option>
+                <? }
+            }
+	?>
     </select>
+    <? } ?>
     <br /><br />
     Produto<br />
     <select name="id_produto">-- Selecione --</option>

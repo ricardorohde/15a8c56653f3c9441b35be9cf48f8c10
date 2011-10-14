@@ -15,7 +15,9 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
 <form action="admin/pedido/controller" method="post">
     <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
-    Consumidor<br />
+    Consumidor<br /><? if($obj->id_consumidor){ 
+         echo $obj->consumidor->login;  
+      }else{ ?>
     <select name="id_consumidor">-- Selecione --</option>
 	<?
 	if ($consumidores) {
@@ -25,8 +27,11 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
 	    <? }
 	} ?>
     </select>
+    <? } ?>
     <br /><br />
-    Restaurante<br />
+    Restaurante<br /><? if($obj->id_restaurante){ 
+         echo $obj->restaurante->nome;  
+      }else{ ?>
     <select name="id_restaurante">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
@@ -36,6 +41,7 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
 	    <? }
 	} ?>
     </select>
+    <? } ?>
     <br /><br />
     Pagamento Efetuado<br />
     <input type="radio" name="pagamento_efetuado" value="1" <? if (!$obj->id || $obj->pagamento_efetuado === 1) { ?>checked="true"<? } ?> />Sim
