@@ -3,8 +3,10 @@
  */
 var COMBO_BOX_DEFAULT_OPTION = '<option value="">-- Selecione --</option>';
 var COMBO_BOX_DEFAULT_BAIRRO = '<option value="">-- Selecione uma cidade primeiro --</option>';
+var COMBO_BOX_DEFAULT_PRODUTO = '<option value="">-- Selecione um pedido primeiro --</option>';
 var COMBO_BOX_LOADING_OPTION = '<option value="">Carregando...</option>';
 var URL_BAIRROS_JSON = 'php/controller/list_bairros_json';
+var URL_PEDIDOS_JSON = 'php/controller/list_pedidos_json';
 var AREA_MODIFICAR_SENHA_ID = 'areaModificarSenha';
 
 function autoCompleteComboBox(url, parameters, targetId, valueIndex, descriptionIndex, preSelectedValue) {
@@ -34,6 +36,16 @@ function autoCompleteBairros(idCidade, preSelectedIdBairro) {
 	autoCompleteComboBox(URL_BAIRROS_JSON, {'id': idCidade}, 'bairros', 'id', 'nome', preSelectedIdBairro);
     } else {
 	$('#bairros').empty().append($(COMBO_BOX_DEFAULT_BAIRRO));
+    }
+}
+
+function autoCompleteProdutos(idRestaurante, preSelectedIdProduto) {
+    if(idRestaurante) {
+		alert("SIM");
+	autoCompleteComboBox(URL_PRODUTOS_JSON, {'id': idRestaurante}, 'produtos', 'id', 'nome', preSelectedIdProduto);
+    } else {
+		alert("NAO");
+	$('#produtos').empty().append($(COMBO_BOX_DEFAULT_PRODUTO));
     }
 }
 

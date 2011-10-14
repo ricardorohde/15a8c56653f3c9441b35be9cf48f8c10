@@ -4,9 +4,18 @@ include("../../include/header.php");
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProduto");
 
 $pedidos = Pedido::all(array("order" => "quando asc"));
-$produtos = Produto::all(array("order" => "nome asc"));
-?>
 
+
+?>
+<script type="text/javascript">
+    $(function() {
+	autoCompleteProdutos(<?= $obj->pedido->id_restaurante ?: 0 ?>, <?= $obj->id_produto ?: 0 ?>);
+	    
+	$('#pedidos').change(function() {
+	    autoCompleteProdutos($(this).val());
+	});
+    });
+</script>
 <h2>Gerenciar Produtos inclusos nos Pedidos</h2>
 
 <a href="admin/pedido_tem_produto/" title="Cancelar">Cancelar</a>
@@ -18,7 +27,7 @@ $produtos = Produto::all(array("order" => "nome asc"));
     Pedido<br /><? if($obj->id_pedido){
             echo $obj->id_pedido." (".$obj->pedido->restaurante->nome.", ".$obj->pedido->consumidor->nome.")";
         }else{ ?>
-    <select name="id_pedido">-- Selecione --</option>
+    <select id="pedidos" name="id_pedido">-- Selecione --</option>
 	<?        
             if ($pedidos) {
                 foreach ($pedidos as $pedido) {
@@ -31,15 +40,7 @@ $produtos = Produto::all(array("order" => "nome asc"));
     <? } ?>
     <br /><br />
     Produto<br />
-    <select name="id_produto">-- Selecione --</option>
-	<?
-	if ($produtos) {
-	    foreach ($produtos as $produto) {
-		?>
-		<option value="<?= $produto->id ?>" <? if ($produto->id == $obj->id_produto) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
-	    <? }
-	} ?>
-    </select>
+    <select id="produtos" name="id_produto"></select>
     <br /><br />
     Quantidade<br />
     <input type="text" name="qtd" value="<?= $obj->qtd ?>" maxlength="100" /><br /><br />
