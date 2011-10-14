@@ -16,7 +16,9 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
-    Restaurante<br />
+    Restaurante<br /><? if($obj->id_restaurante){ 
+         echo $obj->restaurante->nome;  
+      }else{ ?>
     <select name="id_restaurante">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
@@ -26,6 +28,7 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 	    <? }
 	} ?>
     </select>
+    <? } ?>
     <br /><br />
     Pre&ccedil;o Adicional<br />
     <input type="text" name="preco_adicional" value="<?= $obj->preco_adicional ?>" maxlength="100" /><br /><br />
