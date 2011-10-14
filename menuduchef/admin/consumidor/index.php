@@ -29,7 +29,7 @@ $itens = Consumidor::all(array("order" => "nome asc"));
 		<td><?= $item->bairro->cidade->nome ?></td>
 		<td><?= $item->bairro->nome ?></td>
 		<td><a href="admin/consumidor/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/consumidor/controller?deleteId=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/consumidor/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}
