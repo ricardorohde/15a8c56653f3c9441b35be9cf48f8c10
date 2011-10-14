@@ -17,17 +17,20 @@ $administradores = Administrador::all(array("order" => "nome asc"));
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
-    Cidade<br />
-    <select name="id_cidade">
-	<option value="">-- Selecione --</option>
-	<?
-	if ($cidades) {
-	    foreach ($cidades as $cidade) {
-		?>
-		<option value="<?= $cidade->id ?>" <? if ($cidade->id == $obj->id_cidade) { ?>selected="true"<? } ?>><?= $cidade->nome ?></option>
-	    <? }
-	} ?>
-    </select>
+    Cidade<br /> <? if($obj->id_cidade){ 
+         echo $obj->cidade->nome;  
+      }else{ ?>
+        <select name="id_cidade">
+            <option value="">-- Selecione --</option>
+            <?
+            if ($cidades) {
+                foreach ($cidades as $cidade) {
+                    ?>
+                    <option value="<?= $cidade->id ?>" <? if ($cidade->id == $obj->id_cidade) { ?>selected="true"<? } ?>><?= $cidade->nome ?></option>
+                <? }
+            } ?>
+        </select>
+    <? } ?>
     <br /><br />
     Endereço<br />
     <input type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br /><br />
