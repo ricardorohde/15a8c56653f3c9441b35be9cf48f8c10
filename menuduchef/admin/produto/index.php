@@ -46,7 +46,7 @@ $itens = Produto::all(array("order" => "nome asc"));
                 <td><?= $item->texto_promocao ?></td>
               
 		<td><a href="admin/produto/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/produto/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/produto/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

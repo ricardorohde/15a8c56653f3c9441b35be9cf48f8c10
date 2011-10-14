@@ -1,14 +1,10 @@
 <?
 include("../../include/header.php");
 
-$obj = new ProdutoTemTipo();
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("ProdutoTemTipo");
+
 $produtos = Produto::all(array("order" => "nome asc"));
 $tipos = TipoProduto::all(array("order" => "nome asc"));
-
-
-if ($_GET["id"]) {
-    $obj = ProdutoTemTipo::find($_GET["id"]);
-}
 ?>
 
 <h2>Gerenciar Produtos tem Tipos</h2>

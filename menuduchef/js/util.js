@@ -2,7 +2,10 @@
  * Requires jQuery
  */
 var COMBO_BOX_DEFAULT_OPTION = '<option value="">-- Selecione --</option>';
+var COMBO_BOX_DEFAULT_BAIRRO = '<option value="">-- Selecione uma cidade primeiro --</option>';
 var COMBO_BOX_LOADING_OPTION = '<option value="">Carregando...</option>';
+var URL_BAIRROS_JSON = 'php/controller/list_bairros_json';
+var AREA_MODIFICAR_SENHA_ID = 'areaModificarSenha';
 
 function autoCompleteComboBox(url, parameters, targetId, valueIndex, descriptionIndex, preSelectedValue) {
     var target = $('#' + targetId);
@@ -27,5 +30,17 @@ function autoCompleteComboBox(url, parameters, targetId, valueIndex, description
 }
 
 function autoCompleteBairros(idCidade, preSelectedIdBairro) {
-    autoCompleteComboBox('php/controller/list_bairros_json', {"id": idCidade}, "bairros", "id", "nome", preSelectedIdBairro);
+    if(idCidade) {
+	autoCompleteComboBox(URL_BAIRROS_JSON, {'id': idCidade}, 'bairros', 'id', 'nome', preSelectedIdBairro);
+    } else {
+	$('#bairros').empty().append($(COMBO_BOX_DEFAULT_BAIRRO));
+    }
+}
+
+function permitirModificarSenha() {
+    if($(this).attr('checked')) {
+	$('#' + AREA_MODIFICAR_SENHA_ID).show();
+    } else {
+	$('#' + AREA_MODIFICAR_SENHA_ID).hide();
+    }
 }

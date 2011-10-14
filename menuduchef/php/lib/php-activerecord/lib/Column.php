@@ -116,7 +116,7 @@ class Column
 
 		switch ($this->type)
 		{
-			case self::STRING:	return (string)$value;
+			case self::STRING:	return (string) htmlentities(html_entity_decode($value));
 			case self::INTEGER:	return (int)$value;
 			case self::DECIMAL:	return (double)$value;
 			case self::DATETIME:

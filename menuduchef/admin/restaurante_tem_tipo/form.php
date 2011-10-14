@@ -1,14 +1,10 @@
 <?
 include("../../include/header.php");
 
-$obj = new RestauranteTemTipo();
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("RestauranteTemTipo");
+
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $tipos = TipoRestaurante::all(array("order" => "nome asc"));
-
-
-if ($_GET["id"]) {
-    $obj = RestauranteTemTipo::find($_GET["id"]);
-}
 ?>
 
 

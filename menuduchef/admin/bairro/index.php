@@ -27,7 +27,7 @@ $itens = Bairro::all(array("order" => "nome asc"));
 		<td><?= $item->nome ?></td>
 		<td><?= $item->cidade->nome ?></td>
 		<td><a href="admin/bairro/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/bairro/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/bairro/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

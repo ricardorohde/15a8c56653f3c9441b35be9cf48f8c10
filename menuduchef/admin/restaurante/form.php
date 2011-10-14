@@ -1,13 +1,10 @@
 <?
 include("../../include/header.php");
 
-$obj = new Restaurante();
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Restaurante");
+
 $cidades = Cidade::all(array("order" => "nome asc"));
 $administradores = Administrador::all(array("order" => "nome asc"));
-
-if ($_GET["id"]) {
-    $obj = Restaurante::find($_GET["id"]);
-}
 ?>
 
 <h2>Gerenciar Restaurantes</h2>

@@ -1,11 +1,7 @@
 <?
 include("../../include/header.php");
 
-$obj = new Administrador();
-
-if ($_GET["id"]) {
-    $obj = Administrador::find($_GET["id"]);
-}
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Administrador");
 ?>
 
 <script type="text/javascript">

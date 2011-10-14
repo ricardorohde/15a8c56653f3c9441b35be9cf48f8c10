@@ -44,7 +44,7 @@ $itens = Pedido::all(array("order" => "quando asc"));
                 <td><?= $item->situacao ?></td>
                               
 		<td><a href="admin/pedido/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/pedido/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/pedido/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

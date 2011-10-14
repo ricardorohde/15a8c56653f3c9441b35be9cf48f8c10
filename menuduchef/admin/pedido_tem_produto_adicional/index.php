@@ -28,7 +28,7 @@ $itens = PedidoTemProdutoAdicional::all(array("order" => "id_pedido_tem_produto 
 		<td><?= $item->produto_adicional->nome ?></td>
                               
 		<td><a href="admin/pedido_tem_produto_adicional/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/pedido_tem_produto_adicional/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/pedido_tem_produto_adicional/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

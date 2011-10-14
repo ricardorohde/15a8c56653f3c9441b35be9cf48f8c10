@@ -36,7 +36,7 @@ $itens = PedidoTemProduto::all(array("order" => "id_pedido asc"));
                 <td><?= $item->produto2->nome ?></td>
                               
 		<td><a href="admin/pedido_tem_produto/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/pedido_tem_produto/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/pedido_tem_produto/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

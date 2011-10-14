@@ -1,13 +1,9 @@
 <?
 include("../../include/header.php");
 
-$obj = new ProdutoAdicional();
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("ProdutoAdicional");
+
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
-
-
-if ($_GET["id"]) {
-    $obj = ProdutoAdicional::find($_GET["id"]);
-}
 ?>
 
 <h2>Gerenciar Produtos Adicionais</h2>

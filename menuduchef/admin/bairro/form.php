@@ -1,12 +1,9 @@
 <?
 include("../../include/header.php");
 
-$obj = new Bairro();
-$cidades = Cidade::all(array("order" => "nome asc"));
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Bairro");
 
-if($_GET["id"]) {
-    $obj = Bairro::find($_GET["id"]);
-}
+$cidades = Cidade::all(array("order" => "nome asc"));
 ?>
 
 <h2>Gerenciar Bairros</h2>

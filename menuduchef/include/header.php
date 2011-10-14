@@ -20,7 +20,7 @@ if(HttpUtil::isLocalhost()) {
 	<title><?= SITE_TITLE ?></title>
 	<base href="<?= $baseHref ?>" />
 	<script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
-	<script type="text/javascript" src="js/ajax_util.js"></script>
+	<script type="text/javascript" src="js/util.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css" />
     </head>
     <body>

@@ -27,7 +27,7 @@ $itens = Administrador::all(array("order" => "nome asc"));
 		<td><?= $item->nome ?></td>
 		<td><?= $item->login ?></td>
 		<td><a href="admin/administrador/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/administrador/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/administrador/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

@@ -1,11 +1,7 @@
 <?
 include("../../include/header.php");
 
-$obj = new TipoProduto();
-
-if($_GET["id"]) {
-    $obj = TipoProduto::find($_GET["id"]);
-}
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("TipoProduto");
 ?>
 
 <h2>Gerenciar Tipos de Produto</h2>

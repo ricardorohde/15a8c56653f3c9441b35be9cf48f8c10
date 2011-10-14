@@ -1,14 +1,10 @@
 <?
 include("../../include/header.php");
 
-$obj = new ProdutoTemProdutoAdicional();
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("ProdutoTemProdutoAdicional");
+
 $produtos = Produto::all(array("order" => "nome asc"));
 $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
-
-
-if ($_GET["id"]) {
-    $obj = ProdutoTemProdutoAdicional::find($_GET["id"]);
-}
 ?>
 
 <h2>Gerenciar Produtos Adicionais pertencentes a Produtos</h2>

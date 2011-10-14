@@ -1,14 +1,10 @@
 <?
 include("../../include/header.php");
 
-$obj = new PedidoTemProdutoAdicional();
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProdutoAdicional");
+
 $pedido_tem_produtos = PedidoTemProduto::all(array("order" => "id asc"));
 $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
-
-
-if ($_GET["id"]) {
-    $obj = PedidoTemProdutoAdicional::find($_GET["id"]);
-}
 ?>
 
 <h2>Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>

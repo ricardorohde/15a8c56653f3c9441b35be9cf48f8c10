@@ -5,7 +5,7 @@ require_once("constant.php");
 class HttpUtil {
 
     static function getParameterArray() {
-	return $_POST ? $_POST : ($_GET ? $_GET : 0);
+	return $_POST ? : ($_GET ? : 0);
     }
 
     static function getCurrentPage() {
@@ -44,11 +44,26 @@ class HttpUtil {
     static function validateRepeatedParameter($parameter, $repeatedParameter, $message) {
 	$data = self::getParameterArray();
 
-	if($data[$parameter] != $data[$repeatedParameter]) {
+	if ($data[$parameter] != $data[$repeatedParameter]) {
+	    $_SESSION["obj"] = $data;
 	    HttpUtil::showErrorMessages(array($message));
 	    header("Location: {$_SERVER["HTTP_REFERER"]}");
 	    exit;
 	}
+    }
+
+    static function getActiveRecordObjectBySessionOrGetId($class) {
+	$obj = new $class();
+	
+	if ($_SESSION["obj"]) {
+	    $obj->set_attributes($_SESSION["obj"]);
+	    unset($_SESSION["obj"]);
+	    
+	} elseif ($_GET["id"]) {
+	    $obj = $class::find($_GET["id"]);
+	}
+	
+	return $obj;
     }
 
 }

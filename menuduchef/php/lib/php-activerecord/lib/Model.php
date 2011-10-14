@@ -996,6 +996,19 @@ class Model
 		$this->__set($name, $value);
 		return $this->update(false);
 	}
+	
+	/**
+	 * <MENU_DU_CHEF>
+	 * Função que pode ser sobrescrita pelas classes filhas de 
+	 * ActiveRecord\Model para manipular o array de atributos
+	 * que será convertido para propriedades do model.
+	 * 
+	 * @param array $attributes 
+	 */
+	public function prepare_attributes(array &$attributes) {
+	    //nothing, but can be overridden
+	}
+	//</MENU_DU_CHEF>
 
 	/**
 	 * Mass update the model with data from an attributes hash.
@@ -1008,6 +1021,9 @@ class Model
 	 */
 	public function set_attributes(array $attributes)
 	{
+		// <MENU_DU_CHEF>
+		$this->prepare_attributes($attributes);
+		// </MENU_DU_CHEF>
 		$this->set_attributes_via_mass_assignment($attributes, true);
 	}
 
@@ -1048,7 +1064,9 @@ class Model
 				try {
 					$this->$name = $value;
 				} catch (UndefinedPropertyException $e) {
-					$exceptions[] = $e->getMessage();
+					
+					//$exceptions[] = $e->getMessage();
+					// </MENU_DU_CHEF>
 				}
 			}
 			else
@@ -1062,8 +1080,15 @@ class Model
 			}
 		}
 
-		if (!empty($exceptions))
-			throw new UndefinedPropertyException(get_called_class(),$exceptions);
+		// <MENU_DU_CHEF>
+		// Linhas comentadas para que, propositalmente, não seja mais
+		// tratada a exceção de elemento do array de atributos que
+		// não é definido como propriedade do modelo. Isso foi feito
+		// para que não seja preciso utilizar a função unset() nos
+		// elementos do $_POST
+		//if (!empty($exceptions))
+		//	throw new UndefinedPropertyException(get_called_class(),$exceptions);
+		// </MENU_DU_CHEF>
 	}
 
 	/**

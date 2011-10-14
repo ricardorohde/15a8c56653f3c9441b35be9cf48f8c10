@@ -1,27 +1,20 @@
 <?
 include("../../include/header.php");
 
-$obj = new Consumidor();
-$cidades = Cidade::all(array("order" => "nome asc"));
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Consumidor");
 
-if ($_GET["id"]) {
-    $obj = Consumidor::find($_GET["id"]);
-}
+$cidades = Cidade::all(array("order" => "nome asc"));
 ?>
 
-<script>
-    /*$(document).ready(function(){
-	$('#cidades').change(function(){
-	    $('#bairros').load('php/controller/combobox_bairros.php?cidade='+$('#cidades').val() );
-	});
-    });
-    */
+<script type="text/javascript">
     $(function() {
 	autoCompleteBairros(<?= $obj->bairro->id_cidade ?: 0 ?>, <?= $obj->id_bairro ?: 0 ?>);
 	    
 	$('#cidades').change(function() {
 	    autoCompleteBairros($(this).val());
 	});
+	
+	$('#modificarSenha').change(permitirModificarSenha);
     });
 </script>
 
@@ -38,20 +31,7 @@ if ($_GET["id"]) {
     Endereço<br />
     <input type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br /><br />
     Cidade<br />
-    <select id="cidades" name="id_cidade" maxlength="100" >
-	<?/*
-	if ($cidades) {
-	    foreach ($cidades as $index => $cid) {
-		$sel = "";
-		if ($obj->bairro->cidade->id == $cid->id) {
-		    $sel = "selected";
-		}
-		echo "<option value='$cid->id' $sel>";
-		echo "$cid->nome";
-		echo "</option>";
-	    }
-	}
-	*/?>
+    <select id="cidades" name="id_cidade">
 	<option value="">-- Selecione --</option>
 	<?
 	if($cidades) {
@@ -71,11 +51,21 @@ if ($_GET["id"]) {
     <input type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />Não
     <br /><br />
     Login<br />
-    <input type="text" name="login" autocomplete="off" value="<?= $obj->login ?>" maxlength="100" /><br />
-    Senha<br />
-    <input type="password" name="senha" autocomplete="off" maxlength="100" /><br /><br />
-    Repita a senha<br />
-    <input type="password" name="senha_rep" autocomplete="off" maxlength="100" /><br /><br />
+    <input type="text" name="login" autocomplete="off" value="<?= $obj->login ?>" maxlength="100" /><br /><br />
+    
+    <? if($obj->id) { ?>
+    <input type="checkbox" name="modificarSenha" id="modificarSenha" value="1" />
+    <label for="modificarSenha">Modificar senha</label>
+    <br /><br />
+    <? } ?>
+    
+    <span id="areaModificarSenha" <? if($obj->id) { ?>style="display: none"<? } ?>>
+	Senha<br />
+	<input type="password" name="senha" autocomplete="off" maxlength="100" /><br /><br />
+	Repita a senha<br />
+	<input type="password" name="senha_rep" autocomplete="off" maxlength="100" /><br clear="all" /><br />
+    </span>
+    
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 

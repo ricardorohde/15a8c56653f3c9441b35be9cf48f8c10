@@ -1,14 +1,10 @@
 <?
 include("../../include/header.php");
 
-$obj = new Pedido();
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Pedido");
+
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $consumidores = Consumidor::all(array("order" => "nome asc"));
-
-
-if ($_GET["id"]) {
-    $obj = Pedido::find($_GET["id"]);
-}
 ?>
 
 <h2>Gerenciar Pedidos</h2>

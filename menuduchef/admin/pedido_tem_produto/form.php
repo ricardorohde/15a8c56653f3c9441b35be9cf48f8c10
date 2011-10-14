@@ -1,14 +1,10 @@
 <?
 include("../../include/header.php");
 
-$obj = new PedidoTemProduto();
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProduto");
+
 $pedidos = Pedido::all(array("order" => "quando asc"));
 $produtos = Produto::all(array("order" => "nome asc"));
-
-
-if ($_GET["id"]) {
-    $obj = PedidoTemProduto::find($_GET["id"]);
-}
 ?>
 
 <h2>Gerenciar Produtos inclusos nos Pedidos</h2>

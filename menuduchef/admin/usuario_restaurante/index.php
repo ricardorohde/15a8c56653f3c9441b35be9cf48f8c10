@@ -33,7 +33,7 @@ $itens = UsuarioRestaurante::all(array("order" => "nome asc"));
                 <td><?= $item->senha ?></td>
                 <td><?= $item->superior ?></td>
 		<td><a href="admin/usuario_restaurante/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/usuario_restaurante/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/usuario_restaurante/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

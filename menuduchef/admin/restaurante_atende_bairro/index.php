@@ -31,7 +31,7 @@ $itens = RestauranteAtendeBairro::all(array("order" => "id_restaurante asc"));
 		<td><?= $item->bairro->nome ?></td>
                 <td><?= $item->preco_entrega ?></td>       
 		<td><a href="admin/restaurante_atende_bairro/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/restaurante_atende_bairro/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/restaurante_atende_bairro/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

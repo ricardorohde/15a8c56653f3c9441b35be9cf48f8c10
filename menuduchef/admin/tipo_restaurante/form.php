@@ -1,11 +1,7 @@
 <?
 include("../../include/header.php");
 
-$obj = new TipoRestaurante();
-
-if($_GET["id"]) {
-    $obj = TipoRestaurante::find($_GET["id"]);
-}
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("TipoRestaurante");
 ?>
 
 <h2>Gerenciar Tipos de Restaurante</h2>

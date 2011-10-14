@@ -30,7 +30,7 @@ $itens = RestauranteTemTipo::all(array("order" => "id_restaurante asc"));
 		<td><?= $item->tipo_restaurante->nome ?></td>
                               
 		<td><a href="admin/restaurante_tem_tipo/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/restaurante_tem_tipo/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/restaurante_tem_tipo/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

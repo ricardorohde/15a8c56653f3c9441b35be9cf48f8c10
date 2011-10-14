@@ -25,7 +25,7 @@ $itens = TipoProduto::all(array("order" => "nome asc"));
 	    <tr>
 		<td><?= $item->nome ?></td>
 		<td><a href="admin/tipo_produto/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/tipo_produto/controller?id=<?= $item->id ?>&action=delete" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td><a href="admin/tipo_produto/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

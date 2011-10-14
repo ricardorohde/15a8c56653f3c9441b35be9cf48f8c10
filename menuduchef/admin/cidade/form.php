@@ -1,11 +1,7 @@
 <?
 include("../../include/header.php");
 
-$obj = new Cidade();
-
-if($_GET["id"]) {
-    $obj = Cidade::find($_GET["id"]);
-}
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Cidade");
 ?>
 
 <h2>Gerenciar Cidades</h2>

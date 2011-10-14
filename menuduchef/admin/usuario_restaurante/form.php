@@ -1,13 +1,9 @@
 <?
 include("../../include/header.php");
 
-$obj = new UsuarioRestaurante();
+$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("UsuarioRestaurante");
+
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
-
-
-if ($_GET["id"]) {
-    $obj = UsuarioRestaurante::find($_GET["id"]);
-}
 ?>
 
 <h2>Gerenciar Usu&aacute;rios de Restaurantes</h2>
