@@ -22,7 +22,6 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
 <br /><br />
 
 <form action="admin/pedido_tem_produto/controller" method="post">
-    <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Pedido<br /><? if($obj->id_pedido){
             echo $obj->id_pedido." (".$obj->pedido->restaurante->nome.", ".$obj->pedido->consumidor->nome.")";

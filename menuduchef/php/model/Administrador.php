@@ -18,10 +18,19 @@ class Administrador extends ActiveRecord\Model {
 	array("login", "message" => "já existe")
     );
     
-    static $before_save = array("encrypt_senha");
-    
-    public function encrypt_senha() {
-	$this->senha = md5($this->senha);
+    public function prepare_attributes(array &$attributes) {
+	if ($attributes["id"] && !$attributes["modificarSenha"]) {
+	    unset($attributes["senha"]);
+	} else {
+	    HttpUtil::validateRepeatedParameter("senha", "senha_rep", "Senha não repetida corretamente");
+	}
+	
+	if ($attributes["senha"]) {
+	    $attributes["senha"] = md5($attributes["senha"]);
+	}
+	
+	unset($attributes["senha_rep"]);
+	unset($attributes["modificarSenha"]);
     }
 
 }

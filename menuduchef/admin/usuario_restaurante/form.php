@@ -12,7 +12,6 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 <br /><br />
 
 <form action="admin/usuario_restaurante/controller" method="post">
-    <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />

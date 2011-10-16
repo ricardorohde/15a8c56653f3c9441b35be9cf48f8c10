@@ -13,7 +13,6 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
 <br /><br />
 
 <form action="admin/produto_tem_tipo/controller" method="post">
-    <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Produto<br />
     <select name="id_produto">-- Selecione --</option>

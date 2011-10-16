@@ -14,7 +14,6 @@ $bairros = Bairro::all(array("order" => "nome asc"));
 <br /><br />
 
 <form action="admin/restaurante_atende_bairro/controller" method="post">
-    <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Restaurante<br />
     <select name="id_restaurante">-- Selecione --</option>

@@ -24,7 +24,6 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 <br /><br />
 
 <form action="admin/consumidor/controller" method="post">
-    <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
@@ -50,21 +49,8 @@ $cidades = Cidade::all(array("order" => "nome asc"));
     <input type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="true"<? } ?> />Sim
     <input type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />Não
     <br /><br />
-    Login<br />
-    <input type="text" name="login" autocomplete="off" value="<?= $obj->login ?>" maxlength="100" /><br /><br />
     
-    <? if($obj->id) { ?>
-    <input type="checkbox" name="modificarSenha" id="modificarSenha" value="1" />
-    <label for="modificarSenha">Modificar senha</label>
-    <br /><br />
-    <? } ?>
-    
-    <span id="areaModificarSenha" <? if($obj->id) { ?>style="display: none"<? } ?>>
-	Senha<br />
-	<input type="password" name="senha" autocomplete="off" maxlength="100" /><br /><br />
-	Repita a senha<br />
-	<input type="password" name="senha_rep" autocomplete="off" maxlength="100" /><br clear="all" /><br />
-    </span>
+    <? include("../../include/inputs_login_senha.php"); ?>
     
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>

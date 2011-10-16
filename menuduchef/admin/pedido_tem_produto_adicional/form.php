@@ -13,7 +13,6 @@ $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 <br /><br />
 
 <form action="admin/pedido_tem_produto_adicional/controller" method="post">
-    <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Pedido tem Produto<br />
     <select name="id_pedido_tem_produto">-- Selecione --</option>

@@ -13,7 +13,6 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
 <br /><br />
 
 <form action="admin/pedido/controller" method="post">
-    <input type="hidden" name="action" value="<?= $obj->id ? "update" : "create" ?>" />
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Consumidor<br /><? if($obj->id_consumidor){ 
          echo $obj->consumidor->login;  
