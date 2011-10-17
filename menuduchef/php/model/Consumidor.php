@@ -9,7 +9,9 @@ class Consumidor extends ActiveRecord\Model {
     );
     
     static $has_many = array(
-	array("pedidos", "foreign_key" => "id_consumidor", "class_name" => "Consumidor")
+	array("pedidos", "foreign_key" => "id_consumidor", "class_name" => "Pedido"),
+        array("enderecos", "foreign_key" => "id_consumidor", "class_name" => "EnderecoConsumidor"),
+        array("telefones", "foreign_key" => "id_consumidor", "class_name" => "TelefoneConsumidor")
     );
     
     static $validates_presence_of = array(
