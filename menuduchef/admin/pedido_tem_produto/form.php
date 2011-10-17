@@ -9,7 +9,7 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
 ?>
 <script type="text/javascript">
     $(function() {
-	autoCompleteProdutos(<?= $obj->pedido->id_restaurante ?: 0 ?>, <?= $obj->id_produto ?: 0 ?>);
+	autoCompleteProdutos(<?= $obj->id_pedido ?: 0 ?>, <?= $obj->id_produto ?: 0 ?>);
 	    
 	$('#pedidos').change(function() {
 	    autoCompleteProdutos($(this).val());
