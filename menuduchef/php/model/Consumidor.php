@@ -4,10 +4,6 @@ class Consumidor extends ActiveRecord\Model {
 
     static $table_name = "consumidor";
     
-    static $belongs_to = array(
-	array("bairro", "foreign_key" => "id_bairro")
-    );
-    
     static $has_many = array(
 	array("pedidos", "foreign_key" => "id_consumidor", "class_name" => "Pedido"),
         array("enderecos", "foreign_key" => "id_consumidor", "class_name" => "EnderecoConsumidor"),
@@ -16,9 +12,6 @@ class Consumidor extends ActiveRecord\Model {
     
     static $validates_presence_of = array(
 	array("nome", "message" => "obrigatório"),
-	array("endereco", "message" => "obrigatório"),
-	array("bairro", "message" => "obrigatório"),
-	array("telefone", "message" => "obrigatório"),
 	array("login", "message" => "obrigatório"),
 	array("senha", "message" => "obrigatória")
     );
