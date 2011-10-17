@@ -15,8 +15,12 @@ if ($data) {
     }
 
     if ($deleteId) {
-	$obj->delete();
-	HttpUtil::showInfoMessages(array("Exclusão realizada com sucesso"));
+	try {
+	    $obj->delete();
+	    HttpUtil::showInfoMessages(array("Exclusão realizada com sucesso"));
+	} catch(Exception $e) {
+	    HttpUtil::showErrorMessages(array("Não foi possível realizar a exclusão: há dados associados a este registro"));
+	}
     } else {
 	$obj->set_attributes($data);
 	$obj->save();

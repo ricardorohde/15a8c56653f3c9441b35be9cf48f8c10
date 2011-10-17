@@ -10,6 +10,10 @@ class StringUtil {
 	
 	return "[" . implode(",", $arrayTemp) . "]";
     }
+    
+    static function doubleToCurrency($value) {
+	return $value ? ("R$ " . number_format($value, 2, ',', '.')) : "";
+    }
 
 }
 

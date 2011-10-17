@@ -11,6 +11,7 @@ class UsuarioRestaurante extends ActiveRecord\Model {
     static $validates_presence_of = array(
 	array("nome", "message" => "obrigatório"),
 	array("restaurante", "message" => "obrigatório"),
+	array("perfil", "message" => "obrigatório"),
 	array("login", "message" => "obrigatório"),
 	array("senha", "message" => "obrigatória")
     );
