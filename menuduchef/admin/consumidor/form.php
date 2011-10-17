@@ -13,8 +13,6 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	$('#cidades').change(function() {
 	    autoCompleteBairros($(this).val());
 	});
-	
-	$('#modificarSenha').change(permitirModificarSenha);
     });
 </script>
 
@@ -25,10 +23,13 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 
 <form action="admin/consumidor/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
+    
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
+    
     Endereço<br />
     <input type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br /><br />
+    
     Cidade<br />
     <select id="cidades" name="id_cidade">
 	<option value="">-- Selecione --</option>
@@ -40,11 +41,14 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	<? } } ?>
     </select>
     <br /><br />
+    
     Bairro<br />
     <select id="bairros" name="id_bairro"></select>
     <br /><br />
+    
     Telefone<br />
     <input type="text" name="telefone" value="<?= $obj->telefone ?>" maxlength="100" /><br /><br />
+    
     Ativo<br />
     <input type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="true"<? } ?> />Sim
     <input type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />Não

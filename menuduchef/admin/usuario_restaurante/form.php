@@ -13,8 +13,10 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 
 <form action="admin/usuario_restaurante/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
+    
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
+    
     Restaurante<br />
     <select name="id_restaurante">
 	<option value="">-- Selecione --</option>
@@ -27,14 +29,17 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 	} ?>
     </select>
     <br /><br />
-    Login<br />
-    <input type="text" name="login" value="<?= $obj->login ?>" maxlength="100" /><br /><br />
-    Senha<br />
-    <input type="text" name="senha" value="<?= $obj->senha ?>" maxlength="100" /><br /><br />
-    Superior<br /> 
-    <input type="text" name="superior" value="<?= $obj->superior ?>" maxlength="100" /><br /><br />
     
-    
+    Perfil<br />
+    <select name="perfil">
+	<option value="">-- Selecione --</option>
+	<option <? if($obj->perfil == UsuarioRestaurante::$PERFIL_GERENTE) { ?>selected="true"<? } ?> value="<?= UsuarioRestaurante::$PERFIL_GERENTE ?>"><?= UsuarioRestaurante::getNomePerfilById(UsuarioRestaurante::$PERFIL_GERENTE) ?></option>
+	<option <? if($obj->perfil == UsuarioRestaurante::$PERFIL_ATENDENTE) { ?>selected="true"<? } ?> value="<?= UsuarioRestaurante::$PERFIL_ATENDENTE ?>"><?= UsuarioRestaurante::getNomePerfilById(UsuarioRestaurante::$PERFIL_ATENDENTE) ?></option>
+    </select>
+    <br /><br />
+
+    <? include("../../include/inputs_login_senha.php"); ?>
+
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 

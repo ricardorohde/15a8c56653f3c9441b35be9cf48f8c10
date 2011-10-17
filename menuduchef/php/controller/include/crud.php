@@ -30,12 +30,10 @@ if ($data) {
 	} else {
 	    $_SESSION["obj"] = $data;
 	    HttpUtil::showErrorMessages($obj->errors->full_messages());
-	    header("Location: form/" . ($obj->id ? : ""));
+	    HttpUtil::redirect("form/" . ($obj->id ? : ""));
 	}
     }
-
-    if ($obj->is_valid()) {
-	header("Location: ./");
-    }
+    
+    HttpUtil::redirect("./");
 }
 ?>

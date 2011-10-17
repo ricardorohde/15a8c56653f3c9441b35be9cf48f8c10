@@ -13,3 +13,9 @@ Login<br />
     Repita a senha<br />
     <input type="password" name="senha_rep" autocomplete="off" maxlength="100" /><br clear="all" /><br />
 </span>
+
+<script type="text/javascript">
+    $(function() {
+	$('#modificarSenha').change(permitirModificarSenha);
+    });
+</script>

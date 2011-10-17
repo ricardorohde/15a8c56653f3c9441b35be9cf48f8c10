@@ -17,8 +17,7 @@ $itens = UsuarioRestaurante::all(array("order" => "nome asc"));
 	<th>Nome</th>
 	<th>Restaurante</th>
 	<th>Login</th>
-	<th>Senha</th>
-	<th>Superior</th>
+	<th>Perfil</th>
         <th>Modificar</th>
 	<th>Excluir</th>
     </tr>
@@ -30,8 +29,7 @@ $itens = UsuarioRestaurante::all(array("order" => "nome asc"));
 		<td><?= $item->nome ?></td>
 		<td><?= $item->restaurante->nome ?></td>
 		<td><?= $item->login ?></td>
-                <td><?= $item->senha ?></td>
-                <td><?= $item->superior ?></td>
+                <td><?= $item->getNomePerfil() ?></td>
 		<td><a href="admin/usuario_restaurante/form/<?= $item->id ?>">Modificar</a></td>
 		<td><a href="admin/usuario_restaurante/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>

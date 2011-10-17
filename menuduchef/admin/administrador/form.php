@@ -4,11 +4,6 @@ include("../../include/header.php");
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Administrador");
 ?>
 
-<script type="text/javascript">
-    $(function() {
-	$('#modificarSenha').change(permitirModificarSenha);
-    });
-</script>
 <h2>Gerenciar Administradores</h2>
 
 <a href="admin/administrador/" title="Cancelar">Cancelar</a>

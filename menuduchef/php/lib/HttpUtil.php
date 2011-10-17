@@ -65,6 +65,11 @@ class HttpUtil {
 	
 	return $obj;
     }
+    
+    static function redirect($target) {
+	header("Location: $target");
+	exit;
+    }
 
 }
 
