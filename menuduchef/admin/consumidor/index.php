@@ -37,9 +37,31 @@ $itens = Consumidor::all(array("order" => "nome asc"));
                 <td><?= $item->cpf ?></td>
                 <td><?= $item->data_nascimento ?></td>
                 <td><?= $item->sexo ?></td>
-                <td><?= $item->telefones->numero ?></td>
-                <td><?= $item->enderecos->logradouro ?></td>
-		<td><?= $item->enderecos->bairro ?></td>
+                <td><?
+                $telc = 0;
+                foreach($item->telefones as $telefone){
+                   
+                    if($telc==0){
+                        echo $endereco->bairro->nome;
+                    }
+                    $telc++;
+                } 
+                
+                ?></td>
+                <td><?
+                foreach($item->enderecos as $endereco){
+                    if($endereco->favorito){
+                        echo $endereco->logradouro;
+                    }
+                }        
+                ?></td>
+		<td><? 
+                foreach($item->enderecos as $endereco){
+                    if($endereco->favorito){
+                        echo $endereco->bairro->nome;
+                    }
+                }  
+                ?></td>
 		<td><a href="admin/consumidor/form/<?= $item->id ?>">Modificar</a></td>
 		<td><a href="admin/consumidor/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
