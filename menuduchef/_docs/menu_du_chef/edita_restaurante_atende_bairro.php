@@ -89,7 +89,7 @@ $sql=mysql_query($sql);
 while($c=mysql_fetch_array($sql)){
 	$idbai = $c['id'];
 
-	$bai="SELECT * FROM restaurante_atende_bairro WHERE id_bairro = '$idbai' AND id_restaurante = '$idres'";
+	$bai="SELECT * FROM restaurante_atende_bairro WHERE bairro_id = '$idbai' AND restaurante_id = '$idres'";
 	$bai=mysql_query($bai);
 	if($bai=mysql_fetch_array($bai)){
 		$atende = 'checked';

@@ -43,7 +43,7 @@ connect();
 
 $restaurantes = "<table>";
 $count = 0;
-$sql="SELECT R.*, RAB.preco_entrega FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.id_restaurante WHERE RAB.id_bairro = '$bairro' ORDER BY nome";
+$sql="SELECT R.*, RAB.preco_entrega FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id WHERE RAB.bairro_id = '$bairro' ORDER BY nome";
 $sql=mysql_query($sql);
 while($c=mysql_fetch_array($sql)){
 	$restaurante[$count]['nome']=$c['nome'];

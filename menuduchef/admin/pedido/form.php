@@ -14,29 +14,29 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
 
 <form action="admin/pedido/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
-    Consumidor<br /><? if($obj->id_consumidor){ 
+    Consumidor<br /><? if($obj->consumidor_id){ 
          echo $obj->consumidor->login;  
       }else{ ?>
-    <select name="id_consumidor">-- Selecione --</option>
+    <select name="consumidor_id">-- Selecione --</option>
 	<?
 	if ($consumidores) {
 	    foreach ($consumidores as $consumidor) {
 		?>
-		<option value="<?= $consumidor->id ?>" <? if ($consumidor->id == $obj->id_consumidor) { ?>selected="true"<? } ?>><?= $consumidor->nome ?></option>
+		<option value="<?= $consumidor->id ?>" <? if ($consumidor->id == $obj->consumidor_id) { ?>selected="true"<? } ?>><?= $consumidor->nome ?></option>
 	    <? }
 	} ?>
     </select>
     <? } ?>
     <br /><br />
-    Restaurante<br /><? if($obj->id_restaurante){ 
+    Restaurante<br /><? if($obj->restaurante_id){ 
          echo $obj->restaurante->nome;  
       }else{ ?>
-    <select name="id_restaurante">-- Selecione --</option>
+    <select name="restaurante_id">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->id_restaurante) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>

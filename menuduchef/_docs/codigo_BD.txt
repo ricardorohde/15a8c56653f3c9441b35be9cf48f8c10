@@ -29,16 +29,16 @@ INSERT INTO `administrador` (`id`, `nome`, `login`, `senha`) VALUES
 CREATE TABLE IF NOT EXISTS `bairro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
-  `id_cidade` int(11) NOT NULL,
+  `cidade_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_cidade` (`id_cidade`)
+  KEY `cidade_id` (`cidade_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Extraindo dados da tabela `bairro`
 --
 
-INSERT INTO `bairro` (`id`, `nome`, `id_cidade`) VALUES
+INSERT INTO `bairro` (`id`, `nome`, `cidade_id`) VALUES
 (1, 'Ponta Negra', 1),
 (2, 'Capim Macio', 1),
 (3, 'Lagoa Nova', 1),
@@ -80,20 +80,20 @@ CREATE TABLE IF NOT EXISTS `consumidor` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(500) NOT NULL,
   `endereco` varchar(1000) NOT NULL,
-  `id_bairro` int(11) NOT NULL,
+  `bairro_id` int(11) NOT NULL,
   `telefone` varchar(30) NOT NULL,
   `desativado` tinyint(1) NOT NULL DEFAULT '0',
   `login` varchar(500) NOT NULL,
   `senha` varchar(32) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_bairro` (`id_bairro`)
+  KEY `bairro_id` (`bairro_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Extraindo dados da tabela `consumidor`
 --
 
-INSERT INTO `consumidor` (`id`, `nome`, `endereco`, `id_bairro`, `telefone`, `desativado`, `login`, `senha`) VALUES
+INSERT INTO `consumidor` (`id`, `nome`, `endereco`, `bairro_id`, `telefone`, `desativado`, `login`, `senha`) VALUES
 (3, 'Paulo Egito', 'Rua Miss. Joel Carlson, 1883', 2, '99114309', 0, 'pvegito@hotmail.com', '3691308f2a4c2f6983f2880d32e29c84'),
 (4, 'Rodolfo Freire', 'Rua dos Muleque, 71', 1, '88994433', 0, 'rodolfo_freire@hotmail.com', '3691308f2a4c2f6983f2880d32e29c84'),
 (5, 'Cesar Rocha', 'Rua do Trabalho, 555', 4, '8888-0000', 0, 'cesar@agenciabiro.com.br', '3691308f2a4c2f6983f2880d32e29c84');
@@ -106,8 +106,8 @@ INSERT INTO `consumidor` (`id`, `nome`, `endereco`, `id_bairro`, `telefone`, `de
 
 CREATE TABLE IF NOT EXISTS `pedido` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_consumidor` int(11) NOT NULL,
-  `id_restaurante` int(11) NOT NULL,
+  `consumidor_id` int(11) NOT NULL,
+  `restaurante_id` int(11) NOT NULL,
   `quando` datetime NOT NULL,
   `forma_pagamento` varchar(50) NOT NULL,
   `preco` int(11) NOT NULL,
@@ -117,8 +117,8 @@ CREATE TABLE IF NOT EXISTS `pedido` (
   `situacao` varchar(100) NOT NULL,
   `pagamento_efetuado` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_consumidor` (`id_consumidor`),
-  KEY `id_restaurante` (`id_restaurante`)
+  KEY `consumidor_id` (`consumidor_id`),
+  KEY `restaurante_id` (`restaurante_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -134,15 +134,15 @@ CREATE TABLE IF NOT EXISTS `pedido` (
 
 CREATE TABLE IF NOT EXISTS `pedido_tem_produto` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_pedido` int(11) NOT NULL,
-  `id_produto` int(11) NOT NULL,
+  `pedido_id` int(11) NOT NULL,
+  `produto_id` int(11) NOT NULL,
   `qtd` int(11) NOT NULL,
   `obs` varchar(500) NOT NULL,
   `tamanho` varchar(20) NOT NULL,
-  `id_produto2` int(11) NOT NULL COMMENT 'usado geralmente pra segundo sabor de pizzas',
+  `produto2_id` int(11) NOT NULL COMMENT 'usado geralmente pra segundo sabor de pizzas',
   PRIMARY KEY (`id`),
-  KEY `id_pedido` (`id_pedido`),
-  KEY `id_produto` (`id_produto`)
+  KEY `pedido_id` (`pedido_id`),
+  KEY `produto_id` (`produto_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -158,11 +158,11 @@ CREATE TABLE IF NOT EXISTS `pedido_tem_produto` (
 
 CREATE TABLE IF NOT EXISTS `pedido_tem_produto_adicional` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_pedido_tem_produto` int(11) NOT NULL,
-  `id_produto_adicional` int(11) NOT NULL,
+  `pedido_tem_produto_id` int(11) NOT NULL,
+  `produto_adicional_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_pedido_tem_produto` (`id_pedido_tem_produto`),
-  KEY `id_produto_adicional` (`id_produto_adicional`)
+  KEY `pedido_tem_produto_id` (`pedido_tem_produto_id`),
+  KEY `produto_adicional_id` (`produto_adicional_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -185,18 +185,18 @@ CREATE TABLE IF NOT EXISTS `produto` (
   `preco_promocional` int(11) NOT NULL,
   `descricao` varchar(2000) NOT NULL,
   `qtd_produto_adicional` int(11) NOT NULL,
-  `id_restaurante` int(11) NOT NULL,
+  `restaurante_id` int(11) NOT NULL,
   `codigo` varchar(100) NOT NULL,
   `texto_promocao` varchar(500) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_restaurante` (`id_restaurante`)
+  KEY `restaurante_id` (`restaurante_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Extraindo dados da tabela `produto`
 --
 
-INSERT INTO `produto` (`id`, `nome`, `preco`, `disponivel`, `esta_em_promocao`, `preco_promocional`, `descricao`, `qtd_produto_adicional`, `id_restaurante`, `codigo`, `texto_promocao`) VALUES
+INSERT INTO `produto` (`id`, `nome`, `preco`, `disponivel`, `esta_em_promocao`, `preco_promocional`, `descricao`, `qtd_produto_adicional`, `restaurante_id`, `codigo`, `texto_promocao`) VALUES
 (1, 'BigMac', 1000, 1, 0, 0, 'Grande BigMac!!!', 0, 2, '4405', ''),
 (2, 'Quarteir&atilde;o', 600, 1, 0, 0, 'Sanduiche Gigantesco!!!', 0, 2, '4507', ''),
 (3, 'Pizza Mussarela', 2000, 1, 0, 1500, 'Pizza feita com queijo mussarela.', 0, 1, '333', ''),
@@ -231,11 +231,11 @@ CREATE TABLE IF NOT EXISTS `produto_adicional` (
 
 CREATE TABLE IF NOT EXISTS `produto_tem_produto_adicional` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_produto_adicional` int(11) NOT NULL,
-  `id_produto` int(11) NOT NULL,
+  `produto_adicional_id` int(11) NOT NULL,
+  `produto_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_produto_adicional` (`id_produto_adicional`),
-  KEY `id_produto` (`id_produto`)
+  KEY `produto_adicional_id` (`produto_adicional_id`),
+  KEY `produto_id` (`produto_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -251,10 +251,10 @@ CREATE TABLE IF NOT EXISTS `produto_tem_produto_adicional` (
 
 CREATE TABLE IF NOT EXISTS `produto_tem_tipo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_tipo` int(11) NOT NULL,
+  `tipo_id` int(11) NOT NULL,
   `id_protudo` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_tipo` (`id_tipo`),
+  KEY `tipo_id` (`tipo_id`),
   KEY `id_protudo` (`id_protudo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -272,19 +272,19 @@ CREATE TABLE IF NOT EXISTS `produto_tem_tipo` (
 CREATE TABLE IF NOT EXISTS `restaurante` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(200) NOT NULL,
-  `id_cidade` int(11) NOT NULL,
+  `cidade_id` int(11) NOT NULL,
   `endereco` varchar(1000) NOT NULL,
   `senha` varchar(32) NOT NULL COMMENT 'provisorio isso aqui',
-  `id_administrador_cadastrou` int(11) NOT NULL,
+  `administrador_cadastrou_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_cidade` (`id_cidade`)
+  KEY `cidade_id` (`cidade_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Extraindo dados da tabela `restaurante`
 --
 
-INSERT INTO `restaurante` (`id`, `nome`, `id_cidade`, `endereco`, `senha`, `id_administrador_cadastrou`) VALUES
+INSERT INTO `restaurante` (`id`, `nome`, `cidade_id`, `endereco`, `senha`, `administrador_cadastrou_id`) VALUES
 (1, 'Bari Palesi', 1, 'Av. Engenheiro Roberto Freire, 564 - Capim Macio', '3691308f2a4c2f6983f2880d32e29c84', 1),
 (2, 'MC Donalds', 1, 'Rua Salgado Filho, numero 6576 - Natal Shopping - Candel&aacute;ria', '3691308f2a4c2f6983f2880d32e29c84', 1),
 (3, 'Bobs', 1, 'Av. Salgado Filho, 670 - Lagoa Nova', '', 0),
@@ -302,19 +302,19 @@ INSERT INTO `restaurante` (`id`, `nome`, `id_cidade`, `endereco`, `senha`, `id_a
 
 CREATE TABLE IF NOT EXISTS `restaurante_atende_bairro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_restaurante` int(11) NOT NULL,
-  `id_bairro` int(11) NOT NULL,
+  `restaurante_id` int(11) NOT NULL,
+  `bairro_id` int(11) NOT NULL,
   `preco_entrega` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_restaurante` (`id_restaurante`),
-  KEY `id_bairro` (`id_bairro`)
+  KEY `restaurante_id` (`restaurante_id`),
+  KEY `bairro_id` (`bairro_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Extraindo dados da tabela `restaurante_atende_bairro`
 --
 
-INSERT INTO `restaurante_atende_bairro` (`id`, `id_restaurante`, `id_bairro`, `preco_entrega`) VALUES
+INSERT INTO `restaurante_atende_bairro` (`id`, `restaurante_id`, `bairro_id`, `preco_entrega`) VALUES
 (1, 1, 1, 500),
 (2, 1, 2, 400),
 (3, 1, 3, 300),
@@ -332,18 +332,18 @@ INSERT INTO `restaurante_atende_bairro` (`id`, `id_restaurante`, `id_bairro`, `p
 
 CREATE TABLE IF NOT EXISTS `restaurante_tem_tipo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_restaurante` int(11) NOT NULL,
-  `id_tipo` int(11) NOT NULL,
+  `restaurante_id` int(11) NOT NULL,
+  `tipo_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_restaurante` (`id_restaurante`),
-  KEY `id_tipo` (`id_tipo`)
+  KEY `restaurante_id` (`restaurante_id`),
+  KEY `tipo_id` (`tipo_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Extraindo dados da tabela `restaurante_tem_tipo`
 --
 
-INSERT INTO `restaurante_tem_tipo` (`id`, `id_restaurante`, `id_tipo`) VALUES
+INSERT INTO `restaurante_tem_tipo` (`id`, `restaurante_id`, `tipo_id`) VALUES
 (1, 2, 2),
 (2, 1, 1),
 (3, 1, 3),
@@ -357,11 +357,11 @@ INSERT INTO `restaurante_tem_tipo` (`id`, `id_restaurante`, `id_tipo`) VALUES
 
 CREATE TABLE IF NOT EXISTS `restaurante_tem_tipo_produto` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_restaurante` int(11) NOT NULL,
-  `id_tipo` int(11) NOT NULL,
+  `restaurante_id` int(11) NOT NULL,
+  `tipo_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `id_restaurante` (`id_restaurante`),
-  KEY `id_tipo` (`id_tipo`)
+  KEY `restaurante_id` (`restaurante_id`),
+  KEY `tipo_id` (`tipo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -422,71 +422,71 @@ INSERT INTO `tipo_restaurante` (`id`, `nome`) VALUES
 -- Restrições para a tabela `bairro`
 --
 ALTER TABLE `bairro`
-  ADD CONSTRAINT `bairro_ibfk_1` FOREIGN KEY (`id_cidade`) REFERENCES `cidade` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `bairro_ibfk_1` FOREIGN KEY (`cidade_id`) REFERENCES `cidade` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `consumidor`
 --
 ALTER TABLE `consumidor`
-  ADD CONSTRAINT `consumidor_ibfk_2` FOREIGN KEY (`id_bairro`) REFERENCES `bairro` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `consumidor_ibfk_2` FOREIGN KEY (`bairro_id`) REFERENCES `bairro` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `pedido`
 --
 ALTER TABLE `pedido`
-  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`id_consumidor`) REFERENCES `consumidor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`id_restaurante`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`consumidor_id`) REFERENCES `consumidor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`restaurante_id`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `pedido_tem_produto`
 --
 ALTER TABLE `pedido_tem_produto`
-  ADD CONSTRAINT `pedido_tem_produto_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pedido_tem_produto_ibfk_1` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `pedido_tem_produto_ibfk_2` FOREIGN KEY (`produto_id`) REFERENCES `produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedido_tem_produto_ibfk_1` FOREIGN KEY (`pedido_id`) REFERENCES `pedido` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `pedido_tem_produto_adicional`
 --
 ALTER TABLE `pedido_tem_produto_adicional`
-  ADD CONSTRAINT `pedido_tem_produto_adicional_ibfk_2` FOREIGN KEY (`id_produto_adicional`) REFERENCES `produto_adicional` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pedido_tem_produto_adicional_ibfk_1` FOREIGN KEY (`id_pedido_tem_produto`) REFERENCES `pedido_tem_produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `pedido_tem_produto_adicional_ibfk_2` FOREIGN KEY (`produto_adicional_id`) REFERENCES `produto_adicional` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedido_tem_produto_adicional_ibfk_1` FOREIGN KEY (`pedido_tem_produto_id`) REFERENCES `pedido_tem_produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `produto`
 --
 ALTER TABLE `produto`
-  ADD CONSTRAINT `produto_ibfk_1` FOREIGN KEY (`id_restaurante`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `produto_ibfk_1` FOREIGN KEY (`restaurante_id`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `produto_tem_produto_adicional`
 --
 ALTER TABLE `produto_tem_produto_adicional`
-  ADD CONSTRAINT `produto_tem_produto_adicional_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `pedido` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `produto_tem_produto_adicional_ibfk_1` FOREIGN KEY (`id_produto_adicional`) REFERENCES `produto_adicional` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `produto_tem_produto_adicional_ibfk_2` FOREIGN KEY (`produto_id`) REFERENCES `pedido` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `produto_tem_produto_adicional_ibfk_1` FOREIGN KEY (`produto_adicional_id`) REFERENCES `produto_adicional` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `produto_tem_tipo`
 --
 ALTER TABLE `produto_tem_tipo`
   ADD CONSTRAINT `produto_tem_tipo_ibfk_2` FOREIGN KEY (`id_protudo`) REFERENCES `produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `produto_tem_tipo_ibfk_1` FOREIGN KEY (`id_tipo`) REFERENCES `tipo_produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `produto_tem_tipo_ibfk_1` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `restaurante`
 --
 ALTER TABLE `restaurante`
-  ADD CONSTRAINT `restaurante_ibfk_1` FOREIGN KEY (`id_cidade`) REFERENCES `cidade` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `restaurante_ibfk_1` FOREIGN KEY (`cidade_id`) REFERENCES `cidade` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `restaurante_atende_bairro`
 --
 ALTER TABLE `restaurante_atende_bairro`
-  ADD CONSTRAINT `restaurante_atende_bairro_ibfk_2` FOREIGN KEY (`id_bairro`) REFERENCES `bairro` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `restaurante_atende_bairro_ibfk_1` FOREIGN KEY (`id_restaurante`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `restaurante_atende_bairro_ibfk_2` FOREIGN KEY (`bairro_id`) REFERENCES `bairro` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `restaurante_atende_bairro_ibfk_1` FOREIGN KEY (`restaurante_id`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Restrições para a tabela `restaurante_tem_tipo`
 --
 ALTER TABLE `restaurante_tem_tipo`
-  ADD CONSTRAINT `restaurante_tem_tipo_ibfk_2` FOREIGN KEY (`id_tipo`) REFERENCES `tipo_restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `restaurante_tem_tipo_ibfk_1` FOREIGN KEY (`id_restaurante`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `restaurante_tem_tipo_ibfk_2` FOREIGN KEY (`tipo_id`) REFERENCES `tipo_restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `restaurante_tem_tipo_ibfk_1` FOREIGN KEY (`restaurante_id`) REFERENCES `restaurante` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

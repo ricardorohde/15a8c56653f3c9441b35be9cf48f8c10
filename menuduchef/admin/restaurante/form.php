@@ -16,16 +16,16 @@ $administradores = Administrador::all(array("order" => "nome asc"));
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
-    Cidade<br /> <? if($obj->id_cidade){ 
+    Cidade<br /> <? if($obj->cidade_id){ 
          echo $obj->cidade->nome;  
       }else{ ?>
-        <select name="id_cidade">
+        <select name="cidade_id">
             <option value="">-- Selecione --</option>
             <?
             if ($cidades) {
                 foreach ($cidades as $cidade) {
                     ?>
-                    <option value="<?= $cidade->id ?>" <? if ($cidade->id == $obj->id_cidade) { ?>selected="true"<? } ?>><?= $cidade->nome ?></option>
+                    <option value="<?= $cidade->id ?>" <? if ($cidade->id == $obj->cidade_id) { ?>selected="true"<? } ?>><?= $cidade->nome ?></option>
                 <? }
             } ?>
         </select>
@@ -38,13 +38,13 @@ $administradores = Administrador::all(array("order" => "nome asc"));
     <input type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />Não
     <br /><br />
     Administrador que cadastrou<br />
-    <select name="id_administrador_cadastrou">
+    <select name="administrador_cadastrou_id">
 	<option value="">-- Selecione --</option>
 	<?
 	if ($administradores) {
 	    foreach ($administradores as $adm) {
 		?>
-		<option value="<?= $adm->id ?>" <? if ($adm->id == $obj->id_administrador_cadastrou) { ?>selected="true"<? } ?>><?= $adm->nome ?></option>
+		<option value="<?= $adm->id ?>" <? if ($adm->id == $obj->administrador_cadastrou_id) { ?>selected="true"<? } ?>><?= $adm->nome ?></option>
 	    <? }
 	} ?>
     </select><br /><br />

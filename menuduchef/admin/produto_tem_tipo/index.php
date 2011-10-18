@@ -1,7 +1,7 @@
 <?
 include("../../include/header.php");
 
-$itens = ProdutoTemTipo::all(array("order" => "id_produto asc"));
+$itens = ProdutoTemTipo::all(array("order" => "produto_id asc"));
 ?>
 
 <h2>Gerenciar Produtos tem Tipos</h2>

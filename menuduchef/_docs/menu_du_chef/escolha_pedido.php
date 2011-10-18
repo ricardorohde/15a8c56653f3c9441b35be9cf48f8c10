@@ -43,7 +43,7 @@ connect();
 
 $menu = "<table>";
 $count = 0;
-$sql="SELECT * FROM produto WHERE id_restaurante = '$restaurante' ORDER BY nome";
+$sql="SELECT * FROM produto WHERE restaurante_id = '$restaurante' ORDER BY nome";
 $sql=mysql_query($sql);
 while($c=mysql_fetch_array($sql)){
 	
@@ -166,10 +166,10 @@ $(document).ready(function(){
 		
 		if(achou){
 		
-			id_pedido = $("#lista-pedidos div[tem_obs=0]")[indice_achado].id;
-			q = $("#"+id_pedido+" .qtd").html();
+			pedido_id = $("#lista-pedidos div[tem_obs=0]")[indice_achado].id;
+			q = $("#"+pedido_id+" .qtd").html();
 			q = parseInt(q) + parseInt(qtd);
-			$("#"+id_pedido+" .qtd").html(q);	
+			$("#"+pedido_id+" .qtd").html(q);	
 		}
 		else{
 		
@@ -186,8 +186,8 @@ $(document).ready(function(){
 		subtotal = 0;
 		for(i=0;i<len;i++){
 		
-				id_pedido = $("#lista-pedidos .item")[i].id;
-				q = $("#"+id_pedido+" .qtd").html();
+				pedido_id = $("#lista-pedidos .item")[i].id;
+				q = $("#"+pedido_id+" .qtd").html();
 				valor = $("#lista-pedidos .valor_unitario")[i].value;
 
 				subtotal += (parseFloat(valor) * parseInt(q));

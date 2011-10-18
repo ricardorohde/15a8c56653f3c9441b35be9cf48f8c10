@@ -1,7 +1,7 @@
 <?
 include("../../include/header.php");
 
-$itens = ProdutoTemProdutoAdicional::all(array("order" => "id_produto asc"));
+$itens = ProdutoTemProdutoAdicional::all(array("order" => "produto_id asc"));
 ?>
 
 <h2>Gerenciar Produtos Adicionais pertencentes aos Produtos</h2>

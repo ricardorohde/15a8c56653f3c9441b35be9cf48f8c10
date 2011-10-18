@@ -9,7 +9,7 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
 ?>
 <script type="text/javascript">
     $(function() {
-	autoCompleteProdutos(<?= $obj->id_pedido ?: 0 ?>, <?= $obj->id_produto ?: 0 ?>);
+	autoCompleteProdutos(<?= $obj->pedido_id ?: 0 ?>, <?= $obj->produto_id ?: 0 ?>);
 	    
 	$('#pedidos').change(function() {
 	    autoCompleteProdutos($(this).val());
@@ -23,15 +23,15 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
 
 <form action="admin/pedido_tem_produto/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
-    Pedido<br /><? if($obj->id_pedido){
-            echo $obj->id_pedido." (".$obj->pedido->restaurante->nome.", ".$obj->pedido->consumidor->nome.")";
+    Pedido<br /><? if($obj->pedido_id){
+            echo $obj->pedido_id." (".$obj->pedido->restaurante->nome.", ".$obj->pedido->consumidor->nome.")";
         }else{ ?>
-    <select id="pedidos" name="id_pedido">-- Selecione --</option>
+    <select id="pedidos" name="pedido_id">-- Selecione --</option>
 	<?        
             if ($pedidos) {
                 foreach ($pedidos as $pedido) {
                     ?>
-                    <option value="<?= $pedido->id ?>" <? if ($pedido->id == $obj->id_pedido) { ?>selected="true"<? } ?>><?= $pedido->id." (".$pedido->restaurante->nome.", ".$pedido->consumidor->nome.")" ?></option>
+                    <option value="<?= $pedido->id ?>" <? if ($pedido->id == $obj->pedido_id) { ?>selected="true"<? } ?>><?= $pedido->id." (".$pedido->restaurante->nome.", ".$pedido->consumidor->nome.")" ?></option>
                 <? }
             }
 	?>
@@ -39,7 +39,7 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
     <? } ?>
     <br /><br />
     Produto<br />
-    <select id="produtos" name="id_produto"></select>
+    <select id="produtos" name="produto_id"></select>
     <br /><br />
     Quantidade<br />
     <input type="text" name="qtd" value="<?= $obj->qtd ?>" maxlength="100" /><br /><br />
@@ -48,12 +48,12 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
     Tamanho<br />
     <input type="text" name="tamanho" value="<?= $obj->tamanho ?>" maxlength="100" /><br /><br />
     Produto2<br />
-    <select name="id_produto2"><option value="">-- Selecione --</option>
+    <select name="produto2_id"><option value="">-- Selecione --</option>
 	<?
 	if ($produtos) {
 	    foreach ($produtos as $produto) {
 		?>
-		<option value="<?= $produto->id ?>" <? if ($produto->id == $obj->id_produto2) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+		<option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto2_id) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
 	    <? }
 	} ?>
     </select>

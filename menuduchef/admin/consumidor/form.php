@@ -8,7 +8,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 
 <script type="text/javascript">
     $(function() {
-	autoCompleteBairros(<?= $obj->bairro->id_cidade ?: 0 ?>, <?= $obj->id_bairro ?: 0 ?>);
+	autoCompleteBairros(<?= $obj->bairro->cidade_id ?: 0 ?>, <?= $obj->bairro_id ?: 0 ?>);
 	    
 	$('#cidades').change(function() {
 	    autoCompleteBairros($(this).val());
@@ -27,11 +27,23 @@ $cidades = Cidade::all(array("order" => "nome asc"));
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
     
-    Endereço<br />
-    <input type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br /><br />
+    Login<br />
+    <input type="text" name="login" value="<?= $obj->login ?>" maxlength="100" /><br /><br />
+    
+    CPF<br />
+    <input type="text" name="cpf" value="<?= $obj->cpf ?>" maxlength="100" /><br /><br />
+    
+    E-mail<br />
+    <input type="text" name="email" value="<?= $obj->email ?>" maxlength="100" /><br /><br />
+    
+    Data de Nascimento<br />
+    <input type="text" name="data_nascimento" value="<?= $obj->data_nascimento ?>" maxlength="100" /><br /><br />
+    
+    Sexo<br />
+    <input type="text" name="sexo" value="<?= $obj->sexo ?>" maxlength="100" /><br /><br />
     
     Cidade<br />
-    <select id="cidades" name="id_cidade">
+    <select id="cidades" name="cidade_id">
 	<option value="">-- Selecione --</option>
 	<?
 	if($cidades) {
@@ -43,7 +55,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
     <br /><br />
     
     Bairro<br />
-    <select id="bairros" name="id_bairro"></select>
+    <select id="bairros" name="bairro_id"></select>
     <br /><br />
     
     Telefone<br />

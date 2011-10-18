@@ -15,23 +15,23 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
 <form action="admin/produto_tem_tipo/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Produto<br />
-    <select name="id_produto">-- Selecione --</option>
+    <select name="produto_id">-- Selecione --</option>
 	<?
 	if ($produtos) {
 	    foreach ($produtos as $produto) {
 		?>
-		<option value="<?= $produto->id ?>" <? if ($produto->id == $obj->id_produto) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+		<option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
 	    <? }
 	} ?>
     </select>
     <br /><br />
     Tipo<br />
-    <select name="id_tipo">-- Selecione --</option>
+    <select name="tipo_id">-- Selecione --</option>
 	<?
 	if ($tipos) {
 	    foreach ($tipos as $tipo) {
 		?>
-		<option value="<?= $tipo->id ?>" <? if ($tipo->id == $obj->id_tipo) { ?>selected="true"<? } ?>><?= $tipo->nome ?></option>
+		<option value="<?= $tipo->id ?>" <? if ($tipo->id == $obj->tipo_id) { ?>selected="true"<? } ?>><?= $tipo->nome ?></option>
 	    <? }
 	} ?>
     </select>

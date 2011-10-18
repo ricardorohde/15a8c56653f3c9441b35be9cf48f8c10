@@ -59,7 +59,7 @@ connect();
 
 $bairros = "";
 $count = 0;
-$sql="SELECT * FROM bairro WHERE id_cidade = '$cidade' ORDER BY nome";
+$sql="SELECT * FROM bairro WHERE cidade_id = '$cidade' ORDER BY nome";
 $sql=mysql_query($sql);
 while($c=mysql_fetch_array($sql)){
 	$bairro[$count]['nome']=$c['nome'];

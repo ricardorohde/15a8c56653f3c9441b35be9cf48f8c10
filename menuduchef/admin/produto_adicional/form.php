@@ -15,15 +15,15 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
-    Restaurante<br /><? if($obj->id_restaurante){ 
+    Restaurante<br /><? if($obj->restaurante_id){ 
          echo $obj->restaurante->nome;  
       }else{ ?>
-    <select name="id_restaurante">-- Selecione --</option>
+    <select name="restaurante_id">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->id_restaurante) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>

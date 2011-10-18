@@ -5,9 +5,9 @@ class Consumidor extends ActiveRecord\Model {
     static $table_name = "consumidor";
     
     static $has_many = array(
-	array("pedidos", "foreign_key" => "id_consumidor", "class_name" => "Pedido"),
-        array("enderecos", "foreign_key" => "id_consumidor", "class_name" => "EnderecoConsumidor"),
-        array("telefones", "foreign_key" => "id_consumidor", "class_name" => "TelefoneConsumidor")
+	array("pedidos", "foreign_key" => "consumidor_id", "class_name" => "Pedido"),
+        array("enderecos", "foreign_key" => "consumidor_id", "class_name" => "EnderecoConsumidor"),
+        array("telefones", "foreign_key" => "consumidor_id", "class_name" => "TelefoneConsumidor")
     );
     
     static $validates_presence_of = array(
@@ -31,7 +31,7 @@ class Consumidor extends ActiveRecord\Model {
 	    $attributes["senha"] = md5($attributes["senha"]);
 	}
 	
-	unset($attributes["id_cidade"]);
+	unset($attributes["cidade_id"]);
 	unset($attributes["senha_rep"]);
 	unset($attributes["modificarSenha"]);
     }

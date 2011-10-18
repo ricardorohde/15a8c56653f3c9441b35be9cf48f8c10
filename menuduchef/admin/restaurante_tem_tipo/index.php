@@ -1,7 +1,7 @@
 <?
 include_once("../../php/lib/config.php");
 
-$itens = RestauranteTemTipo::all(array("order" => "id_restaurante asc"));
+$itens = RestauranteTemTipo::all(array("order" => "restaurante_id asc"));
 ?>
 
 <? include("../../include/header.php"); ?>

@@ -58,7 +58,7 @@ if($prossegue){
 					$endereco = $_POST['endereco'];
 					$idusu = $_SESSION['idusu'];
 					
-					$sql="INSERT INTO restaurante (nome, id_cidade, endereco, senha, id_administrador_cadastrou) VALUES ('$nome','$cidade','$endereco','3691308f2a4c2f6983f2880d32e29c84','$idusu')";
+					$sql="INSERT INTO restaurante (nome, cidade_id, endereco, senha, administrador_cadastrou_id) VALUES ('$nome','$cidade','$endereco','3691308f2a4c2f6983f2880d32e29c84','$idusu')";
 					mysql_query($sql);
 					
 					$idres = mysql_insert_id();

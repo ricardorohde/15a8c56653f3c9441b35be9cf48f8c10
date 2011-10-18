@@ -5,19 +5,19 @@ class Restaurante extends ActiveRecord\Model {
     static $table_name = "restaurante";
     
     static $belongs_to = array(
-	array("cidade", "foreign_key" => "id_cidade"),
-	array("administrador", "foreign_key" => "id_administrador_cadastrou")
+	array("cidade", "foreign_key" => "cidade_id"),
+	array("administrador", "foreign_key" => "administrador_cadastrou_id")
     );
     
     static $has_many = array(
-	array("pedidos", "foreign_key" => "id_restaurante", "class_name" => "Pedido"),
-	array("usuarios", "foreign_key" => "id_restaurante", "class_name" => "UsuarioRestaurante"),
-	array("produtos", "foreign_key" => "id_restaurante", "class_name" => "Produto"),
-	array("restaurante_tem_tipos", "foreign_key" => "id_restaurante", "class_name" => "RestauranteTemTipo"),
-	array("bairros_atendidos", "foreign_key" => "id_restaurante", "class_name" => "RestauranteAtendeBairro"),
-	array("bairros", 'through' => 'bairros_atendidos', "foreign_key" => "id_restaurante", "class_name" => "Bairro"),
-	array("restaurante_tem_tipos_produto", "foreign_key" => "id_restaurante", "class_name" => "RestauranteTemTipoProduto"),
-	array("tipos", 'through' => 'restaurante_tem_tipos_produto', "foreign_key" => "id_restaurante", "class_name" => "TipoRestaurante")
+	array("pedidos", "foreign_key" => "restaurante_id", "class_name" => "Pedido"),
+	array("usuarios", "foreign_key" => "restaurante_id", "class_name" => "UsuarioRestaurante"),
+	array("produtos", "foreign_key" => "restaurante_id", "class_name" => "Produto"),
+	array("restaurante_tem_tipos", "foreign_key" => "restaurante_id", "class_name" => "RestauranteTemTipo"),
+	array("bairros_atendidos", "foreign_key" => "restaurante_id", "class_name" => "RestauranteAtendeBairro"),
+	array("bairros", 'through' => 'bairros_atendidos', "foreign_key" => "restaurante_id", "class_name" => "Bairro"),
+	array("restaurante_tem_tipos_produto", "foreign_key" => "restaurante_id", "class_name" => "RestauranteTemTipoProduto"),
+	array("tipos", 'through' => 'restaurante_tem_tipos_produto', "foreign_key" => "restaurante_id", "class_name" => "TipoRestaurante")
     );
     
     static $validates_presence_of = array(
@@ -28,7 +28,7 @@ class Restaurante extends ActiveRecord\Model {
     );
     
     static $validates_uniqueness_of = array(
-	array(array("nome", "Cidade" => "id_cidade"), "message" => "já existem")
+	array(array("nome", "Cidade" => "cidade_id"), "message" => "já existem")
     );
 
 }

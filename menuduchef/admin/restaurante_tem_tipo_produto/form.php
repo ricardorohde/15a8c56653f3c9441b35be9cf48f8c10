@@ -16,23 +16,23 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
 <form action="admin/restaurante_tem_tipo_produto/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Restaurante<br />
-    <select name="id_restaurante">-- Selecione --</option>
+    <select name="restaurante_id">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->id_restaurante) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>
     <br /><br />
     Tipo de Produto<br />
-    <select name="id_tipo">-- Selecione --</option>
+    <select name="tipo_id">-- Selecione --</option>
 	<?
 	if ($tipos) {
 	    foreach ($tipos as $tipo) {
 		?>
-		<option value="<?= $tipo->id ?>" <? if ($tipo->id == $obj->id_tipo) { ?>selected="true"<? } ?>><?= $tipo->nome ?></option>
+		<option value="<?= $tipo->id ?>" <? if ($tipo->id == $obj->tipo_id) { ?>selected="true"<? } ?>><?= $tipo->nome ?></option>
 	    <? }
 	} ?>
     </select>

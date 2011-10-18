@@ -1,7 +1,7 @@
 <?
 include_once("../../php/lib/config.php");
 
-$itens = RestauranteAtendeBairro::all(array("order" => "id_restaurante asc"));
+$itens = RestauranteAtendeBairro::all(array("order" => "restaurante_id asc"));
 ?>
 
 <? include("../../include/header.php"); ?>

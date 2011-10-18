@@ -1,7 +1,7 @@
 <?
 include("../../include/header.php");
 
-$itens = PedidoTemProdutoAdicional::all(array("order" => "id_pedido_tem_produto asc"));
+$itens = PedidoTemProdutoAdicional::all(array("order" => "pedido_tem_produto_id asc"));
 ?>
 
 <h2>Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
@@ -24,7 +24,7 @@ $itens = PedidoTemProdutoAdicional::all(array("order" => "id_pedido_tem_produto 
 	foreach ($itens as $item) {
 	    ?>
 	    <tr>
-		<td><?= $item->id_pedido_tem_produto." (".$item->pedido_tem_produto->produto->nome.")"; ?></td>
+		<td><?= $item->pedido_tem_produto_id." (".$item->pedido_tem_produto->produto->nome.")"; ?></td>
 		<td><?= $item->produto_adicional->nome ?></td>
                               
 		<td><a href="admin/pedido_tem_produto_adicional/form/<?= $item->id ?>">Modificar</a></td>

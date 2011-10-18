@@ -20,17 +20,17 @@ $tipos = TipoProduto::all();
     
     Restaurante<br />
     <?
-    if($obj->id_restaurante){ 
+    if($obj->restaurante_id){ 
          echo $obj->restaurante->nome;  
     } else {
     ?>
-    <select name="id_restaurante">
+    <select name="restaurante_id">
 	<option value="">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->id_restaurante) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>
@@ -46,7 +46,7 @@ $tipos = TipoProduto::all();
     
     <? foreach($tipos as $tipo) { ?>
     
-    <input type="checkbox" name="id_tipo" value="<?= $tipo->id ?>" id="tipo_<?= $tipo->id ?>" />
+    <input type="checkbox" name="tipo_id" value="<?= $tipo->id ?>" id="tipo_<?= $tipo->id ?>" />
     <label for="tipo_<?= $tipo->id ?>"><?= $tipo->nome ?></label><br />
     
     <? } ?>

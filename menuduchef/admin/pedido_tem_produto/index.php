@@ -1,7 +1,7 @@
 <?
 include("../../include/header.php");
 
-$itens = PedidoTemProduto::all(array("order" => "id_pedido asc"));
+$itens = PedidoTemProduto::all(array("order" => "pedido_id asc"));
 ?>
 
 <h2>Gerenciar Produtos inclusos nos Pedidos</h2>
@@ -28,7 +28,7 @@ $itens = PedidoTemProduto::all(array("order" => "id_pedido asc"));
 	foreach ($itens as $item) {
 	    ?>
 	    <tr>
-		<td><?= $item->id_pedido." (".$item->pedido->restaurante->nome.", ".$item->pedido->consumidor->nome.")" ?></td>
+		<td><?= $item->pedido_id." (".$item->pedido->restaurante->nome.", ".$item->pedido->consumidor->nome.")" ?></td>
 		<td><?= $item->produto->nome ?></td>
                 <td><?= $item->qtd ?></td>
                 <td><?= $item->obs ?></td>
