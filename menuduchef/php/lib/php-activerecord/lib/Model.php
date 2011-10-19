@@ -86,6 +86,14 @@ class Model
 	 * @var array
 	 */
 	private $attributes = array();
+        
+        /**
+         * <MENU_DU_CHEF>
+         */
+        protected $__request_attributes = array();
+        /**
+         * </MENU_DU_CHEF>
+         */
 
 	/**
 	 * Flag whether or not this model's attributes have been modified since it will either be null or an array of column_names that have been modified
@@ -1022,6 +1030,7 @@ class Model
 	public function set_attributes(array $attributes)
 	{
 		// <MENU_DU_CHEF>
+                $this->__request_attributes = $attributes;
 		$this->prepare_attributes($attributes);
 		// </MENU_DU_CHEF>
 		$this->set_attributes_via_mass_assignment($attributes, true);

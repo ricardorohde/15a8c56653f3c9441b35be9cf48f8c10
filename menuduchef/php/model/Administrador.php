@@ -19,6 +19,7 @@ class Administrador extends ActiveRecord\Model {
     );
     
     public function prepare_attributes(array &$attributes) {
+        //print_r($this->__request_attributes);exit;
 	if ($attributes["id"] && !$attributes["modificarSenha"]) {
 	    unset($attributes["senha"]);
 	} else {

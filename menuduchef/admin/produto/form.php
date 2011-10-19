@@ -46,7 +46,7 @@ $tipos = TipoProduto::all();
     
     <? foreach($tipos as $tipo) { ?>
     
-    <input type="checkbox" name="tipo_id" value="<?= $tipo->id ?>" id="tipo_<?= $tipo->id ?>" />
+    <input type="checkbox" name="tipos[]" value="<?= $tipo->id ?>" id="tipoproduto_id_<?= $tipo->id ?>" <? if($obj->temTipo($tipo->id)) { ?>checked="true"<? } ?>  />
     <label for="tipo_<?= $tipo->id ?>"><?= $tipo->nome ?></label><br />
     
     <? } ?>

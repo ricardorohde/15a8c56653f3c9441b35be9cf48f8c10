@@ -38,7 +38,7 @@ class HttpUtil {
     }
 
     static function isLocalhost() {
-	return $_SERVER["HTTP_HOST"] == "localhost" || $_SERVER["HTTP_HOST"] == "127.0.0.1";
+        return $_SERVER["HTTP_HOST"] == "127.0.0.1" || !preg_match('/(\.[\d\w]+)+/', $_SERVER["HTTP_HOST"]);
     }
 
     static function validateRepeatedParameter($parameter, $repeatedParameter, $message) {
