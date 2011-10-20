@@ -4,7 +4,7 @@ include("../../include/header.php");
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Produto");
 
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
-$tipos = TipoProduto::all();
+$tipos = TipoProduto::all(array("order" => "nome asc"));
 ?>
 
 <h2>Gerenciar Produtos</h2>
@@ -42,7 +42,7 @@ $tipos = TipoProduto::all();
     
     <? if($tipos) { ?>
     
-    Categorias<br />
+    Categorias:<br />
     
     <? foreach($tipos as $tipo) { ?>
     
