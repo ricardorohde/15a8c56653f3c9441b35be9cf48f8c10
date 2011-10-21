@@ -22,14 +22,16 @@ function autoCompleteCheckBox(url, parameters, targetId, valueIndex, description
 	    target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
 
 
-            $.each(data, function(i, value) {
-              var atende = autoFill();
-              target.append($('<input type="checkbox" name="bairros[]" value="' + value[valueIndex] + '" id="bairro' + value[valueIndex] + '" ' + (atende ? 'checked="true"' : '') + ' />'));
-              target.append($('<label for="bairro' + value[valueIndex] + '">' + value[descriptionIndex] + '</label>'));
-              target.append($(' -- <input type="text" name="preco_entrega[]" value="' + (atende ? atende.preco_entrega : '') + '" id="preco_entrega' + value[valueIndex] + '" />'));
-              target.append($('<br />'));
+	    $.each(data, function(i, value) {
+		console.log(value);
+		var atende = restauranteAtendeBairro(parameters.id, value[valueIndex]);
+		console.log(atende);
+		target.append($('<input type="checkbox" name="bairros[]" value="' + value[valueIndex] + '" id="bairro' + value[valueIndex] + '" ' + (atende ? 'checked="true"' : '') + ' />'));
+		target.append($('<label for="bairro' + value[valueIndex] + '">' + value[descriptionIndex] + '</label>'));
+		target.append($(' -- <input type="text" name="preco_entrega[]" value="' + (atende ? atende.preco_entrega : '') + '" id="preco_entrega' + value[valueIndex] + '" />'));
+		target.append($('<br />'));
 
-            });
+	    });
 	    
 	} else {
             
@@ -49,11 +51,11 @@ function autoFillCheckBox(url, parameters, targetId, valueIndex, descriptionInde
 
 	    $.each(data, function(i, value) {
                 
-                target.append($('<input type="checkbox" name="bairros[]" value="' + value[valueIndex] + '" id="bairro' + value[valueIndex] + '" />'));
-                target.append($('<label for="bairro' + value[valueIndex] + '">' + value[descriptionIndex] + '</label>'));
-                target.append($(' -- <input type="text" name="preco_entrega[]" value="" id="preco_entrega' + value[valueIndex] + '" />'));
-                target.append($('<br />'));
-		/*target.append($(
+		target.append($('<input type="checkbox" name="bairros[]" value="' + value[valueIndex] + '" id="bairro' + value[valueIndex] + '" />'));
+		target.append($('<label for="bairro' + value[valueIndex] + '">' + value[descriptionIndex] + '</label>'));
+		target.append($(' -- <input type="text" name="preco_entrega[]" value="" id="preco_entrega' + value[valueIndex] + '" />'));
+		target.append($('<br />'));
+	    /*target.append($(
 		    '<input type="checkbox" value="' + value[valueIndex] + '">' +
 		    value[descriptionIndex]
 		));*/
@@ -69,7 +71,9 @@ function autoFillCheckBox(url, parameters, targetId, valueIndex, descriptionInde
 function autoCompleteBairrosCheckBox(idCidade, preSelectedIdBairro) {
     if(idCidade) {
  
-        autoCompleteCheckBox(URL_BAIRROS_JSON, {'id': idCidade}, 'bairros', 'id', 'nome', preSelectedIdBairro);
+	autoCompleteCheckBox(URL_BAIRROS_JSON, {
+	    'id': idCidade
+	}, 'bairros', 'id', 'nome', preSelectedIdBairro);
 
     } else {
 	$('#bairros').empty().append($(CHECK_BOX_DEFAULT_BAIRRO));
@@ -78,7 +82,9 @@ function autoCompleteBairrosCheckBox(idCidade, preSelectedIdBairro) {
 function autoFillBairrosCheckBox(idRestaurante, listaBairros) {
     if(idRestaurante) {
  
-        autoFillCheckBox(URL_RESTAURANTE_ATENDE_BAIRROS_JSON, {'id': idRestaurante}, 'bairros', 'id', 'nome');
+	autoFillCheckBox(URL_RESTAURANTE_ATENDE_BAIRROS_JSON, {
+	    'id': idRestaurante
+	}, 'bairros', 'id', 'nome');
 
     }
 }
@@ -97,7 +103,7 @@ function autoCompleteComboBox(url, parameters, targetId, valueIndex, description
 		    (preSelectedValue && (preSelectedValue == value[valueIndex]) ? ' selected="true"' : '') + '>' +
 		    value[descriptionIndex] +
 		    '</option>'
-		));
+		    ));
 	    });
 	} else {
 	    target.empty().append($(COMBO_BOX_DEFAULT_OPTION));
@@ -105,9 +111,20 @@ function autoCompleteComboBox(url, parameters, targetId, valueIndex, description
     });
 }
 
+function restauranteAtendeBairro(idRestaurante, idBairro) {
+    $.getJSON("php/controller/restaurante_atende_bairro_json.php", {
+	"restaurante_id": idRestaurante, 
+	"bairro_id": idBairro
+    }, function(data) {
+	return data;
+    });
+}
+
 function autoCompleteBairros(idCidade, preSelectedIdBairro) {
     if(idCidade) {
-	autoCompleteComboBox(URL_BAIRROS_JSON, {'id': idCidade}, 'bairros', 'id', 'nome', preSelectedIdBairro);
+	autoCompleteComboBox(URL_BAIRROS_JSON, {
+	    'id': idCidade
+	}, 'bairros', 'id', 'nome', preSelectedIdBairro);
     } else {
 	$('#bairros').empty().append($(COMBO_BOX_DEFAULT_BAIRRO));
     }
@@ -116,7 +133,9 @@ function autoCompleteBairros(idCidade, preSelectedIdBairro) {
 function autoCompleteProdutos(idRestaurante, preSelectedIdProduto) {
     if(idRestaurante) {
 	alert(idRestaurante);	
-	autoCompleteComboBox(URL_PRODUTOS_JSON, {'id': idRestaurante}, 'produtos', 'id', 'nome', preSelectedIdProduto);
+	autoCompleteComboBox(URL_PRODUTOS_JSON, {
+	    'id': idRestaurante
+	}, 'produtos', 'id', 'nome', preSelectedIdProduto);
     } else {
 		
 	$('#produtos').empty().append($(COMBO_BOX_DEFAULT_PRODUTO));

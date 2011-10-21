@@ -1,6 +1,6 @@
 <? include("include/header.php"); ?>
 
-<h2>Menu du Chef</h2>
+<h2><?= SITE_TITLE ?></h2>
 
 <form action="admin/" method="post">
     <?// Apagar depois a linha abaixo ?>

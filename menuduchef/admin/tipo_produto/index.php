@@ -15,15 +15,18 @@ $itens = TipoProduto::all(array("order" => "nome asc"));
 <table>
     <tr>
 	<th>Nome</th>
+	<th>Qtd. de Produtos</th>
 	<th>Modificar</th>
 	<th>Excluir</th>
     </tr>
     <?
     if ($itens) {
 	foreach ($itens as $item) {
+	    $qtdProdutos = ProdutoTemTipo::count(array("conditions" => array("tipoproduto_id = ?", $item->id)));
 	    ?>
 	    <tr>
 		<td><?= $item->nome ?></td>
+		<td><?= $qtdProdutos ?></td>
 		<td><a href="admin/tipo_produto/form/<?= $item->id ?>">Modificar</a></td>
 		<td><a href="admin/tipo_produto/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>

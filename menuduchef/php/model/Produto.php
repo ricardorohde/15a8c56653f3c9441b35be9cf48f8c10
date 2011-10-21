@@ -7,16 +7,15 @@ class Produto extends ActiveRecord\Model {
 	array("restaurante", "foreign_key" => "restaurante_id")
     );
     static $has_many = array(
-	array("produto_tem_pedidos", "foreign_key" => "produto_id", "class_name" => "PedidoTemProduto"),
-	array("pedidos", "through" => "produto_tem_pedidos", "foreign_key" => "produto_id", "class_name" => "Pedido"),
+	array("produto_tem_pedidos", "class_name" => "PedidoTemProduto"),
+	array("pedidos", "through" => "produto_tem_pedidos", "class_name" => "Pedido"),
 	array("produto2_tem_pedidos", "foreign_key" => "produto2_id", "class_name" => "PedidoTemProduto"),
 	array("pedidos2", "through" => "produto2_tem_pedidos", "foreign_key" => "produto2_id", "class_name" => "Pedido"),
-	array("pedido_tem_produtos_adicionais", "foreign_key" => "produto_id", "class_name" => "PedidoTemProdutoAdicional"),
-	array("tipos_produto", "foreign_key" => "produto_id", "class_name" => "ProdutoTemTipo"),
+	array("pedido_tem_produtos_adicionais", "class_name" => "PedidoTemProdutoAdicional"),
 	array("produto_tem_tipos"),
-	array("tipos", "through" => "produto_tem_tipos", "foreign_key" => "produto_id", "class_name" => "TipoProduto"),
-	array("produto_tem_produtos_adicionais", "foreign_key" => "produto_id", "class_name" => "ProdutoAdicional"),
-	array("produtos_adicionais", 'through' => 'produto_tem_produtos_adicionais', "foreign_key" => "produto_id", "class_name" => "ProdutoAdicional")
+	array("tipos", "through" => "produto_tem_tipos", "class_name" => "TipoProduto"),
+	array("produto_tem_produtos_adicionais", "class_name" => "ProdutoAdicional"),
+	array("produtos_adicionais", "through" => "produto_tem_produtos_adicionais", "class_name" => "ProdutoAdicional")
     );
     static $validates_presence_of = array(
 	array("nome", "message" => "obrigatório"),

@@ -1,6 +1,7 @@
+<? require("../php/lib/config.php"); ?>
 <html>
     <head>
-	<title>Menu du Chef</title>
+	<title><?= SITE_TITLE ?></title>
 	<style>
 	ul li span.title { font-weight: bold; }
 	</style>
