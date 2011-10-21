@@ -5,8 +5,27 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Restaurante");
 
 $cidades = Cidade::all(array("order" => "nome asc"));
 $administradores = Administrador::all(array("order" => "nome asc"));
-?>
 
+$tipos = TipoRestaurante::all();
+$tipos_produto = TipoProduto::all();
+$bairros = Bairro::all();
+?>
+<script type="text/javascript">
+    $(function() {
+        
+        <? if($obj->id){ ?>
+            autoCompleteBairrosCheckBox(<? echo $obj->cidade_id; ?>);
+            //autoFillBairrosCheckBox(<? echo $obj->id; ?>,);              
+        <? } ?>
+
+	    
+	$('#cidades').change(function() {
+            
+	    autoCompleteBairrosCheckBox($(this).val());
+            
+	});
+    });
+</script>
 <h2>Gerenciar Restaurantes</h2>
 
 <a href="admin/restaurante/" title="Cancelar">Cancelar</a>
@@ -17,9 +36,10 @@ $administradores = Administrador::all(array("order" => "nome asc"));
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
     Cidade<br /> <? if($obj->cidade_id){ 
-         echo $obj->cidade->nome;  
+         echo $obj->cidade->nome;
+         echo "<input type='hidden' id='cidades' value='".$obj->cidade_id."'>";
       }else{ ?>
-        <select name="cidade_id">
+        <select id="cidades" name="cidade_id">
             <option value="">-- Selecione --</option>
             <?
             if ($cidades) {
@@ -47,7 +67,38 @@ $administradores = Administrador::all(array("order" => "nome asc"));
 		<option value="<?= $adm->id ?>" <? if ($adm->id == $obj->administrador_cadastrou_id) { ?>selected="true"<? } ?>><?= $adm->nome ?></option>
 	    <? }
 	} ?>
-    </select><br /><br />
+    </select><br /><br />    
+    Bairros que o restaurante atende<br />
+    <div id="bairros">
+
+    <br /></div>
+
+    <br />
+    <? if($tipos) { ?>
+    
+    Categorias de restaurante<br />
+    
+    <? foreach($tipos as $tipo) { ?>
+    
+    <input type="checkbox" name="tipo_id" value="<?= $tipo->id ?>" id="tipo_<?= $tipo->id ?>" />
+    <label for="tipo_<?= $tipo->id ?>"><?= $tipo->nome ?></label><br />
+    
+    <? } ?>
+    <br />
+    <? } ?>
+    <? if($tipos_produto) { ?>
+    
+    Categorias de produtos<br />
+    
+    <? foreach($tipos_produto as $tipo_produto) { ?>
+    
+    <input type="checkbox" name="tipo_produto_id" value="<?= $tipo_produto->id ?>" id="tipo_produto_<?= $tipo_produto->id ?>" />
+    <label for="tipo_produto_<?= $tipo_produto->id ?>"><?= $tipo_produto->nome ?></label><br />
+    
+    <? } ?>
+    <br />
+    <? } ?>
+    
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 

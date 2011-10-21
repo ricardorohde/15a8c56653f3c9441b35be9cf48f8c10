@@ -30,6 +30,16 @@ class Restaurante extends ActiveRecord\Model {
     static $validates_uniqueness_of = array(
 	array(array("nome", "Cidade" => "cidade_id"), "message" => "já existem")
     );
+    
+    public function atendeBairro($id) {
+	if ($this->bairros_atendidos) {
+	    foreach ($this->bairros_atendidos as $b) {
+		if ($b->bairro_id == $id)
+		    return true;
+	    }
+	}
+	return false;
+    }
 
 }
 
