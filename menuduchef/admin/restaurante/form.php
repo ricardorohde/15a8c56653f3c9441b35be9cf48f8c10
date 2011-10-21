@@ -14,15 +14,12 @@ $bairros = Bairro::all();
     $(function() {
         
         <? if($obj->id){ ?>
-            autoCompleteBairrosCheckBox(<? echo $obj->cidade_id; ?>);
-            //autoFillBairrosCheckBox(<? echo $obj->id; ?>,);              
+            autoCompleteBairrosCheckBox(<?= $obj->cidade_id ?>, <?= $obj->id ?>);          
         <? } ?>
 
 	    
 	$('#cidades').change(function() {
-            
 	    autoCompleteBairrosCheckBox($(this).val());
-            
 	});
     });
 </script>
@@ -69,11 +66,9 @@ $bairros = Bairro::all();
 	} ?>
     </select><br /><br />    
     Bairros que o restaurante atende<br />
-    <div id="bairros">
-
-    <br /></div>
-
+    <div id="bairros"></div>
     <br />
+    
     <? if($tipos) { ?>
     
     Categorias de restaurante<br />
