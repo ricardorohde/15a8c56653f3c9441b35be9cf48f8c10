@@ -58,15 +58,15 @@
 		    <li>
 			<a href="produto/" title="Produtos">Produtos</a>
 		    </li>
-		    <li>
+		    <?/*li>
 			<a href="produto_tem_tipo/" title="Produtos tem Tipo">Produtos tem Tipo</a>
-		    </li>
+		    </li*/?>
 		    <li>
 			<a href="produto_adicional/" title="Produtos Adicionais">Produtos Adicionais</a>
 		    </li>
-		    <li>
+		    <?/*li>
 			<a href="produto_tem_produto_adicional/" title="Produtos Adicionais pertencentes a Produtos">Produtos Adicionais pertencentes a Produtos</a>
-		    </li>
+		    </li*/?>
 		</ul>
 	    </li>
 	    <li>

@@ -9,6 +9,7 @@ var CHECK_BOX_LOADING_OPTION = 'Carregando...';
 var CHECK_BOX_DEFAULT_OPTION = '';
 var URL_BAIRROS_JSON = 'php/controller/list_bairros_json';
 var URL_PRODUTOS_JSON = 'php/controller/list_produtos_json';
+var URL_PRODUTOS_ADICIONAIS_JSON = 'php/controller/list_produtos_adicionais_json';
 var AREA_MODIFICAR_SENHA_ID = 'areaModificarSenha';
 
 function autoCompleteComboBox(url, parameters, targetId, valueIndex, descriptionIndex, preSelectedValue) {
@@ -62,7 +63,6 @@ function permitirModificarSenha() {
     }
 }
 
-
 function autoCompleteBairrosCheckBox(idCidade, idRestaurante) {
     var target = $('#bairros');
     target.empty().append($(CHECK_BOX_LOADING_OPTION));
@@ -74,9 +74,9 @@ function autoCompleteBairrosCheckBox(idCidade, idRestaurante) {
 	    target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
 
 	    $.each(data, function(i, value) {
-		$.getJSON("php/controller/restaurante_atende_bairro_json.php", {
-		    "restaurante_id": idRestaurante, 
-		    "bairro_id": value.id
+		$.getJSON('php/controller/restaurante_atende_bairro_json.php', {
+		    'restaurante_id': idRestaurante, 
+		    'bairro_id': value.id
 		}, function(atende) {
 		    target.append($('<input type="checkbox" name="bairros[]" value="' + value.id + '" id="bairro' + value.id + '" ' + (atende ? 'checked="true"' : '') + ' />'));
 		    target.append($('<label for="bairro' + value.id + '">' + value.nome + '</label>'));
@@ -89,4 +89,39 @@ function autoCompleteBairrosCheckBox(idCidade, idRestaurante) {
 	    target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
 	}
     });
+}
+
+function autoCompleteProdutosAdicionaisCheckBox(idRestaurante, idProduto) {
+    var target = $('#adicionais');
+
+    if(idRestaurante) {
+	target.empty().append($(CHECK_BOX_LOADING_OPTION));
+
+	$.getJSON(URL_PRODUTOS_ADICIONAIS_JSON, {
+	    'id': idRestaurante
+	}, function(data) {
+	    if(data.length) {
+		target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
+
+		$.each(data, function(i, value) {
+		
+		    var produtoTemAdicional = false;
+		
+		    $.each(value.produto_tem_produtos_adicionais, function(j, ppa) {
+			if(!produtoTemAdicional && ppa.produto_id == idProduto) {
+			    produtoTemAdicional = true;
+			}
+		    });
+		
+		    target.append($('<input type="checkbox" name="produtos_adicionais[]" value="' + value.id + '" id="produto_adicional' + value.id + '" ' + (produtoTemAdicional ? 'checked="true"' : '') + ' />'));
+		    target.append($('<label for="produto_adicional' + value.id + '">' + value.nome + '</label>'));
+		    target.append($('<br />'));
+		});
+	    } else {
+		target.empty().text('O restaurante não disponibiliza adicionais');
+	    }
+	});
+    } else {
+	target.empty().text('Escolha um restaurante primeiro');
+    }
 }

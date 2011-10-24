@@ -7,6 +7,19 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $tipos = TipoProduto::all(array("order" => "nome asc"));
 ?>
 
+
+<script type="text/javascript">
+    $(function() {
+        <? if($obj->id){ ?>
+            autoCompleteProdutosAdicionaisCheckBox(<?= $obj->restaurante_id ?>, <?= $obj->id ?>);          
+        <? } ?>
+	
+	$('#restaurantes').change(function() {
+	    autoCompleteProdutosAdicionaisCheckBox($(this).val());
+	});
+    });
+</script>
+
 <h2>Gerenciar Produtos</h2>
 
 <a href="admin/produto/" title="Cancelar">Cancelar</a>
@@ -15,16 +28,11 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
 <form action="admin/produto/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     
-    Nome<br />
-    <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
-    
     Restaurante<br />
-    <?
-    if($obj->restaurante_id){ 
-         echo $obj->restaurante->nome;  
-    } else {
-    ?>
-    <select name="restaurante_id">
+    <? if($obj->restaurante_id){ ?>
+	<?= $obj->restaurante->nome ?>
+    <? } else { ?>
+    <select name="restaurante_id" id="restaurantes">
 	<option value="">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
@@ -37,12 +45,12 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
     <? } ?>
     <br /><br />
     
-    Pre&ccedil;o<br />
-    <input type="text" name="preco" value="<?= $obj->preco ?>" maxlength="100" /><br /><br />
+    Nome do produto<br />
+    <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
     
     <? if($tipos) { ?>
     
-    Categorias:<br />
+    Categorias a que o produto pertence:<br />
     
     <? foreach($tipos as $tipo) { ?>
     
@@ -52,6 +60,13 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
     <? } ?>
     <br />
     <? } ?>
+    
+    Adicionais disponíveis para o produto:<br />
+    <div id="adicionais">Escolha um restaurante primeiro</div>
+    <br />
+    
+    Pre&ccedil;o<br />
+    <input type="text" name="preco" value="<?= $obj->preco ?>" maxlength="100" /><br /><br />
     
     Ativo<br />
     <input type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="true"<? } ?> />Sim

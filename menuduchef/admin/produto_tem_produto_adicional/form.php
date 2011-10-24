@@ -26,12 +26,12 @@ $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
     </select>
     <br /><br />
     Produto Adicional<br />
-    <select name="produto_adicional_id">-- Selecione --</option>
+    <select name="produtoadicional_id">-- Selecione --</option>
 	<?
 	if ($produtos_adicionais) {
 	    foreach ($produtos_adicionais as $produto_adicional) {
 		?>
-		<option value="<?= $produto_adicional->id ?>" <? if ($produto_adicional->id == $obj->produto_adicional_id) { ?>selected="true"<? } ?>><?= $produto_adicional->nome ?></option>
+		<option value="<?= $produto_adicional->id ?>" <? if ($produto_adicional->id == $obj->produtoadicional_id) { ?>selected="true"<? } ?>><?= $produto_adicional->nome ?></option>
 	    <? }
 	} ?>
     </select>
