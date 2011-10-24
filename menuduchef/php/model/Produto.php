@@ -49,7 +49,7 @@ class Produto extends ActiveRecord\Model {
 		}
 	    }
 	}
-
+	
 	/*
 	 * Excluindo o objeto se ele for desmarcado do formulário
 	 */
