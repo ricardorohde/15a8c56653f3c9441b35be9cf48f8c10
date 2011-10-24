@@ -75,7 +75,7 @@ $bairros = Bairro::all();
     
     <? foreach($tipos as $tipo) { ?>
     
-    <input type="checkbox" name="tipo_id" value="<?= $tipo->id ?>" id="tipo_<?= $tipo->id ?>" />
+    <input type="checkbox" name="tipos[]" value="<?= $tipo->id ?>" id="tiporestaurante_id_<?= $tipo->id ?>" <? if($obj->temTipo($tipo->id)) { ?>checked="true"<? } ?> />
     <label for="tipo_<?= $tipo->id ?>"><?= $tipo->nome ?></label><br />
     
     <? } ?>
@@ -87,7 +87,7 @@ $bairros = Bairro::all();
     
     <? foreach($tipos_produto as $tipo_produto) { ?>
     
-    <input type="checkbox" name="tipo_produto_id" value="<?= $tipo_produto->id ?>" id="tipo_produto_<?= $tipo_produto->id ?>" />
+    <input type="checkbox" name="tipos_produto[]" value="<?= $tipo_produto->id ?>" id="tipo_produto_<?= $tipo_produto->id ?>" <? if($obj->temTipoProduto($tipo_produto->id)) { ?>checked="true"<? } ?> />
     <label for="tipo_produto_<?= $tipo_produto->id ?>"><?= $tipo_produto->nome ?></label><br />
     
     <? } ?>
