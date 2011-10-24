@@ -32,7 +32,7 @@ $tipos = TipoRestaurante::all(array("order" => "nome asc"));
 	if ($tipos) {
 	    foreach ($tipos as $tipo) {
 		?>
-		<option value="<?= $tipo->id ?>" <? if ($tipo->id == $obj->tipo_id) { ?>selected="true"<? } ?>><?= $tipo->nome ?></option>
+		<option value="<?= $tipo->id ?>" <? if ($tipo->id == $obj->tiporestaurante_id) { ?>selected="true"<? } ?>><?= $tipo->nome ?></option>
 	    <? }
 	} ?>
     </select>

@@ -5,7 +5,7 @@ class RestauranteTemTipoProduto extends ActiveRecord\Model {
         
         static $belongs_to = array(
 		array("restaurante", "foreign_key" => "restaurante_id"),
-                array("tipo_produto", "foreign_key" => "tipo_id")
+                array("tipo_produto", "foreign_key" => "tipoproduto_id")
 	);
 }
 

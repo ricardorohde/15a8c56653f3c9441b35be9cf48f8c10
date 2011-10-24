@@ -5,7 +5,34 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Pedido");
 
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $consumidores = Consumidor::all(array("order" => "nome asc"));
+$produtos = Produto::all(array("order" => "nome asc"));
 ?>
+
+<script type="text/javascript">
+	    var current_p = <?= $obj->pedido_tem_produtos->produtos ? (sizeof($obj->pedido_tem_produtos->produtos) + 1) : 1 ?>;
+	
+	    function addInput_p(suffix) {
+		$('#proInput').append($(
+		'<div id="input' + suffix + '">'
+		    + '   <select name="produto' + suffix + '"  />'
+                    <? if($produtos){ 
+                            foreach($produtos as $produto){ ?>
+                            +'<option value="<?= $produto->id ?>"><?= $produto->nome ?></option>'                         
+                    <?      }
+                        } ?>
+                    +'</select>'
+		    + (suffix > 1 ? ' <span onclick="this.parentNode.parentNode.removeChild(this.parentNode)">X</span>' : '')
+		    + '</div>'
+	    ));
+	    }
+	
+	    $(function() {
+		addInput_p(current_p);
+		$('#addPagina_p').click(function() {
+		    addInput_p(++current_p);
+		});
+	    });
+</script>
 
 <h2>Gerenciar Pedidos</h2>
 
@@ -42,6 +69,19 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
     </select>
     <? } ?>
     <br /><br />
+    
+    Itens inclusos:<br />
+    <div id="proInput">
+    <?
+    if($obj->pedido_tem_produtos->produtos){
+        $proc = 1;
+        foreach($obj->pedido_tem_produtos->produtos as $pro){ ?>
+            <div><input type="text" name="produto<?= $proc ?>" value="<?= $pro->nome ?>" maxlength="100" /><span onclick="this.parentNode.parentNode.removeChild(this.parentNode)">X</span></div>
+        <? $proc++; }
+    }?>
+    </div>
+    <input type="button" value="  +  " title="Adicionar mais itens" id="addPagina_p" /><br /><br />
+    
     Pagamento Efetuado<br />
     <input type="radio" name="pagamento_efetuado" value="1" <? if (!$obj->id || $obj->pagamento_efetuado === 1) { ?>checked="true"<? } ?> />Sim
     <input type="radio" name="pagamento_efetuado" value="0" <? if ($obj->id && $obj->pagamento_efetuado === 0) { ?>checked="true"<? } ?> />Não

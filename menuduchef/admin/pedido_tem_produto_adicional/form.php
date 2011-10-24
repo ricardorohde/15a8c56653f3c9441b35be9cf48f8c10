@@ -15,12 +15,12 @@ $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 <form action="admin/pedido_tem_produto_adicional/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Pedido tem Produto<br />
-    <select name="pedido_tem_produto_id">-- Selecione --</option>
+    <select name="pedidotemproduto_id">-- Selecione --</option>
 	<?
 	if ($pedido_tem_produtos) {
 	    foreach ($pedido_tem_produtos as $pp) {
 		?>
-		<option value="<?= $pp->id ?>" <? if ($pp->id == $obj->pedido_tem_produto_id) { ?>selected="true"<? } ?>><?= $pp->id." (".$pp->produto->nome.")" ?></option>
+		<option value="<?= $pp->id ?>" <? if ($pp->id == $obj->pedidotemproduto_id) { ?>selected="true"<? } ?>><?= $pp->id." (".$pp->produto->nome.")" ?></option>
 	    <? }
 	} ?>
     </select>
@@ -31,7 +31,7 @@ $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 	if ($produtos_adicionais) {
 	    foreach ($produtos_adicionais as $produto_adicional) {
 		?>
-		<option value="<?= $produto_adicional->id ?>" <? if ($produto_adicional->id == $obj->produto_adicional_id) { ?>selected="true"<? } ?>><?= $produto_adicional->nome ?></option>
+		<option value="<?= $produto_adicional->id ?>" <? if ($produto_adicional->id == $obj->produtoadicional_id) { ?>selected="true"<? } ?>><?= $produto_adicional->nome ?></option>
 	    <? }
 	} ?>
     </select>
