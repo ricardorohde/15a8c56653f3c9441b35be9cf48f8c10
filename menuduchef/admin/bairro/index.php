@@ -4,15 +4,14 @@ include("../../include/header.php");
 $itens = Bairro::all(array("order" => "nome asc"));
 ?>
 
-<h2>Gerenciar Bairros</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
 
-<a href="admin/" title="Menu principal">Menu principal</a>
-<br /><br />
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Bairros</h2>
 
 <a href="admin/bairro/form" title="Criar">Criar</a>
 <br /><br />
 
-<table>
+<table class="list">
     <tr>
 	<th>Bairro</th>
 	<th>Cidade</th>

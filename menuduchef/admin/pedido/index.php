@@ -4,15 +4,14 @@ include("../../include/header.php");
 $itens = Pedido::all(array("order" => "quando asc"));
 ?>
 
-<h2>Gerenciar Pedidos</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
 
-<a href="admin/" title="Menu principal">Menu principal</a>
-<br /><br />
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Pedidos</h2>
 
 <a href="admin/pedido/form" title="Criar">Criar</a>
 <br /><br />
 
-<table>
+<table class="list">
     <tr>
 	<th>Consumidor</th>
 	<th>Restaurante</th>
@@ -34,7 +33,7 @@ $itens = Pedido::all(array("order" => "quando asc"));
 	    <tr>
 		<td><?= $item->consumidor->nome ?></td>
 		<td><?= $item->restaurante->nome ?></td>
-		<td><?= $item->quando ?></td>
+		<td><?= $item->quando->format('H:i:s m/d/Y') ?></td>
                 <td><?= $item->pagamento_efetuado ?></td>
                 <td><?= $item->forma_pagamento ?></td>
                 <td><?= $item->preco ?></td>

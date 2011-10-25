@@ -4,9 +4,10 @@ include("../../include/header.php");
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProduto");
 
 $pedidos = Pedido::all(array("order" => "quando asc"));
-
-
 ?>
+
+<? include("../../include/painel_area_administrativa.php") ;?>
+
 <script type="text/javascript">
     $(function() {
 	autoCompleteProdutos(<?= $obj->pedido_id ?: 0 ?>, <?= $obj->produto_id ?: 0 ?>);
@@ -16,7 +17,8 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
 	});
     });
 </script>
-<h2>Gerenciar Produtos inclusos nos Pedidos</h2>
+
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
 
 <a href="admin/pedido_tem_produto/" title="Cancelar">Cancelar</a>
 <br /><br />

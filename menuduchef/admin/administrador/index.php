@@ -4,15 +4,14 @@ include("../../include/header.php");
 $itens = Administrador::all(array("order" => "nome asc"));
 ?>
 
-<h2>Gerenciar Administradores</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
 
-<a href="admin/" title="Menu principal">Menu principal</a>
-<br /><br />
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Administradores</h2>
 
 <a href="admin/administrador/form" title="Criar">Criar</a>
 <br /><br />
 
-<table>
+<table class="list">
     <tr>
 	<th>Nome</th>
 	<th>Login</th>

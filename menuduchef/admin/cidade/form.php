@@ -4,7 +4,9 @@ include("../../include/header.php");
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Cidade");
 ?>
 
-<h2>Gerenciar Cidades</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
+
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Cidades</h2>
 
 <a href="admin/cidade/" title="Cancelar">Cancelar</a>
 <br /><br />

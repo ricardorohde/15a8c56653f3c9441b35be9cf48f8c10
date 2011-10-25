@@ -4,15 +4,14 @@ include("../../include/header.php");
 $itens = PedidoTemProdutoAdicional::all(array("order" => "pedidotemproduto_id asc"));
 ?>
 
-<h2>Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
 
-<a href="admin/" title="Menu principal">Menu principal</a>
-<br /><br />
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 
 <a href="admin/pedido_tem_produto_adicional/form" title="Criar">Criar</a>
 <br /><br />
 
-<table>
+<table class="list">
     <tr>
 	<th>Produto contido no Pedido</th>
 	<th>Produto Adicional</th>

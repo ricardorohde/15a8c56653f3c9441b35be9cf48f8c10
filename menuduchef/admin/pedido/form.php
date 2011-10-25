@@ -8,7 +8,9 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
 //$produtos = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ?", $obj->restaurante->id)));
 ?>
 
-<h2>Gerenciar Pedidos</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
+
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Pedidos</h2>
 
 <a href="admin/pedido/" title="Cancelar">Cancelar</a>
 <br /><br />

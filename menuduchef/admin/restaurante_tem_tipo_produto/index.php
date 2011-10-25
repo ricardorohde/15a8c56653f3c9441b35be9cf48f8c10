@@ -1,20 +1,17 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $itens = RestauranteTemTipoProduto::all(array("order" => "restaurante_id asc"));
 ?>
 
-<? include("../../include/header.php"); ?>
+<? include("../../include/painel_area_administrativa.php") ;?>
 
-<h2>Gerenciar Restaurantes tem Tipos de Produto</h2>
-
-<a href="admin/" title="Menu principal">Menu principal</a>
-<br /><br />
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Restaurantes tem Tipos de Produto</h2>
 
 <a href="admin/restaurante_tem_tipo_produto/form" title="Criar">Criar</a>
 <br /><br />
 
-<table>
+<table class="list">
     <tr>
 	<th>Restaurante</th>
 	<th>Tipo de Produto</th>

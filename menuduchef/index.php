@@ -2,13 +2,13 @@
 
 <h2><?= SITE_TITLE ?></h2>
 
-<form action="admin/" method="post">
+<form action="php/controller/login" method="post">
     <?// Apagar depois a linha abaixo ?>
     <font color="red"><strong>Login ainda não foi implementado. Para entrar no sistema, basta clicar em "Entrar" sem preencher os campos.</strong></font><br /><br />
-    Login:
-    <input type="text" name="login" maxlength="100" /><br />
+    E-mail:
+    <input type="text" name="email" maxlength="50" /><br />
     Senha:
-    <input type="password" name="senha" maxlength="100" /><br /><br />
+    <input type="password" name="senha" maxlength="50" /><br /><br />
     <input type="submit" value="Entrar" />
 </form>
 

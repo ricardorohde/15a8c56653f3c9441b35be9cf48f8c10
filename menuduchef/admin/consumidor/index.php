@@ -4,15 +4,14 @@ include("../../include/header.php");
 $itens = Consumidor::all(array("order" => "nome asc"));
 ?>
 
-<h2>Gerenciar Consumidores</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
 
-<a href="admin/" title="Menu principal">Menu principal</a>
-<br /><br />
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Consumidores</h2>
 
 <a href="admin/consumidor/form" title="Criar">Criar</a>
 <br /><br />
 
-<table>
+<table class="list">
     <tr>
         <th>Login</th>
 	<th>Nome</th>

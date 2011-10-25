@@ -6,7 +6,9 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("UsuarioRestaurante");
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 ?>
 
-<h2>Gerenciar Usu&aacute;rios de Restaurantes</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
+
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Gerentes e Atendentes de Restaurantes</h2>
 
 <a href="admin/usuario_restaurante/" title="Cancelar">Cancelar</a>
 <br /><br />

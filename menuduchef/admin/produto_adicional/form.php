@@ -6,7 +6,9 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("ProdutoAdicional");
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 ?>
 
-<h2>Gerenciar Produtos Adicionais</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
+
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais</h2>
 
 <a href="admin/produto_adicional/" title="Cancelar">Cancelar</a>
 <br /><br />

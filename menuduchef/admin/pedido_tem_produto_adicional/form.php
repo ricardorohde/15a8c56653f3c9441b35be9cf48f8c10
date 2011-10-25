@@ -7,7 +7,9 @@ $pedido_tem_produtos = PedidoTemProduto::all(array("order" => "id asc"));
 $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 ?>
 
-<h2>Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
+
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 
 <a href="admin/pedido_tem_produto_adicional/" title="Cancelar">Cancelar</a>
 <br /><br />

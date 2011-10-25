@@ -4,15 +4,14 @@ include("../../include/header.php");
 $itens = TipoProduto::all(array("order" => "nome asc"));
 ?>
 
-<h2>Gerenciar Tipos de Produto</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
 
-<a href="admin/" title="Menu principal">Menu principal</a>
-<br /><br />
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Tipos de Produto</h2>
 
 <a href="admin/tipo_produto/form" title="Criar">Criar</a>
 <br /><br />
 
-<table>
+<table class="list">
     <tr>
 	<th>Nome</th>
 	<th>Qtd. de Produtos</th>

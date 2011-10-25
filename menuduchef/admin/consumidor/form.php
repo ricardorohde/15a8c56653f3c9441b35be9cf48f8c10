@@ -6,17 +6,23 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Consumidor");
 $cidades = Cidade::all(array("order" => "nome asc"));
 ?>
 
+<? include("../../include/painel_area_administrativa.php") ;?>
+
 <script type="text/javascript">
     $(function() {
         $cid = 0;
         
-        <? foreach($obj->enderecos as $ende){    
-            if($ende->favorito){
-                $cid = $ende->bairro->cidade_id;
-                echo "<alert>".$ende->bairro_id."</alert>";
-                echo "<alert>".$cid."</alert>";
+        <?
+        if($obj->enderecos) {
+            foreach($obj->enderecos as $ende){    
+                if($ende->favorito){
+                    $cid = $ende->bairro->cidade_id;
+                    echo "<alert>".$ende->bairro_id."</alert>";
+                    echo "<alert>".$cid."</alert>";
+                }
             }
-        }  ?>
+        }
+        ?>
 	autoCompleteBairros(<?= $cid ?: 0 ?>, <?= 0 ?: 0 ?>); //$obj->bairro_id
 	    
 	$('#cidades').change(function() {
@@ -67,7 +73,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	    });
 	</script>
 
-<h2>Gerenciar Consumidores</h2>
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Consumidores</h2>
 
 <a href="admin/consumidor/" title="Cancelar">Cancelar</a>
 <br /><br />

@@ -7,6 +7,7 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $tipos = TipoProduto::all(array("order" => "nome asc"));
 ?>
 
+<? include("../../include/painel_area_administrativa.php") ;?>
 
 <script type="text/javascript">
     $(function() {
@@ -20,7 +21,7 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
     });
 </script>
 
-<h2>Gerenciar Produtos</h2>
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos</h2>
 
 <a href="admin/produto/" title="Cancelar">Cancelar</a>
 <br /><br />

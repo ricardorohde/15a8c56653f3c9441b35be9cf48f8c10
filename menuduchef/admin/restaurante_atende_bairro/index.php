@@ -1,20 +1,17 @@
 <?
-include_once("../../php/lib/config.php");
+include("../../include/header.php");
 
 $itens = RestauranteAtendeBairro::all(array("order" => "restaurante_id asc"));
 ?>
 
-<? include("../../include/header.php"); ?>
+<? include("../../include/painel_area_administrativa.php") ;?>
 
-<h2>Gerenciar Restaurantes atendem Bairros</h2>
-
-<a href="admin/" title="Menu principal">Menu principal</a>
-<br /><br />
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Restaurantes atendem Bairros</h2>
 
 <a href="admin/restaurante_atende_bairro/form" title="Criar">Criar</a>
 <br /><br />
 
-<table>
+<table class="list">
     <tr>
 	<th>Restaurante</th>
 	<th>Bairro</th>

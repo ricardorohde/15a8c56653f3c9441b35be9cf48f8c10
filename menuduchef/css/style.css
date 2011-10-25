@@ -1,5 +1,22 @@
-table { border-collapse: collapse; }
-table tr td, table tr th { border: #000 solid 1px; }
-.msg { float: left; width: 50%; color: white; font-weight: bold; padding: 2px; }
+* { margin: 0; padding: 0; }
+body { width: 100%; background-color: #ccc; }
+#conteudo { float: left; width: 80%; margin: 0 10%; padding: 5px 5px 15px; background-color: #fff; }
+
+h1, h2, h3, h4, input, select, textarea, a, .msg { font: 12px Verdana; }
+h1, h2 { float: left; width: 100%; margin-bottom: 10px; font-weight: bold; }
+h1 { font-size: 20px; }
+h2, h2 a { font-size: 16px; }
+.white_in_black { background-color: #000; color: #fff; }
+.center { text-align: center; }
+.msg { float: left; width: 50%; margin: 1px 25%; color: white; font-weight: bold; padding: 5px; }
 .error { background-color: red; }
 .info, .warning { background-color: blue; }
+
+table.list { border-collapse: collapse; }
+table.list tr td, table tr th { border: #000 solid 1px; padding: 3px; }
+ul { margin-left: 30px; }
+ul li { margin: 5px 0 0 15px; }
+ul li span.title { font-weight: bold; }
+
+#painel_area_administrativa { float:left; width: 100%; margin-bottom: 10px; }
+#painel_area_administrativa {  }

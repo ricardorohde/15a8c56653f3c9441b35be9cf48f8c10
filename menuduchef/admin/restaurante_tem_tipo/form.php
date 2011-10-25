@@ -7,8 +7,9 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $tipos = TipoRestaurante::all(array("order" => "nome asc"));
 ?>
 
+<? include("../../include/painel_area_administrativa.php") ;?>
 
-<h2>Gerenciar Restaurantes tem Tipos</h2>
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Restaurantes tem Tipos</h2>
 
 <a href="admin/restaurante_tem_tipo/" title="Cancelar">Cancelar</a>
 <br /><br />

@@ -10,15 +10,15 @@ unset($_SESSION[DEFAULT_WARNING_SESSION_ATTRIBUTE_NAME]);
 
 <? if ($msgError) {
 foreach ($msgError as $msg) { ?>
-<div class="msg error"><?= $msg ?></div>
-<? } ?><br clear="all" /><? } ?>
+<div class="msg error">- <?= $msg ?></div>
+<? } ?><br clear="all" /><br clear="all" /><? } ?>
 
 <? if ($msgInfo) {
 foreach ($msgInfo as $msg) { ?>
-<div class="msg info"><?= $msg ?></div>
-<? } ?><br clear="all" /><? } ?>
+<div class="msg info">- <?= $msg ?></div>
+<? } ?><br clear="all" /><br clear="all" /><? } ?>
 
 <? if ($msgWarning) {
 foreach ($msgWarning as $msg) { ?>
-<div class="msg warning"><?= $msg ?></div>
-<? } ?><br clear="all" /><? } ?>
+<div class="msg warning">- <?= $msg ?></div>
+<? } ?><br clear="all" /><br clear="all" /><? } ?>

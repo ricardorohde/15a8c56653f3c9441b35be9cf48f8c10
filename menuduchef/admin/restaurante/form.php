@@ -10,6 +10,9 @@ $tipos = TipoRestaurante::all();
 $tipos_produto = TipoProduto::all();
 $bairros = Bairro::all();
 ?>
+
+<? include("../../include/painel_area_administrativa.php") ;?>
+
 <script type="text/javascript">
     $(function() {
         
@@ -23,7 +26,8 @@ $bairros = Bairro::all();
 	});
     });
 </script>
-<h2>Gerenciar Restaurantes</h2>
+
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Restaurantes</h2>
 
 <a href="admin/restaurante/" title="Cancelar">Cancelar</a>
 <br /><br />

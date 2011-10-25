@@ -4,7 +4,9 @@ include("../../include/header.php");
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Administrador");
 ?>
 
-<h2>Gerenciar Administradores</h2>
+<? include("../../include/painel_area_administrativa.php") ;?>
+
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Administradores</h2>
 
 <a href="admin/administrador/" title="Cancelar">Cancelar</a>
 <br /><br />
