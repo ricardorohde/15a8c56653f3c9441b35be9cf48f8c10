@@ -23,6 +23,7 @@ if (HttpUtil::isLocalhost()) {
         <script type="text/javascript" src="js/util.js"></script>
         <script type='text/javascript' src="js/quickmenu.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" type="text/css" href="css/menu.css" />
     </head>
     <body>
         

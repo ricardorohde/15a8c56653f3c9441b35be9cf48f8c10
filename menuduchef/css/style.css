@@ -2,7 +2,7 @@
 body { width: 100%; background-color: #ccc; }
 #conteudo { float: left; width: 80%; margin: 0 10%; padding: 5px 5px 15px; background-color: #fff; }
 
-h1, h2, h3, h4, input, select, textarea, a, .msg, table.list tr td, table.list tr th { font: 12px Verdana; }
+h1, h2, h3, h4, input, select, textarea, a, .msg, table.list tr td, table.list tr th, div { font: 12px Verdana; }
 h1, h2 { float: left; width: 100%; margin-bottom: 10px; font-weight: bold; }
 h1 { font-size: 20px; }
 h2, h2 a { font-size: 16px; }
@@ -11,6 +11,13 @@ h2, h2 a { font-size: 16px; }
 .msg { float: left; width: 50%; margin: 1px 25%; color: white; font-weight: bold; padding: 5px; }
 .error { background-color: red; }
 .info, .warning { background-color: blue; }
+.left { float: left; }
+.right { float: right; }
+.tleft { text-align: left; }
+.tright { text-align: right; }
+.w25 { width: 25%; }
+.w40 { width: 40%; }
+.w50 { width: 50%; }
 
 table.list { border-collapse: collapse; }
 table.list tr td, table.list tr th { border: #000 solid 1px; padding: 3px; }

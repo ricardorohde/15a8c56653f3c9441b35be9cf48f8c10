@@ -35,6 +35,8 @@
         <span class="qmclear"> </span>
     </div>
     <script type="text/javascript">qm_create(0,false,0,250,false,false,false,false,false);</script>
-    <div class="right"></div>
+    <div class="right tright w50">
+        <strong>Manolo da Silva Sauro</strong> - Gerente - Restaurante do Biro | <a href="admin/sair" title="Sair">Sair</a>
+    </div>
 </div>
 <? include("messages.php"); ?>
