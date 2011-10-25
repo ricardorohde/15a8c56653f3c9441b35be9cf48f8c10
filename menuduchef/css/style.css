@@ -19,5 +19,4 @@ ul { margin-left: 30px; }
 ul li { margin: 5px 0 0 15px; }
 ul li span.title { font-weight: bold; }
 
-#painel_area_administrativa { float:left; width: 100%; margin-bottom: 10px; }
-#painel_area_administrativa {  }
+#painel_area_administrativa { float:left; width: 100%; margin-bottom: 10px; border-bottom: #CCC solid 1px; }
