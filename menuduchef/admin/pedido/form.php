@@ -5,34 +5,8 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Pedido");
 
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $consumidores = Consumidor::all(array("order" => "nome asc"));
-$produtos = Produto::all(array("order" => "nome asc"));
+//$produtos = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ?", $obj->restaurante->id)));
 ?>
-
-<script type="text/javascript">
-	    var current_p = <?= $obj->pedido_tem_produtos->produtos ? (sizeof($obj->pedido_tem_produtos->produtos) + 1) : 1 ?>;
-	
-	    function addInput_p(suffix) {
-		$('#proInput').append($(
-		'<div id="input' + suffix + '">'
-		    + '   <select name="produto' + suffix + '"  />'
-                    <? if($produtos){ 
-                            foreach($produtos as $produto){ ?>
-                            +'<option value="<?= $produto->id ?>"><?= $produto->nome ?></option>'                         
-                    <?      }
-                        } ?>
-                    +'</select>'
-		    + (suffix > 1 ? ' <span onclick="this.parentNode.parentNode.removeChild(this.parentNode)">X</span>' : '')
-		    + '</div>'
-	    ));
-	    }
-	
-	    $(function() {
-		addInput_p(current_p);
-		$('#addPagina_p').click(function() {
-		    addInput_p(++current_p);
-		});
-	    });
-</script>
 
 <h2>Gerenciar Pedidos</h2>
 
@@ -58,7 +32,7 @@ $produtos = Produto::all(array("order" => "nome asc"));
     Restaurante<br /><? if($obj->restaurante_id){ 
          echo $obj->restaurante->nome;  
       }else{ ?>
-    <select name="restaurante_id">-- Selecione --</option>
+    <select id="restaurantes" name="restaurante_id">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
@@ -73,14 +47,18 @@ $produtos = Produto::all(array("order" => "nome asc"));
     Itens inclusos:<br />
     <div id="proInput">
     <?
-    if($obj->pedido_tem_produtos->produtos){
+    echo "O";
+    var_dump($obj);
+    if($obj->pedido_tem_produtos->produto){
         $proc = 1;
+        echo "I";
         foreach($obj->pedido_tem_produtos->produtos as $pro){ ?>
-            <div><input type="text" name="produto<?= $proc ?>" value="<?= $pro->nome ?>" maxlength="100" /><span onclick="this.parentNode.parentNode.removeChild(this.parentNode)">X</span></div>
+            <div><? echo $pro->nome ?></div>
+            echo "E";
         <? $proc++; }
     }?>
     </div>
-    <input type="button" value="  +  " title="Adicionar mais itens" id="addPagina_p" /><br /><br />
+    <input type="button" value="Acrescentar/Modificar/Excluir Itens" title="Acrescentar/Modificar/Excluir Itens" id="addPagina_p" /><br /><br />
     
     Pagamento Efetuado<br />
     <input type="radio" name="pagamento_efetuado" value="1" <? if (!$obj->id || $obj->pagamento_efetuado === 1) { ?>checked="true"<? } ?> />Sim

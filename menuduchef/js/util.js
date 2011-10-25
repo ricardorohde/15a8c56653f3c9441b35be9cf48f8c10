@@ -125,3 +125,32 @@ function autoCompleteProdutosAdicionaisCheckBox(idRestaurante, idProduto) {
 	target.empty().text('Escolha um restaurante primeiro');
     }
 }
+
+function autoCompleteProdutosCheckBox(idRestaurante) { //seinao ainda
+    var target = $('#produtos');
+
+    if(idRestaurante) {
+	target.empty().append($(CHECK_BOX_LOADING_OPTION));
+
+	$.getJSON(URL_PRODUTOS_JSON, {
+	    'id': idRestaurante
+	}, function(data) {
+	    if(data.length) {
+		target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
+
+		$.each(data, function(i, value) {
+		
+		    var produto = false;
+			
+		    target.append($('<select name="produtos_adicionais[]" value="' + value.id + '" id="produto' + value.id + '" >'));
+		    target.append($('<label for="produto' + value.id + '">' + value.nome + '</select>'));
+		    target.append($('<br />'));
+		});
+	    } else {
+		target.empty().text('O restaurante não disponibiliza itens');
+	    }
+	});
+    } else {
+	target.empty().text('Escolha um restaurante primeiro');
+    }
+}

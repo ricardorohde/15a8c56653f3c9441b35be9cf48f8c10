@@ -9,7 +9,7 @@ class Pedido extends ActiveRecord\Model {
 	);
         static $has_many = array(
 	    array("pedido_tem_produtos", "foreign_key" => "pedido_id", "class_name" => "PedidoTemProduto"),
-            array("produtos", 'through' => 'pedido_tem_produtos', "foreign_key" => "pedido_id", "class_name" => "Produto")
+            array("produtos", 'through' => 'pedido_tem_produtos', "foreign_key" => "produto_id", "class_name" => "Produto")
 	);
         
         static $before_save = array("set_current_date");
