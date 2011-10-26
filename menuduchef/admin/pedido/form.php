@@ -47,11 +47,12 @@ $preco_total = 0;
     <? } ?>
     <br /><br />
     
-    <? if($obj->pedido_tem_produtos) { ?>
+    <? if($obj->id) { ?>
     Itens inclusos:<br />
     <div id="proInput">
     <?
         $proc = 1;
+	if($obj->pedido_tem_produtos) {
         foreach($obj->pedido_tem_produtos as $pro){
             $adicionais = "";
             if($pro->pedido_tem_produtos_adicionais){
@@ -62,7 +63,7 @@ $preco_total = 0;
             $preco_total += ($pro->preco_unitario * $pro->qtd);
              ?>
             <div><? echo $pro->qtd; ?>x <? echo $pro->produto->nome; ?> <? if($pro->tamanho){ echo " (".$pro->tamanho.") ";} ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?> <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?> <? echo " ---Valor: R$".($pro->preco_unitario * $pro->qtd)." "; ?> </div>
-        <? $proc++; }
+        <? $proc++; } }
     ?>
     </div>
     <a href="admin/pedido_tem_produto/?ped=<?= $obj->id ?>">Acrescentar/Modificar/Excluir Itens</a><br /><br />
