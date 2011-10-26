@@ -16,6 +16,8 @@ $produto_tem_adicionais = ProdutoTemProdutoAdicional::all(array("order" => "id a
 
 <form action="admin/pedido_tem_produto_adicional/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
+    <input type="hidden" name="ped" value="<?= $_GET['ped'] ?>" />
+    <input type="hidden" name="prodnoped" value="<?= $_GET['prodnoped'] ?>" />
     Pedido tem Produto<br /><? if($obj->pedido_tem_produto){ 
          echo $obj->pedido_tem_produto->id." ".$obj->pedido_tem_produto->produto->nome;  
       }else{ ?>
