@@ -3,7 +3,7 @@
 include_once("../lib/config.php");
 
 $data = HttpUtil::getParameterArray();
-$redirect = $redirect ? : false;
+$redirect = $redirect ? : true;
 
 $obj = new $class();
 
@@ -26,7 +26,7 @@ if ($data) {
 	$obj->set_attributes($data);
 	$obj->save();
 
-	if ($obj->is_valid()) {
+	if ($obj->is_valid() && $obj->errors->is_empty()) {
 	    if ($id) {
 		HttpUtil::showInfoMessages(array("Modificação realizada com sucesso"));
 	    } else {
