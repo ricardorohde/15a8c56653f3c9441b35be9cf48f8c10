@@ -5,6 +5,7 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Pedido");
 
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $consumidores = Consumidor::all(array("order" => "nome asc"));
+$preco_total = 0;
 //$produtos = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ?", $obj->restaurante->id)));
 ?>
 
@@ -58,6 +59,7 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
                     $adicionais .= " ".$adi->produto_adicional->nome;
                 }
             }
+            $preco_total += ($pro->preco_unitario * $pro->qtd);
              ?>
             <div><? echo $pro->qtd; ?>x <? echo $pro->produto->nome; ?> <? if($pro->tamanho){ echo " (".$pro->tamanho.") ";} ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?> <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?> <? echo " ---Valor: R$".($pro->preco_unitario * $pro->qtd)." "; ?> </div>
         <? $proc++; }
@@ -73,7 +75,7 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
     Forma de Pagamento<br />
     <input type="text" name="forma_pagamento" value="<?= $obj->forma_pagamento ?>" maxlength="100" /><br /><br />
     Pre&ccedil;o<br />
-    <input type="text" name="preco" value="<?= $obj->preco ?>" maxlength="100" /><br /><br />
+    R$ <?= $preco_total ?><br /><br />
     Troco<br />
     <input type="text" name="troco" value="<?= $obj->troco ?>" maxlength="100" /><br /><br />
     Cupom<br />
