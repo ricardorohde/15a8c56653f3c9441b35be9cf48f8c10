@@ -1,20 +1,17 @@
 <?
 include("../../include/header.php");
 
-$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProduto");
+//$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProduto");
 
-$obj ? $obj = PedidoTemProduto::all(array("conditions" => array("pedido_id = ?", $_GET['ped']))) : "";
+$pedido = Pedido::find($_GET['ped']);
+$obj = PedidoTemProduto::find($_GET['id']);
+$produtos = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ?",$pedido->restaurante_id)));
+
 
 ?>
 
 <? include("../../include/painel_area_administrativa.php") ;?>
 
-<script type="text/javascript">
-    $(function() {
-	autoCompleteProdutos(<?= $obj->pedido_id ?: 0 ?>, <?= $obj->produto_id ?: 0 ?>);
-	    
-    });
-</script>
 
 <h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
 
@@ -39,26 +36,34 @@ $obj ? $obj = PedidoTemProduto::all(array("conditions" => array("pedido_id = ?",
     </select>
     <? } ?>
     <br /><br />
-    Produto<br /><? if($obj->produto_id){
-         $adicionais = "";
-            if($obj->pedido_tem_produtos_adicionais){
-                foreach($obj->pedido_tem_produtos_adicionais as $adi){
-                    $adicionais .= " ".$adi->produto_adicional->nome;
-                }
+    Produto<br /><? if($obj){
+                        
+                            $adicionais = "";
+                            if($obj->pedido_tem_produtos_adicionais){
+                                foreach($obj->pedido_tem_produtos_adicionais as $adi){
+                                    $adicionais .= " ".$adi->produto_adicional->nome;
+                                }
+                            }
+                             ?>
+                            <div><? echo $obj->produto->nome; ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?></div>
+                            <? if($obj->produto->produto_tem_produtos_adicionais){ ?> <a href="admin/pedido_tem_produto_adicional/?prodnoped=<?= $obj->id ?>&ped=<?= $_GET['ped']?>">Acrescentar/Modificar/Excluir Adicionais</a> <? } ?>
+                       <? }else{ ?>
+    <select id="produtos" name="produto_id">
+        <?
+            if($produtos){
+                foreach($produtos as $produto){ ?>
+                    <option value='<?= $produto->id ?>'><?= $produto->nome ?> <? if($produto->tamanho){ ?>(<?= $produto->tamanho ?>)<? } ?></option>
+                <?}
             }
-             ?>
-            <div><? echo $obj->produto->nome; ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?></div>
-            <? if($obj->produto->produto_tem_produtos_adicionais){ ?> <a href="admin/pedido_tem_produto_adicional/?prodnoped=<?= $obj->id ?>&ped=<?= $_GET['ped']?>">Acrescentar/Modificar/Excluir Adicionais</a> <? } ?>
-      <? }else{ ?>
-    <select id="produtos" name="produto_id"></select>
+        ?>
+    </select>
     <? } ?>
     <br /><br />
     Quantidade<br />
     <input type="text" name="qtd" value="<?= $obj->qtd ?>" maxlength="100" /><br /><br />
     OBS:<br />
     <input type="text" name="obs" value="<?= $obj->obs ?>" maxlength="100" /><br /><br />
-    Tamanho<br />
-    <input type="text" name="tamanho" value="<?= $obj->tamanho ?>" maxlength="100" /><br /><br />
+
     Produto2<br /><? if($obj->produto_id){
                         if($obj->produto_id2){
                             echo $obj->produto2->nome;

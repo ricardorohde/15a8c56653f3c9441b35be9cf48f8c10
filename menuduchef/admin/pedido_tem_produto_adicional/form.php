@@ -11,7 +11,7 @@ $produto_tem_adicionais = ProdutoTemProdutoAdicional::all(array("order" => "id a
 
 <h2><a href="admin/">Menu Principal</a> &raquo;  <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; <a href="admin/pedido_tem_produto/?ped=<?= $_GET['ped'] ?>">Gerenciar Produtos inclusos nos Pedidos</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 
-<a href="admin/pedido_tem_produto_adicional/" title="Cancelar">Cancelar</a>
+<a href="admin/pedido_tem_produto_adicional/?prodnoped=<?= $_GET['prodnoped'] ?>&ped=<?= $_GET['ped'] ?>" title="Cancelar">Cancelar</a>
 <br /><br />
 
 <form action="admin/pedido_tem_produto_adicional/controller" method="post">
