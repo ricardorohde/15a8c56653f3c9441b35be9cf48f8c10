@@ -46,11 +46,10 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
     <? } ?>
     <br /><br />
     
+    <? if($obj->pedido_tem_produtos) { ?>
     Itens inclusos:<br />
     <div id="proInput">
     <?
-
-    if($obj->pedido_tem_produtos){
         $proc = 1;
         foreach($obj->pedido_tem_produtos as $pro){
             $adicionais = "";
@@ -62,9 +61,10 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
              ?>
             <div><? echo $pro->qtd; ?>x <? echo $pro->produto->nome; ?> <? if($pro->tamanho){ echo " (".$pro->tamanho.") ";} ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?> <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?> <? echo " ---Valor: R$".($pro->preco_unitario * $pro->qtd)." "; ?> </div>
         <? $proc++; }
-    }?>
+    ?>
     </div>
     <a href="admin/pedido_tem_produto/?ped=<?= $obj->id ?>">Acrescentar/Modificar/Excluir Itens</a><br /><br />
+    <? } ?>
     
     Pagamento Efetuado<br />
     <input type="radio" name="pagamento_efetuado" value="1" <? if (!$obj->id || $obj->pagamento_efetuado === 1) { ?>checked="true"<? } ?> />Sim
@@ -83,7 +83,7 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
     Situa&ccedil;&atilde;o<br />
     <input type="text" name="situacao" value="<?= $obj->situacao ?>" maxlength="100" /><br /><br />
     
-    <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
+    <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar pedido e adicionar produtos" ?>" />
 </form>
 
 <? include("../../include/footer.php"); ?>

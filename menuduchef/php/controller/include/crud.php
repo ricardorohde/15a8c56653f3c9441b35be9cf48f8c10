@@ -3,6 +3,7 @@
 include_once("../lib/config.php");
 
 $data = HttpUtil::getParameterArray();
+$redirect = $redirect ? : false;
 
 $obj = new $class();
 
@@ -18,7 +19,7 @@ if ($data) {
 	try {
 	    $obj->delete();
 	    HttpUtil::showInfoMessages(array("Exclusão realizada com sucesso"));
-	} catch(Exception $e) {
+	} catch (Exception $e) {
 	    HttpUtil::showErrorMessages(array("Não foi possível realizar a exclusão: há dados associados a este registro"));
 	}
     } else {
@@ -37,7 +38,9 @@ if ($data) {
 	    HttpUtil::redirect("form/" . ($obj->id ? : ""));
 	}
     }
-    
-    HttpUtil::redirect("./");
+
+    if ($redirect) {
+	HttpUtil::redirect("./");
+    }
 }
 ?>
