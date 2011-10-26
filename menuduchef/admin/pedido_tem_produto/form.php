@@ -23,6 +23,7 @@ $obj ? $obj = PedidoTemProduto::all(array("conditions" => array("pedido_id = ?",
 
 <form action="admin/pedido_tem_produto/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
+    <input type="hidden" name="ped" value="<?= $_GET['ped'] ?>" />
     Pedido<br /><? if($obj->pedido_id){
             echo $obj->pedido_id." (".$obj->pedido->restaurante->nome.", ".$obj->pedido->consumidor->nome.")";
         }else{ ?>

@@ -3,7 +3,7 @@
 include_once("../lib/config.php");
 
 $data = HttpUtil::getParameterArray();
-$redirect = $redirect ? : true;
+$redirect = isset ($redirect) ? $redirect : true;
 
 $obj = new $class();
 
