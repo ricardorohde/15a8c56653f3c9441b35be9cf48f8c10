@@ -1,12 +1,12 @@
 <?
 include("../../include/header.php");
 
-$itens = PedidoTemProdutoAdicional::all(array("order" => "pedidotemproduto_id asc"));
+$itens = PedidoTemProdutoAdicional::all(array("order" => "pedidotemproduto_id asc", "conditions" => array("pedidotemproduto_id = ?",$_GET['prodnoped'])));
 ?>
 
 <? include("../../include/painel_area_administrativa.php") ;?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
+<h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; <a href="admin/pedido_tem_produto/?ped=<?= $_GET['ped'] ?>">Gerenciar Produtos inclusos nos Pedidos</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 
 <a href="admin/pedido_tem_produto_adicional/form" title="Criar">Criar</a>
 <br /><br />
@@ -26,7 +26,7 @@ $itens = PedidoTemProdutoAdicional::all(array("order" => "pedidotemproduto_id as
 		<td><?= $item->pedidotemproduto_id." (".$item->pedido_tem_produto->produto->nome.")"; ?></td>
 		<td><?= $item->produto_adicional->nome ?></td>
                               
-		<td><a href="admin/pedido_tem_produto_adicional/form/<?= $item->id ?>">Modificar</a></td>
+		<td><a href="admin/pedido_tem_produto_adicional/form/?id=<?= $item->id ?>&prod=<?= $item->pedido_tem_produto->produto_id ?>&ped=<?= $_GET['ped'] ?>">Modificar</a></td>
 		<td><a href="admin/pedido_tem_produto_adicional/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?

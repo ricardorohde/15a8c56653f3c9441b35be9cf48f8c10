@@ -1,14 +1,14 @@
 <?
 include("../../include/header.php");
 
-$itens = PedidoTemProduto::all(array("order" => "pedido_id asc"));
+$itens = PedidoTemProduto::all(array("order" => "pedido_id asc", "conditions" => array("pedido_id = ?", $_GET['ped'])));
 ?>
 
 <? include("../../include/painel_area_administrativa.php") ;?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
+<h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
 
-<a href="admin/pedido_tem_produto/form" title="Criar">Criar</a>
+<a href="admin/pedido_tem_produto/form.php?ped=<?= $_GET['ped'] ?>" title="Criar">Criar</a>
 <br /><br />
 
 <table class="list">
@@ -34,7 +34,7 @@ $itens = PedidoTemProduto::all(array("order" => "pedido_id asc"));
                 <td><?= $item->tamanho ?></td>
                 <td><?= $item->produto2->nome ?></td>
                               
-		<td><a href="admin/pedido_tem_produto/form/<?= $item->id ?>">Modificar</a></td>
+		<td><a href="admin/pedido_tem_produto/form/?id=<?= $item->id ?>&ped=<?= $_GET['ped'] ?>">Modificar</a></td>
 		<td><a href="admin/pedido_tem_produto/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?

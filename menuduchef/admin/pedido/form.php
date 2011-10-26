@@ -49,18 +49,22 @@ $consumidores = Consumidor::all(array("order" => "nome asc"));
     Itens inclusos:<br />
     <div id="proInput">
     <?
-    echo "O";
-    var_dump($obj);
-    if($obj->pedido_tem_produtos->produto){
+
+    if($obj->pedido_tem_produtos){
         $proc = 1;
-        echo "I";
-        foreach($obj->pedido_tem_produtos->produtos as $pro){ ?>
-            <div><? echo $pro->nome ?></div>
-            echo "E";
+        foreach($obj->pedido_tem_produtos as $pro){
+            $adicionais = "";
+            if($pro->pedido_tem_produtos_adicionais){
+                foreach($pro->pedido_tem_produtos_adicionais as $adi){
+                    $adicionais .= " ".$adi->produto_adicional->nome;
+                }
+            }
+             ?>
+            <div><? echo $pro->qtd; ?>x <? echo $pro->produto->nome; ?> <? if($pro->tamanho){ echo " (".$pro->tamanho.") ";} ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?> <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?> <? echo " ---Valor: R$".($pro->preco_unitario * $pro->qtd)." "; ?> </div>
         <? $proc++; }
     }?>
     </div>
-    <input type="button" value="Acrescentar/Modificar/Excluir Itens" title="Acrescentar/Modificar/Excluir Itens" id="addPagina_p" /><br /><br />
+    <a href="admin/pedido_tem_produto/?ped=<?= $obj->id ?>">Acrescentar/Modificar/Excluir Itens</a><br /><br />
     
     Pagamento Efetuado<br />
     <input type="radio" name="pagamento_efetuado" value="1" <? if (!$obj->id || $obj->pagamento_efetuado === 1) { ?>checked="true"<? } ?> />Sim

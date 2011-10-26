@@ -3,7 +3,9 @@ include("../../include/header.php");
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProduto");
 
-$pedidos = Pedido::all(array("order" => "quando asc"));
+if(!$obj){
+    $obj = PedidoTemProduto::all(array("conditions" => array("pedido_id = ?", $_GET['ped'])));
+}
 ?>
 
 <? include("../../include/painel_area_administrativa.php") ;?>
@@ -12,15 +14,12 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
     $(function() {
 	autoCompleteProdutos(<?= $obj->pedido_id ?: 0 ?>, <?= $obj->produto_id ?: 0 ?>);
 	    
-	$('#pedidos').change(function() {
-	    autoCompleteProdutos($(this).val());
-	});
     });
 </script>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
+<h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
 
-<a href="admin/pedido_tem_produto/" title="Cancelar">Cancelar</a>
+<a href="admin/pedido_tem_produto/?ped=<?= $_GET['ped'] ?>" title="Cancelar">Cancelar</a>
 <br /><br />
 
 <form action="admin/pedido_tem_produto/controller" method="post">
@@ -40,8 +39,19 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
     </select>
     <? } ?>
     <br /><br />
-    Produto<br />
+    Produto<br /><? if($obj->produto_id){
+         $adicionais = "";
+            if($obj->pedido_tem_produtos_adicionais){
+                foreach($obj->pedido_tem_produtos_adicionais as $adi){
+                    $adicionais .= " ".$adi->produto_adicional->nome;
+                }
+            }
+             ?>
+            <div><? echo $obj->produto->nome; ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?></div>
+            <? if($obj->produto->produto_tem_produtos_adicionais){ ?> <a href="admin/pedido_tem_produto_adicional/?prodnoped=<?= $obj->id ?>&ped=<?= $_GET['ped']?>">Acrescentar/Modificar/Excluir Adicionais</a> <? } ?>
+      <? }else{ ?>
     <select id="produtos" name="produto_id"></select>
+    <? } ?>
     <br /><br />
     Quantidade<br />
     <input type="text" name="qtd" value="<?= $obj->qtd ?>" maxlength="100" /><br /><br />
@@ -49,7 +59,13 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
     <input type="text" name="obs" value="<?= $obj->obs ?>" maxlength="100" /><br /><br />
     Tamanho<br />
     <input type="text" name="tamanho" value="<?= $obj->tamanho ?>" maxlength="100" /><br /><br />
-    Produto2<br />
+    Produto2<br /><? if($obj->produto_id){
+                        if($obj->produto_id2){
+                            echo $obj->produto2->nome;
+                        }else{
+                            echo "Sem segundo sabor";
+                        }
+      }else{ ?>
     <select name="produto2_id"><option value="">-- Selecione --</option>
 	<?
 	if ($produtos) {
@@ -59,7 +75,8 @@ $pedidos = Pedido::all(array("order" => "quando asc"));
 	    <? }
 	} ?>
     </select>
-    
+    <? } ?>
+    <br /><br />
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 

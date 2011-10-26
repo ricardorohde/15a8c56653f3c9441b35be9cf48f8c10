@@ -3,34 +3,34 @@
     <div id="qm0" class="qmmc">
         <a href="javascript:void(0)">ADMINISTRAÇÃO</a>
         <div>
-            <a href="admin/administrador/">Administradores</a>
-            <a href="admin/cidade/">Cidades</a>
-            <a href="admin/bairro/">Bairros</a>
-            <a href="admin/consumidor/">Consumidores</a>
+            <a href="admin/administrador/">Administradores</a><br/>
+            <a href="admin/cidade/">Cidades</a><br/>
+            <a href="admin/bairro/">Bairros</a><br/>
+            <a href="admin/consumidor/">Consumidores</a><br/><br/>
         </div>
         <span class="qmdivider qmdividery"></span>
         <a href="javascript:void(0)">RESTAURANTES</a>
         <div>
-            <a href="admin/tipo_restaurante/">Tipos de Restaurante</a>
-            <a href="admin/restaurante/">Restaurantes</a>
-            <a href="admin/usuario_restaurante/">Gerentes e Atendentes de Restaurantes</a>
-            <a href="admin/restaurante_tem_tipo/">Restaurantes tem Tipos</a>
-            <a href="admin/restaurante_tem_tipo_produto/">Restaurantes tem Tipos de Produto</a>
-            <a href="admin/restaurante_atende_bairro/">Restaurantes Atendem Bairros</a>
+            <a href="admin/tipo_restaurante/">Tipos de Restaurante</a><br/>
+            <a href="admin/restaurante/">Restaurantes</a><br/>
+            <a href="admin/usuario_restaurante/">Gerentes e Atendentes de Restaurantes</a><br/>
+            <a href="admin/restaurante_tem_tipo/">Restaurantes tem Tipos</a><br/>
+            <a href="admin/restaurante_tem_tipo_produto/">Restaurantes tem Tipos de Produto</a><br/>
+            <a href="admin/restaurante_atende_bairro/">Restaurantes Atendem Bairros</a><br/><br/>
         </div>
         <span class="qmdivider qmdividery"></span>
         <a href="javascript:void(0)">PRODUTOS</a>
         <div>
-            <a href="admin/tipo_produto/">Tipos de Produto</a>
-            <a href="admin/produto/">Produtos</a>
-            <a href="admin/produto_adicional/">Produtos Adicionais</a>
+            <a href="admin/tipo_produto/">Tipos de Produto</a><br/>
+            <a href="admin/produto/">Produtos</a><br/>
+            <a href="admin/produto_adicional/">Produtos Adicionais</a><br/><br/>
         </div>
         <span class="qmdivider qmdividery"></span>
         <a href="javascript:void(0)">PEDIDOS</a>
         <div>
-            <a href="admin/pedido/">Pedidos</a>
-            <a href="admin/pedido_tem_produto/">Produtos inclusos em Pedidos</a>
-            <a href="admin/pedido_tem_produto_adicional/">Produtos Adicionais inclusos em Pedidos</a>
+            <a href="admin/pedido/">Pedidos</a><br/><br/>
+            <!--<a href="admin/pedido_tem_produto/">Produtos inclusos em Pedidos</a>
+            <a href="admin/pedido_tem_produto_adicional/">Produtos Adicionais inclusos em Pedidos</a>-->
         </div>
         <span class="qmclear"> </span>
     </div>
