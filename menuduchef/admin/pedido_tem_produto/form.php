@@ -3,9 +3,8 @@ include("../../include/header.php");
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProduto");
 
-if(!$obj){
-    $obj = PedidoTemProduto::all(array("conditions" => array("pedido_id = ?", $_GET['ped'])));
-}
+$obj ? $obj = PedidoTemProduto::all(array("conditions" => array("pedido_id = ?", $_GET['ped']))) : "";
+
 ?>
 
 <? include("../../include/painel_area_administrativa.php") ;?>
