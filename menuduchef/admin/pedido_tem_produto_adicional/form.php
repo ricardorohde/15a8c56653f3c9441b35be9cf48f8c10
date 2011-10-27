@@ -26,7 +26,7 @@ $produto_tem_adicionais = ProdutoTemProdutoAdicional::all(array("order" => "id a
 
     <br /><br />
     Produto Adicional<br />
-    <select name="produto_adicional_id">-- Selecione --</option>
+    <select name="produtoadicional_id">-- Selecione --</option>
 	<?
 	if ($produto_tem_adicionais) {
 	    foreach ($produto_tem_adicionais as $pta) {
