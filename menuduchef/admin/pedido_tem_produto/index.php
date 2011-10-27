@@ -16,6 +16,7 @@ $itens = PedidoTemProduto::all(array("order" => "pedido_id asc", "conditions" =>
 	<th>Pedido</th>
 	<th>Produto</th>
         <th>Sabores Adicionais</th>
+        <th>Pre&ccedil;o Unit&aacute;rio</th>
         <th>Quantidade</th>
         <th>OBS</th>
         <th>Tamanho</th>
@@ -33,6 +34,7 @@ $itens = PedidoTemProduto::all(array("order" => "pedido_id asc", "conditions" =>
                 <td><?= $item->produto2->nome ?>
                     <? if($item->produto_id3){ echo ", ".$item->produto3->nome; } ?>
                     <? if($item->produto_id4){ echo ", ".$item->produto4->nome; } ?></td>
+                <td><?= $item->preco_unitario ?></td>
                 <td><?= $item->qtd ?></td>
                 <td><?= $item->obs ?></td>
                 <td><?= $item->tamanho ?></td>

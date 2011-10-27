@@ -35,6 +35,8 @@ $aparece_sabores_extras = 0;
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     <input type="hidden" name="ped" value="<?= $_GET['ped'] ?>" />
     <input type="hidden" name="pedido_id" value="<?= $_GET['ped'] ?>" />
+    <input type="hidden" name="preco_unitario" value="<?= $obj->preco_unitario ?>" />
+    
     Pedido<br /><? if($pedido){
             echo $pedido->id." (".$pedido->restaurante->nome.", ".$pedido->consumidor->nome.")";
         }?>
@@ -69,6 +71,10 @@ $aparece_sabores_extras = 0;
     <br /><br />
     Quantidade<br />
     <input type="text" name="qtd" value="<?= $obj->qtd ?>" maxlength="100" /><br /><br />
+    Pre&ccedil;o Unit&aacute;rio<br /><? if($obj->preco_unitario){
+            echo "R$ ".$obj->preco_unitario;
+        }?>
+    <br /><br />
     OBS:<br />
     <input type="text" name="obs" value="<?= $obj->obs ?>" maxlength="100" /><br /><br />
 
