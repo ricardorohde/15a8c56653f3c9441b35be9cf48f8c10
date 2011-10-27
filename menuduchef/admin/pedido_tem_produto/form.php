@@ -53,8 +53,8 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
     OBS:<br />
     <input type="text" name="obs" value="<?= $obj->obs ?>" maxlength="100" /><br /><br />
 
-    <? if($obj->aceita_segundo_sabor){ ?>
-        Produto2<br /><? if($obj->produto_id){
+    <? //if($obj->aceita_segundo_sabor){ ?>
+        Segundo sabor<br /><? if($obj->produto_id){
                             if($obj->produto_id2){
                                 echo $obj->produto2->nome;
                             }else{
@@ -71,8 +71,8 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
             } ?>
         </select>
         <? } ?>
-        <br />
-        Produto3<br /><? if($obj->produto_id){
+        <br /><br />
+        Terceiro sabor<br /><? if($obj->produto_id){
                             if($obj->produto_id3){
                                 echo $obj->produto3->nome;
                             }else{
@@ -89,8 +89,8 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
             } ?>
         </select>
         <? } ?>
-        <br />
-        Produto4<br /><? if($obj->produto_id){
+        <br /><br />
+        Quarto sabor<br /><? if($obj->produto_id){
                             if($obj->produto_id4){
                                 echo $obj->produto4->nome;
                             }else{
@@ -108,8 +108,8 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
         </select>
         <? } ?>
         <br />
-    <? } ?>
-    
+    <? //} ?>
+    <br /><br />
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 

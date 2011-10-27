@@ -72,6 +72,11 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
     Tamanho<br />
     <input type="text" name="tamanho" value="<?= $obj->tamanho ?>" maxlength="100" /><br /><br />
     
+    Multi-sabor<br />
+    <input type="radio" name="aceita_segundo_sabor" value="1" <? if (!$obj->id || $obj->aceita_segundo_sabor === 1) { ?>checked="true"<? } ?> />Sim
+    <input type="radio" name="aceita_segundo_sabor" value="0" <? if ($obj->id && $obj->aceita_segundo_sabor === 0) { ?>checked="true"<? } ?> />Não
+    <br /><br />
+    
     Ativo<br />
     <input type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="true"<? } ?> />Sim
     <input type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />Não

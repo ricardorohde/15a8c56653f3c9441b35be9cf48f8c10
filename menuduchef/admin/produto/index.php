@@ -16,6 +16,7 @@ $itens = Produto::all(array("order" => "nome asc"));
 	<th>Nome</th>
 	<th>Restaurante</th>
         <th>Tamanho</th>
+        <th>Multi-sabor</th>
         <th>Pre&ccedil;o</th>
         <th>Ativo</th>
         <th>Dispon&iacute;vel</th>
@@ -30,6 +31,7 @@ $itens = Produto::all(array("order" => "nome asc"));
 		<td><?= $item->nome ?></td>
 		<td><?= $item->restaurante->nome ?></td>
                 <td><?= $item->tamanho ?></td>
+                <td><?= $item->aceita_segundo_sabor ? "Sim" : "Não" ?></td>
 		<td><?= $item->getPrecoFormatado() ?></td>
                 
                 <td><?= $item->ativo ? "Sim" : "Não" ?></td>
