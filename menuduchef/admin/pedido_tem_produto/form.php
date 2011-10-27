@@ -8,11 +8,24 @@ $obj = PedidoTemProduto::find($_GET['id']);
 $produtos = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ?",$pedido->restaurante_id)));
 $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ? AND aceita_segundo_sabor = ?",$pedido->restaurante_id,1)));
 
+$aparece_sabores_extras = 0;
 ?>
 
 <? include("../../include/painel_area_administrativa.php") ;?>
 
-
+<script type="text/javascript">
+    
+    $("#produtos").change(function(){
+        alert("OOO");
+        if($("#produtos").attr("saborextra")){
+            alert("EEE");
+            document.getElementById("sabor_extra").style.display = "block";
+        }else{
+            alert("AAA");
+            document.getElementById("sabor_extra").style.display = "none";
+        }
+    });
+</script>
 <h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
 
 <a href="admin/pedido_tem_produto/?ped=<?= $_GET['ped'] ?>" title="Cancelar">Cancelar</a>
@@ -27,7 +40,7 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
         }?>
     <br /><br />
     Produto<br /><? if($obj){
-                        
+                            
                             $adicionais = "";
                             if($obj->pedido_tem_produtos_adicionais){
                                 foreach($obj->pedido_tem_produtos_adicionais as $adi){
@@ -35,15 +48,20 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
                                 }
                             }
                              ?>
-                            <div><? echo $obj->produto->nome; ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?></div>
+                            <div><? $aparece_sabores_extras = $obj->produto->aceita_segundo_sabor; ?><? echo $obj->produto->nome; ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?></div>
                             <? if($obj->produto->produto_tem_produtos_adicionais){ ?> <a href="admin/pedido_tem_produto_adicional/?prodnoped=<?= $obj->id ?>&ped=<?= $_GET['ped']?>">Acrescentar/Modificar/Excluir Adicionais</a> <? } ?>
                        <? }else{ ?>
     <select id="produtos" name="produto_id">
         <?
             if($produtos){
-                foreach($produtos as $produto){ ?>
-                    <option value='<?= $produto->id ?>'><?= $produto->nome ?> <? if($produto->tamanho){ ?>(<?= $produto->tamanho ?>)<? } ?></option>
-                <?}
+                $count = 0;
+                foreach($produtos as $produto){ 
+                    if($count==0){ $aparece_sabores_extras = $produto->aceita_segundo_sabor; }
+                    ?>
+                    <option saborextra="<?= $produto->aceita_segundo_sabor ?>" value='<?= $produto->id ?>'><?= $produto->nome ?> <? if($produto->tamanho){ ?>(<?= $produto->tamanho ?>)<? } ?></option>
+                <? 
+                $count++;
+                }
             }
         ?>
     </select>
@@ -54,7 +72,7 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
     OBS:<br />
     <input type="text" name="obs" value="<?= $obj->obs ?>" maxlength="100" /><br /><br />
 
-    <? //if($obj->aceita_segundo_sabor){ ?>
+    <div id="sabor_extra" style="display:<?= $aparece_sabores_extras ? "block" : "none" ?>">
         Segundo sabor<br /><? if($obj->produto_id){
                             if($obj->produto_id2){
                                 echo $obj->produto2->nome;
@@ -109,8 +127,8 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
         </select>
         <? } ?>
         <br />
-    <? //} ?>
-    <br /><br />
+    
+    </div><br />
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 
