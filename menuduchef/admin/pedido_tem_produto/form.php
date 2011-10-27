@@ -21,6 +21,7 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
 <form action="admin/pedido_tem_produto/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     <input type="hidden" name="ped" value="<?= $_GET['ped'] ?>" />
+    <input type="hidden" name="pedido_id" value="<?= $_GET['ped'] ?>" />
     Pedido<br /><? if($pedido){
             echo $pedido->id." (".$pedido->restaurante->nome.", ".$pedido->consumidor->nome.")";
         }?>
