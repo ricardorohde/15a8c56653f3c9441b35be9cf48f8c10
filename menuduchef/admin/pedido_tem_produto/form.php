@@ -6,7 +6,7 @@ include("../../include/header.php");
 $pedido = Pedido::find($_GET['ped']);
 $obj = PedidoTemProduto::find($_GET['id']);
 $produtos = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ?",$pedido->restaurante_id)));
-
+$produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ? AND aceita_segundo_sabor = ?",$pedido->restaurante_id,1)));
 
 ?>
 
@@ -21,20 +21,9 @@ $produtos = Produto::all(array("order" => "nome asc", "conditions" => array("res
 <form action="admin/pedido_tem_produto/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     <input type="hidden" name="ped" value="<?= $_GET['ped'] ?>" />
-    Pedido<br /><? if($obj->pedido_id){
-            echo $obj->pedido_id." (".$obj->pedido->restaurante->nome.", ".$obj->pedido->consumidor->nome.")";
-        }else{ ?>
-    <select id="pedidos" name="pedido_id">-- Selecione --</option>
-	<?        
-            if ($pedidos) {
-                foreach ($pedidos as $pedido) {
-                    ?>
-                    <option value="<?= $pedido->id ?>" <? if ($pedido->id == $obj->pedido_id) { ?>selected="true"<? } ?>><?= $pedido->id." (".$pedido->restaurante->nome.", ".$pedido->consumidor->nome.")" ?></option>
-                <? }
-            }
-	?>
-    </select>
-    <? } ?>
+    Pedido<br /><? if($pedido){
+            echo $pedido->id." (".$pedido->restaurante->nome.", ".$pedido->consumidor->nome.")";
+        }?>
     <br /><br />
     Produto<br /><? if($obj){
                         
@@ -64,24 +53,63 @@ $produtos = Produto::all(array("order" => "nome asc", "conditions" => array("res
     OBS:<br />
     <input type="text" name="obs" value="<?= $obj->obs ?>" maxlength="100" /><br /><br />
 
-    Produto2<br /><? if($obj->produto_id){
-                        if($obj->produto_id2){
-                            echo $obj->produto2->nome;
-                        }else{
-                            echo "Sem segundo sabor";
-                        }
-      }else{ ?>
-    <select name="produto2_id"><option value="">-- Selecione --</option>
-	<?
-	if ($produtos) {
-	    foreach ($produtos as $produto) {
-		?>
-		<option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto2_id) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
-	    <? }
-	} ?>
-    </select>
+    <? if($obj->aceita_segundo_sabor){ ?>
+        Produto2<br /><? if($obj->produto_id){
+                            if($obj->produto_id2){
+                                echo $obj->produto2->nome;
+                            }else{
+                                echo "Sem segundo sabor";
+                            }
+          }else{ ?>
+        <select name="produto_id2"><option value="">-- Selecione --</option>
+            <?
+            if ($produtos2) {
+                foreach ($produtos2 as $produto) {
+                    ?>
+                    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id2) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+                <? }
+            } ?>
+        </select>
+        <? } ?>
+        <br />
+        Produto3<br /><? if($obj->produto_id){
+                            if($obj->produto_id3){
+                                echo $obj->produto3->nome;
+                            }else{
+                                echo "Sem segundo sabor";
+                            }
+          }else{ ?>
+        <select name="produto_id3"><option value="">-- Selecione --</option>
+            <?
+            if ($produtos2) {
+                foreach ($produtos2 as $produto) {
+                    ?>
+                    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id3) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+                <? }
+            } ?>
+        </select>
+        <? } ?>
+        <br />
+        Produto4<br /><? if($obj->produto_id){
+                            if($obj->produto_id4){
+                                echo $obj->produto4->nome;
+                            }else{
+                                echo "Sem segundo sabor";
+                            }
+          }else{ ?>
+        <select name="produto_id4"><option value="">-- Selecione --</option>
+            <?
+            if ($produtos2) {
+                foreach ($produtos2 as $produto) {
+                    ?>
+                    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id4) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+                <? }
+            } ?>
+        </select>
+        <? } ?>
+        <br />
     <? } ?>
-    <br /><br />
+    
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 

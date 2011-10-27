@@ -3,7 +3,8 @@ include("../../include/header.php");
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProdutoAdicional");
 
-$produto_tem_adicionais = ProdutoTemProdutoAdicional::all(array("order" => "id asc", "conditions" => array("produto_id = ?",$_GET['prod'])));
+$pedido_tem_produto = PedidoTemProduto::find_by_id($_GET['prodnoped']);
+$produto_tem_adicionais = ProdutoTemProdutoAdicional::all(array("order" => "id asc", "conditions" => array("produto_id = ?",$pedido_tem_produto->produto_id)));
 //$produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc", "conditions" => array("",)));
 ?>
 
@@ -18,18 +19,10 @@ $produto_tem_adicionais = ProdutoTemProdutoAdicional::all(array("order" => "id a
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     <input type="hidden" name="ped" value="<?= $_GET['ped'] ?>" />
     <input type="hidden" name="prodnoped" value="<?= $_GET['prodnoped'] ?>" />
-    Pedido tem Produto<br /><? if($obj->pedido_tem_produto){ 
-         echo $obj->pedido_tem_produto->id." ".$obj->pedido_tem_produto->produto->nome;  
-      }else{ ?>
-    <select name="pedidotemproduto_id">-- Selecione --</option>
-	<?
-	if ($pedido_tem_produtos) {
-	    foreach ($pedido_tem_produtos as $pp) {
-		?>
-		<option value="<?= $pp->id ?>" <? if ($pp->id == $obj->pedidotemproduto_id) { ?>selected="true"<? } ?>><?= $pp->id." (".$pp->produto->nome.")" ?></option>
-	    <? }
-	} ?>
-    </select><? } ?>
+    Pedido tem Produto<br /><? if($pedido_tem_produto){ 
+         echo $pedido_tem_produto->id." ".$pedido_tem_produto->produto->nome;  
+      } ?>
+
     <br /><br />
     Produto Adicional<br />
     <select name="produto_adicional_id">-- Selecione --</option>
