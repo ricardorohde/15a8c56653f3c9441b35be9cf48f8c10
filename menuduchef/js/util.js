@@ -34,6 +34,30 @@ function autoCompleteComboBox(url, parameters, targetId, valueIndex, description
     });
 }
 
+function autoCompleteSegundoSabor(idProduto) {
+    if(idProduto) {
+	autoShow(URL_PRODUTOS_JSON, {
+	    'id': idProduto
+	}, 'sabor_extra', 'id', 'nome', preSelectedIdProduto);
+    } else {
+		
+	$('#sabor_extra').hide();
+    }
+}
+
+function autoShow(url, parameters) {
+    var target = $('#' + targetId);
+    target.empty().append($(CHECK_BOX_LOADING_OPTION));
+    
+    $.getJSON(url, parameters, function(data) {
+	if(data.length) {
+	    target.show();
+	} else {
+	    target.hide();
+	}
+    });
+}
+
 function autoCompleteBairros(idCidade, preSelectedIdBairro) {
     if(idCidade) {
 	autoCompleteComboBox(URL_BAIRROS_JSON, {

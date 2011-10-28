@@ -16,14 +16,15 @@ $aparece_sabores_extras = 0;
 <script type="text/javascript">
     
     $("#produtos").change(function(){
-        alert("OOO");
-        if($("#produtos").attr("saborextra")){
-            alert("EEE");
-            document.getElementById("sabor_extra").style.display = "block";
-        }else{
-            alert("AAA");
-            document.getElementById("sabor_extra").style.display = "none";
-        }
+        $(function() {
+            <? if($obj->id){ ?>
+                autoCompleteSegundoSabor(<?= $obj->produto_id ?>);          
+            <? } ?>
+
+            $('#produtos').change(function() {
+                autoCompleteSegundoSabor($(this).val());
+            });
+        });
     });
 </script>
 <h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
