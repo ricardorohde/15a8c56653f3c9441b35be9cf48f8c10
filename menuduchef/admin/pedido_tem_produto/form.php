@@ -14,16 +14,13 @@ $aparece_sabores_extras = 0;
 <? include("../../include/painel_area_administrativa.php") ;?>
 
 <script type="text/javascript">
-    
-    $("#produtos").change(function(){
-        $(function() {
-            <? if($obj->id){ ?>
-                autoCompleteSegundoSabor(<?= $obj->produto_id ?>);          
-            <? } ?>
+    $(function() {
+        <? if($obj->id){ ?>
+            autoCompleteSegundoSabor(<?= $obj->produto_id ?>);          
+        <? } ?>
 
-            $('#produtos').change(function() {
-                autoCompleteSegundoSabor($(this).val());
-            });
+        $('#produtos').change(function() {
+            autoCompleteSegundoSabor($(this).val());
         });
     });
 </script>

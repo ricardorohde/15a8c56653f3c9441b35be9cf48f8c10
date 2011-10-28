@@ -1,8 +1,7 @@
 <?
 include_once("../lib/config.php");
 
-$produto = Produto::find($REQUEST["id"]);
-
+$produto = Produto::find($_REQUEST["id"]);
 header("Content-type: application/json;");
 
 if($produto->aceita_segundo_sabor) {

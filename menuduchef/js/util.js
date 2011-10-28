@@ -10,7 +10,12 @@ var CHECK_BOX_DEFAULT_OPTION = '';
 var URL_BAIRROS_JSON = 'php/controller/list_bairros_json';
 var URL_PRODUTOS_JSON = 'php/controller/list_produtos_json';
 var URL_PRODUTOS_ADICIONAIS_JSON = 'php/controller/list_produtos_adicionais_json';
+var URL_PRODUTO_SEGUNDO_SABOR = 'php/controller/list_segundo_sabor_json';
 var AREA_MODIFICAR_SENHA_ID = 'areaModificarSenha';
+
+function isEmpty(data) {
+    return data == null || data.length == 0;
+}
 
 function autoCompleteComboBox(url, parameters, targetId, valueIndex, descriptionIndex, preSelectedValue) {
     var target = $('#' + targetId);
@@ -36,21 +41,17 @@ function autoCompleteComboBox(url, parameters, targetId, valueIndex, description
 
 function autoCompleteSegundoSabor(idProduto) {
     if(idProduto) {
-	autoShow(URL_PRODUTOS_JSON, {
-	    'id': idProduto
-	}, 'sabor_extra', 'id', 'nome', preSelectedIdProduto);
+	autoShow(URL_PRODUTO_SEGUNDO_SABOR, {'id': idProduto}, 'sabor_extra');
     } else {
 		
 	$('#sabor_extra').hide();
     }
 }
 
-function autoShow(url, parameters) {
+function autoShow(url, parameters, targetId) {
     var target = $('#' + targetId);
-    target.empty().append($(CHECK_BOX_LOADING_OPTION));
-    
     $.getJSON(url, parameters, function(data) {
-	if(data.length) {
+	if(!isEmpty(data)) {
 	    target.show();
 	} else {
 	    target.hide();
