@@ -58,6 +58,14 @@ $bairros = Bairro::all();
     <input type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="true"<? } ?> />Sim
     <input type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />Não
     <br /><br />
+    Pizzas podem ser divididas em quantos sabores (&uacute;til apenas para quem vende pizzas)<br />
+    <select name="qtd_max_sabores">
+	<option value="">-- Selecione --</option>
+	
+	<option value="2" <? if (2 == $obj->qtd_max_sabores) { ?>selected="true"<? } ?>>2</option>
+        <option value="3" <? if (3 == $obj->qtd_max_sabores) { ?>selected="true"<? } ?>>3</option>
+        <option value="4" <? if (4 == $obj->qtd_max_sabores) { ?>selected="true"<? } ?>>4</option>
+    </select><br /><br /> 
     Administrador que cadastrou<br />
     <select name="administrador_cadastrou_id">
 	<option value="">-- Selecione --</option>
