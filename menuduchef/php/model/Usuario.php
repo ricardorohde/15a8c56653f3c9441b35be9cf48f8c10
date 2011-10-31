@@ -7,7 +7,7 @@ class Usuario extends ActiveRecord\Model {
     static $GERENTE = 2;
     static $ATENDENTE = 3;
     static $CONSUMIDOR = 4;
-
+    
     public static function emailExiste($email, $excludeId) {
 	if ($excludeId) {
 	    $conditions = array('id <> ? and email = ?', $excludeId, $email);

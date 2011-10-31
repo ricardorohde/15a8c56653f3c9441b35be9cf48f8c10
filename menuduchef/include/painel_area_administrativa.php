@@ -39,7 +39,7 @@
         <? if($usuario_logado) { ?>
 	    <strong><?= $usuario_logado->nome ?></strong>
 	    - <?= $usuario_logado->getNomePerfil() ?>
-	    <? if($usuario_logado->tipo == Usuario::$GERENTE || $usuario_logado->tipo == Usuario::$ATENDENTE) { ?>- Restaurante do Biro<? } ?>
+	    <? if($usuario_logado->tipo == Usuario::$GERENTE || $usuario_logado->tipo == Usuario::$ATENDENTE) { ?>- <?= $usuario_logado_obj->restaurante->nome ?><? } ?>
 	    |
 	<? } ?>
 	<a href="admin/sair" title="Sair">Sair</a>

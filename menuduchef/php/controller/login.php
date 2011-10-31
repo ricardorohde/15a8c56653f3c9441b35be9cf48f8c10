@@ -8,25 +8,36 @@ if (trim($data['email']) && trim($data['senha'])) {
     $usuario = Usuario::login($data['email'], $data['senha']);
 
     if ($usuario) {
-	$_SESSION['usuario'] = serialize($usuario);
+	$usuario_obj = null;
+	$redirect = null;
 	
 	switch ($usuario->tipo) {
 	    case Usuario::$ADMINISTRADOR:
+		$usuario_obj = Administrador::find_by_usuario_id($usuario->id);
+		$redirect = '../../admin/';
+		break;
+
 	    case Usuario::$GERENTE:
 	    case Usuario::$ATENDENTE:
-		HttpUtil::redirect('../../admin/');
+		$usuario_obj = UsuarioRestaurante::find_by_usuario_id($usuario->id);
+		$redirect = '../../admin/';
 		break;
 
 	    case Usuario::$CONSUMIDOR:
-		HttpUtil::redirect('../../');
+		$usuario_obj = Consumidor::find_by_usuario_id($usuario->id);
+		$redirect = '../../';
 		break;
 	}
+	
+	$_SESSION['usuario'] = serialize($usuario);
+	$_SESSION['usuario_obj'] = serialize($usuario_obj);
+	HttpUtil::redirect($redirect);
     } else {
 	HttpUtil::showErrorMessages(array('Usuário não encontrado'));
-	HttpUtil::redirect('../../');
     }
 } else {
     HttpUtil::showErrorMessages(array('E-mail e Senha são campos obrigatórios'));
-    HttpUtil::redirect('../../');
 }
+
+HttpUtil::redirect('../../');
 ?>
