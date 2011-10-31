@@ -91,7 +91,8 @@ $aparece_sabores_extras = 0;
                 <? }
             } ?>
         </select>
-        <? } ?>
+        <? } 
+        if($pedido->restaurante->qtd_max_sabores>=3){?>
         <br /><br />
         Terceiro sabor<br /><? if($obj->produto_id){
                             if($obj->produto_id3){
@@ -109,25 +110,29 @@ $aparece_sabores_extras = 0;
                 <? }
             } ?>
         </select>
-        <? } ?>
-        <br /><br />
-        Quarto sabor<br /><? if($obj->produto_id){
-                            if($obj->produto_id4){
-                                echo $obj->produto4->nome;
-                            }else{
-                                echo "Sem segundo sabor";
-                            }
-          }else{ ?>
-        <select name="produto_id4"><option value="">-- Selecione --</option>
-            <?
-            if ($produtos2) {
-                foreach ($produtos2 as $produto) {
-                    ?>
-                    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id4) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
-                <? }
-            } ?>
-        </select>
-        <? } ?>
+        <? } 
+        }
+        if($pedido->restaurante->qtd_max_sabores>=4){?>
+            <br /><br />
+            
+            Quarto sabor<br /><? if($obj->produto_id){
+                                if($obj->produto_id4){
+                                    echo $obj->produto4->nome;
+                                }else{
+                                    echo "Sem segundo sabor";
+                                }
+              }else{ ?>
+            <select name="produto_id4"><option value="">-- Selecione --</option>
+                <?
+                if ($produtos2) {
+                    foreach ($produtos2 as $produto) {
+                        ?>
+                        <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id4) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+                    <? }
+                } ?>
+            </select>
+            <? } 
+         }?>
         <br />
     
     </div><br />
