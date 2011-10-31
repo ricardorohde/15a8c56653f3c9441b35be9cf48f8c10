@@ -17,7 +17,17 @@ class PedidoTemProduto extends ActiveRecord\Model {
     static $before_create = array('copiar_preco');
 
     public function copiar_preco() {
-	$this->preco_unitario = $this->produto->preco;
+        $preco = $this->produto->preco;
+        if($this->produto2->preco){
+            $preco = max($preco,$this->produto2->preco);
+        }
+        if($this->produto3->preco){
+            $preco = max($preco,$this->produto3->preco);
+        }
+        if($this->produto4->preco){
+            $preco = max($preco,$this->produto4->preco);
+        }
+	$this->preco_unitario = $preco;
     }
 
 }

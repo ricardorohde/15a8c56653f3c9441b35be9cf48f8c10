@@ -98,7 +98,7 @@ $aparece_sabores_extras = 0;
                             if($obj->produto_id3){
                                 echo $obj->produto3->nome;
                             }else{
-                                echo "Sem segundo sabor";
+                                echo "Sem terceiro sabor";
                             }
           }else{ ?>
         <select name="produto_id3"><option value="">-- Selecione --</option>
@@ -119,7 +119,7 @@ $aparece_sabores_extras = 0;
                                 if($obj->produto_id4){
                                     echo $obj->produto4->nome;
                                 }else{
-                                    echo "Sem segundo sabor";
+                                    echo "Sem quarto sabor";
                                 }
               }else{ ?>
             <select name="produto_id4"><option value="">-- Selecione --</option>
