@@ -1,10 +1,8 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $itens = PedidoTemProduto::all(array("order" => "pedido_id asc", "conditions" => array("pedido_id = ?", $_GET['ped'])));
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
 

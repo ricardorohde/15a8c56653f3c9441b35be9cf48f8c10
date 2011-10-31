@@ -28,3 +28,4 @@ if (HttpUtil::isLocalhost()) {
     <body>
         
         <div id="conteudo">
+	    <? include("messages.php"); ?>

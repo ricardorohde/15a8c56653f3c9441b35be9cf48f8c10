@@ -2,44 +2,40 @@
 
 class Restaurante extends ActiveRecord\Model {
 
-    static $table_name = "restaurante";
-    
+    static $table_name = 'restaurante';
     static $belongs_to = array(
-	array("cidade", "foreign_key" => "cidade_id"),
-	array("administrador", "foreign_key" => "administrador_cadastrou_id")
+	array('cidade'),
+	array('administrador', 'foreign_key' => 'administrador_cadastrou_id')
     );
-    
     static $has_many = array(
-	array("pedidos", "foreign_key" => "restaurante_id", "class_name" => "Pedido"),
-	array("usuarios", "foreign_key" => "restaurante_id", "class_name" => "UsuarioRestaurante"),
-	array("produtos", "foreign_key" => "restaurante_id", "class_name" => "Produto"),
-	array("restaurante_tem_tipos", "foreign_key" => "restaurante_id", "class_name" => "RestauranteTemTipo"),
-	array("bairros_atendidos", "foreign_key" => "restaurante_id", "class_name" => "RestauranteAtendeBairro"),
-	array("bairros", 'through' => 'bairros_atendidos', "foreign_key" => "restaurante_id", "class_name" => "Bairro"),
-	array("restaurante_tem_tipos_produto", "foreign_key" => "restaurante_id", "class_name" => "RestauranteTemTipoProduto"),
-	array("tipos", 'through' => 'restaurante_tem_tipos_produto', "foreign_key" => "restaurante_id", "class_name" => "TipoRestaurante")
+	array('pedidos', 'class_name' => 'Pedido'),
+	array('usuarios', 'class_name' => 'UsuarioRestaurante'),
+	array('produtos', 'class_name' => 'Produto'),
+	array('restaurante_tem_tipos', 'class_name' => 'RestauranteTemTipo'),
+	array('bairros_atendidos', 'class_name' => 'RestauranteAtendeBairro'),
+	array('bairros', 'through' => 'bairros_atendidos', 'class_name' => 'Bairro'),
+	array('restaurante_tem_tipos_produto', 'class_name' => 'RestauranteTemTipoProduto'),
+	array('tipos', 'through' => 'restaurante_tem_tipos_produto', 'class_name' => 'TipoRestaurante')
     );
-    
     static $validates_presence_of = array(
-	array("nome", "message" => "obrigatório"),
-	array("cidade", "message" => "obrigatória"),
-	array("endereco", "message" => "obrigatório"),
-	array("administrador", "message" => "obrigatório")
+	array('nome', 'message' => 'obrigatório'),
+	array('cidade', 'message' => 'obrigatória'),
+	array('endereco', 'message' => 'obrigatório'),
+	array('administrador', 'message' => 'obrigatório')
     );
-    
     static $validates_uniqueness_of = array(
-	array(array("nome", "Cidade" => "cidade_id"), "message" => "já existem")
+	array(array('nome', 'Cidade' => 'cidade_id'), 'message' => 'já existem')
     );
-    static $after_save = array("save_tipos","save_tipos_de_produto","save_bairros_atendidos");
-    
+    static $after_save = array('save_tipos', 'save_tipos_de_produto', 'save_bairros_atendidos');
+
     public function save_tipos() {
 	/*
 	 * Criando objeto se ele já não existir
 	 */
-	if ($this->__request_attributes["tipos"]) {
-	    foreach ($this->__request_attributes["tipos"] as $id_tipo) {
+	if ($this->__request_attributes['tipos']) {
+	    foreach ($this->__request_attributes['tipos'] as $id_tipo) {
 		if (!$this->temTipo($id_tipo)) {
-		    RestauranteTemTipo::create(array("tiporestaurante_id" => $id_tipo, "restaurante_id" => $this->id));
+		    RestauranteTemTipo::create(array('tiporestaurante_id' => $id_tipo, 'restaurante_id' => $this->id));
 		}
 	    }
 	}
@@ -49,20 +45,21 @@ class Restaurante extends ActiveRecord\Model {
 	 */
 	if ($this->restaurante_tem_tipos) {
 	    foreach ($this->restaurante_tem_tipos as $rt) {
-		if (!$this->__request_attributes["tipos"] || !in_array($rt->tiporestaurante_id, $this->__request_attributes["tipos"])) {
+		if (!$this->__request_attributes['tipos'] || !in_array($rt->tiporestaurante_id, $this->__request_attributes['tipos'])) {
 		    $rt->delete();
 		}
 	    }
 	}
     }
+
     public function save_tipos_de_produto() {
 	/*
 	 * Criando objeto se ele já não existir
 	 */
-	if ($this->__request_attributes["tipos_produto"]) {
-	    foreach ($this->__request_attributes["tipos_produto"] as $id_tipo) {
+	if ($this->__request_attributes['tipos_produto']) {
+	    foreach ($this->__request_attributes['tipos_produto'] as $id_tipo) {
 		if (!$this->temTipoProduto($id_tipo)) {
-		    RestauranteTemTipoProduto::create(array("tipoproduto_id" => $id_tipo, "restaurante_id" => $this->id));
+		    RestauranteTemTipoProduto::create(array('tipoproduto_id' => $id_tipo, 'restaurante_id' => $this->id));
 		}
 	    }
 	}
@@ -72,21 +69,22 @@ class Restaurante extends ActiveRecord\Model {
 	 */
 	if ($this->restaurante_tem_tipos_produto) {
 	    foreach ($this->restaurante_tem_tipos_produto as $rt) {
-		if (!$this->__request_attributes["tipos_produto"] || !in_array($rt->tipoproduto_id, $this->__request_attributes["tipos_produto"])) {
+		if (!$this->__request_attributes['tipos_produto'] || !in_array($rt->tipoproduto_id, $this->__request_attributes['tipos_produto'])) {
 		    $rt->delete();
 		}
 	    }
 	}
     }
+
     public function save_bairros_atendidos() {
 	/*
 	 * Criando objeto se ele já não existir
 	 */
-	if ($this->__request_attributes["bairros"]) {
-	    foreach ($this->__request_attributes["bairros"] as $index => $id_bairro) {
-                $preco_entrega = $this->__request_attributes["preco_entrega"][$index];
+	if ($this->__request_attributes['bairros']) {
+	    foreach ($this->__request_attributes['bairros'] as $index => $id_bairro) {
+		$preco_entrega = $this->__request_attributes['preco_entrega'][$index];
 		if (!$this->atendeBairro($id_bairro)) {
-		    RestauranteAtendeBairro::create(array("bairro_id" => $id_bairro, "restaurante_id" => $this->id, "preco_entrega" => $preco_entrega));
+		    RestauranteAtendeBairro::create(array('bairro_id' => $id_bairro, 'restaurante_id' => $this->id, 'preco_entrega' => $preco_entrega));
 		}
 	    }
 	}
@@ -96,13 +94,13 @@ class Restaurante extends ActiveRecord\Model {
 	 */
 	if ($this->bairros_atendidos) {
 	    foreach ($this->bairros_atendidos as $ba) {
-		if (!$this->__request_attributes["bairros"] || !in_array($ba->bairro_id, $this->__request_attributes["bairros"])) {
+		if (!$this->__request_attributes['bairros'] || !in_array($ba->bairro_id, $this->__request_attributes['bairros'])) {
 		    $ba->delete();
 		}
 	    }
 	}
     }
-    
+
     public function atendeBairro($id) {
 	if ($this->bairros_atendidos) {
 	    foreach ($this->bairros_atendidos as $b) {
@@ -112,7 +110,7 @@ class Restaurante extends ActiveRecord\Model {
 	}
 	return false;
     }
-    
+
     public function temTipo($id) {
 	if ($this->restaurante_tem_tipos) {
 	    foreach ($this->restaurante_tem_tipos as $t) {
@@ -122,6 +120,7 @@ class Restaurante extends ActiveRecord\Model {
 	}
 	return false;
     }
+
     public function temTipoProduto($id) {
 	if ($this->restaurante_tem_tipos_produto) {
 	    foreach ($this->restaurante_tem_tipos_produto as $t) {

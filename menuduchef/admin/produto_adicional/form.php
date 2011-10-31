@@ -1,12 +1,10 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("ProdutoAdicional");
 
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais</h2>
 

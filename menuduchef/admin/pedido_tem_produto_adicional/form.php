@@ -1,5 +1,5 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProdutoAdicional");
 
@@ -7,8 +7,6 @@ $pedido_tem_produto = PedidoTemProduto::find_by_id($_GET['prodnoped']);
 $produto_tem_adicionais = ProdutoTemProdutoAdicional::all(array("order" => "id asc", "conditions" => array("produto_id = ?",$pedido_tem_produto->produto_id)));
 //$produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc", "conditions" => array("",)));
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <h2><a href="admin/">Menu Principal</a> &raquo;  <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; <a href="admin/pedido_tem_produto/?ped=<?= $_GET['ped'] ?>">Gerenciar Produtos inclusos nos Pedidos</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 

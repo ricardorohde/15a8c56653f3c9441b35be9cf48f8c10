@@ -6,7 +6,7 @@
             <a href="admin/administrador/">Administradores</a>
             <a href="admin/cidade/">Cidades</a>
             <a href="admin/bairro/">Bairros</a>
-            <a href="admin/consumidor/">Consumidores</a>
+            <a href="admin/consumidor/">Clientes</a>
         </div>
         <span class="qmdivider qmdividery"></span>
         <a href="javascript:void(0)">RESTAURANTES</a>
@@ -36,7 +36,12 @@
     </div>
     <script type="text/javascript">qm_create(0,false,0,250,false,false,false,false,false);</script>
     <div class="right tright w50">
-        <strong>Manolo da Silva Sauro</strong> - Gerente - Restaurante do Biro | <a href="admin/sair" title="Sair">Sair</a>
+        <? if($usuario_logado) { ?>
+	    <strong><?= $usuario_logado->nome ?></strong>
+	    - <?= $usuario_logado->getNomePerfil() ?>
+	    <? if($usuario_logado->tipo == Usuario::$GERENTE || $usuario_logado->tipo == Usuario::$ATENDENTE) { ?>- Restaurante do Biro<? } ?>
+	    |
+	<? } ?>
+	<a href="admin/sair" title="Sair">Sair</a>
     </div>
 </div>
-<? include("messages.php"); ?>

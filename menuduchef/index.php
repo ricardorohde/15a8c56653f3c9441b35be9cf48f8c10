@@ -3,8 +3,6 @@
 <h2><?= SITE_TITLE ?></h2>
 
 <form action="php/controller/login" method="post">
-    <?// Apagar depois a linha abaixo ?>
-    <font color="red"><strong>Login ainda não foi implementado. Para entrar no sistema, basta clicar em "Entrar" sem preencher os campos.</strong></font><br /><br />
     E-mail:
     <input type="text" name="email" maxlength="50" /><br />
     Senha:

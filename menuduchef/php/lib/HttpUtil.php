@@ -38,7 +38,7 @@ class HttpUtil {
     }
 
     static function isLocalhost() {
-        return $_SERVER["HTTP_HOST"] == "127.0.0.1" || !preg_match('/(\.[\d\w]+)+/', $_SERVER["HTTP_HOST"]);
+	return $_SERVER["HTTP_HOST"] == "127.0.0.1" || !preg_match('/(\.[\d\w]+)+/', $_SERVER["HTTP_HOST"]);
     }
 
     static function validateRepeatedParameter($parameter, $repeatedParameter, $message) {
@@ -46,26 +46,33 @@ class HttpUtil {
 
 	if ($data[$parameter] != $data[$repeatedParameter]) {
 	    $_SESSION["obj"] = $data;
-	    HttpUtil::showErrorMessages(array($message));
-	    header("Location: {$_SERVER["HTTP_REFERER"]}");
-	    exit;
+	    static::showErrorMessages(array($message));
+	    static::redirect($_SERVER["HTTP_REFERER"]);
+	}
+    }
+
+    static function validateRepeatedEmailUsuario($email, $excludeId) {
+	if (Usuario::emailExiste($email, $excludeId)) {
+	    $data = self::getParameterArray();
+	    $_SESSION["obj"] = $data;
+	    static::showErrorMessages(array("O e-mail \"{$email}\" já é utilizado por outro usuário"));
+	    static::redirect($_SERVER["HTTP_REFERER"]);
 	}
     }
 
     static function getActiveRecordObjectBySessionOrGetId($class) {
 	$obj = new $class();
-	
+
 	if ($_SESSION["obj"]) {
 	    $obj->set_attributes($_SESSION["obj"]);
 	    unset($_SESSION["obj"]);
-	    
 	} elseif ($_GET["id"]) {
 	    $obj = $class::find($_GET["id"]);
 	}
-	
+
 	return $obj;
     }
-    
+
     static function redirect($target) {
 	header("Location: $target");
 	exit;

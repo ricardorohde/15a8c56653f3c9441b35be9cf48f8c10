@@ -1,10 +1,8 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $itens = Restaurante::all(array("order" => "nome asc"));
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Restaurantes</h2>
 

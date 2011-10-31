@@ -1,5 +1,5 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Restaurante");
 
@@ -10,8 +10,6 @@ $tipos = TipoRestaurante::all();
 $tipos_produto = TipoProduto::all();
 $bairros = Bairro::all();
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <script type="text/javascript">
     $(function() {

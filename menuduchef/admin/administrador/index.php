@@ -1,10 +1,8 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
-$itens = Administrador::all(array("order" => "nome asc"));
+$itens = Administrador::all();
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Administradores</h2>
 
@@ -14,7 +12,7 @@ $itens = Administrador::all(array("order" => "nome asc"));
 <table class="list">
     <tr>
 	<th>Nome</th>
-	<th>Login</th>
+	<th>E-mail</th>
 	<th>Modificar</th>
 	<th>Excluir</th>
     </tr>
@@ -24,7 +22,7 @@ $itens = Administrador::all(array("order" => "nome asc"));
 	    ?>
 	    <tr>
 		<td><?= $item->nome ?></td>
-		<td><?= $item->login ?></td>
+		<td><?= $item->email ?></td>
 		<td><a href="admin/administrador/form/<?= $item->id ?>">Modificar</a></td>
 		<td><a href="admin/administrador/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
@@ -33,7 +31,7 @@ $itens = Administrador::all(array("order" => "nome asc"));
     } else {
 	?>
     <tr>
-	<td colspan="3">Nenhum administrador cadastrado</td>
+	<td colspan="5">Nenhum administrador cadastrado</td>
     </tr>
     <? } ?>
 </table>

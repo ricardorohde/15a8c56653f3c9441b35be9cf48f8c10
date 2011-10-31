@@ -1,5 +1,5 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 //$obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("PedidoTemProduto");
 
@@ -10,8 +10,6 @@ $produtos2 = Produto::all(array("order" => "nome asc", "conditions" => array("re
 
 $aparece_sabores_extras = 0;
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <script type="text/javascript">
     $(function() {

@@ -1,5 +1,5 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Pedido");
 
@@ -9,8 +9,6 @@ $preco_total = 0;
 //$produtos = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ?", $obj->restaurante->id)));
 ?>
 
-<? include("../../include/painel_area_administrativa.php") ;?>
-
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Pedidos</h2>
 
 <a href="admin/pedido/" title="Cancelar">Cancelar</a>
@@ -19,7 +17,7 @@ $preco_total = 0;
 <form action="admin/pedido/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Consumidor<br /><? if($obj->consumidor_id){ 
-         echo $obj->consumidor->login;  
+         echo $obj->consumidor->nome;  
       }else{ ?>
     <select name="consumidor_id">-- Selecione --</option>
 	<?

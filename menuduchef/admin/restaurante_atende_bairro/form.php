@@ -1,13 +1,11 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("RestauranteAtendeBairro");
 
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $bairros = Bairro::all(array("order" => "nome asc"));
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Restaurantes atendem Bairros</h2>
 

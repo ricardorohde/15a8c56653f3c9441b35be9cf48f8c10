@@ -2,13 +2,13 @@
 
 class ProdutoAdicional extends ActiveRecord\Model {
 
-    static $table_name = "produto_adicional";
+    static $table_name = 'produto_adicional';
     static $belongs_to = array(
-	array("restaurante")
+	array('restaurante')
     );
     static $has_many = array(
-	array("produto_tem_produtos_adicionais", "class_name" => "ProdutoTemProdutoAdicional"),
-	array("produtos", "through" => "produto_tem_produtos_adicionais", "class_name" => "Produto")
+	array('produto_tem_produtos_adicionais', 'class_name' => 'ProdutoTemProdutoAdicional'),
+	array('produtos', 'through' => 'produto_tem_produtos_adicionais', 'class_name' => 'Produto')
     );
 
 }

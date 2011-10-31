@@ -1,19 +1,16 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
-$itens = Consumidor::all(array("order" => "nome asc"));
+$itens = Consumidor::all();
 ?>
 
-<? include("../../include/painel_area_administrativa.php") ;?>
-
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Consumidores</h2>
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Clientes</h2>
 
 <a href="admin/consumidor/form" title="Criar">Criar</a>
 <br /><br />
 
 <table class="list">
     <tr>
-        <th>Login</th>
 	<th>Nome</th>
         <th>E-mail</th>
         <th>CPF</th>
@@ -30,7 +27,6 @@ $itens = Consumidor::all(array("order" => "nome asc"));
 	foreach ($itens as $item) {
 	    ?>
 	    <tr>
-                <td><?= $item->login ?></td>
 		<td><?= $item->nome ?></td>
                 <td><?= $item->email ?></td>
                 <td><?= $item->cpf ?></td>

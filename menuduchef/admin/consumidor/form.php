@@ -1,12 +1,10 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Consumidor");
 
 $cidades = Cidade::all(array("order" => "nome asc"));
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <script type="text/javascript">
     $(function() {
@@ -73,7 +71,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	    });
 	</script>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Consumidores</h2>
+<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Clientes</h2>
 
 <a href="admin/consumidor/" title="Cancelar">Cancelar</a>
 <br /><br />
@@ -84,14 +82,8 @@ $cidades = Cidade::all(array("order" => "nome asc"));
     Nome<br />
     <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
     
-    Login<br />
-    <input type="text" name="login" value="<?= $obj->login ?>" maxlength="100" /><br /><br />
-    
     CPF<br />
     <input type="text" name="cpf" value="<?= $obj->cpf ?>" maxlength="100" /><br /><br />
-    
-    E-mail<br />
-    <input type="text" name="email" value="<?= $obj->email ?>" maxlength="100" /><br /><br />
     
     Data de Nascimento<br />
     <input type="text" name="data_nascimento" value="<?= $obj->data_nascimento ?>" maxlength="100" /><br /><br />
@@ -149,7 +141,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
     <input type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />Não
     <br /><br />
  
-    <? include("../../include/inputs_login_senha.php"); ?>
+    <? include("../../include/inputs_email_senha.php"); ?>
     
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>

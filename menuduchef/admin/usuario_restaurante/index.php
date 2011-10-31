@@ -1,10 +1,8 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
-$itens = UsuarioRestaurante::all(array("order" => "nome asc"));
+$itens = UsuarioRestaurante::all();
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Gerentes e Atendentes de Restaurantes</h2>
 
@@ -15,7 +13,7 @@ $itens = UsuarioRestaurante::all(array("order" => "nome asc"));
     <tr>
 	<th>Nome</th>
 	<th>Restaurante</th>
-	<th>Login</th>
+	<th>E-mail</th>
 	<th>Perfil</th>
         <th>Modificar</th>
 	<th>Excluir</th>
@@ -27,8 +25,8 @@ $itens = UsuarioRestaurante::all(array("order" => "nome asc"));
 	    <tr>
 		<td><?= $item->nome ?></td>
 		<td><?= $item->restaurante->nome ?></td>
-		<td><?= $item->login ?></td>
-                <td><?= $item->getNomePerfil() ?></td>
+		<td><?= $item->email ?></td>
+                <td><?= $item->usuario->getNomePerfil() ?></td>
 		<td><a href="admin/usuario_restaurante/form/<?= $item->id ?>">Modificar</a></td>
 		<td><a href="admin/usuario_restaurante/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>

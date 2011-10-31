@@ -1,10 +1,8 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Administrador");
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Administradores</h2>
 
@@ -16,7 +14,7 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Administrador");
     Nome<br />
     <input type="text" name="nome" autocomplete="off" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
     
-    <? include("../../include/inputs_login_senha.php"); ?>
+    <? include("../../include/inputs_email_senha.php"); ?>
 
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>

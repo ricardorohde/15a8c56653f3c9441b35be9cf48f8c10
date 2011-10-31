@@ -384,7 +384,9 @@ class Validations {
 	foreach ($attrs as $attr) {
 	    $options = array_merge($configuration, $attr);
 	    $attribute = $options[0];
-	    $var = $this->model->$attribute;
+	    /* <MENU_DU_CHEF> */
+	    $var = html_entity_decode($this->model->$attribute);
+	    /* </MENU_DU_CHEF> */
 
 	    if (is_null($options['with']) || !is_string($options['with']) || !is_string($options['with']))
 		throw new ValidationsArgumentError('A regular expression must be supplied as the [with] option of the configuration array.');
@@ -534,6 +536,10 @@ class Validations {
 	    $pk_value = $this->model->$pk[0];
 
 	    if (is_array($options[0])) {
+		/*
+		 * <MENU_DU_CHEF>
+		 * 
+		 */
 		$sanitizedOptions = array();
 		foreach ($options[0] as $key => $option) {
 		    if (!is_numeric($key)) {
@@ -543,12 +549,15 @@ class Validations {
 		    }
 		}
 		$add_record = join("_e_", $sanitizedOptions);
+		/*
+		 * </MENU_DU_CHEF>
+		 */
 		$fields = $options[0];
 	    } else {
 		$add_record = $options[0];
 		$fields = array($options[0]);
 	    }
-
+	    
 	    $sql = "";
 	    $conditions = array("");
 

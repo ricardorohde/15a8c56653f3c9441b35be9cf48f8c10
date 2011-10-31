@@ -1,12 +1,10 @@
 <?
-include("../../include/header.php");
+include('../../include/header_admin.php');
 
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("UsuarioRestaurante");
 
 $restaurantes = Restaurante::all(array("order" => "nome asc"));
 ?>
-
-<? include("../../include/painel_area_administrativa.php") ;?>
 
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Gerentes e Atendentes de Restaurantes</h2>
 
@@ -34,13 +32,13 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
     
     Perfil<br />
     <select name="perfil">
-	<option value="">-- Selecione --</option>
-	<option <? if($obj->perfil == UsuarioRestaurante::$PERFIL_GERENTE) { ?>selected="true"<? } ?> value="<?= UsuarioRestaurante::$PERFIL_GERENTE ?>"><?= UsuarioRestaurante::getNomePerfilById(UsuarioRestaurante::$PERFIL_GERENTE) ?></option>
-	<option <? if($obj->perfil == UsuarioRestaurante::$PERFIL_ATENDENTE) { ?>selected="true"<? } ?> value="<?= UsuarioRestaurante::$PERFIL_ATENDENTE ?>"><?= UsuarioRestaurante::getNomePerfilById(UsuarioRestaurante::$PERFIL_ATENDENTE) ?></option>
+	<option value="0">-- Selecione --</option>
+	<option <? if($obj->tipo == Usuario::$GERENTE) { ?>selected="true"<? } ?> value="<?= Usuario::$GERENTE ?>"><?= Usuario::getNomePerfilById(Usuario::$GERENTE) ?></option>
+	<option <? if($obj->tipo == Usuario::$ATENDENTE) { ?>selected="true"<? } ?> value="<?= Usuario::$ATENDENTE ?>"><?= Usuario::getNomePerfilById(Usuario::$ATENDENTE) ?></option>
     </select>
     <br /><br />
 
-    <? include("../../include/inputs_login_senha.php"); ?>
+    <? include("../../include/inputs_email_senha.php"); ?>
 
     <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
