@@ -39,12 +39,6 @@ $preco_total = 0;
     </select>
     <? } ?>
     <br /><br />
-    Endere&ccedil;o<br />
-    <select id="enderecos" name="endereco_id"> -- Selecione --</option>
-	
-    </select>
-
-    <br /><br />
     Restaurante<br /><? if($obj->restaurante_id){ 
          echo $obj->restaurante->nome;  
       }else{ ?>
@@ -59,7 +53,12 @@ $preco_total = 0;
     </select>
     <? } ?>
     <br /><br />
-    
+    Endere&ccedil;o da entrega<br />
+    <select id="enderecos" name="endereco_id"> -- Selecione --</option>
+	
+    </select>
+
+    <br /><br />
     <? if($obj->id) { ?>
     Itens inclusos:<br />
     <div id="proInput">
@@ -98,8 +97,10 @@ $preco_total = 0;
     <br /><br />
     Forma de Pagamento<br />
     <input type="text" name="forma_pagamento" value="<?= $obj->forma_pagamento ?>" maxlength="100" /><br /><br />
+    <? if($_GET['id']){ ?>
     Pre&ccedil;o<br />
     <?= StringUtil::doubleToCurrency($preco_total) ?><br /><br />
+    <? } ?>
     Troco<br />
     <input type="text" name="troco" value="<?= $obj->troco ?>" maxlength="100" /><br /><br />
     Cupom<br />
