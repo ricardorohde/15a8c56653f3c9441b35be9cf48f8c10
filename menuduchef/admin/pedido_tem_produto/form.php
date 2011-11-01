@@ -52,7 +52,7 @@ $aparece_sabores_extras = 0;
                                 }
                             }
                              ?>
-                            <div><? $aparece_sabores_extras = $obj->produto->aceita_segundo_sabor; ?><? echo $obj->produto->nome; ?> <? if($adicionais){ echo " ---Adicionais: ".$adicionais." (Valor total dos adicionais: R$".$valor_adicional.")";} ?></div>
+                            <div><? $aparece_sabores_extras = $obj->produto->aceita_segundo_sabor; ?><? echo $obj->produto->nome; ?> <? if($adicionais){ echo " ---Adicionais: ".$adicionais." (Valor total dos adicionais: ".StringUtil::doubleToCurrency($valor_adicional).")";} ?></div>
                             <? if($obj->produto->produto_tem_produtos_adicionais){ ?> <a href="admin/pedido_tem_produto_adicional/?prodnoped=<?= $obj->id ?>&ped=<?= $_GET['ped']?>">Acrescentar/Modificar/Excluir Acompanhamentos e Por&ccedil;&otilde;es Extras</a> <? } ?>
                        <? }else{ ?>
     <select id="produtos" name="produto_id">
@@ -73,10 +73,12 @@ $aparece_sabores_extras = 0;
     <br /><br />
     Quantidade<br />
     <input type="text" name="qtd" value="<?= $obj->qtd ?>" maxlength="100" /><br /><br />
+    <? if($_GET['id']){ ?>
     Pre&ccedil;o Unit&aacute;rio<br /><? if($obj->preco_unitario){
-            echo "R$ ".$obj->preco_unitario;
+            echo StringUtil::doubleToCurrency($obj->preco_unitario);
         }?>
     <br /><br />
+    <? } ?>
     OBS:<br />
     <input type="text" name="obs" value="<?= $obj->obs ?>" maxlength="100" /><br /><br />
 

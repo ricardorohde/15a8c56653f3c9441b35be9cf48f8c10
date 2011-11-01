@@ -2,12 +2,14 @@
  * Requires jQuery
  */
 var COMBO_BOX_DEFAULT_OPTION = '<option value="">-- Selecione --</option>';
+var COMBO_BOX_DEFAULT_ENDERECO = '<option value="">-- Selecione um cliente primeiro --</option>';
 var COMBO_BOX_DEFAULT_BAIRRO = '<option value="">-- Selecione uma cidade primeiro --</option>';
 var COMBO_BOX_DEFAULT_PRODUTO = '<option value="">-- Selecione um pedido primeiro --</option>';
 var COMBO_BOX_LOADING_OPTION = '<option value="">Carregando...</option>';
 var CHECK_BOX_LOADING_OPTION = 'Carregando...';
 var CHECK_BOX_DEFAULT_OPTION = '';
 var URL_BAIRROS_JSON = 'php/controller/list_bairros_json';
+var URL_ENDERECOS_JSON = 'php/controller/list_enderecos_json';
 var URL_PRODUTOS_JSON = 'php/controller/list_produtos_json';
 var URL_PRODUTOS_ADICIONAIS_JSON = 'php/controller/list_produtos_adicionais_json';
 var URL_PRODUTO_SEGUNDO_SABOR = 'php/controller/list_segundo_sabor_json';
@@ -57,6 +59,16 @@ function autoShow(url, parameters, targetId) {
 	    target.hide();
 	}
     });
+}
+
+function autoCompleteEnderecos(idConsumidor, preSelectedIdEndereco) {
+    if(idConsumidor) {
+	autoCompleteComboBox(URL_ENDERECOS_JSON, {
+	    'id': idConsumidor
+	}, 'enderecos', 'id', 'logradouro', preSelectedIdEndereco);
+    } else {
+	$('#enderecos').empty().append($(COMBO_BOX_DEFAULT_ENDERECO));
+    }
 }
 
 function autoCompleteBairros(idCidade, preSelectedIdBairro) {

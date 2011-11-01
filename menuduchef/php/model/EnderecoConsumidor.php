@@ -8,6 +8,10 @@ class EnderecoConsumidor extends ActiveRecord\Model {
 	array('consumidor'),
         array('bairro')
     );
+    
+    static $has_many = array(
+	array('pedidos', 'foreign_key' => 'endereco_id', 'class_name' => 'Pedido')
+    );
 
 }
 

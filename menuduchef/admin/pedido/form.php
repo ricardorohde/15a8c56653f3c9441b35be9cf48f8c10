@@ -9,6 +9,15 @@ $preco_total = 0;
 //$produtos = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ?", $obj->restaurante->id)));
 ?>
 
+<script type="text/javascript">
+    $(function() {
+	autoCompleteEnderecos(<?= $obj->consumidor_id ?: 0 ?>, <?= $obj->endereco_id ?: 0 ?>);
+	    
+	$('#consumidores').change(function() {
+	    autoCompleteEnderecos($(this).val());
+	});
+    });
+</script>
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Pedidos</h2>
 
 <a href="admin/pedido/" title="Cancelar">Cancelar</a>
@@ -19,7 +28,7 @@ $preco_total = 0;
     Consumidor<br /><? if($obj->consumidor_id){ 
          echo $obj->consumidor->nome;  
       }else{ ?>
-    <select name="consumidor_id">-- Selecione --</option>
+    <select id='consumidores' name="consumidor_id"><option>-- Selecione --</option>
 	<?
 	if ($consumidores) {
 	    foreach ($consumidores as $consumidor) {
@@ -30,10 +39,16 @@ $preco_total = 0;
     </select>
     <? } ?>
     <br /><br />
+    Endere&ccedil;o<br />
+    <select id="enderecos" name="endereco_id"> -- Selecione --</option>
+	
+    </select>
+
+    <br /><br />
     Restaurante<br /><? if($obj->restaurante_id){ 
          echo $obj->restaurante->nome;  
       }else{ ?>
-    <select id="restaurantes" name="restaurante_id">-- Selecione --</option>
+    <select id="restaurantes" name="restaurante_id"><option>-- Selecione --</option>
 	<?
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
@@ -67,7 +82,7 @@ $preco_total = 0;
             }
             $preco_total += (($pro->preco_unitario + $valor_adicional) * $pro->qtd);
              ?>
-            <div><? echo $pro->qtd; ?>x <? echo $pro->produto->nome; ?> <? if($pro->tamanho){ echo " (".$pro->tamanho.") ";} ?> <? if($adicionais){ echo " ---Adicionais: ".$adicionais." ";} ?> <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?> <? echo " ---Valor Unit&aacute;rio: R$".$pro->preco_unitario;
+            <div><? echo $pro->qtd; ?>x <? echo $pro->produto->nome; ?> <? if($pro->tamanho){ echo " (".$pro->tamanho.") ";} ?> <? if($adicionais){ echo " ---Adicionais: ".$adicionais." ";} ?> <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?> <? echo " ---Valor Unit&aacute;rio: ".StringUtil::doubleToCurrency($pro->preco_unitario);
             if($adicionais){ echo " + (".$valor_adicional.")"; }
             ?> 
             </div>
@@ -84,7 +99,7 @@ $preco_total = 0;
     Forma de Pagamento<br />
     <input type="text" name="forma_pagamento" value="<?= $obj->forma_pagamento ?>" maxlength="100" /><br /><br />
     Pre&ccedil;o<br />
-    R$ <?= $preco_total ?><br /><br />
+    <?= StringUtil::doubleToCurrency($preco_total) ?><br /><br />
     Troco<br />
     <input type="text" name="troco" value="<?= $obj->troco ?>" maxlength="100" /><br /><br />
     Cupom<br />
