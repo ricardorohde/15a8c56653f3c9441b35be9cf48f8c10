@@ -38,16 +38,22 @@ $aparece_sabores_extras = 0;
         }?>
     <br /><br />
     Produto<br /><? if($obj){
-                            
+                            $count_ad = 0;
+                            $valor_adicional = 0;
                             $adicionais = "";
                             if($obj->pedido_tem_produtos_adicionais){
                                 foreach($obj->pedido_tem_produtos_adicionais as $adi){
+                                    if($count_ad>0){
+                                        $adicionais .= ", ";
+                                    }
                                     $adicionais .= " ".$adi->produto_adicional->nome;
+                                    $valor_adicional += $adi->preco;
+                                    $count_ad++;
                                 }
                             }
                              ?>
-                            <div><? $aparece_sabores_extras = $obj->produto->aceita_segundo_sabor; ?><? echo $obj->produto->nome; ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?></div>
-                            <? if($obj->produto->produto_tem_produtos_adicionais){ ?> <a href="admin/pedido_tem_produto_adicional/?prodnoped=<?= $obj->id ?>&ped=<?= $_GET['ped']?>">Acrescentar/Modificar/Excluir Adicionais</a> <? } ?>
+                            <div><? $aparece_sabores_extras = $obj->produto->aceita_segundo_sabor; ?><? echo $obj->produto->nome; ?> <? if($adicionais){ echo " ---Adicionais: ".$adicionais." (Valor total dos adicionais: R$".$valor_adicional.")";} ?></div>
+                            <? if($obj->produto->produto_tem_produtos_adicionais){ ?> <a href="admin/pedido_tem_produto_adicional/?prodnoped=<?= $obj->id ?>&ped=<?= $_GET['ped']?>">Acrescentar/Modificar/Excluir Acompanhamentos e Por&ccedil;&otilde;es Extras</a> <? } ?>
                        <? }else{ ?>
     <select id="produtos" name="produto_id">
         <?

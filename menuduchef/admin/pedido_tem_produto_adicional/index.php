@@ -13,6 +13,8 @@ $itens = PedidoTemProdutoAdicional::all(array("order" => "pedidotemproduto_id as
     <tr>
 	<th>Produto contido no Pedido</th>
 	<th>Produto Adicional</th>
+        <th>Tipo</th>
+        <th>Pre&ccedil;o</th>
 	<th>Modificar</th>
 	<th>Excluir</th>
     </tr>
@@ -23,7 +25,8 @@ $itens = PedidoTemProdutoAdicional::all(array("order" => "pedidotemproduto_id as
 	    <tr>
 		<td><?= $item->pedidotemproduto_id." (".$item->pedido_tem_produto->produto->nome.")"; ?></td>
 		<td><?= $item->produto_adicional->nome ?></td>
-                              
+                <td><?= $item->produto_adicional->quantas_unidades_ocupa ? "Acompanhamento" : "Por&ccedil;&atilde;o Extra" ?></td>
+                <td><?= $item->preco ?></td>
 		<td><a href="admin/pedido_tem_produto_adicional/form/?id=<?= $item->id ?>&prodnoped=<?= $item->pedidotemproduto_id ?>&ped=<?= $_GET['ped'] ?>">Modificar</a></td>
 		<td><a href="admin/pedido_tem_produto_adicional/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>

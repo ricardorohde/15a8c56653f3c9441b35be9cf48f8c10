@@ -52,15 +52,25 @@ $preco_total = 0;
         $proc = 1;
 	if($obj->pedido_tem_produtos) {
         foreach($obj->pedido_tem_produtos as $pro){
+            $count_ad = 0;
+            $valor_adicional = 0;
             $adicionais = "";
             if($pro->pedido_tem_produtos_adicionais){
                 foreach($pro->pedido_tem_produtos_adicionais as $adi){
+                    if($count_ad>0){
+                        $adicionais .= ", ";
+                    }
                     $adicionais .= " ".$adi->produto_adicional->nome;
+                    $valor_adicional += $adi->preco;
+                    $count_ad++;
                 }
             }
-            $preco_total += ($pro->preco_unitario * $pro->qtd);
+            $preco_total += (($pro->preco_unitario + $valor_adicional) * $pro->qtd);
              ?>
-            <div><? echo $pro->qtd; ?>x <? echo $pro->produto->nome; ?> <? if($pro->tamanho){ echo " (".$pro->tamanho.") ";} ?> <? if($adicionais){ echo " ---Acompanhamento: ".$adicionais." ";} ?> <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?> <? echo " ---Valor: R$".($pro->preco_unitario * $pro->qtd)." "; ?> </div>
+            <div><? echo $pro->qtd; ?>x <? echo $pro->produto->nome; ?> <? if($pro->tamanho){ echo " (".$pro->tamanho.") ";} ?> <? if($adicionais){ echo " ---Adicionais: ".$adicionais." ";} ?> <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?> <? echo " ---Valor Unit&aacute;rio: R$".$pro->preco_unitario;
+            if($adicionais){ echo " + (".$valor_adicional.")"; }
+            ?> 
+            </div>
         <? $proc++; } }
     ?>
     </div>
