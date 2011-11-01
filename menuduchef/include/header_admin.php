@@ -9,13 +9,10 @@ foreach ($libDirectoryArray as $directory) {
 
 include_once("{$libDirectory}/config.php");
 
-$usuario_logado = null;
-$usuario_logado_obj = null;
+$usuario_logado = unserialize($_SESSION['usuario']);
+$usuario_logado_obj = unserialize($_SESSION['usuario_obj']);
 
-if($_SESSION['usuario'] && $_SESSION['usuario_obj']) {
-    $usuario_logado = unserialize($_SESSION['usuario']);
-    $usuario_logado_obj = unserialize($_SESSION['usuario_obj']);
-} else {
+if(!$usuario_logado || $usuario_logado->tipo == Usuario::$CONSUMIDOR) {
     $_SESSION['request_fail'] = $_SERVER["REQUEST_URI"];
     HttpUtil::redirect('../404');
 }
