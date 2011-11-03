@@ -8,19 +8,20 @@ $limite_acompanhamento = $pedido_tem_produto->produto->qtd_produto_adicional;
 
 <h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; <a href="admin/pedido_tem_produto/?ped=<?= $_GET['ped'] ?>">Gerenciar Produtos inclusos nos Pedidos</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 
+<a href="admin/pedido_tem_produto_adicional/form?prodnoped=<?= $_GET['prodnoped'] ?>&ped=<?= $_GET['ped'] ?>" title="Criar">Criar</a>
 <?
 $qtd_acompanhamentos_existente = 0;
     if ($itens) {
 	foreach ($itens as $item) {
-            if($item->produto_adicional->quantas_unidades_ocupa>0){
-                $qtd_acompanhamentos_existente++;
-            }
+            
+            $qtd_acompanhamentos_existente += $item->produto_adicional->quantas_unidades_ocupa;
+            
         }
     }
     
-    if($qtd_acompanhamentos_existente<$limite_acompanhamento){
+    if(($qtd_acompanhamentos_existente>=$limite_acompanhamento)&&($limite_acompanhamento>0)){
 ?>
-<a href="admin/pedido_tem_produto_adicional/form?prodnoped=<?= $_GET['prodnoped'] ?>&ped=<?= $_GET['ped'] ?>" title="Criar">Criar</a>
+(O limite de <?= $limite_acompanhamento ?> acompanhamentos foi alcan&ccedil;ado.)
 <?  } ?>
 <br /><br />
 
