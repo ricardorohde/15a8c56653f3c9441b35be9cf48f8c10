@@ -11,10 +11,14 @@ $preco_total = 0;
 
 <script type="text/javascript">
     $(function() {
-	autoCompleteEnderecos(<?= $obj->consumidor_id ?: 0 ?>, <?= $obj->endereco_id ?: 0 ?>);
+	autoCompleteEnderecos(<?= $obj->consumidor_id ?: 0 ?>, <?= $obj->restaurante_id ?: 0 ?>, <?= $obj->endereco_id ?: 0 ?>);
 	    
 	$('#consumidores').change(function() {
-	    autoCompleteEnderecos($(this).val());
+	    autoCompleteEnderecos($(this).val(), $('#restaurantes').val());
+	});
+        
+        $('#restaurantes').change(function() {
+	    autoCompleteEnderecos($('#consumidores').val(), $(this).val());
 	});
     });
 </script>
@@ -28,7 +32,8 @@ $preco_total = 0;
     Consumidor<br /><? if($obj->consumidor_id){ 
          echo $obj->consumidor->nome;  
       }else{ ?>
-    <select id='consumidores' name="consumidor_id"><option>-- Selecione --</option>
+    <select id='consumidores' name="consumidor_id">
+        <option value="">-- Selecione --</option>
 	<?
 	if ($consumidores) {
 	    foreach ($consumidores as $consumidor) {
@@ -42,7 +47,8 @@ $preco_total = 0;
     Restaurante<br /><? if($obj->restaurante_id){ 
          echo $obj->restaurante->nome;  
       }else{ ?>
-    <select id="restaurantes" name="restaurante_id"><option>-- Selecione --</option>
+    <select id="restaurantes" name="restaurante_id">
+        <option value="">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
@@ -54,10 +60,7 @@ $preco_total = 0;
     <? } ?>
     <br /><br />
     Endere&ccedil;o da entrega<br />
-    <select id="enderecos" name="endereco_id"> -- Selecione --</option>
-	
-    </select>
-
+    <select id="enderecos" name="endereco_id"></select>
     <br /><br />
     <? if($obj->id) { ?>
     Itens inclusos:<br />
