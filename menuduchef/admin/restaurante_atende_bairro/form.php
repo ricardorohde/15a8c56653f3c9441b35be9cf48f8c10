@@ -15,23 +15,23 @@ $bairros = Bairro::all(array("order" => "nome asc"));
 <form action="admin/restaurante_atende_bairro/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     Restaurante<br />
-    <select name="id_restaurante">-- Selecione --</option>
+    <select name="restaurante_id">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->id_restaurante) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>
     <br /><br />
     Bairro<br />
-    <select name="id_bairro">-- Selecione --</option>
+    <select name="bairro_id">-- Selecione --</option>
 	<?
 	if ($bairros) {
 	    foreach ($bairros as $bairro) {
 		?>
-		<option value="<?= $bairro->id ?>" <? if ($bairro->id == $obj->id_bairro) { ?>selected="true"<? } ?>><?= $bairro->nome ?></option>
+		<option value="<?= $bairro->id ?>" <? if ($bairro->id == $obj->bairro_id) { ?>selected="true"<? } ?>><?= $bairro->nome ?></option>
 	    <? }
 	} ?>
     </select>
