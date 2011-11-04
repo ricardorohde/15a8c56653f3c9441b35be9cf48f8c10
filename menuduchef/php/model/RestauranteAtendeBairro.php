@@ -7,6 +7,9 @@ class RestauranteAtendeBairro extends ActiveRecord\Model {
 	array('restaurante'),
 	array('bairro')
     );
+    static $validates_uniqueness_of = array(
+	array(array('Restaurante' => 'restaurante_id', 'Bairro' => 'bairro_id'), 'message' => 'já existem')
+    );
 
 }
 
