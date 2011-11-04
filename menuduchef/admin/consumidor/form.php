@@ -96,7 +96,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
     if($obj->telefones){
         $telc = 1;
         foreach($obj->telefones as $tel){ ?>
-            <div><input type="text" name="telefone<?= $telc ?>" value="<?= $tel->numero ?>" maxlength="100" /><span onclick="this.parentNode.parentNode.removeChild(this.parentNode)">X</span></div>
+            <div><input type="text" name="telefone<?= $telc ?>" value="<?= $tel->numero ?>" maxlength="100" /> <span onclick="this.parentNode.parentNode.removeChild(this.parentNode)">X</span></div>
         <? $telc++; }
     }?>
     </div>
@@ -119,18 +119,14 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	<option value="<?= $cidade->id ?>" <? if($cidade->id == $favorito) { ?>selected="true"<? } ?>><?= $cidade->nome ?></option>
 	<? } } ?>
     </select>
-    <br /><br />
-  
-    Bairro<br />
-    <select id="bairros" name="bairro_id"></select>
-    <br /><br />
-         
+    <br /><br />  
+    
     Endere&ccedil;o<div id="endInput">
     <?
     if($obj->enderecos){
         $endc = 1;
         foreach($obj->enderecos as $ende){ ?>
-            <div><input type="text" name="endereco<?= $telc ?>" value="<?= $ende->logradouro ?>" maxlength="100" /><span onclick="this.parentNode.parentNode.removeChild(this.parentNode)">X</span></div>
+            <div><select name="cidade<?= $endc ?>" type="text"  ></select> <select name="bairro<?= $endc ?>" type="text"  ></select> <input type="text" name="endereco<?= $telc ?>" value="<?= $ende->logradouro ?>" maxlength="100" /> <span onclick="this.parentNode.parentNode.removeChild(this.parentNode)">X</span></div>
         <? $endc++; }
     }?>
     </div>

@@ -37,7 +37,7 @@ $itens = Consumidor::all();
                 foreach($item->telefones as $telefone){
                    
                     if($telc==0){
-                        echo $endereco->bairro->nome;
+                        echo $telefone->numero;
                     }
                     $telc++;
                 } 
