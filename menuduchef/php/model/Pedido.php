@@ -18,10 +18,16 @@ class Pedido extends ActiveRecord\Model {
 	array('endereco_consumidor', 'message' => 'obrigatório'),
 	array('forma_pagamento', 'message' => 'obrigatória')
     );
-    static $before_save = array('set_current_date');
+    static $before_create = array('set_current_date');
+    static $before_save = array('set_preco_entrega');
 
     public function set_current_date() {
 	$this->quando = date('Y-m-d H:i:s');
+    }
+    public function set_preco_entrega() {
+        $bairro = $this->endereco_consumidor->bairro_id;
+        $taxa = RestauranteAtendeBairro::find(array("conditions" => array("restaurante_id = ? AND bairro_id = ?",$this->restaurante_id,$bairro)));
+	$this->preco_entrega = $taxa->preco_entrega;
     }
 
 }
