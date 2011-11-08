@@ -17,7 +17,7 @@ var URL_PRODUTO_SEGUNDO_SABOR = 'php/controller/list_segundo_sabor_json';
 var URL_ENDERECO_CONSUMIDOR = 'php/controller/add_endereco_consumidor';
 
 function isEmpty(data) {
-    return data == null || data.length == 0;
+    return data == null || data == '' || data.length == 0;
 }
 
 function autoCompleteComboBox(url, parameters, targetId, valueIndex, descriptionIndex, preSelectedValue, booleanIndex) {
@@ -213,30 +213,21 @@ function autoCompleteProdutosCheckBox(idRestaurante) { //seinao ainda
 }
 
 function addEnderecoConsumidor(parameters, tableId) {
-    $.getJSON(URL_ENDERECO_CONSUMIDOR, parameters, function(data) {
+    $.post(URL_ENDERECO_CONSUMIDOR, parameters, function(data) {
 	if(!isEmpty(data)) {
-	    $.each(data, function(index, key) {
-		var row = '<tr>';
-		row += '<td>' + key.logradouro + '</td>';
-		row += '<td>' + key.bairro.cidade.nome + '</td>';
-		row += '<td>' + key.bairro.nome + '</td>';
-		row += '<td>' + 0 + '</td>';
-		row += '<td><input type="radio" name="favorito" ' + (key.favorito ? 'checked="true"' : '') + ' /></td>';
-		row += '<td><a href="javascript:void(0)" class="excluir">Excluir</a></td>';
-		row += '</tr>';
-		
-		$('#' + tableId).append($(row));
-	    });
+	    $('#nenhum_endereco').remove();
+	    var row = '<tr>';
+	    row += '<td>' + data.logradouro + '</td>';
+	    row += '<td>' + data.bairro.cidade.nome + '</td>';
+	    row += '<td>' + data.bairro.nome + '</td>';
+	    row += '<td>' + 0 + '</td>';
+	    row += '<td><input type="radio" name="favorito" ' + (data.favorito ? 'checked="true"' : '') + ' /></td>';
+	    row += '<td><a href="javascript:void(0)" class="excluir">Excluir</a></td>';
+	    row += '</tr>';
+
+	    $('#' + tableId).append($(row));
 	}
-	/*<tr>
-	    <td><?= $endereco->logradouro ?></td>
-	    <td><?= $endereco->bairro->cidade->nome ?></td>
-	    <td><?= $endereco->bairro->nome ?></td>
-	    <td><?= 0 ?></td>
-	    <td align="center"><input type="radio" name="favorito" <?= $endereco->favorito ? 'checked="true"' : '' ?> /></td>
-	    <td><a href="javascript:void(0)" class="excluir">Excluir</a></td>
-	</tr>*/
-    });
+    }, 'json');
 }
 
 function clearFormElements(context) {

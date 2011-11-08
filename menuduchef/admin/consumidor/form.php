@@ -4,6 +4,7 @@ include('../../include/header_admin.php');
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Consumidor");
 
 $cidades = Cidade::all(array("order" => "nome asc"));
+$hash = 'consumidor' . time();
 ?>
 
 <script type="text/javascript">
@@ -62,7 +63,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	    resizable: false,
 	    buttons: {
 		'Adicionar endereço': function() {
-		    addEnderecoConsumidor($('input, select, textarea', this).serialize(), 'enderecos');
+		    addEnderecoConsumidor($('input, select, textarea', this).add('#hash').serializeArray(), 'enderecos');
 		},
 		'Cancelar': function () {
 		    $(this).dialog('close');
@@ -88,7 +89,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 
 <form action="admin/consumidor/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
-    <input type="hidden" id="hash" name="hash" value="consumidor<?= time() ?>" />
+    <input type="hidden" id="hash" name="hash" value="<?= $hash ?>" />
     
     <label class="normal">Nome:</label>
     <input class="formfield w50" type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" />
@@ -172,10 +173,10 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	<select class="w80 formfield" id="bairro_endereco" name="bairro_id"></select>
 	
 	<label class="normal">Logradouro:</label>
-	<input class="formfield w90" type="text" name="logradouro" />
+	<input class="formfield w90" type="text" id="logradouro_endereco" name="logradouro" />
 	
-	<input class="adjacent clear-left top10" type="checkbox" id="checkbox_favorito" name="favorito" value="1" />
-	<label class="adjacent top10" for="checkbox_favorito">Atribuir como endereço favorito</label>
+	<input class="adjacent clear-left top10" type="checkbox" id="checkbox_endereco_favorito" name="favorito" value="1" />
+	<label class="adjacent top10" for="checkbox_endereco_favorito">Atribuir como endereço favorito</label>
     </div>
     
     <table class="list" id="enderecos">
@@ -199,7 +200,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	    <td><a href="javascript:void(0)" class="excluir">Excluir</a></td>
 	</tr>
 	<? } } else { ?>
-	<tr><td colspan="6">Nenhum endereço cadastrado</td></tr>
+	<tr id="nenhum_endereco"><td colspan="6">Nenhum endereço cadastrado</td></tr>
 	<? } ?>
     </table>
 

@@ -15,11 +15,11 @@ class StringUtil {
 	    }
 	}
 
-	return "[" . implode(",", $arrayTemp) . "]";
+	return '[' . implode(',', $arrayTemp) . ']';
     }
 
     static function doubleToCurrency($value) {
-	return $value ? ("R$ " . number_format($value, 2, ',', '.')) : "";
+	return $value ? ('R$ ' . number_format($value, 2, ',', '.')) : '';
     }
 
 }

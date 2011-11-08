@@ -51,7 +51,7 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
     
     <? foreach($tipos as $tipo) { ?>
     
-    <input class="adjacent" type="checkbox" name="tipos[]" value="<?= $tipo->id ?>" id="tipoproduto_id_<?= $tipo->id ?>" <? if($obj->temTipo($tipo->id)) { ?>checked="true"<? } ?>  />
+    <input class="adjacent" type="checkbox" name="tipos[]" value="<?= $tipo->id ?>" id="tipo_<?= $tipo->id ?>" <? if($obj->temTipo($tipo->id)) { ?>checked="true"<? } ?>  />
     <label class="adjacent" for="tipo_<?= $tipo->id ?>"><?= $tipo->nome ?></label>
     
     <? } ?>

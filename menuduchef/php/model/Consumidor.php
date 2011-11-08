@@ -27,6 +27,7 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 	array('email', 'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/', 'message' => 'inválido')
     );
     static $before_save = array('save_usuario');
+    static $after_save = array('save_enderecos');
     static $after_destroy = array('destroy_usuario');
 
     public function prepare_attributes(array &$attributes) {
@@ -56,6 +57,22 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 
 	$usuario->save();
 	$this->usuario_id = $usuario->id;
+    }
+    
+    public function save_enderecos() {
+	if($this->__request_attributes['hash']) {
+	    $enderecosMatrix = $_SESSION[$this->__request_attributes['hash']];
+	    
+	    if($enderecosMatrix) {
+		foreach($enderecosMatrix as $enderecoArray) {
+		    $endereco = new EnderecoConsumidor($enderecoArray);
+		    $endereco->consumidor_id = $this->id;
+		    $endereco->save();
+		}
+	    }
+	    
+	    unset($_SESSION[$this->__request_attributes['hash']]);
+	}
     }
 
     public function destroy_usuario() {

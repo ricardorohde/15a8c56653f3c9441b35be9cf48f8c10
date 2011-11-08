@@ -78,6 +78,30 @@ class HttpUtil {
 	exit;
     }
 
+    static function addArrayInSessionHash($array, $hash) {
+	if ($hash) {
+	    if (!$_SESSION[$hash]) {
+		$_SESSION[$hash] = array();
+	    }
+
+	    $_SESSION[$hash][] = $array;
+	}
+    }
+
+    static function utf8DecodeArray($array) {
+	if ($array) {
+	    $arrayDecoded = array();
+
+	    foreach ($array as $key => $value) {
+		$arrayDecoded[$key] = utf8_decode($value);
+	    }
+
+	    return $arrayDecoded;
+	}
+	
+	return null;
+    }
+
 }
 
 ?>
