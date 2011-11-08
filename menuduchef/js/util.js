@@ -2,6 +2,7 @@
  * Requires jQuery
  */
 var AREA_MODIFICAR_SENHA_ID = 'areaModificarSenha';
+var AREA_ENDERECO_DIALOG_ID = 'form_endereco';
 var COMBO_BOX_DEFAULT_OPTION = '<option value="">-- Selecione --</option>';
 var COMBO_BOX_DEFAULT_ENDERECO = '<option value="">-- Selecione um cliente e um restaurante primeiro --</option>';
 var COMBO_BOX_DEFAULT_BAIRRO = '<option value="">-- Selecione uma cidade primeiro --</option>';
@@ -227,6 +228,8 @@ function addEnderecoConsumidor(parameters, tableId) {
 
 	    $('#' + tableId).append($(row));
 	}
+	
+	$('#' + AREA_ENDERECO_DIALOG_ID).dialog('close');
     }, 'json');
 }
 
