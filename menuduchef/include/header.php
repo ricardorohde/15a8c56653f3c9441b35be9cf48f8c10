@@ -20,12 +20,14 @@ if (HttpUtil::isLocalhost()) {
         <title><?= SITE_TITLE ?></title>
         <base href="<?= $baseHref ?>" />
         <script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="js/util.js"></script>
         <script type='text/javascript' src="js/quickmenu.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link rel="stylesheet" type="text/css" href="css/menu.css" />
+	<link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" />
     </head>
     <body>
         
         <div id="conteudo">
-	    <? include("messages.php"); ?>
+	    <? include('messages.php'); ?>

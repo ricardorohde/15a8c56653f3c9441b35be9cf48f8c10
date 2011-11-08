@@ -1,17 +1,17 @@
-E-mail<br />
-<input type="text" name="email" autocomplete="off" value="<?= $obj->email ?>" maxlength="255" /><br /><br />
+<label class="normal">E-mail:</label>
+<input class="formfield w50" type="text" name="email" autocomplete="off" value="<?= $obj->email ?>" maxlength="255" />
 
 <? if($obj->id) { ?>
-    <input type="checkbox" name="modificarSenha" id="modificarSenha" value="1" />
-    <label for="modificarSenha">Modificar senha</label>
-    <br /><br />
+    <input class="adjacent clear-left top10" type="checkbox" name="modificarSenha" id="modificarSenha" value="1" />
+    <label class="adjacent top10" for="modificarSenha">Modificar senha</label>
 <? } ?>
 
-<span id="areaModificarSenha" <? if($obj->id) { ?>style="display: none"<? } ?>>
-    Senha<br />
-    <input type="password" name="senha" autocomplete="off" maxlength="100" /><br /><br />
-    Repita a senha<br />
-    <input type="password" name="senha_rep" autocomplete="off" maxlength="100" /><br clear="all" /><br />
+<span class="left w100" id="areaModificarSenha" <? if($obj->id) { ?>style="display: none"<? } ?>>
+    <label class="normal">Senha:</label>
+    <input class="formfield w15" type="password" name="senha" autocomplete="off" maxlength="100" />
+    
+    <label class="normal">Repita a senha:</label>
+    <input class="formfield w15" type="password" name="senha_rep" autocomplete="off" maxlength="100" />
 </span>
 
 <script type="text/javascript">

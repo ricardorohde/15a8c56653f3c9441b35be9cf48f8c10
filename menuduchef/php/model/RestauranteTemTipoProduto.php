@@ -7,6 +7,13 @@ class RestauranteTemTipoProduto extends ActiveRecord\Model {
 	array('restaurante', 'foreign_key' => 'restaurante_id'),
 	array('tipo_produto', 'foreign_key' => 'tipoproduto_id')
     );
+    static $validates_presence_of = array(
+	array('restaurante', 'message' => 'obrigatório'),
+	array('tipo_produto', 'message' => 'obrigatório')
+    );
+    static $validates_uniqueness_of = array(
+	array(array('Restaurante' => 'restaurante_id', 'Tipo de produto' => 'tipoproduto_id'), 'message' => 'já estão associados')
+    );
 
 }
 

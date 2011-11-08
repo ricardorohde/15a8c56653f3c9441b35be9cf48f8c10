@@ -10,12 +10,13 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Restaurantes tem Tipos de Produto</h2>
 
 <a href="admin/restaurante_tem_tipo_produto/" title="Cancelar">Cancelar</a>
-<br /><br />
 
 <form action="admin/restaurante_tem_tipo_produto/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
-    Restaurante<br />
-    <select name="restaurante_id">-- Selecione --</option>
+    
+    <label class="normal">Restaurante:</label>
+    <select class="formfield w40" name="restaurante_id">
+	<option value="">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
@@ -24,9 +25,10 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
 	    <? }
 	} ?>
     </select>
-    <br /><br />
-    Tipo de Produto<br />
-    <select name="tipo_id">-- Selecione --</option>
+
+    <label class="normal">Tipo de Produto:</label>
+    <select class="formfield w40" name="tipoproduto_id">
+	<option value="">-- Selecione --</option>
 	<?
 	if ($tipos) {
 	    foreach ($tipos as $tipo) {
@@ -37,7 +39,7 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
     </select>
     <br /><br />
         
-    <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
+    <input class="btn" type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 
 <? include("../../include/footer.php"); ?>

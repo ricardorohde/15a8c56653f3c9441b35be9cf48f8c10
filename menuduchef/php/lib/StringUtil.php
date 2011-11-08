@@ -8,7 +8,7 @@ class StringUtil {
 	if ($collection) {
 	    foreach ($collection as $element) {
 		if($include) {
-		    $arrayTemp[] = $element->to_json(array("include" => $include));
+		    $arrayTemp[] = $element->to_json(array('include' => $include));
 		} else {
 		    $arrayTemp[] = $element->to_json();
 		}

@@ -10,12 +10,13 @@ $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais pertencentes a Produtos</h2>
 
 <a href="admin/produto_tem_produto_adicional/" title="Cancelar">Cancelar</a>
-<br /><br />
 
 <form action="admin/produto_tem_produto_adicional/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
-    Produto<br />
-    <select name="produto_id">-- Selecione --</option>
+    
+    <label class="normal">Produto:</label>
+    <select class="formfield w40" name="produto_id">
+	<option value="">-- Selecione --</option>
 	<?
 	if ($produtos) {
 	    foreach ($produtos as $produto) {
@@ -24,9 +25,10 @@ $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 	    <? }
 	} ?>
     </select>
-    <br /><br />
-    Produto Adicional<br />
-    <select name="produtoadicional_id">-- Selecione --</option>
+
+    <label class="normal">Produto Adicional:</label>
+    <select class="formfield w40" name="produtoadicional_id">
+	<option value="">-- Selecione --</option>
 	<?
 	if ($produtos_adicionais) {
 	    foreach ($produtos_adicionais as $produto_adicional) {
@@ -35,9 +37,8 @@ $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 	    <? }
 	} ?>
     </select>
-    <br /><br />
         
-    <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
+    <input class="btn" type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 
 <? include("../../include/footer.php"); ?>

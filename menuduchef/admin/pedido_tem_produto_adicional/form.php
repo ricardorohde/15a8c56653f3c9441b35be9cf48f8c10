@@ -26,30 +26,29 @@ $qtd_acompanhamentos_existente = 0;
 <h2><a href="admin/">Menu Principal</a> &raquo;  <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; <a href="admin/pedido_tem_produto/?ped=<?= $_GET['ped'] ?>">Gerenciar Produtos inclusos nos Pedidos</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 
 <a href="admin/pedido_tem_produto_adicional/?prodnoped=<?= $_GET['prodnoped'] ?>&ped=<?= $_GET['ped'] ?>" title="Cancelar">Cancelar</a>
-<br /><br />
 
 <form action="admin/pedido_tem_produto_adicional/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     <input type="hidden" name="ped" value="<?= $_GET['ped'] ?>" />
     <input type="hidden" name="prodnoped" value="<?= $_GET['prodnoped'] ?>" />
     <input type="hidden" name="pedidotemproduto_id" value="<?= $_GET['prodnoped'] ?>" />
-    Pedido tem Produto<br /><? if($pedido_tem_produto){ 
-         echo $pedido_tem_produto->id." ".$pedido_tem_produto->produto->nome;  
-      } ?>
+    
+    <label class="normal">Pedido tem Produto:</label>
+    <? if($pedido_tem_produto) { ?>
+	<label class="adjacent"><?= $pedido_tem_produto->id." ".$pedido_tem_produto->produto->nome ?></label>
+    <? } ?>
 
-    <br /><br />
     <? if($tem_adicionias){ ?>
         <? if($_GET['id']){ ?>
-            <?= $obj->produto_adicional->quantas_unidades_ocupa>0 ? "Acompanhamento" : "Por&ccedil;&atilde;o Extra" ?>
-        <? } else{ 
-                if($limite_acompanhamento_alcancado){
-                    echo "Por&ccedil;&atilde;o Extra";
-                }else{
-                    echo "Acompanhamento ou Por&ccedil;&atilde;o Extra";
-                }
-           } ?>
-        <br />
-        <select name="produtoadicional_id"><option>-- Selecione --</option>
+            <label class="normal"><?= $obj->produto_adicional->quantas_unidades_ocupa>0 ? "Acompanhamento" : "Por&ccedil;&atilde;o Extra" ?>:</label>
+        <? } else { ?>
+	<? if($limite_acompanhamento_alcancado) { ?>
+	    <label class="normal">Por&ccedil;&atilde;o Extra:</label>
+	<? } else { ?>
+            <label class="normal">Acompanhamento ou Por&ccedil;&atilde;o Extra:</label>
+	<? } } ?>
+
+	<select class="formfield w40" name="produtoadicional_id"><option>-- Selecione --</option>
             <?
             if ($produto_tem_adicionais) {
                 $aviso_nao_tem_porcao_extra = 0;
@@ -82,16 +81,15 @@ $qtd_acompanhamentos_existente = 0;
                 }
             }
             if($aviso_nao_tem_porcao_extra==0){ ?>
-                           <option selected>-- N&atilde;o h&aacute; por&ccedil;&otilde;es extras cadastradas para este produto --</option>
+	       <option selected>-- N&atilde;o h&aacute; por&ccedil;&otilde;es extras cadastradas para este produto --</option>
         <?  }
 ?>
         </select>
-        <br /><br />
 
-        <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
-    <? }else{
-        echo "Nenhum acompanhamento e/ou por&ccedil;&atilde;o extra cadastrado para este produto.";
-    } ?>
+    <input class="btn" type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
+    <? } else { ?>
+	<label class="adjacent">Nenhum acompanhamento e/ou por&ccedil;&atilde;o extra cadastrado para este produto.</label>
+    <? } ?>
 </form>
 
 <? include("../../include/footer.php"); ?>

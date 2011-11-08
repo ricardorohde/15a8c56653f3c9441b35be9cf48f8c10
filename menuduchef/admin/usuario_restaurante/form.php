@@ -9,16 +9,15 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Gerentes e Atendentes de Restaurantes</h2>
 
 <a href="admin/usuario_restaurante/" title="Cancelar">Cancelar</a>
-<br /><br />
 
 <form action="admin/usuario_restaurante/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     
-    Nome<br />
-    <input type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" /><br /><br />
+    <label class="normal">Nome:</label>
+    <input class="formfield w50" type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" />
     
-    Restaurante<br />
-    <select name="restaurante_id">
+    <label class="normal">Restaurante:</label>
+    <select class="formfield w40" name="restaurante_id">
 	<option value="">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
@@ -28,19 +27,17 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 	    <? }
 	} ?>
     </select>
-    <br /><br />
     
-    Perfil<br />
-    <select name="perfil">
+    <label class="normal">Perfil:</label>
+    <select class="formfield w25" name="perfil">
 	<option value="0">-- Selecione --</option>
 	<option <? if($obj->tipo == Usuario::$GERENTE) { ?>selected="true"<? } ?> value="<?= Usuario::$GERENTE ?>"><?= Usuario::getNomePerfilById(Usuario::$GERENTE) ?></option>
 	<option <? if($obj->tipo == Usuario::$ATENDENTE) { ?>selected="true"<? } ?> value="<?= Usuario::$ATENDENTE ?>"><?= Usuario::getNomePerfilById(Usuario::$ATENDENTE) ?></option>
     </select>
-    <br /><br />
 
     <? include("../../include/inputs_email_senha.php"); ?>
 
-    <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
+    <input class="btn" type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 
 <? include("../../include/footer.php"); ?>

@@ -34,7 +34,7 @@ $itens = Pedido::all(array("order" => "quando asc"));
 		<td><?= $item->quando->format('H:i:s m/d/Y') ?></td>
                 <td><?= $item->pagamento_efetuado ?></td>
                 <td><?= $item->forma_pagamento ?></td>
-                <td><?= $item->preco ?></td>
+                <td><?= $item->getTotal() ?></td>
                 <td><?= $item->troco ?></td>
                 <td><?= $item->cupom ?></td>
                 <td><?= $item->endereco ?></td>

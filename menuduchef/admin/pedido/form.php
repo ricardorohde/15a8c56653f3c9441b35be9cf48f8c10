@@ -25,14 +25,15 @@ $preco_total = 0;
 <h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Pedidos</h2>
 
 <a href="admin/pedido/" title="Cancelar">Cancelar</a>
-<br /><br />
 
 <form action="admin/pedido/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
-    Consumidor<br /><? if($obj->consumidor_id){ 
-         echo $obj->consumidor->nome;  
-      }else{ ?>
-    <select id='consumidores' name="consumidor_id">
+    
+    <label class="normal">Consumidor:</label>
+    <? if($obj->consumidor_id) { ?>
+    <label class="adjacent"><?= $obj->consumidor->nome ?></label>
+    <? } else { ?>
+    <select class="formfield w40" id="consumidores" name="consumidor_id">
         <option value="">-- Selecione --</option>
 	<?
 	if ($consumidores) {
@@ -43,11 +44,12 @@ $preco_total = 0;
 	} ?>
     </select>
     <? } ?>
-    <br /><br />
-    Restaurante<br /><? if($obj->restaurante_id){ 
-         echo $obj->restaurante->nome;  
-      }else{ ?>
-    <select id="restaurantes" name="restaurante_id">
+    
+    <label class="normal">Restaurante:</label>
+    <? if($obj->restaurante_id) { ?>
+    <label class="adjacent"><?= $obj->restaurante->nome ?></label>
+    <? } else { ?>
+    <select class="formfield w40" id="restaurantes" name="restaurante_id">
         <option value="">-- Selecione --</option>
 	<?
 	if ($restaurantes) {
@@ -58,12 +60,12 @@ $preco_total = 0;
 	} ?>
     </select>
     <? } ?>
-    <br /><br />
-    Endere&ccedil;o da entrega<br />
-    <select id="enderecos" name="endereco_id"></select>
-    <br /><br />
+    
+    <label class="normal">Endere&ccedil;o da entrega:</label>
+    <select class="formfield w40" id="enderecos" name="endereco_id"></select>
+    
     <? if($obj->id) { ?>
-    Itens inclusos:<br />
+    <label class="normal">Itens inclusos:</label>
     <div id="proInput">
     <?
         $proc = 1;
@@ -84,36 +86,46 @@ $preco_total = 0;
             }
             $preco_total += (($pro->preco_unitario + $valor_adicional) * $pro->qtd);
              ?>
-            <div><? echo $pro->qtd; ?>x <? echo $pro->produto->nome; ?> <? if($pro->tamanho){ echo " (".$pro->tamanho.") ";} ?> <? if($adicionais){ echo " ---Adicionais: ".$adicionais." ";} ?> <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?> <? echo " ---Valor Unit&aacute;rio: ".StringUtil::doubleToCurrency($pro->preco_unitario);
-            if($adicionais){ echo " + (".$valor_adicional.")"; }
-            ?> 
+            <div>
+		<label class="adjacent">
+		    <?= $pro->qtd ?>x <?= $pro->produto->nome ?>
+		    <? if($pro->tamanho) { echo " (".$pro->tamanho.") ";} ?>
+		    <? if($adicionais){ echo " ---Adicionais: ".$adicionais." ";} ?>
+		    <? if($pro->obs){ echo " ---[OBS:".$pro->obs."] ";} ?>
+		    <? echo " ---Valor Unit&aacute;rio: ".StringUtil::doubleToCurrency($pro->preco_unitario);
+		    if($adicionais){ echo " + (".$valor_adicional.")"; }
+		    ?>
+		</label>
             </div>
         <? $proc++; } }
     ?>
     </div>
-    <a href="admin/pedido_tem_produto/?ped=<?= $obj->id ?>">Acrescentar/Modificar/Excluir Itens</a><br /><br />
+    <a class="left clear-both top10" href="admin/pedido_tem_produto/?ped=<?= $obj->id ?>">Acrescentar/Modificar/Excluir Itens</a>
     <? } ?>
     
-    Pagamento Efetuado<br />
-    <input type="radio" name="pagamento_efetuado" value="1" <? if (!$obj->id || $obj->pagamento_efetuado === 1) { ?>checked="true"<? } ?> />Sim
-    <input type="radio" name="pagamento_efetuado" value="0" <? if ($obj->id && $obj->pagamento_efetuado === 0) { ?>checked="true"<? } ?> />Não
-    <br /><br />
-    Forma de Pagamento<br />
-    <input type="text" name="forma_pagamento" value="<?= $obj->forma_pagamento ?>" maxlength="100" /><br /><br />
+    <label class="normal">Pagamento Efetuado:</label>
+    <input class="adjacent" id="pagamento_efetuado_sim" type="radio" name="pagamento_efetuado" value="1" <? if ($obj->id && $obj->pagamento_efetuado === 1) { ?>checked="true"<? } ?> />
+    <label for="pagamento_efetuado_sim" class="adjacent">Sim</label>
+    <input class="adjacent" id="pagamento_efetuado_nao" type="radio" name="pagamento_efetuado" value="0" <? if (!$obj->id || $obj->pagamento_efetuado === 0) { ?>checked="true"<? } ?> />
+    <label for="pagamento_efetuado_nao" class="adjacent">Não</label>
+    
+    <label class="normal">Forma de Pagamento:</label>
+    <input class="formfield w15" type="text" name="forma_pagamento" value="<?= $obj->forma_pagamento ?>" maxlength="100" />
     <? if($_GET['id']){ ?>
-    Pre&ccedil;o<br />
-    <?= StringUtil::doubleToCurrency($preco_total) ?><br /><br />
+    <label class="normal">Pre&ccedil;o:</label>
+    <label class="adjacent"><?= StringUtil::doubleToCurrency($obj->getTotal()) ?></label>
     <? } ?>
-    Troco<br />
-    <input type="text" name="troco" value="<?= $obj->troco ?>" maxlength="100" /><br /><br />
-    Cupom<br />
-    <input type="text" name="cupom" value="<?= $obj->cupom ?>" maxlength="100" /><br /><br />
-    Endere&ccedil;o<br />
-    <input type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br /><br />
-    Situa&ccedil;&atilde;o<br />
-    <input type="text" name="situacao" value="<?= $obj->situacao ?>" maxlength="100" /><br /><br />
     
-    <input type="submit" value="<?= $obj->id ? "Modificar" : "Criar pedido e adicionar produtos" ?>" />
+    <label class="normal">Troco:</label>
+    <input class="formfield w15" type="text" name="troco" value="<?= $obj->troco ?>" maxlength="100" />
+    
+    <label class="normal">Cupom:</label>
+    <input class="formfield w15" type="text" name="cupom" value="<?= $obj->cupom ?>" maxlength="100" />
+    
+    <label class="normal">Situa&ccedil;&atilde;o:</label>
+    <input class="formfield w15" type="text" name="situacao" value="<?= $obj->situacao ?>" maxlength="100" />
+    
+    <input class="btn" type="submit" value="<?= $obj->id ? "Modificar" : "Criar pedido e adicionar produtos" ?>" />
 </form>
 
 <? include("../../include/footer.php"); ?>

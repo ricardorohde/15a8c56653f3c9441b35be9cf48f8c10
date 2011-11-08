@@ -10,6 +10,10 @@ class ProdutoAdicional extends ActiveRecord\Model {
 	array('produto_tem_produtos_adicionais', 'class_name' => 'ProdutoTemProdutoAdicional'),
 	array('produtos', 'through' => 'produto_tem_produtos_adicionais', 'class_name' => 'Produto')
     );
+    static $validates_presence_of = array(
+	array('nome', 'message' => 'obrigatório'),
+	array('restaurante', 'message' => 'obrigatório')
+    );
 
 }
 

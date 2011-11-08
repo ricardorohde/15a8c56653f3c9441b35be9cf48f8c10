@@ -1,3 +1,4 @@
+/* Regras gerais */
 * { margin: 0; padding: 0; }
 body { width: 100%; background-color: #ccc; }
 #conteudo { float: left; width: 80%; margin: 0 10%; padding: 5px 5px 15px; background-color: #fff; }
@@ -12,19 +13,54 @@ h2, h2 a { font-size: 16px; }
 .msg { float: left; width: 99%; margin-bottom: 1px; color: white; font-weight: bold; padding: 3px; }
 .error { background-color: red; }
 .info, .warning { background-color: blue; }
-.left { float: left; }
-.right { float: right; }
-.tleft { text-align: left; }
-.tright { text-align: right; }
-.w25 { width: 25%; }
-.w40 { width: 40%; }
-.w50 { width: 50%; }
 
-table.list { border-collapse: collapse; }
+table.list { float:left; border-collapse: collapse; }
 table.list tr td, table.list tr th { border: #000 solid 1px; padding: 3px; }
 table.list tr th { font-weight: bold; text-align: center; }
 ul { margin-left: 30px; }
 ul li { margin: 5px 0 0 15px; }
 ul li span.title { font-weight: bold; }
 
+a { color: #999; font-weight: bold; text-decoration: underline; }
+a:hover { color: #555; }
+
+.adjacent { float: left; margin-top: 5px; }
+
+input, select, textarea { float: left; padding: 4px; }
+input.formfield, select.formfield, textarea.formfield { clear: both; }
+input.btn { clear: both; margin-top: 10px; }
+
+label { cursor: pointer; }
+label.normal { float: left; width: 100%; margin: 10px 0 5px 0; font-weight: bold; }
+label.adjacent { margin-left: 3px; margin-right: 10px; }
+
 #painel_area_administrativa { float:left; width: 100%; margin-bottom: 10px; border-bottom: #CCC solid 1px; }
+
+/* Regras para tratar exceções */
+.left { float: left; }
+.right { float: right; }
+.tleft { text-align: left; }
+.tright { text-align: right; }
+.w10 { width: 10%; }
+.w15 { width: 15%; }
+.w20 { width: 20%; }
+.w25 { width: 25%; }
+.w40 { width: 40%; }
+.w50 { width: 50%; }
+.w60 { width: 60%; }
+.w70 { width: 70%; }
+.w80 { width: 80%; }
+.w90 { width: 90%; }
+.w100 { width: 100%; }
+
+.bottom10 { margin-bottom: 10px; }
+.bottom15 { margin-bottom: 15px; }
+
+.top10 { margin-top: 10px; }
+.top15 { margin-top: 15px; }
+
+.clear-left { clear: left; }
+.clear-right { clear: right; }
+.clear-both { clear: both; }
+
+.bold { font-weight: bold; }
