@@ -6,11 +6,13 @@ $categorias = RestauranteTemTipoProduto::all(array("conditions" => array("restau
 ?>
 
 <script>
-var allHTMLTags = new Array();
 
-$("#ver_completo").click( function(){
-    alert("EEEE");
-});   
+$(document).ready(function() {
+    $("#ver_completo").click( function(){
+        $(".filtro_categoria").attr("checked","true");
+        $(".categoria").show();
+    });
+});
 function poe_no_carrinho(x){
     conteudo = document.getElementById('carrinho');
     produto = document.getElementById('nome_'+x).value;
@@ -81,9 +83,10 @@ function menos(x){
         <table class="list">
             <? if($categorias){
                     foreach($categorias as $categoria){ ?>
+                        <tr><td><div class="categoria" id="categoria_<?= $categoria->tipoproduto_id ?>" ><table>
                         <tr><th colspan="3" style="color:#CC0000;"><?= $categoria->tipo_produto->nome ?></th></tr>
                         <tr><td colspan="3">
-                                <div id="categoria_<?= $categoria->tipoproduto_id ?>" ><table style="width:100%">
+                                <table style="width:550px;">
                     <? 
                         $itens = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id INNER JOIN restaurante_tem_tipo_produto RTTP ON PTT.tipoproduto_id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = ".$_GET['res']." AND PTT.tipoproduto_id = ".$categoria->tipoproduto_id." AND P.restaurante_id = ".$_GET['res']." ORDER BY P.nome asc");
                         if($itens){
@@ -96,8 +99,9 @@ function menos(x){
                                    <tr><td colspan='3'><div id="obsprod_<?= $item->id ?>" style="display:none;"><textarea id="obsbox_<?= $item->id ?>" style="width:100%; height: 45px;"></textarea></div></td></tr>
                            <? }
                         }?>
-                                </table></div>
+                                </table>
                        </td></tr>
+                                </table></div></td></tr>
                     <?}
              } ?>
         
