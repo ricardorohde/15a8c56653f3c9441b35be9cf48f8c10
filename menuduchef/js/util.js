@@ -2,7 +2,7 @@
  * Requires jQuery
  */
 var AREA_MODIFICAR_SENHA_ID = 'areaModificarSenha';
-var AREA_ENDERECO_DIALOG_ID = 'form_endereco';
+var ENDERECO_DIALOG_ID = 'form_endereco';
 var COMBO_BOX_DEFAULT_OPTION = '<option value="">-- Selecione --</option>';
 var COMBO_BOX_DEFAULT_ENDERECO = '<option value="">-- Selecione um cliente e um restaurante primeiro --</option>';
 var COMBO_BOX_DEFAULT_BAIRRO = '<option value="">-- Selecione uma cidade primeiro --</option>';
@@ -213,23 +213,34 @@ function autoCompleteProdutosCheckBox(idRestaurante) { //seinao ainda
     }
 }
 
-function addEnderecoConsumidor(parameters, tableId) {
+function addEnderecoConsumidor(parameters, tableId, imgLoading) {
+    $('#mensagens_endereco').empty().append($('<img src="' + imgLoading.src + '" alt="Carregando" title="Carregando" />'));
+    
     $.post(URL_ENDERECO_CONSUMIDOR, parameters, function(data) {
 	if(!isEmpty(data)) {
-	    $('#nenhum_endereco').remove();
-	    var row = '<tr>';
-	    row += '<td>' + data.logradouro + '</td>';
-	    row += '<td>' + data.bairro.cidade.nome + '</td>';
-	    row += '<td>' + data.bairro.nome + '</td>';
-	    row += '<td>' + 0 + '</td>';
-	    row += '<td><input type="radio" name="favorito" ' + (data.favorito ? 'checked="true"' : '') + ' /></td>';
-	    row += '<td><a href="javascript:void(0)" class="excluir">Excluir</a></td>';
-	    row += '</tr>';
+	    if(!data.errors) {
+		$('#nenhum_endereco').remove();
+		var row = '<tr>';
+		row += '<td>' + data.logradouro + '</td>';
+		row += '<td>' + data.bairro.cidade.nome + '</td>';
+		row += '<td>' + data.bairro.nome + '</td>';
+		row += '<td>' + 0 + '</td>';
+		row += '<td><input type="radio" name="favorito" ' + (data.favorito ? 'checked="true"' : '') + ' /></td>';
+		row += '<td><a href="javascript:void(0)" class="excluir">Excluir</a></td>';
+		row += '</tr>';
 
-	    $('#' + tableId).append($(row));
+		$('#' + tableId).append($(row));
+		$('#' + ENDERECO_DIALOG_ID).dialog('close');
+	    } else {
+		$('#mensagens_endereco').empty();
+		
+		$.each(data.errors, function(index, key) {
+		    $('#mensagens_endereco').append($(
+			'<div class="msg error">&raquo; ' + key.error + '</div>'
+		    ));
+		});
+	    }
 	}
-	
-	$('#' + AREA_ENDERECO_DIALOG_ID).dialog('close');
     }, 'json');
 }
 

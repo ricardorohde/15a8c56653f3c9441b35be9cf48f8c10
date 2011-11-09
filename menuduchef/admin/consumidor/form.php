@@ -55,6 +55,9 @@ $hash = 'consumidor' . time();
 	$('#add_endereco').click(function() {
 	   $('#form_endereco').dialog('open'); 
 	});
+	
+	var imgLoading = new Image();
+	imgLoading.src = '<?= PATH_IMAGE_LOADING ?>';
 
 	$('#form_endereco').dialog({
 	    autoOpen: false,
@@ -63,7 +66,7 @@ $hash = 'consumidor' . time();
 	    resizable: false,
 	    buttons: {
 		'Adicionar endereço': function() {
-		    addEnderecoConsumidor($('input, select, textarea', this).add('#hash').serializeArray(), 'enderecos');
+		    addEnderecoConsumidor($('input, select, textarea', this).add('#hash').serializeArray(), 'enderecos', imgLoading);
 		},
 		'Cancelar': function () {
 		    $(this).dialog('close');
@@ -78,6 +81,7 @@ $hash = 'consumidor' . time();
 	    },
 	    close: function() {
 		clearFormElements(this);
+		$('#mensagens_endereco').empty();
 	    }
 	});
     });
@@ -160,6 +164,8 @@ $hash = 'consumidor' . time();
     <a id="add_endereco" class="left w100 bottom10" href="javascript:void(0)">Adicionar</a>
     <br /><br />
     <div id="form_endereco" title="Adicionar endereço">
+	<div id="mensagens_endereco"></div>
+	
 	<label class="normal">Cidade:</label>
 	
 	<select class="w80 formfield" id="cidade_endereco" name="cidade_id">
@@ -187,6 +193,7 @@ $hash = 'consumidor' . time();
 	    <th>CEP</th>
 	    <th>Favorito</th>
 	    <th></th>
+	    <th></th>
 	</tr>
 	<? if ($obj->enderecos) {
 	    foreach($obj->enderecos as $endereco) {
@@ -197,6 +204,7 @@ $hash = 'consumidor' . time();
 	    <td><?= $endereco->bairro->nome ?></td>
 	    <td><?= 0 ?></td>
 	    <td align="center"><input type="radio" name="favorito" <?= $endereco->favorito ? 'checked="true"' : '' ?> /></td>
+	    <td><a href="javascript:void(0)" class="modificar">Modificar</a></td>
 	    <td><a href="javascript:void(0)" class="excluir">Excluir</a></td>
 	</tr>
 	<? } } else { ?>
