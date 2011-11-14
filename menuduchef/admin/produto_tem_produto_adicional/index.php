@@ -37,4 +37,4 @@ $itens = ProdutoTemProdutoAdicional::all(array("order" => "produto_id asc"));
     <? } ?>
 </table>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

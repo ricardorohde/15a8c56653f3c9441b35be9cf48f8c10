@@ -3,7 +3,7 @@ $libDirectoryArray = array("php/lib", "../php/lib", "../../php/lib");
 
 foreach ($libDirectoryArray as $directory) {
     if (is_dir($directory)) {
-        $libDirectory = $directory;
+	$libDirectory = $directory;
     }
 }
 
@@ -15,7 +15,10 @@ if (HttpUtil::isLocalhost()) {
     $baseHref = URL_PRODUCTION;
 }
 ?>
-<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd"
+    >
+<html lang="pt">
     <head>
         <title><?= SITE_TITLE ?></title>
         <base href="<?= $baseHref ?>" />
@@ -26,8 +29,12 @@ if (HttpUtil::isLocalhost()) {
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link rel="stylesheet" type="text/css" href="css/menu.css" />
 	<link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" />
+	<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">  
+	<link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen"> 
+	<!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
     </head>
     <body>
-        
-        <div id="conteudo">
-	    <? include('messages.php'); ?>
+	<div class="container">
+	    <div id="background_container">
+		    <? include('messages.php'); ?>

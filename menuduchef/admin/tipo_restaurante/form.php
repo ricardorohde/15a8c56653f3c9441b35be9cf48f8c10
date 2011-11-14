@@ -17,4 +17,4 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("TipoRestaurante");
     <input class="btn" type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

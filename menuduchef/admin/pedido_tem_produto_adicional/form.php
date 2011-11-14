@@ -92,4 +92,4 @@ $qtd_acompanhamentos_existente = 0;
     <? } ?>
 </form>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

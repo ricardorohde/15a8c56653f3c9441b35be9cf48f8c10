@@ -27,97 +27,97 @@ function autoCompleteComboBox(url, parameters, targetId, valueIndex, description
     target.empty().append($(COMBO_BOX_LOADING_OPTION));
     
     $.getJSON(url, parameters, function(data) {
-        if(!isEmpty(data)) {
-            target.empty().append($(COMBO_BOX_DEFAULT_OPTION));
+	if(!isEmpty(data)) {
+	    target.empty().append($(COMBO_BOX_DEFAULT_OPTION));
 	    
-            $.each(data, function(index, key) {
-                contentOption = '<option value="' + key[valueIndex] + '"';
-                var preSelected = false;
+	    $.each(data, function(index, key) {
+		contentOption = '<option value="' + key[valueIndex] + '"';
+		var preSelected = false;
                 
-                if(preSelectedValue) {
-                    if(preSelectedValue == key[valueIndex]) {
-                        preSelected = true;
-                    }
-                } else if(booleanIndex) {
-                    if(key[booleanIndex]) {
-                        preSelected = true;
-                    }
-                }
+		if(preSelectedValue) {
+		    if(preSelectedValue == key[valueIndex]) {
+			preSelected = true;
+		    }
+		} else if(booleanIndex) {
+		    if(key[booleanIndex]) {
+			preSelected = true;
+		    }
+		}
                 
-                if(preSelected) {
-                    contentOption += ' selected="true"';
-                }
+		if(preSelected) {
+		    contentOption += ' selected="true"';
+		}
                 
-                contentOption += '>' + key[descriptionIndex] + '</option>';
-                target.append($(contentOption));
-            });
-        } else {
-            target.empty().append($(COMBO_BOX_DEFAULT_OPTION));
-        }
+		contentOption += '>' + key[descriptionIndex] + '</option>';
+		target.append($(contentOption));
+	    });
+	} else {
+	    target.empty().append($(COMBO_BOX_DEFAULT_OPTION));
+	}
     });
 }
 
 function autoCompleteSegundoSabor(idProduto) {
     if(idProduto) {
-        autoShow(URL_PRODUTO_SEGUNDO_SABOR, {
-            'id': idProduto
-        }, 'sabor_extra');
+	autoShow(URL_PRODUTO_SEGUNDO_SABOR, {
+	    'id': idProduto
+	}, 'sabor_extra');
     } else {
 		
-        $('#sabor_extra').hide();
+	$('#sabor_extra').hide();
     }
 }
 
 function autoShow(url, parameters, targetId) {
     var target = $('#' + targetId);
     $.getJSON(url, parameters, function(data) {
-        if(!isEmpty(data)) {
-            target.show();
-        } else {
-            target.hide();
-        }
+	if(!isEmpty(data)) {
+	    target.show();
+	} else {
+	    target.hide();
+	}
     });
 }
 
 function autoCompleteEnderecos(idConsumidor, idRestaurante, preSelectedIdEndereco) {
     if(idConsumidor && idRestaurante) {
-        autoCompleteComboBox(URL_ENDERECOS_JSON, {
-            'idConsumidor': idConsumidor,
-            'idRestaurante': idRestaurante
-        }, 'enderecos', 'id', 'logradouro', preSelectedIdEndereco, 'favorito');
+	autoCompleteComboBox(URL_ENDERECOS_JSON, {
+	    'idConsumidor': idConsumidor,
+	    'idRestaurante': idRestaurante
+	}, 'enderecos', 'id', 'logradouro', preSelectedIdEndereco, 'favorito');
         
-        $('#enderecos').removeAttr('disabled');
+	$('#enderecos').removeAttr('disabled');
     } else {
-        $('#enderecos').empty().append($(COMBO_BOX_DEFAULT_ENDERECO)).attr('disabled', true);
+	$('#enderecos').empty().append($(COMBO_BOX_DEFAULT_ENDERECO)).attr('disabled', true);
     }
 }
 
 function autoCompleteBairros(idCidade, comboboxBairrosId, preSelectedIdBairro) {
     if(idCidade) {
-        autoCompleteComboBox(URL_BAIRROS_JSON, {
-            'id': idCidade
-        }, comboboxBairrosId, 'id', 'nome', preSelectedIdBairro);
+	autoCompleteComboBox(URL_BAIRROS_JSON, {
+	    'id': idCidade
+	}, comboboxBairrosId, 'id', 'nome', preSelectedIdBairro);
     } else {
-        $('#' + comboboxBairrosId).empty().append($(COMBO_BOX_DEFAULT_BAIRRO));
+	$('#' + comboboxBairrosId).empty().append($(COMBO_BOX_DEFAULT_BAIRRO));
     }
 }
 
 function autoCompleteProdutos(idRestaurante, preSelectedIdProduto) {
     if(idRestaurante) {
-        autoCompleteComboBox(URL_PRODUTOS_JSON, {
-            'id': idRestaurante
-        }, 'produtos', 'id', 'nome', preSelectedIdProduto);
+	autoCompleteComboBox(URL_PRODUTOS_JSON, {
+	    'id': idRestaurante
+	}, 'produtos', 'id', 'nome', preSelectedIdProduto);
     } else {
 		
-        $('#produtos').empty().append($(COMBO_BOX_DEFAULT_PRODUTO));
+	$('#produtos').empty().append($(COMBO_BOX_DEFAULT_PRODUTO));
     }
 }
 
 function permitirModificarSenha() {
     if($(this).attr('checked')) {
-        $('#' + AREA_MODIFICAR_SENHA_ID).show();
+	$('#' + AREA_MODIFICAR_SENHA_ID).show();
     } else {
-        $('#' + AREA_MODIFICAR_SENHA_ID).hide();
+	$('#' + AREA_MODIFICAR_SENHA_ID).hide();
     }
 }
 
@@ -126,26 +126,26 @@ function autoCompleteBairrosCheckBox(idCidade, idRestaurante) {
     target.empty().append($(CHECK_BOX_LOADING_OPTION));
 
     $.getJSON(URL_BAIRROS_JSON, {
-        'id': idCidade
+	'id': idCidade
     }, function(data) {
-        if(!isEmpty(data)) {
-            target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
+	if(!isEmpty(data)) {
+	    target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
 
-            $.each(data, function(index, key) {
-                $.getJSON('php/controller/restaurante_atende_bairro_json.php', {
-                    'restaurante_id': idRestaurante, 
-                    'bairro_id': key.id
-                }, function(atende) {
-                    target.append($('<input class="adjacent clear-left top10" type="checkbox" name="bairros[]" value="' + key.id + '" id="bairro' + key.id + '" ' + (atende ? 'checked="true"' : '') + ' />'));
-                    target.append($('<label class="adjacent top10" for="bairro' + key.id + '">' + key.nome + '</label>'));
-                    target.append($('<input class="adjacent" type="text" name="preco_entrega[]" value="' + (atende ? atende.preco_entrega : '') + '" id="preco_entrega' + key.id + '" />'));
-                    target.append($('<br />'));
-                });
-            });
+	    $.each(data, function(index, key) {
+		$.getJSON('php/controller/restaurante_atende_bairro_json.php', {
+		    'restaurante_id': idRestaurante, 
+		    'bairro_id': key.id
+		}, function(atende) {
+		    target.append($('<input class="adjacent clear-left top10" type="checkbox" name="bairros[]" value="' + key.id + '" id="bairro' + key.id + '" ' + (atende ? 'checked="true"' : '') + ' />'));
+		    target.append($('<label class="adjacent top10" for="bairro' + key.id + '">' + key.nome + '</label>'));
+		    target.append($('<input class="adjacent" type="text" name="preco_entrega[]" value="' + (atende ? atende.preco_entrega : '') + '" id="preco_entrega' + key.id + '" />'));
+		    target.append($('<br />'));
+		});
+	    });
 
-        } else {
-            target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
-        }
+	} else {
+	    target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
+	}
     });
 }
 
@@ -153,34 +153,34 @@ function autoCompleteProdutosAdicionaisCheckBox(idRestaurante, idProduto) {
     var target = $('#adicionais');
 
     if(idRestaurante) {
-        target.empty().append($(CHECK_BOX_LOADING_OPTION));
+	target.empty().append($(CHECK_BOX_LOADING_OPTION));
 
-        $.getJSON(URL_PRODUTOS_ADICIONAIS_JSON, {
-            'id': idRestaurante
-        }, function(data) {
-            if(!isEmpty(data)) {
-                target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
+	$.getJSON(URL_PRODUTOS_ADICIONAIS_JSON, {
+	    'id': idRestaurante
+	}, function(data) {
+	    if(!isEmpty(data)) {
+		target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
 
-                $.each(data, function(index, key) {
+		$.each(data, function(index, key) {
 		
-                    var produtoTemAdicional = false;
+		    var produtoTemAdicional = false;
 		
-                    $.each(key.produto_tem_produtos_adicionais, function(j, ppa) {
-                        if(!produtoTemAdicional && ppa.produto_id == idProduto) {
-                            produtoTemAdicional = true;
-                        }
-                    });
+		    $.each(key.produto_tem_produtos_adicionais, function(j, ppa) {
+			if(!produtoTemAdicional && ppa.produto_id == idProduto) {
+			    produtoTemAdicional = true;
+			}
+		    });
 		
-                    target.append($('<input class="adjacent" type="checkbox" name="produtos_adicionais[]" value="' + key.id + '" id="produto_adicional' + key.id + '" ' + (produtoTemAdicional ? 'checked="true"' : '') + ' />'));
-                    target.append($('<label class="adjacent" for="produto_adicional' + key.id + '">' + key.nome + '</label>'));
-                    target.append($('<br />'));
-                });
-            } else {
-                target.empty().html('<label class="adjacent">O restaurante não disponibiliza adicionais</label>');
-            }
-        });
+		    target.append($('<input class="adjacent" type="checkbox" name="produtos_adicionais[]" value="' + key.id + '" id="produto_adicional' + key.id + '" ' + (produtoTemAdicional ? 'checked="true"' : '') + ' />'));
+		    target.append($('<label class="adjacent" for="produto_adicional' + key.id + '">' + key.nome + '</label>'));
+		    target.append($('<br />'));
+		});
+	    } else {
+		target.empty().html('<label class="adjacent">O restaurante não disponibiliza adicionais</label>');
+	    }
+	});
     } else {
-        target.empty().html('<label class="adjacent">Escolha um restaurante primeiro</label>');
+	target.empty().html('<label class="adjacent">Escolha um restaurante primeiro</label>');
     }
 }
 
@@ -188,28 +188,28 @@ function autoCompleteProdutosCheckBox(idRestaurante) { //seinao ainda
     var target = $('#produtos');
 
     if(idRestaurante) {
-        target.empty().append($(CHECK_BOX_LOADING_OPTION));
+	target.empty().append($(CHECK_BOX_LOADING_OPTION));
 
-        $.getJSON(URL_PRODUTOS_JSON, {
-            'id': idRestaurante
-        }, function(data) {
-            if(!isEmpty(data)) {
-                target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
+	$.getJSON(URL_PRODUTOS_JSON, {
+	    'id': idRestaurante
+	}, function(data) {
+	    if(!isEmpty(data)) {
+		target.empty().append($(CHECK_BOX_DEFAULT_OPTION));
 
-                $.each(data, function(index, key) {
+		$.each(data, function(index, key) {
 		
-                    var produto = false;
+		    var produto = false;
 			
-                    target.append($('<select name="produtos_adicionais[]" value="' + key.id + '" id="produto' + key.id + '" >'));
-                    target.append($('<label for="produto' + key.id + '">' + key.nome + '</select>'));
-                    target.append($('<br />'));
-                });
-            } else {
-                target.empty().html('<label class="adjacent">O restaurante não disponibiliza itens</label>');
-            }
-        });
+		    target.append($('<select name="produtos_adicionais[]" value="' + key.id + '" id="produto' + key.id + '" >'));
+		    target.append($('<label for="produto' + key.id + '">' + key.nome + '</select>'));
+		    target.append($('<br />'));
+		});
+	    } else {
+		target.empty().html('<label class="adjacent">O restaurante não disponibiliza itens</label>');
+	    }
+	});
     } else {
-        target.empty().html('<label class="adjacent">Escolha um restaurante primeiro</label>');
+	target.empty().html('<label class="adjacent">Escolha um restaurante primeiro</label>');
     }
 }
 
@@ -221,12 +221,16 @@ function addEnderecoConsumidor(parameters, tableId, imgLoading) {
 	    if(!data.errors) {
 		$('#nenhum_endereco').remove();
 		var row = '<tr>';
+		row += '<input type="hidden" name="hash_endereco" value="' + data.hash + '" />';
 		row += '<td>' + data.logradouro + '</td>';
 		row += '<td>' + data.bairro.cidade.nome + '</td>';
 		row += '<td>' + data.bairro.nome + '</td>';
-		row += '<td>' + 0 + '</td>';
-		row += '<td><input type="radio" name="favorito" ' + (data.favorito ? 'checked="true"' : '') + ' /></td>';
-		row += '<td><a href="javascript:void(0)" class="excluir">Excluir</a></td>';
+		row += '<td>' + (data.numero ? data.numero : '---') + '</td>';
+		row += '<td>' + (data.complemento ? data.complemento : '---') + '</td>';
+		row += '<td>' + data.cep + '</td>';
+		row += '<td><input type="radio" name="endereco_favorito" value="' + data.hash + '" ' + (data.favorito ? 'checked="true"' : '') + ' /></td>';
+		row += '<td><a href="javascript:void(0)" class="modificar_endereco">Modificar</a></td>';
+		row += '<td><a href="javascript:void(0)" class="excluir_endereco">Excluir</a></td>';
 		row += '</tr>';
 
 		$('#' + tableId).append($(row));
@@ -237,7 +241,7 @@ function addEnderecoConsumidor(parameters, tableId, imgLoading) {
 		$.each(data.errors, function(index, key) {
 		    $('#mensagens_endereco').append($(
 			'<div class="msg error">&raquo; ' + key.error + '</div>'
-		    ));
+			));
 		});
 	    }
 	}
@@ -247,3 +251,36 @@ function addEnderecoConsumidor(parameters, tableId, imgLoading) {
 function clearFormElements(context) {
     $('input, select, textarea', context).val(null).removeAttr('checked');
 }
+
+$.fn.extend({
+    populateForm: function(fields) {
+	$.each(fields, function (name, value) {
+	    $('input[name=' + name + '], textarea[name=' + name + '], select[name=' + name + ']').each(function() {
+		switch (this.nodeName.toLowerCase()) {
+		    case 'textarea':
+		    case 'input':
+			switch (this.type.toLowerCase()) {
+			    case 'radio':
+			    case 'checkbox':
+				if (this.value == value) {
+				    $(this).click();
+				}
+				break;
+			    default:
+				$(this).val(value);
+				break;
+			}
+			break;
+			
+		    case 'select':
+			$('option', this).each(function(){
+			    if (this.value == value) {
+				this.selected = true;
+			    }
+			});
+			break;
+		}
+	    });
+	});
+    }
+});

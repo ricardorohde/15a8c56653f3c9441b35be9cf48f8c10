@@ -40,4 +40,4 @@ $itens = UsuarioRestaurante::all();
     <? } ?>
 </table>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

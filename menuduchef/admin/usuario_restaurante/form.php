@@ -40,4 +40,4 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
     <input class="btn" type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

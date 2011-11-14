@@ -61,4 +61,4 @@ $itens = PedidoTemProduto::all(array("order" => "pedido_id asc", "conditions" =>
     <? } ?>
 </table>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

@@ -37,4 +37,4 @@ $itens = RestauranteTemTipo::all(array("order" => "restaurante_id asc"));
     <? } ?>
 </table>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

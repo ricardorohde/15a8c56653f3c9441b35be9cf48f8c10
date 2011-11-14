@@ -37,4 +37,4 @@ $itens = TipoProduto::all(array("order" => "nome asc"));
     <? } ?>
 </table>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

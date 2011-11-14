@@ -37,7 +37,7 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 	    HttpUtil::validateRepeatedParameter('senha', 'senha_rep', 'Senha não repetida corretamente');
 	}
     }
-    
+
     public function save_usuario() {
 	HttpUtil::validateRepeatedEmailUsuario($this->__request_attributes['email'], $this->usuario_id);
 
@@ -58,27 +58,39 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 	$usuario->save();
 	$this->usuario_id = $usuario->id;
     }
-    
+
     public function save_enderecos() {
-	if($this->__request_attributes['hash']) {
+	if ($this->__request_attributes['hash']) {
 	    $enderecosMatrix = $_SESSION[$this->__request_attributes['hash']];
-	    
-	    if($enderecosMatrix) {
-		foreach($enderecosMatrix as $enderecoArray) {
+
+	    if ($enderecosMatrix) {
+		foreach ($enderecosMatrix as $enderecoArray) {
 		    $endereco = new EnderecoConsumidor($enderecoArray);
 		    $endereco->consumidor_id = $this->id;
 		    $endereco->save();
 		}
 	    }
-	    
+
 	    unset($_SESSION[$this->__request_attributes['hash']]);
 	}
+
+	if ($this->enderecos) {
+	    foreach ($this->enderecos as $e) {
+		echo "{$e->hash()} == {$this->__request_attributes['endereco_favorito']} ?" . ($e->hash() == $this->__request_attributes['endereco_favorito'] ? 1 : 0) . "<br />";
+		$e->favorito = ($e->hash() == $this->__request_attributes['endereco_favorito'] ? 1 : 0);
+		echo "favorito?" . $e->favorito . "<br />";
+		$e->save();
+		print_r($e);
+		echo ($e->is_valid() ? 'válido' : 'inválido') . "<hr />";
+	    }
+	}
+	//exit;
     }
 
     public function destroy_usuario() {
 	$this->usuario->delete();
     }
-    
+
     public static function all() {
 	return parent::all(array("joins" => "inner join usuario on " . static::$table_name . ".usuario_id = usuario.id", "order" => "usuario.nome asc"));
     }

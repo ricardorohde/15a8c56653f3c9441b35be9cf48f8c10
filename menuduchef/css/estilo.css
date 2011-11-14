@@ -1,0 +1,235 @@
+@charset "utf-8";
+/* CSS Document */
+
+a:link{
+	color:#FFF;
+	text-decoration:none;
+	}
+a:visited{
+	color:#FFF;
+	text-decoration:none;
+	}
+a:hover{color:#CCC}
+
+#background_container{
+	background:url(../background/bg_container.jpg) no-repeat;
+	width:950px;
+	height:851px;
+	}
+	
+@font-face {
+    font-family:'BebasNeueRegular';
+    src: url(../fontes/BebasNeue-webfont.eot);
+    src: url(../fontes/BebasNeue-webfont.eot?#iefix) format('embedded-opentype'),
+         url(../fontes/BebasNeue-webfont.woff) format('woff'),
+         url(../fontes/BebasNeue-webfont.ttf) format('truetype'),
+         url(../fontes/BebasNeue-webfont.svg#BebasNeueRegular) format('svg');
+		 
+
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/*Menu*/
+
+#menu{
+	width:950px;
+	height:63px;
+	background:url(../background/menu.jpg);
+	font-family:'BebasNeueRegular'; 
+	font-size:20px;
+	color:#FFF;	
+	position:relative;
+}
+
+#itens_menu{
+	background: url(../background/itens_menu.jpg);
+	width:514px;
+	height:63px;
+	float:right;
+	}
+	
+#login{
+	height:63px;
+	width:220px;
+	float:right;
+	}
+	
+.radios{
+	border:1px solid #bcbec0;  
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	}
+	
+/*Restaurante.php */ 
+
+#central{
+	box-shadow: 1px 1px 3px #AE6D1A;
+	-webkit-box-shadow:2px 1px 3px #AE6D1A;
+    -moz-box-shadow: 1px 1px 3px #333;
+	background:#FFF;
+	border-top:o;
+	border-bottom:1px solid #bcbec0; 
+	border-left:1px solid #bcbec0;
+	border-right:1px solid #bcbec0;     
+	-moz-border-radius-topleft:0;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-top-left-radius:0;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	padding-bottom:30px;
+	}
+
+#barra_esquerda{
+	border-top:o;
+	border-bottom:1px solid #bcbec0; 
+	border-left:1px solid #bcbec0;
+	border-right:1px solid #bcbec0;     
+	-moz-border-radius-topleft:0;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-top-left-radius:0;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	background-color:#f1f1f2;
+	width:220px;
+	float:right; 
+    height:1200px;
+	position:relative;
+	z-index:3;
+	}
+	
+#seleciona_endereco{
+	width:220px;
+	height:90px;
+	float:left;
+	margin-top:96px;
+	}
+	
+#busca{	
+	width:220px;
+	height:70px;
+	float:left;
+	}
+	
+#caixa_sup{
+	background-color:#f1f1f2;
+	width:700px; 
+	height:52px;
+	position:relative;
+	}
+	
+#box_restaurante{
+	background-color:#f1f1f2;
+	width:698px; 
+	height:128px;
+	position:relative;
+	}
+	
+#box_interno{
+	padding:15px;
+	width:670px;
+	height:98px; 
+	}
+	
+#box_avatar{
+	height:98px;
+	width:130px;
+	float:left;
+	border:thin #bcbec0 solid;
+	}	
+	
+#box_textos{
+	width:426px;
+	height:100px;
+	float:left;
+	}
+	
+#box_botoes{
+	width:110px;
+	height:100px;
+	float:left;
+	}
+	
+#status{
+	width:700px;
+	height:45px;
+	}	
+	
+#rest_titulo{
+	width:180px; 
+	height:40px; 
+	float:left;
+	margin-left:14px;
+	margin-top:6px;
+	
+	}
+	
+#numero_rest{
+	width:145px; 
+	height:20px; 
+	float:left; 
+	margin-top:25px; 
+	background:#E51B21;
+	}	
+	
+#contagem_pag{
+	width:295px;
+	height:20px; 
+	float:right; 
+	margin:12px; 
+	background:#FC6; 
+	}
+
+#status_pedido{
+	width:540px; 
+	height:45px; 
+	float:right; 
+	}
+	
+.texto_box{
+	padding:2px; 
+	margin-left:10px;
+	font-family:Arial, Helvetica, sans-serif;	
+	}
+#b1{
+	padding-left:2px; 
+	margin-left:10px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	font-weight:bold;
+	color:#6E7072;
+	height:10px;
+	}
+#b2{
+	font-size:18px;
+	font-weight:bold;
+	color:#E51B21;
+	height:30px;
+	}
+#b3{
+	font-size:12px;
+	font-weight:normal;
+	color:#6E7072;
+	height:22px;
+	}
+#b4{
+	font-size:12px;
+	font-weight:normal;
+	color:#6E7072;
+	height:26px;
+	}
+
+#rodape{
+	width:700px; 
+	height:69px;
+	position:relative;
+	z-index:2;
+	}
+

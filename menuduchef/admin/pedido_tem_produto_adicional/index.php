@@ -57,4 +57,4 @@ $qtd_acompanhamentos_existente = 0;
     <? } ?>
 </table>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

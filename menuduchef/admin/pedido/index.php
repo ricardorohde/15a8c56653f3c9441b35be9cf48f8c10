@@ -53,4 +53,4 @@ $itens = Pedido::all(array("order" => "quando asc"));
     <? } ?>
 </table>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

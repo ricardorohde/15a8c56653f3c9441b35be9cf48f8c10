@@ -53,7 +53,11 @@ $hash = 'consumidor' . time();
 	});
 	
 	$('#add_endereco').click(function() {
-	   $('#form_endereco').dialog('open'); 
+	   $('#form_endereco').dialog('open');
+	});
+	
+	$('.modificar_endereco').click(function() {
+	    
 	});
 	
 	var imgLoading = new Image();
@@ -122,43 +126,6 @@ $hash = 'consumidor' . time();
 	?>
     </div>
     <input class="btn" type="button" value="  +  " id="addPagina_t" />
-
-    <?/*
-    Cidade<br />
-    <select id="cidades" name="cidade_id">
-	<option value="">-- Selecione --</option>
-	<?
-	if ($cidades) {
-	    $favorito = 0;
-	    foreach ($obj->enderecos as $ende) {
-		if ($ende->favorito) {
-		    $favorito = $ende->bairro_id;
-		}
-	    }
-	    foreach ($cidades as $cidade) {
-		?>
-		<option value="<?= $cidade->id ?>" <? if ($cidade->id == $favorito) { ?>selected="true"<? } ?>><?= $cidade->nome ?></option>
-	    <? }
-	} ?>
-    </select>
-    <br /><br />  
-    
-    Endere&ccedil;os:<br />
-    <div id="endInput">
-	<?
-	if ($obj->enderecos) {
-	    $endc = 1;
-	    foreach ($obj->enderecos as $ende) {
-		?>
-		<div><select name="cidade<?= $endc ?>" type="text"  ></select> <select name="bairro<?= $endc ?>" type="text"  ></select> <input type="text" name="endereco<?= $telc ?>" value="<?= $ende->logradouro ?>" maxlength="100" /> <span onclick="this.parentNode.parentNode.removeChild(this.parentNode)">X</span></div>
-		<?
-		$endc++;
-	    }
-	}
-	?>
-    </div>
-    <input type="button" value="  +  " id="addPagina_e" /><br /><br />
-    */?>
     
     <label class="normal">Endereços:</label>
     <a id="add_endereco" class="left w100 bottom10" href="javascript:void(0)">Adicionar</a>
@@ -166,7 +133,7 @@ $hash = 'consumidor' . time();
     <div id="form_endereco" title="Adicionar endereço">
 	<div id="mensagens_endereco"></div>
 	
-	<label class="normal">Cidade:</label>
+	<label for="cidade_endereco" class="normal">Cidade:</label>
 	
 	<select class="w80 formfield" id="cidade_endereco" name="cidade_id">
 	    <option value="">-- Selecione --</option>
@@ -175,11 +142,20 @@ $hash = 'consumidor' . time();
 	    <? } ?>
 	</select>
 	
-	<label class="normal">Bairro:</label>
+	<label for="bairro_endereco" class="normal">Bairro:</label>
 	<select class="w80 formfield" id="bairro_endereco" name="bairro_id"></select>
 	
-	<label class="normal">Logradouro:</label>
+	<label for="logradouro_endereco" class="normal">Logradouro:</label>
 	<input class="formfield w90" type="text" id="logradouro_endereco" name="logradouro" />
+	
+	<label for="numero_endereco" class="normal">Número:</label>
+	<input class="formfield w15" type="text" id="numero_endereco" name="numero" />
+	
+	<label for="complemento_endereco" class="normal">Complemento:</label>
+	<input class="formfield w25" type="text" id="complemento_endereco" name="complemento" />
+	
+	<label for="cep_endereco" class="normal">CEP:</label>
+	<input class="formfield w25" type="text" id="cep_endereco" name="cep" />
 	
 	<input class="adjacent clear-left top10" type="checkbox" id="checkbox_endereco_favorito" name="favorito" value="1" />
 	<label class="adjacent top10" for="checkbox_endereco_favorito">Atribuir como endereço favorito</label>
@@ -190,6 +166,8 @@ $hash = 'consumidor' . time();
 	    <th>Logradouro</th>
 	    <th>Cidade</th>
 	    <th>Bairro</th>
+	    <th>Número</th>
+	    <th>Complemento</th>
 	    <th>CEP</th>
 	    <th>Favorito</th>
 	    <th></th>
@@ -199,16 +177,19 @@ $hash = 'consumidor' . time();
 	    foreach($obj->enderecos as $endereco) {
 	?>
 	<tr>
+	    <input type="hidden" name="hash_endereco" value="<?= $endereco->hash() ?>" />
 	    <td><?= $endereco->logradouro ?></td>
 	    <td><?= $endereco->bairro->cidade->nome ?></td>
 	    <td><?= $endereco->bairro->nome ?></td>
-	    <td><?= 0 ?></td>
-	    <td align="center"><input type="radio" name="favorito" <?= $endereco->favorito ? 'checked="true"' : '' ?> /></td>
-	    <td><a href="javascript:void(0)" class="modificar">Modificar</a></td>
-	    <td><a href="javascript:void(0)" class="excluir">Excluir</a></td>
+	    <td><?= $endereco->numero ?: '---' ?></td>
+	    <td><?= $endereco->complemento ?: '---' ?></td>
+	    <td><?= $endereco->cep ?></td>
+	    <td align="center"><input type="radio" name="endereco_favorito" value="<?= $endereco->hash() ?>" <?= $endereco->favorito ? 'checked="true"' : '' ?> /></td>
+	    <td><a href="javascript:void(0)" class="modificar_endereco">Modificar</a></td>
+	    <td><a href="javascript:void(0)" class="excluir_endereco">Excluir</a></td>
 	</tr>
 	<? } } else { ?>
-	<tr id="nenhum_endereco"><td colspan="6">Nenhum endereço cadastrado</td></tr>
+	<tr id="nenhum_endereco"><td colspan="9">Nenhum endereço cadastrado</td></tr>
 	<? } ?>
     </table>
 
@@ -223,4 +204,4 @@ $hash = 'consumidor' . time();
     <input class="btn" type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>
 
-<? include("../../include/footer.php"); ?>
+<? include("../../include/footer_admin.php"); ?>

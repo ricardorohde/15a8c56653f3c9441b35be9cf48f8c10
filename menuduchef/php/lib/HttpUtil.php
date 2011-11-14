@@ -98,8 +98,23 @@ class HttpUtil {
 
 	    return $arrayDecoded;
 	}
-	
+
 	return null;
+    }
+
+    static function searchAttributeInSessionMatrix($sessionAttribute, $key, $searchValue, $excludeValue=null) {
+	$sessionMatrix = $_SESSION[$sessionAttribute];
+
+	if ($sessionMatrix) {
+	    if (is_array($sessionMatrix)) {
+		foreach ($sessionMatrix as $sessionArray) {
+		    if ($sessionArray[$key] == $searchValue && $sessionArray[$key] != $excludeValue) {
+			return true;
+		    }
+		}
+	    }
+	}
+	return false;
     }
 
 }
