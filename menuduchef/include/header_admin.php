@@ -9,17 +9,6 @@ foreach ($libDirectoryArray as $directory) {
 
 include_once("{$libDirectory}/config.php");
 
-echo '<!--';
-
-$request_uri = $_SERVER['REQUEST_URI'];
-
-if(strstr($request_uri, '/admin')) {
-    preg_match('/admin\/?(\w*).*/', $request_uri, $matches);
-    $module = $matches[1];
-}
-
-echo '-->';
-
 $usuario_logado = unserialize($_SESSION['usuario']);
 $usuario_logado_obj = unserialize($_SESSION['usuario_obj']);
 
