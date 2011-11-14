@@ -65,7 +65,13 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 
 	    if ($enderecosMatrix) {
 		foreach ($enderecosMatrix as $enderecoArray) {
-		    $endereco = new EnderecoConsumidor($enderecoArray);
+		    $endereco = new EnderecoConsumidor();
+		    
+		    if($enderecoArray['endereco_id']) {
+			$endereco = EnderecoConsumidor::find($enderecoArray['id']);
+		    }
+		    
+		    $endereco->set_attributes($enderecoArray);
 		    $endereco->consumidor_id = $this->id;
 		    $endereco->save();
 		}

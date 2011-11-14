@@ -84,7 +84,7 @@ $hash = 'consumidor' . time();
 		});
 	    },
 	    close: function() {
-		clearFormElements(this);
+		$(this).clearFormElements();
 		$('#mensagens_endereco').empty();
 	    }
 	});
@@ -132,6 +132,8 @@ $hash = 'consumidor' . time();
     <br /><br />
     <div id="form_endereco" title="Adicionar endereço">
 	<div id="mensagens_endereco"></div>
+	
+	<input type="hidden" id="endereco_id" name="endereco_id" value="" />
 	
 	<label for="cidade_endereco" class="normal">Cidade:</label>
 	

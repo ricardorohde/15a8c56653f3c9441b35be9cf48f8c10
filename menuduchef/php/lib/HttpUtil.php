@@ -109,12 +109,13 @@ class HttpUtil {
 	    if (is_array($sessionMatrix)) {
 		foreach ($sessionMatrix as $sessionArray) {
 		    if ($sessionArray[$key] == $searchValue && $sessionArray[$key] != $excludeValue) {
-			return true;
+			return $sessionArray;
 		    }
 		}
 	    }
 	}
-	return false;
+	
+	return null;
     }
 
 }

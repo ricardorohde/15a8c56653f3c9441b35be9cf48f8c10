@@ -220,6 +220,7 @@ function addEnderecoConsumidor(parameters, tableId, imgLoading) {
 	if(!isEmpty(data)) {
 	    if(!data.errors) {
 		$('#nenhum_endereco').remove();
+		console.log('Endereço: \n' + data + '\nsendo adicionado');
 		var row = '<tr>';
 		row += '<input type="hidden" name="hash_endereco" value="' + data.hash + '" />';
 		row += '<td>' + data.logradouro + '</td>';
@@ -233,7 +234,16 @@ function addEnderecoConsumidor(parameters, tableId, imgLoading) {
 		row += '<td><a href="javascript:void(0)" class="excluir_endereco">Excluir</a></td>';
 		row += '</tr>';
 
-		$('#' + tableId).append($(row));
+		var rowElement = $(row).appendTo($('#' + tableId));
+		
+		rowElement.find('.modificar_endereco').click(function() {
+		    alert('modificar ' + data.logradouro);
+		});
+		
+		rowElement.find('.excluir_endereco').click(function() {
+		    alert('excluir ' + data.logradouro);
+		});
+		
 		$('#' + ENDERECO_DIALOG_ID).dialog('close');
 	    } else {
 		$('#mensagens_endereco').empty();
@@ -248,11 +258,28 @@ function addEnderecoConsumidor(parameters, tableId, imgLoading) {
     }, 'json');
 }
 
-function clearFormElements(context) {
-    $('input, select, textarea', context).val(null).removeAttr('checked');
-}
-
 $.fn.extend({
+    clearFormElements: function() {
+	$('input, select, textarea', this).each(function() {
+	    switch (this.nodeName.toLowerCase()) {
+		case 'select':
+		case 'textarea':
+		    $(this).val(null);
+		    break;
+		    
+		case 'input':
+		    switch (this.type.toLowerCase()) {
+			case 'radio':
+			case 'checkbox':
+			    $(this).removeAttr('checked');
+			    break;
+			default:
+			    $(this).val(null);
+			    break;
+		    }
+	    }
+	});
+    },
     populateForm: function(fields) {
 	$.each(fields, function (name, value) {
 	    $('input[name=' + name + '], textarea[name=' + name + '], select[name=' + name + ']').each(function() {
