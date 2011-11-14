@@ -4,7 +4,7 @@ include('../../include/header_admin.php');
 $itens = Consumidor::all();
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Clientes</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Clientes</h2>
 
 <a href="admin/consumidor/form" title="Criar">Criar</a>
 <br /><br />

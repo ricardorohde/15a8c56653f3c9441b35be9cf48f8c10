@@ -4,7 +4,7 @@ include('../../include/header_admin.php');
 $itens = UsuarioRestaurante::all();
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Gerentes e Atendentes de Restaurantes</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Gerentes e Atendentes de Restaurantes</h2>
 
 <a href="admin/usuario_restaurante/form" title="Criar">Criar</a>
 <br /><br />

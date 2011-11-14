@@ -7,7 +7,7 @@ $produtos = Produto::all(array("order" => "nome asc"));
 $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais pertencentes a Produtos</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais pertencentes a Produtos</h2>
 
 <a href="admin/produto_tem_produto_adicional/" title="Cancelar">Cancelar</a>
 

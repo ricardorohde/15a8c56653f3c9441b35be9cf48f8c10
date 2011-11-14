@@ -19,7 +19,7 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
     });
 </script>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Produtos</h2>
 
 <a href="admin/produto/" title="Cancelar">Cancelar</a>
 

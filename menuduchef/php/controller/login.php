@@ -14,13 +14,13 @@ if (trim($data['email']) && trim($data['senha'])) {
 	switch ($usuario->tipo) {
 	    case Usuario::$ADMINISTRADOR:
 		$usuario_obj = Administrador::find_by_usuario_id($usuario->id);
-		$redirect = '../../admin/';
+		$redirect = '../../admin/area_administrativa';
 		break;
 
 	    case Usuario::$GERENTE:
 	    case Usuario::$ATENDENTE:
 		$usuario_obj = UsuarioRestaurante::find_by_usuario_id($usuario->id);
-		$redirect = '../../admin/';
+		$redirect = '../../admin/area_administrativa';
 		break;
 
 	    case Usuario::$CONSUMIDOR:

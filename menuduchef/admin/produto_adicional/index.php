@@ -4,7 +4,7 @@ include('../../include/header_admin.php');
 $itens = ProdutoAdicional::all(array("order" => "nome asc"));
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Produtos Adicionais</h2>
 
 <a href="admin/produto_adicional/form" title="Criar">Criar</a>
 <br /><br />

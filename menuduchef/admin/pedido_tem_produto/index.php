@@ -5,7 +5,7 @@ $itens = PedidoTemProduto::all(array("order" => "pedido_id asc", "conditions" =>
 
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; Gerenciar Produtos inclusos nos Pedidos</h2>
 
 <a href="admin/pedido_tem_produto/form.php?ped=<?= $_GET['ped'] ?>" title="Criar">Criar</a>
 <br /><br />

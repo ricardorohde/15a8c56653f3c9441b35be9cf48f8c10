@@ -7,7 +7,7 @@ $produtos = Produto::all(array("order" => "nome asc"));
 $tipos = TipoProduto::all(array("order" => "nome asc"));
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Produtos tem Tipos</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Produtos tem Tipos</h2>
 
 <a href="admin/produto_tem_tipo/" title="Cancelar">Cancelar</a>
 

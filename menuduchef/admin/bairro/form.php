@@ -6,7 +6,7 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Bairro");
 $cidades = Cidade::all(array("order" => "nome asc"));
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Bairros</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Bairros</h2>
 
 <a href="admin/bairro/" title="Cancelar">Cancelar</a>
 

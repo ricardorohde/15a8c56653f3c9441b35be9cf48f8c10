@@ -4,7 +4,7 @@ include('../../include/header_admin.php');
 $itens = Pedido::all(array("order" => "quando asc"));
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Pedidos</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Pedidos</h2>
 
 <a href="admin/pedido/form" title="Criar">Criar</a>
 <br /><br />

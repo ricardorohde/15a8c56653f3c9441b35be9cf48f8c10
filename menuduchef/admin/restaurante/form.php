@@ -25,7 +25,7 @@ $bairros = Bairro::all();
     });
 </script>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Restaurantes</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Restaurantes</h2>
 
 <a href="admin/restaurante/" title="Cancelar">Cancelar</a>
 

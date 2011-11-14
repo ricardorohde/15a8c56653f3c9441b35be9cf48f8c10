@@ -4,7 +4,7 @@ include('../../include/header_admin.php');
 $itens = Administrador::all();
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Administradores</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Administradores</h2>
 
 <a href="admin/administrador/form" title="Criar">Criar</a>
 <br /><br />

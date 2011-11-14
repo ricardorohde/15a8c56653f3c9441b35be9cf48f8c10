@@ -1,14 +1,11 @@
-<?
-include("../include/header_admin.php");
+<? include("../include/header.php"); ?>
 
-//print_r($_REQUEST);exit;
-//
-//$request_uri = $_SERVER['REQUEST_URI'];
-//
-//if(strstr($request_uri, '/admin')) {
-//    preg_match('/admin\/?(\w*).*/', $request_uri, $matches);
-//    $module = $matches[1];
-//}
+<form action="php/controller/login" method="post">
+    <label for="email" class="normal">E-mail:</label>
+    <input type="text" id="email" name="email" maxlength="50" />
+    <label for="senha" class="normal">Senha:</label>
+    <input type="password" id="senha" name="senha" maxlength="50" />
+    <input class="btn" type="submit" value="Entrar" />
+</form>
 
-include("../include/footer.php");
-?>
+<? include("../include/footer.php"); ?>

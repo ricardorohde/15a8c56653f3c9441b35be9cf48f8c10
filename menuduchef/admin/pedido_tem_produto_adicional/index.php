@@ -6,7 +6,7 @@ $pedido_tem_produto = PedidoTemProduto::find_by_id($_GET['prodnoped']);
 $limite_acompanhamento = $pedido_tem_produto->produto->qtd_produto_adicional;
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; <a href="admin/pedido_tem_produto/?ped=<?= $_GET['ped'] ?>">Gerenciar Produtos inclusos nos Pedidos</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; <a href="admin/pedido">Gerenciar Pedidos</a> &raquo; <a href="admin/pedido_tem_produto/?ped=<?= $_GET['ped'] ?>">Gerenciar Produtos inclusos nos Pedidos</a> &raquo; Gerenciar Produtos Adicionais inclusos nos Pedidos</h2>
 
 <a href="admin/pedido_tem_produto_adicional/form?prodnoped=<?= $_GET['prodnoped'] ?>&ped=<?= $_GET['ped'] ?>" title="Criar">Criar</a>
 <?

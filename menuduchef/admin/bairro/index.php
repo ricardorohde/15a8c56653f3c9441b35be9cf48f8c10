@@ -4,7 +4,7 @@ include('../../include/header_admin.php');
 $itens = Bairro::all(array("order" => "nome asc"));
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Bairros</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Bairros</h2>
 
 <a href="admin/bairro/form" title="Criar">Criar</a>
 <br /><br />

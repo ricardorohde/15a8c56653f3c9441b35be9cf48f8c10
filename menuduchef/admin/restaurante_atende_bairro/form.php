@@ -7,7 +7,7 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 $bairros = Bairro::all(array("order" => "nome asc"));
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Restaurantes atendem Bairros</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Restaurantes atendem Bairros</h2>
 
 <a href="admin/restaurante_atende_bairro/" title="Cancelar">Cancelar</a>
 

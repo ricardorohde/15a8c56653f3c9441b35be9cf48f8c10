@@ -4,7 +4,7 @@ include('../../include/header_admin.php');
 $itens = TipoRestaurante::all(array("order" => "nome asc"));
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Tipos de Restaurante</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Tipos de Restaurante</h2>
 
 <a href="admin/tipo_restaurante/form" title="Criar">Criar</a>
 <br /><br />

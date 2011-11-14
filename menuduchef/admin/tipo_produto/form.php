@@ -4,7 +4,7 @@ include('../../include/header_admin.php');
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("TipoProduto");
 ?>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Tipos de Produto</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Tipos de Produto</h2>
 
 <a href="admin/tipo_produto/" title="Cancelar">Cancelar</a>
 

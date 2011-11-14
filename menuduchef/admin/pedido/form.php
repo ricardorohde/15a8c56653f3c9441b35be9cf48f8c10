@@ -22,7 +22,7 @@ $preco_total = 0;
 	});
     });
 </script>
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Pedidos</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Pedidos</h2>
 
 <a href="admin/pedido/" title="Cancelar">Cancelar</a>
 

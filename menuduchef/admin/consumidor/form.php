@@ -91,7 +91,7 @@ $hash = 'consumidor' . time();
     });
 </script>
 
-<h2><a href="admin/">Menu Principal</a> &raquo; Gerenciar Clientes</h2>
+<h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Clientes</h2>
 
 <a href="admin/consumidor/" title="Cancelar">Cancelar</a>
 
