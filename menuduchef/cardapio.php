@@ -12,6 +12,13 @@ $(document).ready(function() {
         $(".filtro_categoria").attr("checked","true");
         $(".categoria").show();
     });
+    
+    $("#filtrar").click( function(){
+        oque = $("#caixa_filtro").attr("value");
+        $(".produto").hide();
+        $("#produto_").hide();
+        
+    });
 });
 function poe_no_carrinho(x){
     conteudo = document.getElementById('carrinho');
@@ -66,7 +73,7 @@ function menos(x){
     <div style="float:left; position: relative; padding-left: 20px; padding-right: 50px;">
         <table class="list">
             <tr><td>Menu <input type="button" id="ver_completo" value="Ver Completo"></td></tr>
-            <tr><td>Filtro<br/><input type="text"> <input type="button" value="OK"></td></tr>
+            <tr><td>Filtro<br/><input id="caixa_filtro" type="text"> <input id="filtrar" type="button" value="OK"></td></tr>
             <tr><td>Card&aacute;pio</td></tr>
             <? if($categorias){
                     foreach($categorias as $categoria){ 
@@ -91,12 +98,18 @@ function menos(x){
                         $itens = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id INNER JOIN restaurante_tem_tipo_produto RTTP ON PTT.tipoproduto_id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = ".$_GET['res']." AND PTT.tipoproduto_id = ".$categoria->tipoproduto_id." AND P.restaurante_id = ".$_GET['res']." ORDER BY P.nome asc");
                         if($itens){
                             foreach($itens as $item){ ?>
-                                   <tr>
-                                       <td><input type="hidden" id="idprod_<?= $item->id ?>" value="<?= $item->id ?>"><input type="hidden" id="nome_<?= $item->id ?>" value="<?= $item->nome ?>"><b><?= $item->nome ?></b><br/><?= $item->descricao ?></td>
-                                       <td><? if($item->esta_em_promocao){ ?><div style="text-decoration:line-through; font-size:10px;"><?= StringUtil::doubleToCurrency($item->preco) ?></div><div style="color:#CC0000;"><?= StringUtil::doubleToCurrency($item->preco_promocional) ?></div><? }else{ ?><div style="color:#CC0000;"><?= StringUtil::doubleToCurrency($item->preco) ?></div><? } ?></td>
-                                       <td><input type="button" value="Foto"><input onclick="show('obsprod_<?= $item->id ?>'); erase('obsbox_<?= $item->id ?>')" type="button" value="OBS"><input id="inclui_<?= $item->id ?>" onclick="poe_no_carrinho(<?= $item->id ?>)" type="button" value=" + "><br/>Qtd: <input type="button" onclick="mais('qtdprod_<?= $item->id ?>')" value=" + "><input id="qtdprod_<?= $item->id ?>" type="text" style="width:30px" readonly="true" value="1"><input onclick="menos('qtdprod_<?= $item->id ?>')" type="button" value=" - "></td>
-                                   </tr>
-                                   <tr><td colspan='3'><div id="obsprod_<?= $item->id ?>" style="display:none;"><textarea id="obsbox_<?= $item->id ?>" style="width:100%; height: 45px;"></textarea></div></td></tr>
+                                <tr><td>
+                                        <div id="produto_<?= $item->nome ?>" class="produto_de_categoria_<?= $categoria->tipo_produto->nome ?>" class="produto">     
+                                           <table>     
+                                               <tr>
+                                                   <td><input type="hidden" id="idprod_<?= $item->id ?>" value="<?= $item->id ?>"><input type="hidden" id="nome_<?= $item->id ?>" value="<?= $item->nome ?>"><b><?= $item->nome ?></b><br/><?= $item->descricao ?></td>
+                                                   <td><? if($item->esta_em_promocao){ ?><div style="text-decoration:line-through; font-size:10px;"><?= StringUtil::doubleToCurrency($item->preco) ?></div><div style="color:#CC0000;"><?= StringUtil::doubleToCurrency($item->preco_promocional) ?></div><? }else{ ?><div style="color:#CC0000;"><?= StringUtil::doubleToCurrency($item->preco) ?></div><? } ?></td>
+                                                   <td><input type="button" value="Foto"><input onclick="show('obsprod_<?= $item->id ?>'); erase('obsbox_<?= $item->id ?>')" type="button" value="OBS"><input id="inclui_<?= $item->id ?>" onclick="poe_no_carrinho(<?= $item->id ?>)" type="button" value=" + "><br/>Qtd: <input type="button" onclick="mais('qtdprod_<?= $item->id ?>')" value=" + "><input id="qtdprod_<?= $item->id ?>" type="text" style="width:30px" readonly="true" value="1"><input onclick="menos('qtdprod_<?= $item->id ?>')" type="button" value=" - "></td>
+                                               </tr>
+                                               <tr><td colspan='3'><div id="obsprod_<?= $item->id ?>" style="display:none;"><textarea id="obsbox_<?= $item->id ?>" style="width:100%; height: 45px;"></textarea></div></td></tr>
+                                           </table>
+                                        </div>
+                                </td></tr>
                            <? }
                         }?>
                                 </table>
