@@ -241,7 +241,7 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                     	<div id="box_avatar">
                         </div>
                         <div id="box_textos">
-                        	<div id="b1">Bebidas</div>
+                        	<div id="b1"><?= $restaurante->getNomeCategoria() ?></div>
                             <div class="texto_box" id="b2"><?= $restaurante->nome ?></div>
                             <div class="texto_box" id="b3">Horario de funcionamento  |  Forma de pagamento</div>
                             <div class="texto_box" id="b4"></div>

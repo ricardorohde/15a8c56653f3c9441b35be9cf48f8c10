@@ -130,6 +130,36 @@ class Restaurante extends ActiveRecord\Model {
 	}
 	return false;
     }
+    
+    public function getNomeCategoria() {
+        if($this->categoria_personalizada) {
+            return $this->categoria_personalizada;
+        } else {
+            $cats = RestauranteTemTipo::find_by_sql("SELECT TR.* FROM restaurante_tem_tipo RTT INNER JOIN tipo_restaurante TR ON RTT.tiporestaurante_id = TR.id WHERE RTT.restaurante_id = ".$this->id." ORDER BY TR.nome desc");
+            if($cats){
+                if(sizeof($cats)==1){
+                    foreach($cats as $cat){
+                        $categorias = $cat->nome;
+                    }
+                }else{
+                    $pri = 1;
+                    $tam = sizeof($cats);
+                    foreach($cats as $cat){
+                        if($pri){
+                            $categorias = " e ".$cat->nome;
+                            $pri = 0;
+                        }else if($tam==1){
+                            $categorias = $cat->nome.$categorias;
+                        }else{
+                            $categorias = ", ".$cat->nome.$categorias;
+                        }
+                        $tam--;
+                    }
+                }
+            }
+            return $categorias;
+        }
+    }
 
 }
 
