@@ -1,7 +1,4 @@
 <?
-
-
-
 include("include/header.php");
 $pag = 1;
 $lim1 = 0;
@@ -17,7 +14,9 @@ if($_POST){
         }
     
 	if($_GET['bai']){
-		$sql = "SELECT DISTINCT R.*, RAB.preco_entrega, RAB.tempo_entrega FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$_GET['bai']." AND R.nome LIKE '%".$_POST['caixa_filtro']."%' ";
+		$sql = "SELECT  DISTINCT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$_GET['bai']." AND R.nome LIKE '%".$_POST['caixa_filtro']."%' ";
+	}else{
+		$sql = "SELECT DISTINCT R.* FROM restaurante R INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE R.ativo = 1 AND R.cidade_id = ".$_GET['cid']." AND R.nome LIKE '%".$_POST['caixa_filtro']."%' ";
 	}
 	$pri = 0;
 	foreach($_POST as $key => $p){
@@ -44,10 +43,15 @@ if($_POST){
 	
 }else{
 	if($_GET['bai']){
-		$restaurantes = Restaurante::find_by_sql("SELECT DISTINCT R.*, RAB.preco_entrega, RAB.tempo_entrega FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$_GET['bai']." ORDER BY R.nome LIMIT 6");
+		$restaurantes = Restaurante::find_by_sql("SELECT DISTINCT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$_GET['bai']." ORDER BY R.nome LIMIT 6");
 		
 		$rests = Restaurante::find_by_sql("SELECT DISTINCT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$_GET['bai']." ORDER BY R.nome");
 		$num_rest = sizeof($rests);
+	}else{
+		$restaurantes = Restaurante::all(array("conditions" => array("ativo = ? AND cidade_id = ?",1,$_GET['cid']), "limit" => "6", "order" => "nome"));
+		
+                $rests = Restaurante::all(array("conditions" => array("ativo = ? AND cidade_id = ?",1,$_GET['cid'])));
+                $num_rest = sizeof($rests);
 	}
 }
 
@@ -126,9 +130,6 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                         <div id="seleciona_endereco">
                             <img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
                             <div style="width:198px; height:25px; margin-left:7px;">
-                                <select id="endereco_cliente" name="endereco_cliente">
-                                    
-                                </select>
                             </div>
                         </div>
                         <div id="busca">
@@ -243,7 +244,7 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                         	<div id="b1"><?= $restaurante->getNomeCategoria() ?></div>
                             <div class="texto_box" id="b2"><?= $restaurante->nome ?></div>
                             <div class="texto_box" id="b3">Horario de funcionamento  |  Forma de pagamento</div>
-                            <div class="texto_box" id="b4">Tempo de entrega: <?= $restaurante->tempo_entrega ?> min | Taxa de entrega: <?= StringUtil::doubleToCurrency($restaurante->preco_entrega) ?></div>
+                            <div class="texto_box" id="b4"></div>
                         </div>
                         <div id="box_botoes">
                         	<div style="width:110px; height:72px;">
