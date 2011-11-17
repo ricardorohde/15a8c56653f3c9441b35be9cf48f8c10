@@ -15,7 +15,7 @@ var URL_ENDERECOS_JSON = 'php/controller/list_enderecos_json';
 var URL_PRODUTOS_JSON = 'php/controller/list_produtos_json';
 var URL_PRODUTOS_ADICIONAIS_JSON = 'php/controller/list_produtos_adicionais_json';
 var URL_PRODUTO_SEGUNDO_SABOR = 'php/controller/list_segundo_sabor_json';
-var URL_ENDERECO_CONSUMIDOR = 'php/controller/add_endereco_consumidor';
+var URL_ENDERECO_CONSUMIDOR = 'php/controller/endereco_consumidor_json';
 
 function isEmpty(data) {
     return data == null || data == '' || data.length == 0;
@@ -213,45 +213,63 @@ function autoCompleteProdutosCheckBox(idRestaurante) { //seinao ainda
     }
 }
 
+function listEnderecosConsumidor(arrayEnderecos, tableId) {
+    if(!isEmpty(arrayEnderecos)) {
+	$('#' + tableId + ' .row_data').remove();
+	
+	$.each(arrayEnderecos, function(index, data) {
+	    var row = '<tr class="row_data">';
+	    row += '<input type="hidden" name="hash_endereco" value="' + data.hash + '" />';
+	    row += '<td>' + data.logradouro + '</td>';
+	    row += '<td>' + data.bairro.cidade.nome + '</td>';
+	    row += '<td>' + data.bairro.nome + '</td>';
+	    row += '<td>' + (data.numero ? data.numero : '---') + '</td>';
+	    row += '<td>' + (data.complemento ? data.complemento : '---') + '</td>';
+	    row += '<td>' + data.cep + '</td>';
+	    row += '<td><input type="radio" name="endereco_favorito" value="' + data.hash + '" ' + (data.favorito ? 'checked="true"' : '') + ' /></td>';
+	    row += '<td><a href="javascript:void(0)" class="modificar_endereco">Modificar</a></td>';
+	    row += '<td><a href="javascript:void(0)" class="excluir_endereco">Excluir</a></td>';
+	    row += '</tr>';
+
+	    var rowElement = $(row).appendTo($('#' + tableId));
+
+	    rowElement.find('.modificar_endereco').click(function() {
+                data.endereco_id = data.id;
+                data.cidade_id = data.bairro.cidade_id;
+                if(!parseInt(data.numero)) {
+                    data.numero = null;
+                }
+                $('#' + ENDERECO_DIALOG_ID).dialog('option', 'isUpdate', 1);
+                $('#' + ENDERECO_DIALOG_ID).dialog('option', 'attributes', data);
+                $('#' + ENDERECO_DIALOG_ID).dialog('open');
+	    });
+
+	    rowElement.find('.excluir_endereco').click(function() {
+                $.getJSON(URL_ENDERECO_CONSUMIDOR, {'deleteHash': data.hash}, function(data) {
+                    listEnderecosConsumidor(data, tableId);
+                });
+	    });
+	});
+    } else {
+	$('<tr class="row_data"><td colspan="9">Nenhum endereço cadastrado</td></tr>').appendTo($('#' + tableId));
+    }
+}
+
 function addEnderecoConsumidor(parameters, tableId, imgLoading) {
     $('#mensagens_endereco').empty().append($('<img src="' + imgLoading.src + '" alt="Carregando" title="Carregando" />'));
     
     $.post(URL_ENDERECO_CONSUMIDOR, parameters, function(data) {
 	if(!isEmpty(data)) {
 	    if(!data.errors) {
-		$('#nenhum_endereco').remove();
-		console.log('Endereço: \n' + data + '\nsendo adicionado');
-		var row = '<tr>';
-		row += '<input type="hidden" name="hash_endereco" value="' + data.hash + '" />';
-		row += '<td>' + data.logradouro + '</td>';
-		row += '<td>' + data.bairro.cidade.nome + '</td>';
-		row += '<td>' + data.bairro.nome + '</td>';
-		row += '<td>' + (data.numero ? data.numero : '---') + '</td>';
-		row += '<td>' + (data.complemento ? data.complemento : '---') + '</td>';
-		row += '<td>' + data.cep + '</td>';
-		row += '<td><input type="radio" name="endereco_favorito" value="' + data.hash + '" ' + (data.favorito ? 'checked="true"' : '') + ' /></td>';
-		row += '<td><a href="javascript:void(0)" class="modificar_endereco">Modificar</a></td>';
-		row += '<td><a href="javascript:void(0)" class="excluir_endereco">Excluir</a></td>';
-		row += '</tr>';
-
-		var rowElement = $(row).appendTo($('#' + tableId));
-		
-		rowElement.find('.modificar_endereco').click(function() {
-		    alert('modificar ' + data.logradouro);
-		});
-		
-		rowElement.find('.excluir_endereco').click(function() {
-		    alert('excluir ' + data.logradouro);
-		});
-		
+		listEnderecosConsumidor(data, tableId);
 		$('#' + ENDERECO_DIALOG_ID).dialog('close');
 	    } else {
 		$('#mensagens_endereco').empty();
 		
 		$.each(data.errors, function(index, key) {
 		    $('#mensagens_endereco').append($(
-			'<div class="msg error">&raquo; ' + key.error + '</div>'
-			));
+                        '<div class="msg error">&raquo; ' + key.error + '</div>'
+                    ));
 		});
 	    }
 	}
@@ -282,6 +300,7 @@ $.fn.extend({
     },
     populateForm: function(fields) {
 	$.each(fields, function (name, value) {
+            var formattedValue = $("<div/>").html(value).text();
 	    $('input[name=' + name + '], textarea[name=' + name + '], select[name=' + name + ']').each(function() {
 		switch (this.nodeName.toLowerCase()) {
 		    case 'textarea':
@@ -289,19 +308,19 @@ $.fn.extend({
 			switch (this.type.toLowerCase()) {
 			    case 'radio':
 			    case 'checkbox':
-				if (this.value == value) {
+				if (this.value == formattedValue) {
 				    $(this).click();
 				}
 				break;
 			    default:
-				$(this).val(value);
+				$(this).val(formattedValue);
 				break;
 			}
 			break;
 			
 		    case 'select':
 			$('option', this).each(function(){
-			    if (this.value == value) {
+			    if (this.value == formattedValue) {
 				this.selected = true;
 			    }
 			});

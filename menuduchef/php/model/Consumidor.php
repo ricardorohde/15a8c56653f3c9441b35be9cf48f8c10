@@ -4,101 +4,109 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 
     static $table_name = 'consumidor';
     static $belongs_to = array(
-	array('usuario')
+        array('usuario')
     );
     static $delegate = array(
-	array('nome', 'email', 'senha', 'to' => 'usuario')
+        array('nome', 'email', 'senha', 'to' => 'usuario')
     );
     static $has_many = array(
-	array('pedidos', 'class_name' => 'Pedido'),
-	array('enderecos', 'class_name' => 'EnderecoConsumidor'),
-	array('telefones', 'class_name' => 'TelefoneConsumidor')
+        array('pedidos', 'class_name' => 'Pedido'),
+        array('enderecos', 'class_name' => 'EnderecoConsumidor', 'order' => 'logradouro asc'),
+        array('telefones', 'class_name' => 'TelefoneConsumidor')
     );
     static $validates_presence_of = array(
-	array('nome', 'message' => 'obrigatório'),
-	array('cpf', 'message' => 'obrigatório'),
-	array('data_nascimento', 'message' => 'obrigatória'),
-	array('senha', 'message' => 'obrigatória')
+        array('nome', 'message' => 'obrigatório'),
+        array('cpf', 'message' => 'obrigatório'),
+        array('data_nascimento', 'message' => 'obrigatória'),
+        array('senha', 'message' => 'obrigatória')
     );
     static $validates_uniqueness_of = array(
-	array('cpf', 'message' => 'já utilizado por outro cliente')
+        array('cpf', 'message' => 'já utilizado por outro cliente')
     );
     static $validates_format_of = array(
-	array('email', 'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/', 'message' => 'inválido')
+        array('email', 'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/', 'message' => 'inválido')
     );
     static $before_save = array('save_usuario');
     static $after_save = array('save_enderecos');
     static $after_destroy = array('destroy_usuario');
 
     public function prepare_attributes(array &$attributes) {
-	if ($attributes['id'] && !$attributes['modificarSenha']) {
-	    unset($attributes['senha']);
-	} else {
-	    HttpUtil::validateRepeatedParameter('senha', 'senha_rep', 'Senha não repetida corretamente');
-	}
+        if ($attributes['id'] && !$attributes['modificarSenha']) {
+            unset($attributes['senha']);
+        } else {
+            HttpUtil::validateRepeatedParameter('senha', 'senha_rep', 'Senha não repetida corretamente');
+        }
     }
 
     public function save_usuario() {
-	HttpUtil::validateRepeatedEmailUsuario($this->__request_attributes['email'], $this->usuario_id);
+        HttpUtil::validateRepeatedEmailUsuario($this->__request_attributes['email'], $this->usuario_id);
 
-	if ($this->usuario->id) {
-	    $usuario = $this->usuario;
-	} else {
-	    $usuario = new Usuario();
-	}
+        if ($this->usuario->id) {
+            $usuario = $this->usuario;
+        } else {
+            $usuario = new Usuario();
+        }
 
-	$usuario->tipo = Usuario::$CONSUMIDOR;
-	$usuario->nome = $this->__request_attributes['nome'];
-	$usuario->email = $this->__request_attributes['email'];
+        $usuario->tipo = Usuario::$CONSUMIDOR;
+        $usuario->nome = $this->__request_attributes['nome'];
+        $usuario->email = $this->__request_attributes['email'];
 
-	if ($this->__request_attributes['senha']) {
-	    $usuario->senha = md5($this->__request_attributes['senha']);
-	}
+        if ($this->__request_attributes['senha']) {
+            $usuario->senha = md5($this->__request_attributes['senha']);
+        }
 
-	$usuario->save();
-	$this->usuario_id = $usuario->id;
+        $usuario->save();
+        $this->usuario_id = $usuario->id;
     }
 
     public function save_enderecos() {
-	if ($this->__request_attributes['hash']) {
-	    $enderecosMatrix = $_SESSION[$this->__request_attributes['hash']];
+        if ($this->__request_attributes['hash_consumidor']) {
+            $enderecosMatrix = $_SESSION[$this->__request_attributes['hash_consumidor']];
 
-	    if ($enderecosMatrix) {
-		foreach ($enderecosMatrix as $enderecoArray) {
-		    $endereco = new EnderecoConsumidor();
-		    
-		    if($enderecoArray['endereco_id']) {
-			$endereco = EnderecoConsumidor::find($enderecoArray['id']);
-		    }
-		    
-		    $endereco->set_attributes($enderecoArray);
-		    $endereco->consumidor_id = $this->id;
-		    $endereco->save();
-		}
-	    }
+            if ($enderecosMatrix) {
+                foreach ($enderecosMatrix as $enderecoArray) {
+                    $endereco = new EnderecoConsumidor();
 
-	    unset($_SESSION[$this->__request_attributes['hash']]);
-	}
+                    if ($enderecoArray['id']) {
+                        $endereco = EnderecoConsumidor::find($enderecoArray['id']);
+                    }
 
-	if ($this->enderecos) {
-	    foreach ($this->enderecos as $e) {
-		echo "{$e->hash()} == {$this->__request_attributes['endereco_favorito']} ?" . ($e->hash() == $this->__request_attributes['endereco_favorito'] ? 1 : 0) . "<br />";
-		$e->favorito = ($e->hash() == $this->__request_attributes['endereco_favorito'] ? 1 : 0);
-		echo "favorito?" . $e->favorito . "<br />";
-		$e->save();
-		print_r($e);
-		echo ($e->is_valid() ? 'válido' : 'inválido') . "<hr />";
-	    }
-	}
-	//exit;
+                    $endereco->set_attributes($enderecoArray);
+                    $endereco->consumidor_id = $this->id;
+                    $endereco->save();
+                }
+                
+                print_r($this->enderecos);exit;
+
+                /*
+                 * Excluindo o objeto se ele for desmarcado do formulário
+                 */
+                if ($this->restaurante_tem_tipos) {
+                    foreach ($this->restaurante_tem_tipos as $rt) {
+                        if (!$this->__request_attributes['tipos'] || !in_array($rt->tiporestaurante_id, $this->__request_attributes['tipos'])) {
+                            $rt->delete();
+                        }
+                    }
+                }
+            }
+
+            unset($_SESSION[$this->__request_attributes['hash_consumidor']]);
+        }
+
+        if ($this->enderecos) {
+            foreach ($this->enderecos as $e) {
+                $e->favorito = ($e->hash() == $this->__request_attributes['endereco_favorito'] ? 1 : 0);
+                $e->save();
+            }
+        }
     }
 
     public function destroy_usuario() {
-	$this->usuario->delete();
+        $this->usuario->delete();
     }
 
     public static function all() {
-	return parent::all(array("joins" => "inner join usuario on " . static::$table_name . ".usuario_id = usuario.id", "order" => "usuario.nome asc"));
+        return parent::all(array("joins" => "inner join usuario on " . static::$table_name . ".usuario_id = usuario.id", "order" => "usuario.nome asc"));
     }
 
 }
