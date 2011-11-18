@@ -91,6 +91,8 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
            $("#formulario").submit();
         });
         
+
+        
     });
     function show(x){
         oque = document.getElementById(x);
@@ -150,14 +152,10 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                                         if($_POST){
                                             if($_GET['bai']){ 
                                                 $itens = Restaurante::find_by_sql("SELECT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE RAB.bairro_id = ".$_GET['bai']." AND R.nome LIKE '%".$_POST['caixa_filtro']."%' AND RTT.tiporestaurante_id = ".$categoria->id." ");
-                                            }else{
-                                                $itens = Restaurante::find_by_sql("SELECT R.* FROM restaurante R INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE R.cidade_id = ".$_GET['cid']." AND R.nome LIKE '%".$_POST['caixa_filtro']."%' AND RTT.tiporestaurante_id = ".$categoria->id." ");
                                             }
                                         }else{
                                             if($_GET['bai']){ 
                                                 $itens = Restaurante::find_by_sql("SELECT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE RAB.bairro_id = ".$_GET['bai']." AND RTT.tiporestaurante_id = ".$categoria->id." ");
-                                            }else{
-                                                $itens = Restaurante::find_by_sql("SELECT R.* FROM restaurante R INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE R.cidade_id = ".$_GET['cid']." AND RTT.tiporestaurante_id = ".$categoria->id." ");
                                             }
                                         }
                                         $num = sizeof($itens);
@@ -242,7 +240,19 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                         <div id="box_textos">
                         	<div id="b1"><?= $restaurante->getNomeCategoria() ?></div>
                             <div class="texto_box" id="b2"><?= $restaurante->nome ?></div>
-                            <div class="texto_box" id="b3">Horario de funcionamento  |  Forma de pagamento</div>
+                            <div class="texto_box" id="b3">Horario de funcionamento  
+                                <?  $horarios = HorarioRestaurante::all(array("conditions" => array("restaurante_id = ?",$restaurante->id))); 
+                                    if($horarios){ ?>
+                                        <div style="display:none;"><table>
+                                       <? foreach($horarios as $horario){ ?>
+                                             <tr><th><b><?= $horario->dia_da_semana ?></b></th><th><?= $horario->hora_inicio1 ?></th><th><?= $horario->hora_fim1 ?></th><th><?= $horario->hora_inicio2 ?></th><th><?= $horario->hora_fim2 ?></th><th><?= $horario->hora_inicio3 ?></th><th><?= $horario->hora_fim3 ?></th></tr>   
+                                        <? } ?>
+                                        </table></div>
+                                    <? }
+                                
+                                ?>
+                                
+                                |  Forma de pagamento</div>
                             <div class="texto_box" id="b4">Tempo de entrega: <?= $restaurante->tempo_entrega ?> min | Taxa de entrega: <?= StringUtil::doubleToCurrency($restaurante->preco_entrega) ?></div>
                         </div>
                         <div id="box_botoes">
