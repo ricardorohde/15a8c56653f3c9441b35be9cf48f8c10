@@ -9,7 +9,6 @@ class Restaurante extends ActiveRecord\Model {
     );
     static $has_many = array(
 	array('pedidos', 'class_name' => 'Pedido'),
-        array('horarios', 'class_name' => 'HorarioRestaurante'),
 	array('usuarios', 'class_name' => 'UsuarioRestaurante'),
 	array('produtos', 'class_name' => 'Produto'),
 	array('restaurante_tem_tipos', 'class_name' => 'RestauranteTemTipo'),

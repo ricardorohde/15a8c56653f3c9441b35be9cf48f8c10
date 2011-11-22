@@ -15,6 +15,10 @@ class RestauranteAtendeBairro extends ActiveRecord\Model {
     static $validates_uniqueness_of = array(
 	array(array('Restaurante' => 'restaurante_id', 'Bairro' => 'bairro_id'), 'message' => 'já estão associados')
     );
+    
+    public function getPrecoFormatado() {
+	return StringUtil::doubleToCurrency($this->preco_entrega);
+    }
 
 }
 

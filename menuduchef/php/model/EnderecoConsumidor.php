@@ -18,13 +18,12 @@ class EnderecoConsumidor extends ActiveRecord\Model {
 
 	if ($attributes) {
 	    foreach ($attributes as $key => $attr) {
-		if ($key != 'id' && $key != 'consumidor_id' && $key != 'favorito') {
+		if ($key != 'id' && $key != 'consumidor_id') {
 		    $to_md5 .= $attr . '-';
 		}
 	    }
 	    
 	    $md5 = md5($to_md5);
-	    #$md5 = $to_md5;
 	}
 
 	return $md5;
