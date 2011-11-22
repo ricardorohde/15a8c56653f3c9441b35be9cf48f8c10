@@ -1,5 +1,6 @@
 <?
-
+session_cache_expire(15);
+session_start();
 include_once("../lib/config.php");
 
 $data = HttpUtil::getParameterArray();
@@ -25,7 +26,13 @@ if (trim($data['email']) && trim($data['senha'])) {
 
 	    case Usuario::$CONSUMIDOR:
 		$usuario_obj = Consumidor::find_by_usuario_id($usuario->id);
-		$redirect = '../../';
+		$redirect = '../../restaurantes';
+		$_SESSION['sessao_valida'] = 1;
+		$consumidor=Consumidor::find_by_usuario_id($usuario->id);
+		$_SESSION['consumidor_id'] = $consumidor->id;
+		$_SESSION['usuario'] = $usuario->nome;
+		$endereco=EnderecoConsumidor::find_by_consumidor_id($consumidor->id);
+		$_SESSION['bairro'] = $endereco->bairro_id;
 		break;
 	}
 	

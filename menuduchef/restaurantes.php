@@ -1,12 +1,44 @@
 <?
 
-
-
 include("include/header.php");
+
+session_cache_expire(15);
+session_start();
+
+
+$bai = 0;
+if($_SESSION['sessao_valida']){
+    if($_SESSION['consumidor_id']){
+        $endereco = "";
+        $enderecos = EnderecoConsumidor::all(array("conditions"=>array("consumidor_id = ?",$_SESSION['consumidor_id'])));
+        if($enderecos){
+            foreach($enderecos as $ende){
+                $sel = "";
+                if($_POST){
+                    if($ende->id==$_POST['endereco_cliente']){
+                        $sel = "selected";
+                        $_SESSION['bairro'] = $ende->bairro_id;
+                    }
+                }else{
+                    if($ende->favorito){
+                        $sel = "selected";
+                        $_SESSION['bairro'] = $ende->bairro_id;
+                    }
+                }
+                $endereco .= "<option value='".$ende->id."' ".$sel.">".$ende->logradouro."</option>";
+            }
+        }
+    }else{
+        $endereco = "<option value='0'>CEP ".$_SESSION['bairro']."</option>";
+    }
+}
+
+$bai = $_SESSION['bairro'];
 $pag = 1;
 $lim1 = 0;
 if($_POST){
     
+	$_SESSION['bairro'] = $_POST['bairro'];
         if(($_POST['pagina'])&&($_POST['volta_pagina1']==0)){
             $pag = $_POST['pagina'];
             if($pag==1){
@@ -16,8 +48,8 @@ if($_POST){
             }
         }
     
-	if($_GET['bai']){
-		$sql = "SELECT DISTINCT R.*, RAB.preco_entrega, RAB.tempo_entrega FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$_GET['bai']." AND R.nome LIKE '%".$_POST['caixa_filtro']."%' ";
+	if($bai){
+		$sql = "SELECT DISTINCT R.*, RAB.preco_entrega, RAB.tempo_entrega FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$bai." AND R.nome LIKE '%".$_POST['caixa_filtro']."%' ";
 	}
 	$pri = 0;
 	foreach($_POST as $key => $p){
@@ -43,10 +75,10 @@ if($_POST){
 	$num_rest = sizeof($rests);
 	
 }else{
-	if($_GET['bai']){
-		$restaurantes = Restaurante::find_by_sql("SELECT DISTINCT R.*, RAB.preco_entrega, RAB.tempo_entrega FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$_GET['bai']." ORDER BY R.nome LIMIT 6");
+	if($bai){
+		$restaurantes = Restaurante::find_by_sql("SELECT DISTINCT R.*, RAB.preco_entrega, RAB.tempo_entrega FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$bai." ORDER BY R.nome LIMIT 6");
 		
-		$rests = Restaurante::find_by_sql("SELECT DISTINCT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$_GET['bai']." ORDER BY R.nome");
+		$rests = Restaurante::find_by_sql("SELECT DISTINCT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id WHERE R.ativo = 1 AND RAB.bairro_id = ".$bai." ORDER BY R.nome");
 		$num_rest = sizeof($rests);
 	}
 }
@@ -91,7 +123,19 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
            $("#formulario").submit();
         });
         
-
+        $('#endereco_cliente').change(function() {
+           $("#volta_pagina1").attr("value",1);
+           $("#formulario").submit();
+        });
+        
+        $('.abre_horario').mouseover(function() {
+           qual = $(this).attr("horario");
+           $("#"+qual).show();
+        });
+        $('.abre_horario').mouseout(function() {
+           qual = $(this).attr("horario");
+           $("#"+qual).hide();
+        });
         
     });
     function show(x){
@@ -129,7 +173,7 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                             <img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
                             <div style="width:198px; height:25px; margin-left:7px;">
                                 <select id="endereco_cliente" name="endereco_cliente">
-                                    
+                                    <?= $endereco ?>
                                 </select>
                             </div>
                         </div>
@@ -150,12 +194,12 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                             <? if($categorias){ 
                                     foreach($categorias as $categoria){ 
                                         if($_POST){
-                                            if($_GET['bai']){ 
-                                                $itens = Restaurante::find_by_sql("SELECT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE RAB.bairro_id = ".$_GET['bai']." AND R.nome LIKE '%".$_POST['caixa_filtro']."%' AND RTT.tiporestaurante_id = ".$categoria->id." ");
+                                            if($bai){ 
+                                                $itens = Restaurante::find_by_sql("SELECT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE RAB.bairro_id = ".$bai." AND R.nome LIKE '%".$_POST['caixa_filtro']."%' AND RTT.tiporestaurante_id = ".$categoria->id." ");
                                             }
                                         }else{
-                                            if($_GET['bai']){ 
-                                                $itens = Restaurante::find_by_sql("SELECT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE RAB.bairro_id = ".$_GET['bai']." AND RTT.tiporestaurante_id = ".$categoria->id." ");
+                                            if($bai){ 
+                                                $itens = Restaurante::find_by_sql("SELECT R.* FROM restaurante R INNER JOIN restaurante_atende_bairro RAB ON R.id = RAB.restaurante_id INNER JOIN restaurante_tem_tipo RTT ON R.id = RTT.restaurante_id WHERE RAB.bairro_id = ".$bai." AND RTT.tiporestaurante_id = ".$categoria->id." ");
                                             }
                                         }
                                         $num = sizeof($itens);
@@ -240,12 +284,12 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                         <div id="box_textos">
                         	<div id="b1"><?= $restaurante->getNomeCategoria() ?></div>
                             <div class="texto_box" id="b2"><?= $restaurante->nome ?></div>
-                            <div class="texto_box" id="b3">Horario de funcionamento  
+                            <div class="texto_box" horario="horarios_<?= $restaurante->id ?>" id="b3"><span class="abre_horario" horario="horarios_<?= $restaurante->id ?>">Horario de funcionamento</span>  
                                 <?  $horarios = HorarioRestaurante::all(array("conditions" => array("restaurante_id = ?",$restaurante->id))); 
                                     if($horarios){ ?>
-                                        <div style="display:none;"><table>
+                                        <div id="horarios_<?= $restaurante->id ?>" style="display:none; z-index:3; background-color: #DDD; position: absolute;"><table>
                                        <? foreach($horarios as $horario){ ?>
-                                             <tr><th><b><?= $horario->dia_da_semana ?></b></th><th><?= $horario->hora_inicio1 ?></th><th><?= $horario->hora_fim1 ?></th><th><?= $horario->hora_inicio2 ?></th><th><?= $horario->hora_fim2 ?></th><th><?= $horario->hora_inicio3 ?></th><th><?= $horario->hora_fim3 ?></th></tr>   
+                                                <tr><th><b><?= $horario->dia_da_semana ?></b></th><th><?= $horario->hora_inicio1 ?></th><th>&agrave;s</th><th><?= $horario->hora_fim1 ?></th> <? if($horario->hora_inicio2){ ?><th> | </th> <th><?= $horario->hora_inicio2 ?></th><th>&agrave;s</th><th><?= $horario->hora_fim2 ?></th> <? } if($horario->hora_inicio3){ ?> <th> | </th><th><?= $horario->hora_inicio3 ?></th><th>&agrave;s</th><th><?= $horario->hora_fim3 ?></th> <? } ?></tr>   
                                         <? } ?>
                                         </table></div>
                                     <? }
@@ -259,7 +303,7 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                         	<div style="width:110px; height:72px;">
                             </div>
                             <div id="botao_pedir">
-                       	    	<img src="background/botao_pedir.gif" onclick="location.href=('cardapio.php?res=<?= $restaurante->id ?>');" width="75" height="28" alt="Pedir" style="float:right; margin-bottom:0; cursor:pointer;">
+                       	    	<img src="background/botao_pedir.gif" onClick="location.href=('cardapio.php?res=<?= $restaurante->id ?>');" width="75" height="28" alt="Pedir" style="float:right; margin-bottom:0; cursor:pointer;">
                             </div>
                         </div>
                     </div>

@@ -31,10 +31,6 @@ if (HttpUtil::isLocalhost()) {
 	<script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
         <script type="text/javascript" src="js/util.js"></script>
         <script type='text/javascript' src="js/quickmenu.js"></script>
-        <script type="text/javascript">
-            var imgLoading = new Image();
-            imgLoading.src = '<?= PATH_IMAGE_LOADING ?>';
-        </script>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link rel="stylesheet" type="text/css" href="css/menu.css" />
 	<link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" />

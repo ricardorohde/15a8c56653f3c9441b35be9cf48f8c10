@@ -2,6 +2,14 @@
 	<div id="menu" class="text">
     	<!-- A div abaixo destinada para login! -->
         <div id="login">
+                 <form action="php/controller/login" method="post">
+    <label style="font-size:14px;" for="email">E-mail:</label>
+    <input  type="text" name="email" maxlength="50" style="float:right; padding:0; margin-right:8px;"/>
+    <label style="font-size:14px;" for="senha">Senha:</label>
+    <input  type="password" name="senha" maxlength="50" style="float:right; padding:0; margin-right:8px;"/>
+    <input class="botao_ok" style="padding:0; margin-left:180px; margin-top:3px; position:absolute; z-index:3;" type="submit" value="OK"/>  
+    
+    </form>
         </div>
         <div id="itens_menu">
         	<div style="padding-top:15px;">

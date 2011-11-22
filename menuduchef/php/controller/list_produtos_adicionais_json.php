@@ -5,5 +5,5 @@ $produtos_adicionais = ProdutoAdicional::find_all_by_restaurante_id($_REQUEST["i
 
 header("Content-type: application/json;");
 
-echo StringUtil::arrayActiveRecordToJson($produtos_adicionais, array('include' => 'produto_tem_produtos_adicionais'));
+echo StringUtil::arrayActiveRecordToJson($produtos_adicionais, "produto_tem_produtos_adicionais");
 ?>
