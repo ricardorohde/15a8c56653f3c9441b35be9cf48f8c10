@@ -7,6 +7,7 @@ session_start();
 
 
 $bai = 0;
+
 if($_SESSION['sessao_valida']){
     if($_SESSION['consumidor_id']){
         $endereco = "";
