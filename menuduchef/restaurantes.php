@@ -1,9 +1,8 @@
 <?
+session_start();
 
 include("include/header.php");
 
-session_cache_expire(15);
-session_start();
 
 
 $bai = 0;
@@ -19,14 +18,23 @@ if($_SESSION['sessao_valida']){
                     if($ende->id==$_POST['endereco_cliente']){
                         $sel = "selected";
                         $_SESSION['bairro'] = $ende->bairro_id;
+                        $_SESSION['endereco_cliente_id'] = $_POST['endereco_cliente'];
                     }
                 }else{
-                    if($ende->favorito){
+                    if($_SESSION['endereco_cliente_id']){
+                        if($ende->id==$_SESSION['endereco_cliente_id']){
+                            $sel = "selected";
+                            $_SESSION['bairro'] = $ende->bairro_id;
+                            $_SESSION['endereco_cliente_id'] = $_SESSION['endereco_cliente_id'];
+                        }
+                    }
+                    else if($ende->favorito){
                         $sel = "selected";
                         $_SESSION['bairro'] = $ende->bairro_id;
+                        $_SESSION['endereco_cliente_id'] = $ende->id;
                     }
                 }
-                $endereco .= "<option value='".$ende->id."' ".$sel.">".$ende->logradouro."</option>";
+                $endereco .= "<option value='".$ende->id."' ".$sel.">".$ende->logradouro.", ".$ende->numero." - ".$ende->bairro->nome."</option>";
             }
         }
     }else{
@@ -129,6 +137,15 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
            $("#formulario").submit();
         });
         
+        $('.abre_formapagamento').mouseover(function() {
+           qual = $(this).attr("formapagamento");
+           $("#"+qual).show();
+        });
+        $('.abre_formapagamento').mouseout(function() {
+           qual = $(this).attr("formapagamento");
+           $("#"+qual).hide();
+        });
+        
         $('.abre_horario').mouseover(function() {
            qual = $(this).attr("horario");
            $("#"+qual).show();
@@ -173,7 +190,7 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                         <div id="seleciona_endereco">
                             <img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
                             <div style="width:198px; height:25px; margin-left:7px;">
-                                <select id="endereco_cliente" name="endereco_cliente">
+                                <select id="endereco_cliente" name="endereco_cliente" style="width:205px;">
                                     <?= $endereco ?>
                                 </select>
                             </div>
@@ -297,7 +314,25 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                                 
                                 ?>
                                 
-                                |  Forma de pagamento</div>
+                                | <span class="abre_formapagamento" formapagamento="formapagamento_<?= $restaurante->id ?>"> Forma de pagamento</span>
+                                <?  $fps = RestauranteAceitaFormaPagamento::all(array("conditions" => array("restaurante_id = ?",$restaurante->id))); 
+                                    if($fps){ ?>
+                                        <div id="formapagamento_<?= $restaurante->id ?>" style="display:none; z-index:3; background-color: #DDD; position: absolute;"><table><tr>
+                                        <? $col = 1; ?>
+                                        <? foreach($fps as $fp){ ?>
+                                                <th><?= $fp->forma_pagamento->nome ?></th>   
+                                        <? 
+                                        $col++;
+                                        if($col==2){
+                                            $col = 1;
+                                            echo "</tr><tr>";
+                                        } ?>
+                                        <? } ?>
+                                        </tr></table></div>
+                                    <? }
+                                
+                                ?>
+                            </div>
                             <div class="texto_box" id="b4">Tempo de entrega: <?= $restaurante->tempo_entrega ?> min | Taxa de entrega: <?= StringUtil::doubleToCurrency($restaurante->preco_entrega) ?></div>
                         </div>
                         <div id="box_botoes">
