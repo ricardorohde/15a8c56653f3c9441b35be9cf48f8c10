@@ -15,10 +15,10 @@ var URL_ENDERECOS_JSON = 'php/controller/list_enderecos_json';
 var URL_PRODUTOS_JSON = 'php/controller/list_produtos_json';
 var URL_PRODUTOS_ADICIONAIS_JSON = 'php/controller/list_produtos_adicionais_json';
 var URL_PRODUTO_SEGUNDO_SABOR = 'php/controller/list_segundo_sabor_json';
-var URL_ENDERECO_CONSUMIDOR = 'php/controller/add_endereco_consumidor';
+var URL_ENDERECO_CONSUMIDOR = 'php/controller/endereco_consumidor_json';
 
 function isEmpty(data) {
-    return data == null || data == '' || data.length == 0;
+    return data == null || data == undefined || data == '' || data.length == 0;
 }
 
 function autoCompleteComboBox(url, parameters, targetId, valueIndex, descriptionIndex, preSelectedValue, booleanIndex) {
@@ -45,7 +45,7 @@ function autoCompleteComboBox(url, parameters, targetId, valueIndex, description
 		}
                 
 		if(preSelected) {
-		    contentOption += ' selected="true"';
+		    contentOption += ' selected="selected"';
 		}
                 
 		contentOption += '>' + key[descriptionIndex] + '</option>';
@@ -136,7 +136,7 @@ function autoCompleteBairrosCheckBox(idCidade, idRestaurante) {
 		    'restaurante_id': idRestaurante, 
 		    'bairro_id': key.id
 		}, function(atende) {
-		    target.append($('<input class="adjacent clear-left top10" type="checkbox" name="bairros[]" value="' + key.id + '" id="bairro' + key.id + '" ' + (atende ? 'checked="true"' : '') + ' />'));
+		    target.append($('<input class="adjacent clear-left top10" type="checkbox" name="bairros[]" value="' + key.id + '" id="bairro' + key.id + '" ' + (atende ? 'checked="checked"' : '') + ' />'));
 		    target.append($('<label class="adjacent top10" for="bairro' + key.id + '">' + key.nome + '</label>'));
 		    target.append($('<input class="adjacent" type="text" name="preco_entrega[]" value="' + (atende ? atende.preco_entrega : '') + '" id="preco_entrega' + key.id + '" />'));
 		    target.append($('<br />'));
@@ -171,7 +171,7 @@ function autoCompleteProdutosAdicionaisCheckBox(idRestaurante, idProduto) {
 			}
 		    });
 		
-		    target.append($('<input class="adjacent" type="checkbox" name="produtos_adicionais[]" value="' + key.id + '" id="produto_adicional' + key.id + '" ' + (produtoTemAdicional ? 'checked="true"' : '') + ' />'));
+		    target.append($('<input class="adjacent" type="checkbox" name="produtos_adicionais[]" value="' + key.id + '" id="produto_adicional' + key.id + '" ' + (produtoTemAdicional ? 'checked="checked"' : '') + ' />'));
 		    target.append($('<label class="adjacent" for="produto_adicional' + key.id + '">' + key.nome + '</label>'));
 		    target.append($('<br />'));
 		});
@@ -213,45 +213,64 @@ function autoCompleteProdutosCheckBox(idRestaurante) { //seinao ainda
     }
 }
 
-function addEnderecoConsumidor(parameters, tableId, imgLoading) {
+function listEnderecosConsumidor(arrayEnderecos, tableId, hashConsumidor) {
+    if(!isEmpty(arrayEnderecos)) {
+	$('#' + tableId + ' .row_data').remove();
+	$('#add_endereco').data('first', 0); //TODO verificar as ocorrências de uso desse attributo
+	
+	$.each(arrayEnderecos, function(index, data) {
+	    var row = '<tr class="row_data">';
+	    row += '<input type="hidden" name="hash_endereco" value="' + data.hash + '" />';
+	    row += '<td>' + data.logradouro + '</td>';
+	    row += '<td>' + data.bairro.cidade.nome + '</td>';
+	    row += '<td>' + data.bairro.nome + '</td>';
+	    row += '<td>' + (data.numero ? data.numero : '---') + '</td>';
+	    row += '<td>' + (data.complemento ? data.complemento : '---') + '</td>';
+	    row += '<td>' + data.cep + '</td>';
+	    row += '<td><input type="radio" name="endereco_favorito" value="' + data.hash + '" ' + (data.favorito ? 'checked="checked"' : '') + ' /></td>';
+	    row += '<td><a href="javascript:void(0)" class="modificar_endereco">Modificar</a></td>';
+	    row += '<td><a href="javascript:void(0)" class="excluir_endereco">Excluir</a></td>';
+	    row += '</tr>';
+
+	    var rowElement = $(row).appendTo($('#' + tableId));
+
+	    rowElement.find('.modificar_endereco').click(function() {
+                data.endereco_id = data.id;
+                data.cidade_id = data.bairro.cidade_id;
+                if(!parseInt(data.numero)) {
+                    data.numero = null;
+                }
+                $('#' + ENDERECO_DIALOG_ID).dialog('option', 'isUpdate', 1);
+                $('#' + ENDERECO_DIALOG_ID).dialog('option', 'attributes', data);
+                $('#' + ENDERECO_DIALOG_ID).dialog('open');
+	    });
+
+	    rowElement.find('.excluir_endereco').click(function() {
+                $.getJSON(URL_ENDERECO_CONSUMIDOR, {'deleteHash': data.hash, 'favorito': data.favorito, 'hash_consumidor': hashConsumidor}, function(e) {
+                    listEnderecosConsumidor(e, tableId, hashConsumidor);
+                });
+	    });
+	});
+    } else {
+	$('#' + tableId + ' .row_data').remove();
+	$('<tr class="row_data"><td colspan="9">Nenhum endereço cadastrado</td></tr>').appendTo($('#' + tableId));
+	$('#add_endereco').data('first', 1);
+    }
+}
+
+function addEnderecoConsumidor(parameters, tableId, hashConsumidor, imgLoading) {
     $('#mensagens_endereco').empty().append($('<img src="' + imgLoading.src + '" alt="Carregando" title="Carregando" />'));
+    var mergedParameters = $.merge(parameters, [{'name': 'hash_consumidor', 'value': hashConsumidor}]);
     
-    $.post(URL_ENDERECO_CONSUMIDOR, parameters, function(data) {
+    $.post(URL_ENDERECO_CONSUMIDOR, mergedParameters, function(data) {
 	if(!isEmpty(data)) {
 	    if(!data.errors) {
-		$('#nenhum_endereco').remove();
-		console.log('Endereço: \n' + data + '\nsendo adicionado');
-		var row = '<tr>';
-		row += '<input type="hidden" name="hash_endereco" value="' + data.hash + '" />';
-		row += '<td>' + data.logradouro + '</td>';
-		row += '<td>' + data.bairro.cidade.nome + '</td>';
-		row += '<td>' + data.bairro.nome + '</td>';
-		row += '<td>' + (data.numero ? data.numero : '---') + '</td>';
-		row += '<td>' + (data.complemento ? data.complemento : '---') + '</td>';
-		row += '<td>' + data.cep + '</td>';
-		row += '<td><input type="radio" name="endereco_favorito" value="' + data.hash + '" ' + (data.favorito ? 'checked="true"' : '') + ' /></td>';
-		row += '<td><a href="javascript:void(0)" class="modificar_endereco">Modificar</a></td>';
-		row += '<td><a href="javascript:void(0)" class="excluir_endereco">Excluir</a></td>';
-		row += '</tr>';
-
-		var rowElement = $(row).appendTo($('#' + tableId));
-		
-		rowElement.find('.modificar_endereco').click(function() {
-		    alert('modificar ' + data.logradouro);
-		});
-		
-		rowElement.find('.excluir_endereco').click(function() {
-		    alert('excluir ' + data.logradouro);
-		});
-		
+		listEnderecosConsumidor(data, tableId, hashConsumidor);
 		$('#' + ENDERECO_DIALOG_ID).dialog('close');
 	    } else {
 		$('#mensagens_endereco').empty();
-		
 		$.each(data.errors, function(index, key) {
-		    $('#mensagens_endereco').append($(
-			'<div class="msg error">&raquo; ' + key.error + '</div>'
-			));
+		    $('#mensagens_endereco').append($('<div class="msg error">&raquo; ' + key.error + '</div>'));
 		});
 	    }
 	}
@@ -281,27 +300,30 @@ $.fn.extend({
 	});
     },
     populateForm: function(fields) {
+	var form = this;
+	
 	$.each(fields, function (name, value) {
-	    $('input[name=' + name + '], textarea[name=' + name + '], select[name=' + name + ']').each(function() {
+            var formattedValue = $("<div/>").html(value).text();
+	    $('input[name=' + name + '], textarea[name=' + name + '], select[name=' + name + ']', form).each(function() {
 		switch (this.nodeName.toLowerCase()) {
 		    case 'textarea':
 		    case 'input':
 			switch (this.type.toLowerCase()) {
 			    case 'radio':
 			    case 'checkbox':
-				if (this.value == value) {
+				if (this.value == formattedValue) {
 				    $(this).click();
 				}
 				break;
 			    default:
-				$(this).val(value);
+				$(this).val(formattedValue);
 				break;
 			}
 			break;
 			
 		    case 'select':
 			$('option', this).each(function(){
-			    if (this.value == value) {
+			    if (this.value == formattedValue) {
 				this.selected = true;
 			    }
 			});

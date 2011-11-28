@@ -28,9 +28,13 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
             addInput_t(++current_t);
         });
 
-        listEnderecosConsumidor(<?= $enderecosJson ?>, 'enderecos');
+        listEnderecosConsumidor(<?= $enderecosJson ?>, 'enderecos', '<?= $hash_consumidor ?>');
         
+	var imgLoading = new Image();
+	imgLoading.src = '<?= PATH_IMAGE_LOADING ?>';
+	
         $('#add_endereco').click(function() {
+	    $('#form_endereco').dialog('option', 'first', $(this).data('first'));
             $('#form_endereco').dialog('open');
         });
 	
@@ -41,21 +45,24 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
             resizable: false,
             buttons: {
                 'Salvar': function() {
-                    addEnderecoConsumidor($('input, select, textarea', this).add('#hash_consumidor').serializeArray(), 'enderecos', imgLoading);
+                    addEnderecoConsumidor($('input, select, textarea', this).serializeArray(), 'enderecos', '<?= $hash_consumidor ?>', imgLoading);
                 },
                 'Cancelar': function () {
                     $(this).dialog('close');
                 }
             },
             open: function() {
+                var first = parseInt($(this).dialog('option', 'first'));
                 var isUpdate = parseInt($(this).dialog('option', 'isUpdate'));
-                console.log(isUpdate);
                 var attributes = $(this).dialog('option', 'attributes');
-                
+		
                 if(isUpdate) {
-                    console.log(attributes);
                     $(this).populateForm(attributes);
                 }
+		
+		if(first) {
+		    $('#checkbox_endereco_favorito').attr('checked', 'checked');
+		}
                 
                 autoCompleteBairros($('#cidade_endereco').val(), 'bairro_endereco', attributes ? attributes.bairro_id : null);
 		
@@ -147,7 +154,7 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
         <label class="adjacent top10" for="checkbox_endereco_favorito">Atribuir como endereço favorito</label>
     </div>
 
-    <table class="list" id="enderecos">
+    <table class="list w100" id="enderecos">
         <tr>
             <th>Logradouro</th>
             <th>Cidade</th>
@@ -162,12 +169,12 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
     </table>
 
     <label class="normal">Ativo:</label>
-    <input class="adjacent" type="radio" id="ativo_sim" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="true"<? } ?> />
+    <input class="adjacent" type="radio" id="ativo_sim" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="checked"<? } ?> />
     <label for="ativo_sim" class="adjacent">Sim</label>
-    <input class="adjacent" type="radio" id="ativo_nao" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />
+    <input class="adjacent" type="radio" id="ativo_nao" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="checked"<? } ?> />
     <label for="ativo_nao" class="adjacent">Não</label>
 
-<? include("../../include/inputs_email_senha.php"); ?>
+    <? include("../../include/inputs_email_senha.php"); ?>
 
     <input class="btn" type="submit" value="<?= $obj->id ? "Modificar" : "Criar" ?>" />
 </form>

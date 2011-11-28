@@ -226,7 +226,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	    <td><?= $endereco->bairro->cidade->nome ?></td>
 	    <td><?= $endereco->bairro->nome ?></td>
         <td><?= $endereco->referencia ?></td>
-        <td align="center"><input type="radio" name="favorito" <?= $endereco->favorito ? 'checked="true"' : '' ?> /></td>	
+        <td align="center"><input type="radio" name="favorito" <?= $endereco->favorito ? 'checked="checked"' : '' ?> /></td>	
 	    <td><a href="javascript:void(0)" class="excluir">Excluir</a></td>
 	    
     </tr>

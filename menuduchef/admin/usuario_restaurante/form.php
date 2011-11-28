@@ -23,7 +23,7 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="selected"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>
@@ -31,8 +31,8 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
     <label class="normal">Perfil:</label>
     <select class="formfield w25" name="perfil">
 	<option value="0">-- Selecione --</option>
-	<option <? if($obj->tipo == Usuario::$GERENTE) { ?>selected="true"<? } ?> value="<?= Usuario::$GERENTE ?>"><?= Usuario::getNomePerfilById(Usuario::$GERENTE) ?></option>
-	<option <? if($obj->tipo == Usuario::$ATENDENTE) { ?>selected="true"<? } ?> value="<?= Usuario::$ATENDENTE ?>"><?= Usuario::getNomePerfilById(Usuario::$ATENDENTE) ?></option>
+	<option <? if($obj->tipo == Usuario::$GERENTE) { ?>selected="selected"<? } ?> value="<?= Usuario::$GERENTE ?>"><?= Usuario::getNomePerfilById(Usuario::$GERENTE) ?></option>
+	<option <? if($obj->tipo == Usuario::$ATENDENTE) { ?>selected="selected"<? } ?> value="<?= Usuario::$ATENDENTE ?>"><?= Usuario::getNomePerfilById(Usuario::$ATENDENTE) ?></option>
     </select>
 
     <? include("../../include/inputs_email_senha.php"); ?>

@@ -21,7 +21,7 @@ $bairros = Bairro::all(array("order" => "nome asc"));
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="selected"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>
@@ -33,7 +33,7 @@ $bairros = Bairro::all(array("order" => "nome asc"));
 	if ($bairros) {
 	    foreach ($bairros as $bairro) {
 		?>
-		<option value="<?= $bairro->id ?>" <? if ($bairro->id == $obj->bairro_id) { ?>selected="true"<? } ?>><?= $bairro->nome ?></option>
+		<option value="<?= $bairro->id ?>" <? if ($bairro->id == $obj->bairro_id) { ?>selected="selected"<? } ?>><?= $bairro->nome ?></option>
 	    <? }
 	} ?>
     </select>

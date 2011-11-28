@@ -111,7 +111,7 @@ $aparece_sabores_extras = 0;
 		if ($produtos2) {
 		    foreach ($produtos2 as $produto) {
 			?>
-	    	    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id2) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+	    	    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id2) { ?>selected="selected"<? } ?>><?= $produto->nome ?></option>
 		<? }
 	    } ?>
     	</select>
@@ -133,7 +133,7 @@ $aparece_sabores_extras = 0;
 		if ($produtos2) {
 		    foreach ($produtos2 as $produto) {
 		?>
-		    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id3) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+		    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id3) { ?>selected="selected"<? } ?>><?= $produto->nome ?></option>
 		<? }
 		} ?>
 	    </select>
@@ -154,7 +154,7 @@ $aparece_sabores_extras = 0;
 		if ($produtos2) {
 		    foreach ($produtos2 as $produto) {
 		?>
-		    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id4) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+		    <option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id4) { ?>selected="selected"<? } ?>><?= $produto->nome ?></option>
 		<? }
 	    } ?>
 	    </select>

@@ -21,7 +21,7 @@ $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 	if ($produtos) {
 	    foreach ($produtos as $produto) {
 		?>
-		<option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id) { ?>selected="true"<? } ?>><?= $produto->nome ?></option>
+		<option value="<?= $produto->id ?>" <? if ($produto->id == $obj->produto_id) { ?>selected="selected"<? } ?>><?= $produto->nome ?></option>
 	    <? }
 	} ?>
     </select>
@@ -33,7 +33,7 @@ $produtos_adicionais = ProdutoAdicional::all(array("order" => "nome asc"));
 	if ($produtos_adicionais) {
 	    foreach ($produtos_adicionais as $produto_adicional) {
 		?>
-		<option value="<?= $produto_adicional->id ?>" <? if ($produto_adicional->id == $obj->produtoadicional_id) { ?>selected="true"<? } ?>><?= $produto_adicional->nome ?></option>
+		<option value="<?= $produto_adicional->id ?>" <? if ($produto_adicional->id == $obj->produtoadicional_id) { ?>selected="selected"<? } ?>><?= $produto_adicional->nome ?></option>
 	    <? }
 	} ?>
     </select>

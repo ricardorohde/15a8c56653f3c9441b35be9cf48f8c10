@@ -39,7 +39,7 @@ $preco_total = 0;
 	if ($consumidores) {
 	    foreach ($consumidores as $consumidor) {
 		?>
-		<option value="<?= $consumidor->id ?>" <? if ($consumidor->id == $obj->consumidor_id) { ?>selected="true"<? } ?>><?= $consumidor->nome ?></option>
+		<option value="<?= $consumidor->id ?>" <? if ($consumidor->id == $obj->consumidor_id) { ?>selected="selected"<? } ?>><?= $consumidor->nome ?></option>
 	    <? }
 	} ?>
     </select>
@@ -55,7 +55,7 @@ $preco_total = 0;
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="selected"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>
@@ -104,9 +104,9 @@ $preco_total = 0;
     <? } ?>
     
     <label class="normal">Pagamento Efetuado:</label>
-    <input class="adjacent" id="pagamento_efetuado_sim" type="radio" name="pagamento_efetuado" value="1" <? if ($obj->id && $obj->pagamento_efetuado === 1) { ?>checked="true"<? } ?> />
+    <input class="adjacent" id="pagamento_efetuado_sim" type="radio" name="pagamento_efetuado" value="1" <? if ($obj->id && $obj->pagamento_efetuado === 1) { ?>checked="checked"<? } ?> />
     <label for="pagamento_efetuado_sim" class="adjacent">Sim</label>
-    <input class="adjacent" id="pagamento_efetuado_nao" type="radio" name="pagamento_efetuado" value="0" <? if (!$obj->id || $obj->pagamento_efetuado === 0) { ?>checked="true"<? } ?> />
+    <input class="adjacent" id="pagamento_efetuado_nao" type="radio" name="pagamento_efetuado" value="0" <? if (!$obj->id || $obj->pagamento_efetuado === 0) { ?>checked="checked"<? } ?> />
     <label for="pagamento_efetuado_nao" class="adjacent">Não</label>
     
     <label class="normal">Forma de Pagamento:</label>

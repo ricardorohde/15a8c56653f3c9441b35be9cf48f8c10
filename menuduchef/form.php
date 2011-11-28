@@ -46,7 +46,7 @@ $bairros = Bairro::all();
             if ($cidades) {
                 foreach ($cidades as $cidade) {
                     ?>
-                    <option value="<?= $cidade->id ?>" <? if ($cidade->id == $obj->cidade_id) { ?>selected="true"<? } ?>><?= $cidade->nome ?></option>
+                    <option value="<?= $cidade->id ?>" <? if ($cidade->id == $obj->cidade_id) { ?>selected="selected"<? } ?>><?= $cidade->nome ?></option>
                 <? }
             } ?>
         </select>
@@ -56,18 +56,18 @@ $bairros = Bairro::all();
     <input class="formfield w50" type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br /><br />
     
     <label class="normal">Ativo:</label>
-    <input class="adjacent" id="ativo_sim" type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="true"<? } ?> />
+    <input class="adjacent" id="ativo_sim" type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="checked"<? } ?> />
     <label class="adjacent" for="ativo_sim">Sim</label>
-    <input class="adjacent" id="ativo_nao" type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />
+    <input class="adjacent" id="ativo_nao" type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="checked"<? } ?> />
     <label class="adjacent" for="ativo_nao">Não</label>
     
     <label class="normal">Pizzas podem ser divididas em quantos sabores (&uacute;til apenas para quem vende pizzas):</label>
     <select class="formfield w20" name="qtd_max_sabores">
 	<option value="">-- Selecione --</option>
 	
-	<option value="2" <? if (2 == $obj->qtd_max_sabores) { ?>selected="true"<? } ?>>2</option>
-        <option value="3" <? if (3 == $obj->qtd_max_sabores) { ?>selected="true"<? } ?>>3</option>
-        <option value="4" <? if (4 == $obj->qtd_max_sabores) { ?>selected="true"<? } ?>>4</option>
+	<option value="2" <? if (2 == $obj->qtd_max_sabores) { ?>selected="selected"<? } ?>>2</option>
+        <option value="3" <? if (3 == $obj->qtd_max_sabores) { ?>selected="selected"<? } ?>>3</option>
+        <option value="4" <? if (4 == $obj->qtd_max_sabores) { ?>selected="selected"<? } ?>>4</option>
     </select>
 	
     <label class="normal">Administrador que cadastrou:</label>
@@ -77,7 +77,7 @@ $bairros = Bairro::all();
 	if ($administradores) {
 	    foreach ($administradores as $adm) {
 		?>
-		<option value="<?= $adm->id ?>" <? if ($adm->id == $obj->administrador_cadastrou_id) { ?>selected="true"<? } ?>><?= $adm->nome ?></option>
+		<option value="<?= $adm->id ?>" <? if ($adm->id == $obj->administrador_cadastrou_id) { ?>selected="selected"<? } ?>><?= $adm->nome ?></option>
 	    <? }
 	} ?>
     </select>
@@ -91,7 +91,7 @@ $bairros = Bairro::all();
     
     <? foreach($tipos as $tipo) { ?>
     
-    <input class="adjacent" type="checkbox" name="tipos[]" value="<?= $tipo->id ?>" id="tiporestaurante_id_<?= $tipo->id ?>" <? if($obj->temTipo($tipo->id)) { ?>checked="true"<? } ?> />
+    <input class="adjacent" type="checkbox" name="tipos[]" value="<?= $tipo->id ?>" id="tiporestaurante_id_<?= $tipo->id ?>" <? if($obj->temTipo($tipo->id)) { ?>checked="checked"<? } ?> />
     <label class="adjacent" for="tiporestaurante_id_<?= $tipo->id ?>"><?= $tipo->nome ?></label>
     
     <? } } ?>
@@ -102,7 +102,7 @@ $bairros = Bairro::all();
     
     <? foreach($tipos_produto as $tipo_produto) { ?>
     
-    <input class="adjacent" type="checkbox" name="tipos_produto[]" value="<?= $tipo_produto->id ?>" id="tipo_produto_<?= $tipo_produto->id ?>" <? if($obj->temTipoProduto($tipo_produto->id)) { ?>checked="true"<? } ?> />
+    <input class="adjacent" type="checkbox" name="tipos_produto[]" value="<?= $tipo_produto->id ?>" id="tipo_produto_<?= $tipo_produto->id ?>" <? if($obj->temTipoProduto($tipo_produto->id)) { ?>checked="checked"<? } ?> />
     <label class="adjacent" for="tipo_produto_<?= $tipo_produto->id ?>"><?= $tipo_produto->nome ?></label>
     
     <? } } ?>

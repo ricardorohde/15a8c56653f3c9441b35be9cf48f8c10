@@ -26,7 +26,7 @@ $cidades = Cidade::all(array("order" => "nome asc"));
 	    if ($cidades) {
 		foreach ($cidades as $cidade) {
 		    ?>
-	    	<option value="<?= $cidade->id ?>" <? if ($cidade->id == $obj->cidade_id) { ?>selected="true"<? } ?>><?= $cidade->nome ?></option>
+	    	<option value="<?= $cidade->id ?>" <? if ($cidade->id == $obj->cidade_id) { ?>selected="selected"<? } ?>><?= $cidade->nome ?></option>
 		<? }
 	    } ?>
         </select>

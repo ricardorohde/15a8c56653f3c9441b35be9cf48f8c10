@@ -11,7 +11,7 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
     );
     static $has_many = array(
 	array('pedidos', 'class_name' => 'Pedido'),
-	array('enderecos', 'class_name' => 'EnderecoConsumidor'),
+	array('enderecos', 'class_name' => 'EnderecoConsumidor', 'order' => 'bairro_id asc, logradouro asc'),
 	array('telefones', 'class_name' => 'TelefoneConsumidor')
     );
     static $validates_presence_of = array(
@@ -60,37 +60,46 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
     }
 
     public function save_enderecos() {
-	if ($this->__request_attributes['hash']) {
-	    $enderecosMatrix = $_SESSION[$this->__request_attributes['hash']];
+	if ($this->__request_attributes['hash_consumidor']) {
+	    $enderecosMatrix = $_SESSION[$this->__request_attributes['hash_consumidor']];
+	    $enderecoIdsInMatrix = array();
+	    $enderecosPreCadastrados = $this->enderecos;
 
-	    if ($enderecosMatrix) {
+	    if (isset($enderecosMatrix)) {
 		foreach ($enderecosMatrix as $enderecoArray) {
 		    $endereco = new EnderecoConsumidor();
-		    
-		    if($enderecoArray['endereco_id']) {
+
+		    if ($enderecoArray['id']) {
+			$enderecoIdsInMatrix[] = $enderecoArray['id'];
 			$endereco = EnderecoConsumidor::find($enderecoArray['id']);
 		    }
-		    
+
 		    $endereco->set_attributes($enderecoArray);
 		    $endereco->consumidor_id = $this->id;
 		    $endereco->save();
 		}
+
+		/*
+		 * Excluindo os endereços removidos do atributo de sessão
+		 */
+		if ($enderecosPreCadastrados) {
+		    foreach ($enderecosPreCadastrados as $e) {
+			if (!$enderecoIdsInMatrix || !in_array($e->id, $enderecoIdsInMatrix)) {
+			    $e->delete();
+			}
+		    }
+		}
 	    }
 
-	    unset($_SESSION[$this->__request_attributes['hash']]);
+	    unset($_SESSION[$this->__request_attributes['hash_consumidor']]);
 	}
 
 	if ($this->enderecos) {
 	    foreach ($this->enderecos as $e) {
-		echo "{$e->hash()} == {$this->__request_attributes['endereco_favorito']} ?" . ($e->hash() == $this->__request_attributes['endereco_favorito'] ? 1 : 0) . "<br />";
 		$e->favorito = ($e->hash() == $this->__request_attributes['endereco_favorito'] ? 1 : 0);
-		echo "favorito?" . $e->favorito . "<br />";
 		$e->save();
-		print_r($e);
-		echo ($e->is_valid() ? 'válido' : 'inválido') . "<hr />";
 	    }
 	}
-	//exit;
     }
 
     public function destroy_usuario() {

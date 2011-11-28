@@ -27,7 +27,7 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="selected"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>
@@ -37,15 +37,15 @@ $restaurantes = Restaurante::all(array("order" => "nome asc"));
     <input class="formfield w15" type="text" name="preco_adicional" value="<?= $obj->preco_adicional ?>" maxlength="100" /><br /><br />
     
     <label class="normal">Ativo:</label>
-    <input class="adjacent" id="ativo_sim" type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="true"<? } ?> />
+    <input class="adjacent" id="ativo_sim" type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="checked"<? } ?> />
     <label class="adjacent" for="ativo_sim">Sim</label>
-    <input class="adjacent" id="ativo_nao" type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="true"<? } ?> />
+    <input class="adjacent" id="ativo_nao" type="radio" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="checked"<? } ?> />
     <label class="adjacent" for="ativo_nao">Não</label>
     
     <label class="normal">Dispon&iacute;vel:</label>
-    <input class="adjacent" id="disponivel_sim" type="radio" name="disponivel" value="1" <? if (!$obj->id || $obj->disponivel === 1) { ?>checked="true"<? } ?> />
+    <input class="adjacent" id="disponivel_sim" type="radio" name="disponivel" value="1" <? if (!$obj->id || $obj->disponivel === 1) { ?>checked="checked"<? } ?> />
     <label class="adjacent" for="disponivel_sim">Sim</label>
-    <input class="adjacent" id="disponivel_nao" type="radio" name="disponivel" value="0" <? if ($obj->id && $obj->disponivel === 0) { ?>checked="true"<? } ?> />
+    <input class="adjacent" id="disponivel_nao" type="radio" name="disponivel" value="0" <? if ($obj->id && $obj->disponivel === 0) { ?>checked="checked"<? } ?> />
     <label class="adjacent" for="disponivel_nao">Não</label>
     
     <label class="normal">Quantas Unidades Ocupa:</label>

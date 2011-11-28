@@ -57,12 +57,12 @@ $qtd_acompanhamentos_existente = 0;
                         if($limite_acompanhamento_alcancado==0){ 
                             $aviso_nao_tem_porcao_extra = 1;
                             ?>
-                            <option value="<?= $pta->produto_adicional->id ?>" <? if ($pta->produto_adicional->id == $obj->produtoadicional_id) { ?>selected="true"<? } ?>><?= $pta->produto_adicional->nome ?></option>
+                            <option value="<?= $pta->produto_adicional->id ?>" <? if ($pta->produto_adicional->id == $obj->produtoadicional_id) { ?>selected="selected"<? } ?>><?= $pta->produto_adicional->nome ?></option>
                    <?  }else{ 
                             if($pta->produto_adicional->quantas_unidades_ocupa==0){ 
                                 $aviso_nao_tem_porcao_extra = 1;
                                 ?>
-                                <option value="<?= $pta->produto_adicional->id ?>" <? if ($pta->produto_adicional->id == $obj->produtoadicional_id) { ?>selected="true"<? } ?>><?= $pta->produto_adicional->nome ?></option>
+                                <option value="<?= $pta->produto_adicional->id ?>" <? if ($pta->produto_adicional->id == $obj->produtoadicional_id) { ?>selected="selected"<? } ?>><?= $pta->produto_adicional->nome ?></option>
                          <? }
                        }
                     }else{
@@ -70,12 +70,12 @@ $qtd_acompanhamentos_existente = 0;
                         if(($obj->produto_adicional->quantas_unidades_ocupa>0)&&($pta->produto_adicional->quantas_unidades_ocupa>0)){
                             $aviso_nao_tem_porcao_extra = 1;
                             ?>
-                           <option value="<?= $pta->produto_adicional->id ?>" <? if ($pta->produto_adicional->id == $obj->produtoadicional_id) { ?>selected="true"<? } ?>><?= $pta->produto_adicional->nome ?></option> 
+                           <option value="<?= $pta->produto_adicional->id ?>" <? if ($pta->produto_adicional->id == $obj->produtoadicional_id) { ?>selected="selected"<? } ?>><?= $pta->produto_adicional->nome ?></option> 
 
                         <? }else if(($obj->produto_adicional->quantas_unidades_ocupa==0)&&($pta->produto_adicional->quantas_unidades_ocupa==0)){
                             $aviso_nao_tem_porcao_extra = 1;
                             ?>
-                           <option value="<?= $pta->produto_adicional->id ?>" <? if ($pta->produto_adicional->id == $obj->produtoadicional_id) { ?>selected="true"<? } ?>><?= $pta->produto_adicional->nome ?></option> 
+                           <option value="<?= $pta->produto_adicional->id ?>" <? if ($pta->produto_adicional->id == $obj->produtoadicional_id) { ?>selected="selected"<? } ?>><?= $pta->produto_adicional->nome ?></option> 
                         <? }
                     } 
                 }

@@ -21,7 +21,7 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
 	if ($restaurantes) {
 	    foreach ($restaurantes as $restaurante) {
 		?>
-		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="true"<? } ?>><?= $restaurante->nome ?></option>
+		<option value="<?= $restaurante->id ?>" <? if ($restaurante->id == $obj->restaurante_id) { ?>selected="selected"<? } ?>><?= $restaurante->nome ?></option>
 	    <? }
 	} ?>
     </select>
@@ -33,7 +33,7 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
 	if ($tipos) {
 	    foreach ($tipos as $tipo) {
 		?>
-		<option value="<?= $tipo->id ?>" <? if ($tipo->id == $obj->tipoproduto_id) { ?>selected="true"<? } ?>><?= $tipo->nome ?></option>
+		<option value="<?= $tipo->id ?>" <? if ($tipo->id == $obj->tipoproduto_id) { ?>selected="selected"<? } ?>><?= $tipo->nome ?></option>
 	    <? }
 	} ?>
     </select>
