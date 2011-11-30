@@ -13,8 +13,8 @@ $itens = Administrador::all();
     <tr>
 	<th>Nome</th>
 	<th>E-mail</th>
-	<th>Modificar</th>
-	<th>Excluir</th>
+	<th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -23,8 +23,8 @@ $itens = Administrador::all();
 	    <tr>
 		<td><?= $item->nome ?></td>
 		<td><?= $item->email ?></td>
-		<td><a href="admin/administrador/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/administrador/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td align="center"><a href="admin/administrador/form/<?= $item->id ?>">Modificar</a></td>
+		<td align="center"><a href="admin/administrador/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

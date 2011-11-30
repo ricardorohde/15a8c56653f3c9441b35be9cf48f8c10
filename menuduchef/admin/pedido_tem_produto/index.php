@@ -19,9 +19,8 @@ $itens = PedidoTemProduto::all(array("order" => "pedido_id asc", "conditions" =>
         <th>Quantidade</th>
         <th>OBS</th>
         <th>Tamanho</th>
-        
-	<th>Modificar</th>
-	<th>Excluir</th>
+        <th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -48,8 +47,8 @@ $itens = PedidoTemProduto::all(array("order" => "pedido_id asc", "conditions" =>
                 <td><?= $item->tamanho ?></td>
                 
                               
-		<td><a href="admin/pedido_tem_produto/form/?id=<?= $item->id ?>&ped=<?= $_GET['ped'] ?>">Modificar</a></td>
-		<td><a href="admin/pedido_tem_produto/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td align="center"><a href="admin/pedido_tem_produto/form/?id=<?= $item->id ?>&ped=<?= $_GET['ped'] ?>">Modificar</a></td>
+		<td align="center"><a href="admin/pedido_tem_produto/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

@@ -13,8 +13,8 @@ $itens = ProdutoTemProdutoAdicional::all(array("order" => "produto_id asc"));
     <tr>
 	<th>Produto</th>
 	<th>Produto Adicional</th>
-	<th>Modificar</th>
-	<th>Excluir</th>
+	<th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -24,8 +24,8 @@ $itens = ProdutoTemProdutoAdicional::all(array("order" => "produto_id asc"));
 		<td><?= $item->produto->nome ?></td>
 		<td><?= $item->produto_adicional->nome ?></td>
                               
-		<td><a href="admin/produto_tem_produto_adicional/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/produto_tem_produto_adicional/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td align="center"><a href="admin/produto_tem_produto_adicional/form/<?= $item->id ?>">Modificar</a></td>
+		<td align="center"><a href="admin/produto_tem_produto_adicional/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

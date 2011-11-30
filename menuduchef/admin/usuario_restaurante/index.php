@@ -15,8 +15,8 @@ $itens = UsuarioRestaurante::all();
 	<th>Restaurante</th>
 	<th>E-mail</th>
 	<th>Perfil</th>
-        <th>Modificar</th>
-	<th>Excluir</th>
+        <th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -27,8 +27,8 @@ $itens = UsuarioRestaurante::all();
 		<td><?= $item->restaurante->nome ?></td>
 		<td><?= $item->email ?></td>
                 <td><?= $item->usuario->getNomePerfil() ?></td>
-		<td><a href="admin/usuario_restaurante/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/usuario_restaurante/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td align="center"><a href="admin/usuario_restaurante/form/<?= $item->id ?>">Modificar</a></td>
+		<td align="center"><a href="admin/usuario_restaurante/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

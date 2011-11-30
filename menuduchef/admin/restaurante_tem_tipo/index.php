@@ -13,8 +13,8 @@ $itens = RestauranteTemTipo::all(array("order" => "restaurante_id asc"));
     <tr>
 	<th>Restaurante</th>
 	<th>Tipo</th>
-	<th>Modificar</th>
-	<th>Excluir</th>
+	<th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -24,8 +24,8 @@ $itens = RestauranteTemTipo::all(array("order" => "restaurante_id asc"));
 		<td><?= $item->restaurante->nome ?></td>
 		<td><?= $item->tipo_restaurante->nome ?></td>
                               
-		<td><a href="admin/restaurante_tem_tipo/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/restaurante_tem_tipo/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td align="center"><a href="admin/restaurante_tem_tipo/form/<?= $item->id ?>">Modificar</a></td>
+		<td align="center"><a href="admin/restaurante_tem_tipo/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

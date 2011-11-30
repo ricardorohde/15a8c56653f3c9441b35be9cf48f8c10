@@ -31,8 +31,8 @@ $qtd_acompanhamentos_existente = 0;
 	<th>Produto Adicional</th>
         <th>Tipo</th>
         <th>Pre&ccedil;o</th>
-	<th>Modificar</th>
-	<th>Excluir</th>
+	<th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -44,8 +44,8 @@ $qtd_acompanhamentos_existente = 0;
 		<td><?= $item->produto_adicional->nome ?></td>
                 <td><?= $item->produto_adicional->quantas_unidades_ocupa ? "Acompanhamento" : "Por&ccedil;&atilde;o Extra" ?></td>
                 <td><?= StringUtil::doubleToCurrency($item->preco) ?></td>
-		<td><a href="admin/pedido_tem_produto_adicional/form/?id=<?= $item->id ?>&prodnoped=<?= $item->pedidotemproduto_id ?>&ped=<?= $_GET['ped'] ?>">Modificar</a></td>
-		<td><a href="admin/pedido_tem_produto_adicional/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td align="center"><a href="admin/pedido_tem_produto_adicional/form/?id=<?= $item->id ?>&prodnoped=<?= $item->pedidotemproduto_id ?>&ped=<?= $_GET['ped'] ?>">Modificar</a></td>
+		<td align="center"><a href="admin/pedido_tem_produto_adicional/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

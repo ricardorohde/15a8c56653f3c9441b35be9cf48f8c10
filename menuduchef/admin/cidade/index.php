@@ -12,8 +12,8 @@ $itens = Cidade::all(array("order" => "nome asc"));
 <table class="list">
     <tr>
 	<th>Cidade</th>
-	<th>Modificar</th>
-	<th>Excluir</th>
+	<th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -21,8 +21,8 @@ $itens = Cidade::all(array("order" => "nome asc"));
 	    ?>
 	    <tr>
 		<td><?= $item->nome ?></td>
-		<td><a href="admin/cidade/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/cidade/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td align="center"><a href="admin/cidade/form/<?= $item->id ?>">Modificar</a></td>
+		<td align="center"><a href="admin/cidade/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

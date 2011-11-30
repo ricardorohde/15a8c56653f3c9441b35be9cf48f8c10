@@ -14,8 +14,8 @@ $itens = RestauranteAtendeBairro::all(array("order" => "restaurante_id asc"));
 	<th>Restaurante</th>
 	<th>Bairro</th>
         <th>Taxa de Entrega</th>
-	<th>Modificar</th>
-	<th>Excluir</th>
+	<th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -25,8 +25,8 @@ $itens = RestauranteAtendeBairro::all(array("order" => "restaurante_id asc"));
 		<td><?= $item->restaurante->nome ?></td>
 		<td><?= $item->bairro->nome ?></td>
                 <td><?= $item->preco_entrega ?></td>       
-		<td><a href="admin/restaurante_atende_bairro/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/restaurante_atende_bairro/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td align="center"><a href="admin/restaurante_atende_bairro/form/<?= $item->id ?>">Modificar</a></td>
+		<td align="center"><a href="admin/restaurante_atende_bairro/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

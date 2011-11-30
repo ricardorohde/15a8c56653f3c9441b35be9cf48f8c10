@@ -13,8 +13,8 @@ $itens = TipoProduto::all(array("order" => "nome asc"));
     <tr>
 	<th>Nome</th>
 	<th>Qtd. de Produtos</th>
-	<th>Modificar</th>
-	<th>Excluir</th>
+	<th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -24,8 +24,8 @@ $itens = TipoProduto::all(array("order" => "nome asc"));
 	    <tr>
 		<td><?= $item->nome ?></td>
 		<td><?= $qtdProdutos ?></td>
-		<td><a href="admin/tipo_produto/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/tipo_produto/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+		<td align="center"><a href="admin/tipo_produto/form/<?= $item->id ?>">Modificar</a></td>
+		<td align="center"><a href="admin/tipo_produto/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}

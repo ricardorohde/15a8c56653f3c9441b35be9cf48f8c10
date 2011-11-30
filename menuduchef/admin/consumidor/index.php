@@ -9,18 +9,13 @@ $itens = Consumidor::all();
 <a href="admin/consumidor/form" title="Criar">Criar</a>
 <br /><br />
 
-<table class="list">
+<table class="list w100">
     <tr>
 	<th>Nome</th>
-        <th>E-mail</th>
-        <th>CPF</th>
-        <th>Data de Nascimento</th>
-        <th>Sexo</th>
         <th>Telefone</th>
 	<th>Endere&ccedil;o</th>
-        <th>Bairro</th>
-	<th>Modificar</th>
-	<th>Excluir</th>
+	<th width="10%"></th>
+	<th width="10%"></th>
     </tr>
     <?
     if ($itens) {
@@ -28,10 +23,6 @@ $itens = Consumidor::all();
 	    ?>
 	    <tr>
 		<td><?= $item->nome ?></td>
-                <td><?= $item->email ?></td>
-                <td><?= $item->cpf ?></td>
-                <td><?= $item->data_nascimento ?></td>
-                <td><?= $item->sexo ?></td>
                 <td><?
                 $telc = 0;
                 foreach($item->telefones as $telefone){
@@ -46,19 +37,12 @@ $itens = Consumidor::all();
                 <td><?
                 foreach($item->enderecos as $endereco){
                     if($endereco->favorito){
-                        echo $endereco->logradouro;
+                        echo $endereco;
                     }
                 }        
-                ?></td>
-		<td><? 
-                foreach($item->enderecos as $endereco){
-                    if($endereco->favorito){
-                        echo $endereco->bairro->nome;
-                    }
-                }  
-                ?></td>
-		<td><a href="admin/consumidor/form/<?= $item->id ?>">Modificar</a></td>
-		<td><a href="admin/consumidor/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
+                ?>
+		<td align="center"><a href="admin/consumidor/form/<?= $item->id ?>">Modificar</a></td>
+		<td align="center"><a href="admin/consumidor/controller?deleteId=<?= $item->id ?>" onclick="return window.confirm('Confirmar exclusão?')">Excluir</a></td>
 	    </tr>
 	    <?
 	}
