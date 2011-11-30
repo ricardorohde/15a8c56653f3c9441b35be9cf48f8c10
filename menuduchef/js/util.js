@@ -221,15 +221,10 @@ function listEnderecosConsumidor(arrayEnderecos, tableId, hashConsumidor) {
 	$.each(arrayEnderecos, function(index, data) {
 	    var row = '<tr class="row_data">';
 	    row += '<input type="hidden" name="hash_endereco" value="' + data.hash + '" />';
-	    row += '<td>' + data.logradouro + '</td>';
-	    row += '<td>' + data.bairro.cidade.nome + '</td>';
-	    row += '<td>' + data.bairro.nome + '</td>';
-	    row += '<td>' + (data.numero ? data.numero : '---') + '</td>';
-	    row += '<td>' + (data.complemento ? data.complemento : '---') + '</td>';
-	    row += '<td>' + data.cep + '</td>';
-	    row += '<td><input type="radio" name="endereco_favorito" value="' + data.hash + '" ' + (data.favorito ? 'checked="checked"' : '') + ' /></td>';
-	    row += '<td><a href="javascript:void(0)" class="modificar_endereco">Modificar</a></td>';
-	    row += '<td><a href="javascript:void(0)" class="excluir_endereco">Excluir</a></td>';
+	    row += '<td>' + data.__toString + '</td>';
+	    row += '<td align="center">' + (data.favorito ? '<strong>X</strong>' : '') + '</td>'
+	    row += '<td align="center"><a href="javascript:void(0)" class="modificar_endereco">Modificar</a></td>';
+	    row += '<td align="center"><a href="javascript:void(0)" class="excluir_endereco">Excluir</a></td>';
 	    row += '</tr>';
 
 	    var rowElement = $(row).appendTo($('#' + tableId));

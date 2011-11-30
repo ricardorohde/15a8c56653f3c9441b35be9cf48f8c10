@@ -90,15 +90,8 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 		    }
 		}
 	    }
-
+	    
 	    unset($_SESSION[$this->__request_attributes['hash_consumidor']]);
-	}
-
-	if ($this->enderecos) {
-	    foreach ($this->enderecos as $e) {
-		$e->favorito = ($e->hash() == $this->__request_attributes['endereco_favorito'] ? 1 : 0);
-		$e->save();
-	    }
 	}
     }
 

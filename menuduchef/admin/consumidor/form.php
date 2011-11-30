@@ -5,7 +5,7 @@ $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Consumidor");
 
 $cidades = Cidade::all(array("order" => "nome asc"));
 $hash_consumidor = 'consumidor' . time();
-$enderecosJson = StringUtil::arrayActiveRecordToJson($obj->enderecos, array('methods' => 'hash', 'include' => array('bairro' => array('include' => 'cidade'))));
+$enderecosJson = StringUtil::arrayActiveRecordToJson($obj->enderecos, array('methods' => array('hash', '__toString'), 'include' => array('bairro' => array('include' => 'cidade'))));
 $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
 ?>
 
@@ -156,15 +156,10 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
 
     <table class="list w100" id="enderecos">
         <tr>
-            <th>Logradouro</th>
-            <th>Cidade</th>
-            <th>Bairro</th>
-            <th>Número</th>
-            <th>Complemento</th>
-            <th>CEP</th>
-            <th>Favorito</th>
-            <th></th>
-            <th></th>
+	    <th width="60%">Endereço</th>
+            <th width="5%">Favorito</th>
+            <th width="10%"></th>
+            <th width="10%"></th>
         </tr>
     </table>
 

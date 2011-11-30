@@ -28,6 +28,11 @@ class EnderecoConsumidor extends ActiveRecord\Model {
 
 	return $md5;
     }
+    
+    public function __toString() {
+	return $this->logradouro . ($this->numero ? ", {$this->numero}" : '') . ($this->complemento ? ", {$this->complemento}" : '')
+	    . '<br />' . $this->bairro->nome . ' - ' . $this->bairro->cidade->nome;
+    }
 
 }
 

@@ -7,18 +7,8 @@ header("Content-type: application/json;");
 $parameters = HttpUtil::utf8DecodeArray($_REQUEST);
 $errors = array();
 
-//print_r($parameters);
-
 if($parameters['deleteHash']) {
     HttpUtil::removeArrayFromSessionMatrix($parameters['hash_consumidor'], 'hash', $parameters['deleteHash']);
-    /*if($parameters['favorito']) {
-	if($_SESSION[$parameters['hash_consumidor']]) {
-	    foreach($_SESSION[$parameters['hash_consumidor']] as $key => $array) {
-		$_SESSION[$parameters['hash_consumidor']][$key]['favorito'] = 1;
-		break;
-	    }
-	}
-    }*/
 } else {
     if (!empty($parameters['cidade_id']) && !empty($parameters['bairro_id']) &&
             !empty($parameters['logradouro']) && !empty($parameters['cep'])) {
@@ -67,15 +57,13 @@ if (!empty($errors)) {
     echo ']}';
 } else {
     $json = StringUtil::matrixAttributesToJson($_SESSION[$parameters['hash_consumidor']], 'EnderecoConsumidor', array(
-        'methods' => 'hash', 'include' => array(
+        'methods' => array('hash', '__toString'), 'include' => array(
             'bairro' => array(
                 'include' => 'cidade'
             )
         )
     ));
-//    print_r(json_decode($json, true));
-//    print_r(HttpUtil::updateValuesOfArrayInMatrix(json_decode($json, true), 'hash_consumidor', $parameters['hash_consumidor']));
-//    echo json_encode(HttpUtil::updateValuesOfArrayInMatrix(json_decode($json, true), 'hash_consumidor', $parameters['hash_consumidor']));
+    
     echo $json;
 }
 ?>
