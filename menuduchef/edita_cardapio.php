@@ -14,9 +14,10 @@ if($_SESSION['restaurante_editado_id']){
 <script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-1.7.2.custom.min.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/mask.js"></script>
 
 <style type="text/css">
-        
+        input {font-size: 11px;}
         body{font:12px "Helvetica", sans-serif;}
         body div#content{width:980px;margin:0 auto;}
         div.recebeDrag{}
@@ -25,18 +26,22 @@ if($_SESSION['restaurante_editado_id']){
         ul li{border-bottom:1px dotted silver;padding:4px; text-align: left;}
         h1{text-align:center;}
         h2{cursor:move!important;background-color:#F30;color:#fff;padding:3px;}
+        h5{cursor:move!important;background-color:#F00;color:#fff;padding:3px;}
         h2 span{float:right;font-size:12px;font-weight:normal;padding:1px;}
         h2 span a{color:#fff;text-decoration:none;}
         div#drop{width:490px;float:left;min-width:490px;min-height:30px;}
-        .dragHelper{border:4px dashed #F0F7F9;min-height:200px;margin:4px;}
+        .dragHelper{border:4px dashed #A0A7F9;min-height:200px;margin:4px;}
+        .dragHelper2{border:4px dashed #A0A7F9;min-height:200px;margin:4px;}
         .itemDrag p small{display:block;margin-top:6px;}
         .itemDrag p a{font-weight:900;text-decoration:none;border-bottom:1px dotted blue;}
-        div#voltar{text-align:center;border: 1px dotted silver;width:960px;margin:0 auto;padding:4px;}
+        div#voltar{text-align:center;border: 1px dotted silver;width:960px;margin:0 auto;padding:4px;} 
+        
 </style>
 
 <script>
 
 $(document).ready(function() {
+        
     $("#ver_completo").click( function(){
         $(".filtro_categoria").attr("checked","true");
         $(".categoria").show();
@@ -50,16 +55,43 @@ $(document).ready(function() {
     
     $('.recebeDrag').sortable({connectWith: ['.recebeDrag']});
 
-
+    $(".promocao_sim").click( function(){
+        qual = $(this).attr("name");
+        qual = qual.split("_");
+        qual = qual[4];
+        $("#div_preco_"+qual).hide();
+        $("#div_preco_promocional_"+qual).show();
+        $("#div_label_preco_"+qual).hide();
+        $("#div_label_preco_promocional_"+qual).show();
+        $("#div_texto_promocional_"+qual).show();
+    });
+    
+    $(".promocao_nao").click( function(){
+        qual = $(this).attr("name");
+        qual = qual.split("_");
+        qual = qual[4];
+        $("#div_preco_"+qual).show();
+        $("#div_preco_promocional_"+qual).hide();
+        $("#div_label_preco_"+qual).show();
+        $("#div_label_preco_promocional_"+qual).hide();
+        $("#div_texto_promocional_"+qual).hide();
+    });
 });
 
+function show(x){
+    oque = document.getElementById(x);
+    if(oque.style.display == "block"){
+        oque.style.display = "none";
+    }else{
+        oque.style.display = "block";
+    }
+}
 </script>
 <div>
     <div style="float:left; position: relative; padding-left: 20px; padding-right: 50px;">
         <table class="list">
-            
             <tr><td><input type="button" value="Salvar Altera&ccedil;&otilde;es"></td></tr>
-            <tr><td><input type="button" onclick="location.href=('edita_cardapio.php');" value="Cancelar"></td></tr>
+            <tr><td><input type="button" onclick="location.href=('edita_cardapio.php');" value="Cancelar"></td></tr> 
             <tr><td><input type="button" value="Voltar"></td></tr>
         </table>
     </div>
@@ -68,7 +100,7 @@ $(document).ready(function() {
         
             <? if($categorias){
                     foreach($categorias as $categoria){ ?>
-                        <div class="itemDrag categoria" id="categoria_<?= $categoria->tipoproduto_id ?>" ><h2><span><a href="#" class="lnk-minimizar">[ - ]</a> <a href="#" class="lnk-remover">[ x ]</a></span><?= $categoria->tipo_produto->nome ?></h2>
+                        <div class="itemDrag categoria" id="categoria_<?= $categoria->tipoproduto_id ?>" ><h2><span><a href="#" class="lnk-adicionar">[ + ]</a></span><?= $categoria->tipo_produto->nome ?></h2>
                             <div style="height:30px;"></div>
                         <ul>
                          <div class="recebe_<?= $categoria->tipoproduto_id ?>">       
@@ -77,12 +109,16 @@ $(document).ready(function() {
                         if($itens){
                             foreach($itens as $item){ ?>
                                 <li>
-                                        <div style="background:#DDDDFF" id="produto_<?= $item->nome ?>" class="produto_de_categoria_<?= $categoria->tipo_produto->nome ?> produto">     
-                                           <table>     
-                                               <tr><td>Nome:</td><td colspan="2"><input type="text" name="produto_nome_<?= $item->id ?>" value="<?= $item->nome ?>"></td><td><input type="button" value="Foto"></td></tr>
-                                               <tr><td>Descri&ccedil;&atilde;o:</td><td colspan="3"><input style="width:400px;" type="text"  name="produto_descricao_<?= $item->id ?>" value="<?= $item->descricao ?>"></td></tr>
-                                               <tr><td>Est&aacute; em promo&ccedil;&atilde;o:</td><td><input type="radio"  name="produto_esta_em_promocao_<?= $item->id ?>" value="1" <? if($item->esta_em_promocao){ echo "checked"; } ?>> Sim <br/><input type="radio"  name="produto_esta_em_promocao_<?= $item->id ?>" value="0" <? if(!$item->esta_em_promocao){ echo "checked"; } ?>> N&atilde;o </td><td>Pre&ccedil;o:</td><td><? if($item->esta_em_promocao){ ?><div style="text-decoration:line-through; font-size:10px;"><?= StringUtil::doubleToCurrency($item->preco) ?></div><div style="color:#CC0000;"><?= StringUtil::doubleToCurrency($item->preco_promocional) ?></div><? }else{ ?><div style="color:#CC0000;">R$<input type="text" name="produto_nome_<?= $item->id ?>" value="<?= $item->preco ?>"></div><? } ?></td></tr>
-                                               
+                                        <div style="background:#DDDDFF; font-size: 11px;" id="produto_<?= $item->nome ?>" class="produto_de_categoria_<?= $categoria->tipo_produto->nome ?> produto">
+                                           <h5>&nbsp;</h5>
+                                           <input type="hidden" name="produto_categoria_<?= $item->id ?>" value="<?= $categoria->tipoproduto_id ?>" >
+                                           <table border="0" cellspacing="0" style="width:350px;">
+                                               <tr><td><table><tr><td style="background:#F0F;"> Ativo: </td><td style="width:40px; background:#FFF;"><input type="radio" name="produto_ativo_<?= $item->id ?>" value="1" <? if($item->ativo){ echo "checked"; } ?>> Sim <br/><input type="radio" name="produto_ativo_<?= $item->id ?>" value="0" <? if(!$item->ativo){ echo "checked"; } ?>> N&atilde;o </td><td style="background:#F00;">Dispon&iacute;vel no momento: </td><td style="width:40px; background:#FF0;"><input type="radio" name="produto_disponivel_<?= $item->id ?>" value="1" <? if($item->disponivel){ echo "checked"; } ?>> Sim <br/><input type="radio" name="produto_disponivel_<?= $item->id ?>" value="0" <? if(!$item->disponivel){ echo "checked"; } ?>> N&atilde;o </td><td style="background:#A57;"><input name="produto_foto_<?= $item->id ?>" type="button" value="Foto" onclick="show('div_produto_imagem_<?= $item->id ?>')" ><div id="div_produto_imagem_<?= $item->id ?>" style="position:absolute; background-color: #519; margin-top: 25px; display:none;"><?= $item->imagem ? "<img src='".$item->imagem."'> Mudar imagem:" : "Adicionar imagem:" ?><input type="file" name="produto_imagem_<?= $item->id ?>"></div></td></tr></table></td></tr>
+                                               <tr><td><table><tr><td>C&oacute;digo: </td><td><input style="width:27px;" type="text" name="produto_nome_<?= $item->id ?>" value="<?= $item->codigo ?>"></td><td>Nome: </td><td><input type="text" name="produto_nome_<?= $item->id ?>" value="<?= $item->nome ?>"></td><td>Tamanho: </td><td><input type="text" style="width:80px;" name="produto_tamanho_<?= $item->id ?>" value="<?= $item->tamanho ?>"></td></tr></table></td></tr>
+                                               <tr><td><table><tr><td>Descri&ccedil;&atilde;o:</td><td><input style="width:300px;" type="text"  name="produto_descricao_<?= $item->id ?>" value="<?= $item->descricao ?>"></td></tr></table></td></tr>
+                                               <tr><td><table><tr><td>Qtd Acompanhamento:</td><td><input type="text" name="produto_qtd_produto_adicional_<?= $item->id ?>" style="width:20px;" value="<?= $item->qtd_produto_adicional ?>"></td><td><input type="button" value="Acompanhamentos e Por&ccedil;&otilde;es Extras"></td></tr></table></td></tr>
+                                               <tr><td><table><tr><td style="width:68px;">Est&aacute; em promo&ccedil;&atilde;o:</td><td style="width:40px; background:#AAA;"><input type="radio" class="promocao_sim"  name="produto_esta_em_promocao_<?= $item->id ?>" value="1" <? if($item->esta_em_promocao){ echo "checked"; } ?>> Sim <br/><input type="radio" class="promocao_nao" name="produto_esta_em_promocao_<?= $item->id ?>" value="0" <? if(!$item->esta_em_promocao){ echo "checked"; } ?>> N&atilde;o </td><td style="background:#09f; width:130px;"><div id="div_label_preco_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "none" : "block" ?>; position:relative; float:right;">Pre&ccedil;o:</div><div id="div_label_preco_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>; position:relative; float:right;">Pre&ccedil;o Promocional:</div></td><td style="width:10px; background: #006;">R$</td><td><div id="div_preco_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>;"><input onkeyup="mask_moeda(this)"  class="preco" style="width:50px;" type="text" name="produto_preco_promocional_<?= $item->id ?>" value="<?= $item->preco_promocional ?>"></div><div id="div_preco_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "none" : "block" ?>;"><input style="width:50px;" type="text" onkeyup="mask_moeda(this)" class="preco" name="produto_preco_<?= $item->id ?>" value="<?= $item->preco ?>"></td></tr></table></div></td></tr>
+                                               <tr><td><div id="div_texto_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>;"><table><tr><td style="width:68px;">Texto da promo&ccedil;&atilde;o:</td><td><input type="text" style="width:300px;" name="produto_texto_promocao_<?= $item->id ?>" value="<?= $item->texto_promocao ?>"></td></tr></table></table></td></tr>
                                                <tr></tr>
                                                
                                            </table>
