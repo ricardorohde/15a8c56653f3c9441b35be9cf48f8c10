@@ -20,29 +20,37 @@ if($_SESSION['restaurante_editado_id']){
 $(document).ready(function() {
     
     num_adi = 0;
-
-    $("#porcoes").append("<tr id='novo_adicional_"+num_adi+"'><input type='hidden' name='novo_quantas_unidades_ocupa_"+num_adi+"' value='0'><th><input type='text' id='novo_nome_"+num_adi+"' name='novo_nome_"+num_adi+"' style='width:60px;' value=''></th><th><div style='position:relative; float: left;'>R$</div><div><input type='text' name='novo_preco_adicional_"+num_adi+"' style='width:50px; position:relative; float: left;' onkeyup='mask_moeda(this)' value='0,00'></div></th><th><div style='width:40px;'><input type='radio' name='novo_disponivel_"+num_adi+"' value='1' checked > Sim<br/><input type='radio' name='novo_disponivel_"+num_adi+"' value='0'> N&atilde;o</div></th><th><input type='hidden' id='novo_ativo_"+num_adi+"' name='novo_ativo_"+num_adi+"' value='1'><input type='button' class='botao_remove_novo_adicional' qual='"+num_adi+"' value='x'></th></tr>");
-    num_adi++;
     
     $("#add_porcao").click( function(){
-        $("#porcoes").append("<tr id='novo_adicional_"+num_adi+"'><input type='hidden' name='novo_quantas_unidades_ocupa_"+num_adi+"' value='0'><th><input type='text' id='novo_nome_"+num_adi+"' name='novo_nome_"+num_adi+"' style='width:60px;' value=''></th><th><div style='position:relative; float: left;'>R$</div><div><input type='text' name='novo_preco_adicional_"+num_adi+"' style='width:50px; position:relative; float: left;' onkeyup='mask_moeda(this)' value='0,00'></div></th><th><div style='width:40px;'><input type='radio' name='novo_disponivel_"+num_adi+"' value='1' checked > Sim<br/><input type='radio' name='novo_disponivel_"+num_adi+"' value='0'> N&atilde;o</div></th><th><input type='hidden' id='novo_ativo_"+num_adi+"' name='novo_ativo_"+num_adi+"' value='1'><input type='button' class='botao_remove_novo_adicional' qual='"+num_adi+"' value='x'></th></tr>");
+        $("#porcoes").append("<tr id='novo_adicional-"+num_adi+"'><input type='hidden' name='novo_quantas_unidades_ocupa-"+num_adi+"' value='0'><th><input type='text' id='novo_nome-"+num_adi+"' name='novo_nome-"+num_adi+"' style='width:60px;' value=''></th><th><div style='position:relative; float: left;'>R$</div><div><input type='text' name='novo_preco_adicional-"+num_adi+"' style='width:50px; position:relative; float: left;' onkeyup='mask_moeda(this)' value='0,00'></div></th><th><div style='width:40px;'><input type='radio' name='novo_disponivel-"+num_adi+"' value='1' checked > Sim<br/><input type='radio' name='novo_disponivel-"+num_adi+"' value='0'> N&atilde;o</div></th><th><input type='hidden' id='novo_ativo-"+num_adi+"' name='novo_ativo-"+num_adi+"' value='1'><input type='button' class='botao_remove_novo_adicional' qual='"+num_adi+"' value='x'></th></tr>");
         num_adi++;
-    });
-
-    $(".botao_remove_novo_adicional").click( function(){
-        alert("HAI");
-        //qual = $(this).attr("qual");
-        //$("#"+qual).remove();
+        
+        $(".botao_remove_novo_adicional").click( function(){
+            qual = $(this).attr("qual");
+            $("#novo_adicional-"+qual).remove();
+        });
     });
     
-    //$("#porcoes").append("<tr id='novo_adicional_"+num_adi+"'><input type='hidden' name='novo_quantas_unidades_ocupa_"+num_adi+"' value='0'><th><input type='text' id='novo_nome_"+num_adi+"' name='novo_nome_"+num_adi+"' style='width:60px;' value=''></th><th><div style='position:relative; float: left;'>R$</div><div><input type='text' name='novo_preco_adicional_"+num_adi+"' style='width:50px; position:relative; float: left;' onkeyup='mask_moeda(this)' value='0,00'></div></th><th><div style='width:40px;'><input type='radio' name='novo_disponivel_"+num_adi+"' value='1' checked > Sim<br/><input type='radio' name='novo_disponivel_"+num_adi+"' value='0'> N&atilde;o</div></th><th><input type='hidden' id='novo_ativo_"+num_adi+"' name='novo_ativo_"+num_adi+"' value='1'><input type='button' class='desativar_novo' qual='"+num_adi+"' value='x"+num_adi+"'></th></tr>");
+    $("#add_acompanhamento").click( function(){
+        $("#acompanhamentos").append("<tr id='novo_adicional-"+num_adi+"'><th><input type='text' id='novo_nome-"+num_adi+"' name='novo_nome-"+num_adi+"' style='width:60px;' value=''></th><th><div style='position:relative; float: left;'>R$</div><div><input type='text' name='novo_preco_adicional-"+num_adi+"' style='width:50px; position:relative; float: left;' onkeyup='mask_moeda(this)' value='0,00'></div></th><th><div style='width:40px;'><input type='radio' name='novo_disponivel-"+num_adi+"' value='1' checked > Sim<br/><input type='radio' name='novo_disponivel-"+num_adi+"' value='0'> N&atilde;o</div></th><th><input type='text' name='novo_quantas_unidades_ocupa-"+num_adi+"' style='width:50px; position:relative; float: left;' value='1'></th><th><input type='hidden' id='novo_ativo-"+num_adi+"' name='novo_ativo-"+num_adi+"' value='1'><input type='button' class='botao_remove_novo_adicional' qual='"+num_adi+"' value='x'></th></tr>");
+        num_adi++;
+        
+        $(".botao_remove_novo_adicional").click( function(){
+            qual = $(this).attr("qual");
+            $("#novo_adicional-"+qual).remove();
+        });
+    });
+
+    
+    
+    //$("#porcoes").append("<tr id='novo_adicional-"+num_adi+"'><input type='hidden' name='novo_quantas_unidades_ocupa-"+num_adi+"' value='0'><th><input type='text' id='novo_nome-"+num_adi+"' name='novo_nome-"+num_adi+"' style='width:60px;' value=''></th><th><div style='position:relative; float: left;'>R$</div><div><input type='text' name='novo_preco_adicional-"+num_adi+"' style='width:50px; position:relative; float: left;' onkeyup='mask_moeda(this)' value='0,00'></div></th><th><div style='width:40px;'><input type='radio' name='novo_disponivel-"+num_adi+"' value='1' checked > Sim<br/><input type='radio' name='novo_disponivel-"+num_adi+"' value='0'> N&atilde;o</div></th><th><input type='hidden' id='novo_ativo-"+num_adi+"' name='novo_ativo-"+num_adi+"' value='1'><input type='button' class='desativar_novo' qual='"+num_adi+"' value='x"+num_adi+"'></th></tr>");
     $(".desativar").click( function(){
         qual = $(this).attr("qual");
-        nome = $("#nome_"+qual).attr("value");
+        nome = $("#nome-"+qual).attr("value");
         con = confirm("Tem certeza que deseja excluir "+nome+"?");
         if(con){    
-            $("#adicional_"+qual).hide();
-            $("#ativo_"+qual).value = 0;
+            $("#adicional-"+qual).hide();
+            $("#ativo-"+qual).value = 0;
         }
     });
     
@@ -75,7 +83,7 @@ function show(x){
     </div>
     
     <div style="float:left; position: relative; width: 350px; font-size: 11px;">
-    <table class="list">
+    <table class="list" id="acompanhamentos">
         <tr><th colspan="6">Acompanhamentos</th></tr>
         <tr>
             <th>Nome</th>
@@ -88,15 +96,16 @@ function show(x){
 
         if($acomps){
             foreach($acomps as $item){ ?>
-                <tr id="adicional_<?= $item->id ?>">
-                    <th><input type="text" id="nome_<?= $item->id ?>" name="nome_<?= $item->id ?>" style="width:60px;" value='<?= $item->nome ?>'></th>
-                    <th><div style="position:relative; float: left;">R$</div><div><input type="text" name="preco_adicional_<?= $item->id ?>" style="width:50px; position:relative; float: left;" onkeyup="mask_moeda(this)" value='<?= $item->preco_adicional ?>'></div></th>
-                    <th><div style="width:40px;"><input type="radio" name="disponivel_<?= $item->id ?>" value="1" <?= $item->disponivel ? "checked" : "" ?> > Sim<br/><input type="radio" name="disponivel_<?= $item->id ?>" value="0" <?= $item->disponivel ? "" : "checked" ?> > N&atilde;o</div></th>
-                    <th><input type="text" name="quantas_unidades_ocupa_<?= $item->id ?>" style="width:20px;" value='<?= $item->quantas_unidades_ocupa ?>'></th>
-                    <th><input type="hidden" id="ativo_<?= $item->id ?>" name="ativo_<?= $item->id ?>" value="1"><input type="button" class="desativar" qual="<?= $item->id ?>" value="x"></th>
+                <tr id="adicional-<?= $item->id ?>">
+                    <th><input type="text" id="nome-<?= $item->id ?>" name="nome-<?= $item->id ?>" style="width:60px;" value='<?= $item->nome ?>'></th>
+                    <th><div style="position:relative; float: left;">R$</div><div><input type="text" name="preco_adicional-<?= $item->id ?>" style="width:50px; position:relative; float: left;" onkeyup="mask_moeda(this)" value='<?= $item->preco_adicional ?>'></div></th>
+                    <th><div style="width:40px;"><input type="radio" name="disponivel-<?= $item->id ?>" value="1" <?= $item->disponivel ? "checked" : "" ?> > Sim<br/><input type="radio" name="disponivel-<?= $item->id ?>" value="0" <?= $item->disponivel ? "" : "checked" ?> > N&atilde;o</div></th>
+                    <th><input type="text" name="quantas_unidades_ocupa-<?= $item->id ?>" style="width:20px;" value='<?= $item->quantas_unidades_ocupa ?>'></th>
+                    <th><input type="hidden" id="ativo-<?= $item->id ?>" name="ativo-<?= $item->id ?>" value="1"><input type="button" class="desativar" qual="<?= $item->id ?>" value="x"></th>
                 </tr>
            <? }
         }?>
+        <tr><th colspan="5">Criar novo <input type="button" id="add_acompanhamento" qual="acompanhamentos" value=" + "></th></tr>
     </table>
     </div>
     
@@ -113,12 +122,12 @@ function show(x){
 
         if($porcoes){
             foreach($porcoes as $item){ ?>
-                <tr id="adicional_<?= $item->id ?>">
-                    <input type="hidden" name="quantas_unidades_ocupa_<?= $item->id ?>" value="0">
-                    <th><input type="text" id="nome_<?= $item->id ?>" name="nome_<?= $item->id ?>" style="width:60px;" value='<?= $item->nome ?>'></th>
-                    <th><div style="position:relative; float: left;">R$</div><div><input type="text" name="preco_adicional_<?= $item->id ?>" style="width:50px; position:relative; float: left;" onkeyup="mask_moeda(this)" value='<?= $item->preco_adicional ?>'></div></th>
-                    <th><div style="width:40px;"><input type="radio" name="disponivel_<?= $item->id ?>" value="1" <?= $item->disponivel ? "checked" : "" ?> > Sim<br/><input type="radio" name="disponivel_<?= $item->id ?>" value="0" <?= $item->disponivel ? "" : "checked" ?> > N&atilde;o</div></th>
-                    <th><input type="hidden" id="ativo_<?= $item->id ?>" name="ativo_<?= $item->id ?>" value="1"><input type="button" class="desativar" qual="<?= $item->id ?>" value="x"></th>
+                <tr id="adicional-<?= $item->id ?>">
+                    <input type="hidden" name="quantas_unidades_ocupa-<?= $item->id ?>" value="0">
+                    <th><input type="text" id="nome-<?= $item->id ?>" name="nome-<?= $item->id ?>" style="width:60px;" value='<?= $item->nome ?>'></th>
+                    <th><div style="position:relative; float: left;">R$</div><div><input type="text" name="preco_adicional-<?= $item->id ?>" style="width:50px; position:relative; float: left;" onkeyup="mask_moeda(this)" value='<?= $item->preco_adicional ?>'></div></th>
+                    <th><div style="width:40px;"><input type="radio" name="disponivel-<?= $item->id ?>" value="1" <?= $item->disponivel ? "checked" : "" ?> > Sim<br/><input type="radio" name="disponivel-<?= $item->id ?>" value="0" <?= $item->disponivel ? "" : "checked" ?> > N&atilde;o</div></th>
+                    <th><input type="hidden" id="ativo-<?= $item->id ?>" name="ativo-<?= $item->id ?>" value="1"><input type="button" class="desativar" qual="<?= $item->id ?>" value="x"></th>
                 </tr>
            <? }
         }?>

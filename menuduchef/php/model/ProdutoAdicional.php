@@ -14,7 +14,7 @@ class ProdutoAdicional extends ActiveRecord\Model {
 	array('nome', 'message' => 'obrigatório'),
 	array('restaurante', 'message' => 'obrigatório')
     );
-
+    
 }
 
 ?>
