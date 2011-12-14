@@ -19,6 +19,13 @@ if (trim($data['email']) && trim($data['senha'])) {
 		break;
 
 	    case Usuario::$GERENTE:
+                $usuario_obj = UsuarioRestaurante::find_by_usuario_id($usuario->id);
+		$redirect = '../../area_adm_restaurante';
+                $_SESSION['sessao_valida'] = 1;
+		$_SESSION['usuario_id'] = $usuario_obj->id;
+		$_SESSION['restaurante_id'] = $usuario_obj->restaurante_id;
+                $_SESSION['cidade_id'] = $usuario_obj->restaurante->cidade_id;
+		break;
 	    case Usuario::$ATENDENTE:
 		$usuario_obj = UsuarioRestaurante::find_by_usuario_id($usuario->id);
 		$redirect = '../../admin/area_administrativa';
@@ -28,10 +35,8 @@ if (trim($data['email']) && trim($data['senha'])) {
 		$usuario_obj = Consumidor::find_by_usuario_id($usuario->id);
 		$redirect = '../../restaurantes';
 		$_SESSION['sessao_valida'] = 1;
-		$consumidor=Consumidor::find_by_usuario_id($usuario->id);
-		$_SESSION['consumidor_id'] = $consumidor->id;
-		$_SESSION['usuario'] = $usuario->nome;
-		$endereco=EnderecoConsumidor::find_by_consumidor_id($consumidor->id);
+		$_SESSION['consumidor_id'] = $usuario_obj->id;
+		$endereco=EnderecoConsumidor::find_by_consumidor_id($usuario_obj->id);
 		$_SESSION['bairro'] = $endereco->bairro_id;
 		break;
 	}

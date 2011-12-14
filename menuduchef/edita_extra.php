@@ -1,7 +1,7 @@
 <?
 session_start();
 
-include("include/header.php");
+include("include/header2.php");
 
 $_SESSION['restaurante_editado_id'] = 1;
 
@@ -75,15 +75,15 @@ function show(x){
 </script>
 <div>
     <div style="float:left; position: relative; padding-left: 20px; padding-right: 50px;">
-        <table class="list">
+        <table border="1">
             <tr><td><input type="button" value="Salvar Altera&ccedil;&otilde;es"></td></tr>
-            <tr><td><input type="button" onclick="location.href=('edita_extra.php');" value="Cancelar"></td></tr> 
-            <tr><td><input type="button" value="Voltar"></td></tr>
+            <tr><td><input type="button" onclick="location.href=('edita_extra');" value="Cancelar"></td></tr> 
+            <tr><td><input type="button" onclick="location.href=('area_adm_restaurante');" value="Voltar"></td></tr>
         </table>
     </div>
     
     <div style="float:left; position: relative; width: 350px; font-size: 11px;">
-    <table class="list" id="acompanhamentos">
+    <table border="1" id="acompanhamentos">
         <tr><th colspan="6">Acompanhamentos</th></tr>
         <tr>
             <th>Nome</th>
@@ -110,7 +110,7 @@ function show(x){
     </div>
     
     <div style="float:left; position: relative; width: 350px; font-size: 11px;">
-    <table class="list" id="porcoes">
+    <table border="1" id="porcoes">
         <tr><th colspan="4">Por&ccedil;&otilde;es Extras</th></tr>
         <tr>
             <th>Nome</th>

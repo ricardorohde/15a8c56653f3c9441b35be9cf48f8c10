@@ -98,17 +98,6 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
 
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-"http://www.w3.org/TR/html4/strict.dtd"
->
-<html lang="pt">
-<head>
-<title>Delivery du Chef</title>
-   <link rel="stylesheet" href="css_/blueprint/screen.css" type="text/css" media="screen, projection">
-   <link rel="stylesheet" href="css_/blueprint/print.css" type="text/css" media="print">  
-   <link rel="stylesheet" href="css_/estilo.css" type="text/css" media="screen"> 
-   <!--[if lt IE 8]><link rel="stylesheet" href="css_/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-
 	<script>
 
     $(document).ready(function() {
@@ -175,40 +164,39 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
         }
     }
     </script>
+    
 </head>
 <body>
-    <form id="formulario" action="" method="post">
-        <input type="hidden" id="volta_pagina1" name="volta_pagina1" value="0" >
+<form id="formulario" action="" method="post">
+<input type="hidden" id="volta_pagina1" name="volta_pagina1" value="0" >
 <div class="container">
 	<div id="background_container">
-    	<?php include "menu.php" ?>
+    	<?php include "menu2.php" ?>
         <div id="central" class="span-24">
 			<div class="span-6">
             	<div id="barra_esquerda">
-                	
-                    	
-                        <div id="seleciona_endereco">
-                            <img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
-                            <div style="width:198px; height:25px; margin-left:7px;">
-                                <select id="endereco_cliente" name="endereco_cliente" style="width:205px;">
+                	<div id="seleciona_endereco">
+               	    	<img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
+                        <div style="width:198px; height:25px; margin-left:7px;">
+                        	<select id="endereco_cliente" name="endereco_cliente" style="width:195px; margin-left:3px;">
                                     <?= $endereco ?>
-                                </select>
-                            </div>
+                            </select>
                         </div>
-                        <div id="busca">
-                            <img src="background/titulo_busca.gif" width="71" height="26" alt="Busca" style="margin-left:12px">
-                            <div style="width:198px; height:25px; margin-left:7px;">
-                            	<? if($_POST['caixa_filtro']){ ?>
+                    </div>
+                    <div id="busca">
+               	    	<img src="background/titulo_busca.gif" width="71" height="26" alt="Busca" style="margin-left:12px">
+                        <div style="width:198px; height:25px;  margin-left:10px;">
+                        	<? if($_POST['caixa_filtro']){ ?>
                                 <input id="caixa_filtro" name="caixa_filtro" type="text" style="float:left; margin: auto 0; width:140px; position:relative;" value='<?= $_POST['caixa_filtro'] ?>'> 
                                 <? }else{ ?>
                                 <input id="caixa_filtro" name="caixa_filtro" type="text" style="float:left; margin: auto 0; width:140px; position:relative;"> 
                                  <? } ?>
-                                <input type="image" class="refino" value="submit" id="filtrar" src="background/botao_ok.gif" style="float:right; margin-top:-3px; border:0; width:36px; height:22px; position:relative; cursor:pointer;"> <!-- <img id="filtrar" src="background/botao_ok.gif" style="float:right; width:36px; margin-top: 1px; height:22px; position:relative; cursor:pointer;"> -->
-                            </div>
+                                <input type="image" class="refino" value="submit" id="filtrar" src="background/botao_ok.gif" style="float:right; margin-top:-4px; border:0; width:40px; height:24px; position:relative; cursor:pointer;">                   	    	
                         </div>
-                        <div id="filtro">
-                            <img src="background/titulo_filtro.gif" width="74" height="26" alt="Filtro" style="margin-left:12px">
-                            <div style="padding-top:5px;">
+                    </div>
+                    <div id="filtro">
+               	    	<img src="background/titulo_filtro.gif" width="74" height="26" alt="Filtro" style="margin-left:12px">
+                        <div style="padding-top:5px;">
                             <? if($categorias){ 
                                     foreach($categorias as $categoria){ 
                                         if($_POST){
@@ -237,25 +225,24 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                                     }
                              } ?>
                              </div>
-                        </div>
-                    
+                    </div>
                 </div>
             </div>
             <div class="span-18 last">
-            	<div style="height:1080px;">
+            	<div style="height:1050px;">
             	<div class="prepend-top" id="status">
-                	<div id="numero_rest" style="color:#FFF" ><span style="margin-left:8px;"> </span>
+                	<div id="numero_rest"><span style="margin-left:8px;"> </span>
                  	</div> 
                     <div id="status_pedido">
-               	    <img src="background/passo.gif" width="540" height="44" alt="passo1">
+               	    <img src="background/passo.png" width="541" height="43" alt="passo1">
                     </div>
                 </div>
-            	<div class="radios prepend-top" id="caixa_sup">
-                	<div id="rest_titulo">
-                    	<img src="background/titulo_restaurantes.gif" width="168" height="26" alt="Restaurantes" style="margin-top:6px;">
-                    </div>
+            	<div id="caixa_sup">
+                	<h1 id="rest_titulo">
+                    	Restaurantes 	
+                    </h1>
                     <div id="contagem_pag">
-                        <input type="hidden" id="pagina" name="pagina" value="<?
+                    	<input type="hidden" id="pagina" name="pagina" value="<?
                             if($_POST){
                                 if($_POST['pagina']){
                                     echo $_POST['pagina'];
@@ -291,10 +278,12 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                             echo $contagem_pag;
                         ?>
                     </div>
-            </div>
-                <!--    -->
+            	</div>
+               
+                	<!--    -->
                 <? if($restaurantes){
 						foreach($restaurantes as $restaurante){ ?>
+         
                 <div class="radios prepend-top" id="box_restaurante">
                 	<div id="box_interno">
                     	<div id="box_avatar">
@@ -351,7 +340,7 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                 <!--    -->
                 <div class="radios prepend-top" id="caixa_sup">
                     <div id="contagem_pag">
-                        <?= $contagem_pag; ?>
+                    	<?= $contagem_pag; ?>
                     </div>
                 </div>
                 </div>
@@ -362,6 +351,6 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
 		</div>
 	</div>
 </div>
-    </form>
+</form>
 </body>
 </html>

@@ -1,8 +1,13 @@
 <?
 include("include/header.php");
 
+session_start();
+$_SESSION["restaurante_id"]=$_GET["res"];
+
 //$itens = Produto::all(array("order" => "nome asc", "conditions" => array("restaurante_id = ?",$_GET['res'])));
 $categorias = RestauranteTemTipoProduto::all(array("conditions" => array("restaurante_id = ?",$_GET['res'])));
+$restaurante = Restaurante::find($_SESSION["restaurante_id"]);
+$resxbai = RestauranteAtendeBairro::all(array("conditions" => array("restaurante_id = ? and bairro_id=?",$_GET['res'],$_SESSION["bairro"]))); 
 ?>
 
 <script>
@@ -13,12 +18,36 @@ $(document).ready(function() {
         $(".categoria").show();
     });
     
+	$(".up").click( function(){
+        qual=$(this).attr("qual");
+        qtd=$("#qtd_"+qual).attr("value");
+		qtd= parseInt(qtd) + 1;
+		$("#qtd_"+qual).attr("value",qtd);
+		$("#qtd2_"+qual).html(qtd);	
+    });
+	
+	$(".down").click( function(){
+        qual=$(this).attr("qual");
+        qtd=$("#qtd_"+qual).attr("value");
+		if(parseInt(qtd)>0){
+			qtd= parseInt(qtd) - 1;
+			$("#qtd_"+qual).attr("value",qtd);
+			$("#qtd2_"+qual).html(qtd);
+		}
+    });
+	
     $("#filtrar").click( function(){
         oque = $("#caixa_filtro").attr("value");
         $(".produto").hide();
         $("#produto_").hide();
         
     });
+	  $('.abreformapagamento').mouseover(function() {
+           $("#formapagamento").show();
+        });
+        $('.abreformapagamento').mouseout(function() {
+           $("#formapagamento").hide();
+        });
 });
 function poe_no_carrinho(x){
     conteudo = document.getElementById('carrinho');
@@ -68,67 +97,181 @@ function menos(x){
         oque.value = parseInt(oque.value) - 1;
     }
 }
-</script>
-<div>
-    <div style="float:left; position: relative; padding-left: 20px; padding-right: 50px;">
-        <table class="list">
-            <tr><td>Menu <input type="button" id="ver_completo" value="Ver Completo"></td></tr>
-            <tr><td>Filtro<br/><input id="caixa_filtro" type="text"> <input id="filtrar" type="button" value="OK"></td></tr>
-            <tr><td>Card&aacute;pio</td></tr>
-            <? if($categorias){
-                    foreach($categorias as $categoria){ 
-                        $itens = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id INNER JOIN restaurante_tem_tipo_produto RTTP ON PTT.tipoproduto_id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = ".$_GET['res']." AND PTT.tipoproduto_id = ".$categoria->tipoproduto_id." AND P.restaurante_id = ".$_GET['res']." ORDER BY P.nome asc");
-                        $num = sizeof($itens);
-                        ?>
-                        <tr><td style="color:#CC0000;"><input type="checkbox" class="filtro_categoria" id="checkprod_<?= $categoria->tipoproduto_id ?>" onclick="check_show('categoria_<?= $categoria->tipoproduto_id ?>','checkprod_<?= $categoria->tipoproduto_id ?>')" checked> <?= $categoria->tipo_produto->nome ?> (<?= $num ?>)</td></tr>
-                    <? 
-                    }
-             } ?>
-        </table>
-    </div>
-    <div style="float:left; position: relative;">
-        <table class="list">
-            <? if($categorias){
-                    foreach($categorias as $categoria){ ?>
-                        <tr><td><div class="categoria" id="categoria_<?= $categoria->tipoproduto_id ?>" ><table>
-                        <tr><th colspan="3" style="color:#CC0000;"><?= $categoria->tipo_produto->nome ?></th></tr>
-                        <tr><td colspan="3">
-                                <table style="width:550px;">
-                    <? 
-                        $itens = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id INNER JOIN restaurante_tem_tipo_produto RTTP ON PTT.tipoproduto_id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = ".$_GET['res']." AND PTT.tipoproduto_id = ".$categoria->tipoproduto_id." AND P.restaurante_id = ".$_GET['res']." ORDER BY P.nome asc");
-                        if($itens){
-                            foreach($itens as $item){ ?>
-                                <tr><td>
-                                        <div id="produto_<?= $item->nome ?>" class="produto_de_categoria_<?= $categoria->tipo_produto->nome ?>" class="produto">     
-                                           <table>     
-                                               <tr>
-                                                   <td><input type="hidden" id="idprod_<?= $item->id ?>" value="<?= $item->id ?>"><input type="hidden" id="nome_<?= $item->id ?>" value="<?= $item->nome ?>"><b><?= $item->nome ?></b><br/><?= $item->descricao ?></td>
-                                                   <td><? if($item->esta_em_promocao){ ?><div style="text-decoration:line-through; font-size:10px;"><?= StringUtil::doubleToCurrency($item->preco) ?></div><div style="color:#CC0000;"><?= StringUtil::doubleToCurrency($item->preco_promocional) ?></div><? }else{ ?><div style="color:#CC0000;"><?= StringUtil::doubleToCurrency($item->preco) ?></div><? } ?></td>
-                                                   <td><input type="button" value="Foto"><input onclick="show('obsprod_<?= $item->id ?>'); erase('obsbox_<?= $item->id ?>')" type="button" value="OBS"><input id="inclui_<?= $item->id ?>" onclick="poe_no_carrinho(<?= $item->id ?>)" type="button" value=" + "><br/>Qtd: <input type="button" onclick="mais('qtdprod_<?= $item->id ?>')" value=" + "><input id="qtdprod_<?= $item->id ?>" type="text" style="width:30px" readonly="true" value="1"><input onclick="menos('qtdprod_<?= $item->id ?>')" type="button" value=" - "></td>
-                                               </tr>
-                                               <tr><td colspan='3'><div id="obsprod_<?= $item->id ?>" style="display:none;"><textarea id="obsbox_<?= $item->id ?>" style="width:100%; height: 45px;"></textarea></div></td></tr>
-                                           </table>
-                                        </div>
-                                </td></tr>
-                           <? }
-                        }?>
-                                </table>
-                       </td></tr>
-                                </table></div></td></tr>
-                    <?}
-             } ?>
-        
-        </table>
-    </div>
 
-    <div style="float:right; position: static;">
-        <table class="list">
-            <tr><td>Seu Pedido</td></tr>
-            <tr><td><div id="carrinho"></div></td></tr>
-            <tr><td>Taxa Entrega:<br/>Desconto:<br/>Subtotal:<br/></td></tr>
-            <tr><td>Promo&ccedil;&atilde;o<br/><input type="text" ><input type="button" value="OK"></td></tr>
-            <tr><td><input type="button" value="FINALIZAR"></td></tr>
-        </table>
-    </div>
-</div>
-<? include("include/footer.php"); ?>
+function move_barra(x){
+
+	$("#carrinho").animate({left: x}, 4000);
+	//$("#barra_move").animate({width: y},300);
+}
+</script>
+
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="js/s3Slider.js" type="text/javascript"></script>
+<script>
+
+    
+
+$(document).ready(function(){  
+    
+    //Horizontal Sliding 
+	  
+    $('#carrinho').hover(function(){  
+        $("#carrinho").stop().animate({left:'74%'},{queue:false,duration:300});  
+    }, function() {  
+        $("#carrinho").stop().animate({left:'91%'},{queue:false,duration:300});  
+    });  
+  
+});  
+
+</script>    
+
+    	<?php include "menu2.php" ?>
+        <div id="central" class="span-24">
+			<div class="span-6">
+            	<div id="barra_esquerda">
+                	<div id="info_restaurante">
+                    	<div id="categoria_rest"><?= $restaurante->getNomeCategoria()?>
+                        </div>
+                        <div id="nome_rest"><?= $restaurante->nome ?>
+                        </div>
+                        <div id="avatar_rest">
+                        </div>
+                        <div id="formas_pagamento"><div class="abreformapagamento" >Formas de pagamento</div>
+                        <? $fps=RestauranteAceitaFormaPagamento::all(array("conditions"=>array("restaurante_id=?",$restaurante->id)));
+							if($fps){?>
+                            <div id="formapagamento" style="display:none; z-index:3; background:#DDD; position:absolute;"><table>
+                            <? foreach($fps as $fp){ ?>
+                            	<tr><th><?= $fp->forma_pagamento->nome ?></th></tr>							
+                                <? } ?>
+                                </table></div>
+                            <? } ?>
+                            
+           					 
+                        </div>
+                        <div id="tempo_entrega">Tempo de entrega:<img src="background/relogio.gif" width="20" height="19" style="position:relative; top:6px; left:4px;">&nbsp;&nbsp;&nbsp;<? if($resxbai){
+								foreach($resxbai as $rxb){
+									echo $rxb->tempo_entrega."min";
+								}
+							}  ?> 
+                        </div>
+                    </div>
+                    <div id="filtro" class="prepend-top">
+               	    	<img src="background/titulo_filtro.gif" width="74" height="26" alt="Filtro" style="margin-left:25px">
+                    </div>	
+                    
+                    
+                </div>
+            </div>
+            <div class="span-18 last">
+            	
+                    <div class="prepend-top" id="status">
+                        <div id="numero_rest" style="color:#FFF" ><span style="margin-left:8px;"> </span>
+                        </div> 
+                        <div id="status_pedido">
+                        	<img src="background/passo2.png" width="541" height="43" alt="passo1">
+                        </div>
+                    </div>
+                    <div id="titulo_box_destaque" >
+                    Dicas du Chef
+                    </div>
+                   
+					
+                    
+                    
+                    
+                    
+			<div id="box_destaque" class="radios" >
+            	<? $destaques=Produto::find_by_sql("SELECT * FROM produto WHERE destaque=1 ORDER BY rand() LIMIT 3");
+					if($destaques){
+						$c=1;
+						foreach($destaques as $dest){ ?>
+							<div class="destaque" <? if($c==2){ echo "style='margin:0 16px;'"; }?> >
+                                <div class="avatar_destaque">
+                                </div>
+                                <div class="titulo_destaque">
+                                    <?= $dest->nome ?> 
+                                </div>
+                                <div class="descricao_destaque">
+                                    <?= $dest->descricao ?>
+                                </div>
+                                <div class="preco_destaque">
+                                    
+                                        <?= StringUtil::doubleToCurrency($dest->preco) ?>
+                                        <img src="background/botao_add.gif" width="36" height="30" style="float:left; cursor:pointer;" /> 
+                                </div>
+                            </div>
+							<? 
+							$c++;
+							}
+						}
+				  ?>                     
+            </div>                
+                  
+            <? $categorias=TipoProduto::find_by_sql("SELECT TP.* FROM tipo_produto TP INNER JOIN restaurante_tem_tipo_produto RTTP ON TP.id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = ".$_SESSION["restaurante_id"]); 
+			if($categorias){
+				foreach($categorias as $cat){	
+				
+			
+			?>      
+                    <div class="titulo_box_categoria"><?= $cat->nome ?>
+                    </div>
+                    
+                    <div id="box_categoria" class="radios" >
+                        <? $produtos=Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id WHERE PTT.tipoproduto_id = ".$cat->id." AND P.restaurante_id = ".$_SESSION["restaurante_id"]); 
+						  if($produtos){
+							  $c=1;
+							  foreach($produtos as $prod){
+								  
+						?>   
+                        <div class="produto" <? if($c%2==1){ echo"style='background:#F0F0F0;'";} ?>>
+                            <div class="titulo_produto">
+                            <?= $prod->nome ?>
+                            </div>
+                            
+                             <div class="sup_produto">	        
+                                <div class="define_quantidade">
+                                    <div style="float:right">
+                                    	<img src="background/seta_down.gif" class="down" qual="<?= $prod->id ?>" width="10" height="10" style="cursor:pointer" />
+                                    </div>
+                                    <div style="float:right; margin:0 3px;">
+                                    	<input type="hidden" value="0" name="qtd_<?= $prod->id ?>" id="qtd_<?= $prod->id ?>" /><div id="qtd2_<?= $prod->id ?>">0</div>
+                                    </div> 
+                                    <div style="float:right">
+                                    	<img src="background/seta_up.gif" class="up" qual="<?= $prod->id ?>" width="10" height="10" style="cursor:pointer" />
+                                    </div>
+                                </div>
+                                
+                                <div class="preco_produto" ><?= StringUtil::doubleToCurrency($prod->preco) ?>
+                                </div> 
+                            </div>
+                            
+                            <div class="texto_produto">
+                            <?= $prod->descricao ?>
+                            </div>
+                            
+                            <div style="width:230px; height:21px; float:right;  padding-top:10px;">
+                                        
+                                <div style="float:right; position:relative;">
+                                    <img src="background/botao_add.gif" width="25" height="21" style="margin:0 8px; cursor:pointer;"/>
+                                </div>
+                                <div style="float:right; width:50px; margin-right:19px; height:21px; background:#B2B2B2; border:0;" class="radios">
+                                </div>
+                            </div>      
+                        </div>
+                        <? 
+						$c++;
+							}
+						  }
+						  ?>
+                    </div>
+                <? }
+			    }?> 
+                
+                
+                            
+            
+             
+            </div>
+		</div>
+        <?php include "carrinho.php" ?>
+	<? include("include/footer.php"); ?>

@@ -1,7 +1,7 @@
 <?
 session_start();
 
-include("include/header.php");
+include("include/header2.php");
 
 $_SESSION['restaurante_editado_id'] = 1;
 
@@ -18,6 +18,8 @@ if($_SESSION['restaurante_editado_id']){
 
 <style type="text/css">
         input {font-size: 11px;}
+        td {font-size: 11px;}
+        
         body{font:12px "Helvetica", sans-serif;}
         body div#content{width:980px;margin:0 auto;}
         div.recebeDrag{}
@@ -55,27 +57,20 @@ $(document).ready(function() {
     
     $('.recebeDrag').sortable({connectWith: ['.recebeDrag']});
 
-    $(".promocao_sim").click( function(){
+    $(".promocao").change( function(){
+        
         qual = $(this).attr("name");
         qual = qual.split("_");
         qual = qual[4];
-        $("#div_preco_"+qual).hide();
-        $("#div_preco_promocional_"+qual).show();
-        $("#div_label_preco_"+qual).hide();
-        $("#div_label_preco_promocional_"+qual).show();
-        $("#div_texto_promocional_"+qual).show();
+        estado = $(this).css("display");
+
+        $("#div_preco_"+qual).toggle();
+        $("#div_preco_promocional_"+qual).toggle();
+        $("#div_label_preco_"+qual).toggle();
+        $("#div_label_preco_promocional_"+qual).toggle();
+        $("#div_texto_promocional_"+qual).toggle();
     });
-    
-    $(".promocao_nao").click( function(){
-        qual = $(this).attr("name");
-        qual = qual.split("_");
-        qual = qual[4];
-        $("#div_preco_"+qual).show();
-        $("#div_preco_promocional_"+qual).hide();
-        $("#div_label_preco_"+qual).show();
-        $("#div_label_preco_promocional_"+qual).hide();
-        $("#div_texto_promocional_"+qual).hide();
-    });
+
 });
 
 function show(x){
@@ -91,8 +86,8 @@ function show(x){
     <div style="float:left; position: relative; padding-left: 20px; padding-right: 50px;">
         <table class="list">
             <tr><td><input type="button" value="Salvar Altera&ccedil;&otilde;es"></td></tr>
-            <tr><td><input type="button" onclick="location.href=('edita_cardapio.php');" value="Cancelar"></td></tr> 
-            <tr><td><input type="button" value="Voltar"></td></tr>
+            <tr><td><input type="button" onclick="location.href=('edita_cardapio');" value="Cancelar"></td></tr> 
+            <tr><td><input type="button" onclick="location.href=('area_adm_restaurante');" value="Voltar"></td></tr>
         </table>
     </div>
      
@@ -110,14 +105,14 @@ function show(x){
                             foreach($itens as $item){ ?>
                                 <li>
                                         <div style="background:#DDDDFF; font-size: 11px;" id="produto_<?= $item->nome ?>" class="produto_de_categoria_<?= $categoria->tipo_produto->nome ?> produto">
-                                           <h5>&nbsp;</h5>
+                                           <h5><span><a href="#" class="lnk-adicionar">[ + ]</a></span></h5>
                                            <input type="hidden" name="produto_categoria_<?= $item->id ?>" value="<?= $categoria->tipoproduto_id ?>" >
-                                           <table border="0" cellspacing="0" style="width:350px;">
-                                               <tr><td><table><tr><td style="background:#F0F;"> Ativo: </td><td style="width:40px; background:#FFF;"><input type="radio" name="produto_ativo_<?= $item->id ?>" value="1" <? if($item->ativo){ echo "checked"; } ?>> Sim <br/><input type="radio" name="produto_ativo_<?= $item->id ?>" value="0" <? if(!$item->ativo){ echo "checked"; } ?>> N&atilde;o </td><td style="background:#F00;">Dispon&iacute;vel no momento: </td><td style="width:40px; background:#FF0;"><input type="radio" name="produto_disponivel_<?= $item->id ?>" value="1" <? if($item->disponivel){ echo "checked"; } ?>> Sim <br/><input type="radio" name="produto_disponivel_<?= $item->id ?>" value="0" <? if(!$item->disponivel){ echo "checked"; } ?>> N&atilde;o </td><td style="background:#A57;"><input name="produto_foto_<?= $item->id ?>" type="button" value="Foto" onclick="show('div_produto_imagem_<?= $item->id ?>')" ><div id="div_produto_imagem_<?= $item->id ?>" style="position:absolute; background-color: #519; margin-top: 25px; display:none;"><?= $item->imagem ? "<img src='".$item->imagem."'> Mudar imagem:" : "Adicionar imagem:" ?><input type="file" name="produto_imagem_<?= $item->id ?>"></div></td></tr></table></td></tr>
+                                           <table border="0" cellspacing="0" style="width:350px; padding: 0px;">
+                                               <tr><td><table><tr><td style="background:#F00;">Dispon&iacute;vel no momento: </td><td style="width:45px; background:#FF0;"><select name="produto_disponivel_<?= $item->id ?>"><option value="1" <? if($item->disponivel){ echo "selected"; } ?>> Sim </option><option value="0" <? if(!$item->disponivel){ echo "selected"; } ?>> N&atilde;o </option></select></td><td style="background:#A57;"><input name="produto_foto_<?= $item->id ?>" type="button" value="Foto" onclick="show('div_produto_imagem_<?= $item->id ?>')" ><div id="div_produto_imagem_<?= $item->id ?>" style="position:absolute; background-color: #519; margin-top: 25px; display:none;"><?= $item->imagem ? "<img src='".$item->imagem."'> Mudar imagem:" : "Adicionar imagem:" ?><input type="file" name="produto_imagem_<?= $item->id ?>"></div></td><td><input type="button" value="X"></td></tr></table></td></tr>
                                                <tr><td><table><tr><td>C&oacute;digo: </td><td><input style="width:27px;" type="text" name="produto_nome_<?= $item->id ?>" value="<?= $item->codigo ?>"></td><td>Nome: </td><td><input type="text" name="produto_nome_<?= $item->id ?>" value="<?= $item->nome ?>"></td><td>Tamanho: </td><td><input type="text" style="width:80px;" name="produto_tamanho_<?= $item->id ?>" value="<?= $item->tamanho ?>"></td></tr></table></td></tr>
                                                <tr><td><table><tr><td>Descri&ccedil;&atilde;o:</td><td><input style="width:300px;" type="text"  name="produto_descricao_<?= $item->id ?>" value="<?= $item->descricao ?>"></td></tr></table></td></tr>
-                                               <tr><td><table><tr><td>Qtd Acompanhamento:</td><td><input type="text" name="produto_qtd_produto_adicional_<?= $item->id ?>" style="width:20px;" value="<?= $item->qtd_produto_adicional ?>"></td><td><input type="button" value="Acompanhamentos e Por&ccedil;&otilde;es Extras"></td></tr></table></td></tr>
-                                               <tr><td><table><tr><td style="width:68px;">Est&aacute; em promo&ccedil;&atilde;o:</td><td style="width:40px; background:#AAA;"><input type="radio" class="promocao_sim"  name="produto_esta_em_promocao_<?= $item->id ?>" value="1" <? if($item->esta_em_promocao){ echo "checked"; } ?>> Sim <br/><input type="radio" class="promocao_nao" name="produto_esta_em_promocao_<?= $item->id ?>" value="0" <? if(!$item->esta_em_promocao){ echo "checked"; } ?>> N&atilde;o </td><td style="background:#09f; width:130px;"><div id="div_label_preco_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "none" : "block" ?>; position:relative; float:right;">Pre&ccedil;o:</div><div id="div_label_preco_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>; position:relative; float:right;">Pre&ccedil;o Promocional:</div></td><td style="width:10px; background: #006;">R$</td><td><div id="div_preco_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>;"><input onkeyup="mask_moeda(this)"  class="preco" style="width:50px;" type="text" name="produto_preco_promocional_<?= $item->id ?>" value="<?= $item->preco_promocional ?>"></div><div id="div_preco_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "none" : "block" ?>;"><input style="width:50px;" type="text" onkeyup="mask_moeda(this)" class="preco" name="produto_preco_<?= $item->id ?>" value="<?= $item->preco ?>"></td></tr></table></div></td></tr>
+                                               <tr><td><table><tr><td>Qtd Acompanhamentos:</td><td><input type="text" name="produto_qtd_produto_adicional_<?= $item->id ?>" style="width:20px;" value="<?= $item->qtd_produto_adicional ?>"></td><td><input type="button" value="Acompanhamentos e Por&ccedil;&otilde;es Extras"></td></tr></table></td></tr>
+                                               <tr><td><table><tr><td style="width:68px;">Est&aacute; em promo&ccedil;&atilde;o:</td><td style="width:45px; background:#AAA;"><select class="promocao" name="produto_esta_em_promocao_<?= $item->id ?>"><option value="1" <? if($item->esta_em_promocao){ echo "selected"; } ?>> Sim </option><option value="0" <? if(!$item->esta_em_promocao){ echo "selected"; } ?>> N&atilde;o </option></select></td><td style="background:#09f; width:130px;"><div id="div_label_preco_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "none" : "block" ?>; position:relative; float:right;">Pre&ccedil;o:</div><div id="div_label_preco_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>; position:relative; float:right;">Pre&ccedil;o Promocional:</div></td><td style="width:10px; background: #006;">R$</td><td><div id="div_preco_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>;"><input onkeyup="mask_moeda(this)"  class="preco" style="width:50px;" type="text" name="produto_preco_promocional_<?= $item->id ?>" value="<?= $item->preco_promocional ?>"></div><div id="div_preco_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "none" : "block" ?>;"><input style="width:50px;" type="text" onkeyup="mask_moeda(this)" class="preco" name="produto_preco_<?= $item->id ?>" value="<?= $item->preco ?>"></td></tr></table></div></td></tr>
                                                <tr><td><div id="div_texto_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>;"><table><tr><td style="width:68px;">Texto da promo&ccedil;&atilde;o:</td><td><input type="text" style="width:300px;" name="produto_texto_promocao_<?= $item->id ?>" value="<?= $item->texto_promocao ?>"></td></tr></table></table></td></tr>
                                                <tr></tr>
                                                
