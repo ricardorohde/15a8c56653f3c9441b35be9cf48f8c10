@@ -3,6 +3,7 @@ include_once("constant.php");
 require_once("HttpUtil.php");
 require_once("StringUtil.php");
 require_once("php-activerecord/ActiveRecord.php");
+require_once("class.upload.php");
 
 /**
  * Comandos de inicialização

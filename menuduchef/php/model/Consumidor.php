@@ -27,7 +27,7 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 	array('email', 'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/', 'message' => 'inválido')
     );
     static $before_save = array('save_usuario');
-    static $after_save = array('save_enderecos');
+    static $after_save = array('save_enderecos', 'save_telefones');
     static $after_destroy = array('destroy_usuario');
 
     public function prepare_attributes(array &$attributes) {
@@ -92,6 +92,42 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 	    }
 	    
 	    unset($_SESSION[$this->__request_attributes['hash_consumidor']]);
+	}
+    }
+    
+    public function save_telefones() {
+	if ($this->__request_attributes['hash_consumidor2']) {
+	    $telefonesMatrix = $_SESSION[$this->__request_attributes['hash_consumidor2']];
+	    $telefoneIdsInMatrix = array();
+	    $telefonesPreCadastrados = $this->telefones;
+
+	    if (isset($telefonesMatrix)) {
+		foreach ($telefonesMatrix as $telefoneArray) {
+		    $telefone = new TelefoneConsumidor();
+
+		    if ($telefoneArray['id']) {
+			$telefoneIdsInMatrix[] = $telefoneArray['id'];
+			$telefone = TelefoneConsumidor::find($telefoneArray['id']);
+		    }
+
+		    $telefone->set_attributes($telefoneArray);
+		    $telefone->consumidor_id = $this->id;
+		    $telefone->save();
+		}
+
+		/*
+		 * Excluindo os telefones removidos do atributo de sessão
+		 */
+		if ($telefonesPreCadastrados) {
+		    foreach ($telefonesPreCadastrados as $t) {
+			if (!$telefoneIdsInMatrix || !in_array($t->id, $telefoneIdsInMatrix)) {
+			    $t->delete();
+			}
+		    }
+		}
+	    }
+	    
+	    unset($_SESSION[$this->__request_attributes['hash_consumidor2']]);
 	}
     }
 

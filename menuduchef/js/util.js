@@ -3,6 +3,7 @@
  */
 var AREA_MODIFICAR_SENHA_ID = 'areaModificarSenha';
 var ENDERECO_DIALOG_ID = 'form_endereco';
+var TELEFONE_DIALOG_ID = 'form_telefone';
 var COMBO_BOX_DEFAULT_OPTION = '<option value="">-- Selecione --</option>';
 var COMBO_BOX_DEFAULT_ENDERECO = '<option value="">-- Selecione um cliente e um restaurante primeiro --</option>';
 var COMBO_BOX_DEFAULT_BAIRRO = '<option value="">-- Selecione uma cidade primeiro --</option>';
@@ -16,6 +17,7 @@ var URL_PRODUTOS_JSON = 'php/controller/list_produtos_json';
 var URL_PRODUTOS_ADICIONAIS_JSON = 'php/controller/list_produtos_adicionais_json';
 var URL_PRODUTO_SEGUNDO_SABOR = 'php/controller/list_segundo_sabor_json';
 var URL_ENDERECO_CONSUMIDOR = 'php/controller/endereco_consumidor_json';
+var URL_TELEFONE_CONSUMIDOR = 'php/controller/telefone_consumidor_json';
 
 function isEmpty(data) {
     return data == null || data == undefined || data == '' || data.length == 0;
@@ -213,6 +215,57 @@ function autoCompleteProdutosCheckBox(idRestaurante) { //seinao ainda
     }
 }
 
+function listTelefonesConsumidor(arrayTelefones, tableId, hashConsumidor) {
+    if(!isEmpty(arrayTelefones)) {
+	$('#' + tableId + ' .row_data').remove();
+	
+	$.each(arrayTelefones, function(index, data) {
+	    var row = '<tr class="row_data">';
+	    row += '<td>' + data.__toString + '</td>';
+	    row += '<td align="center"><a href="javascript:void(0)" class="modificar_telefone">Modificar</a></td>';
+	    row += '<td align="center"><a href="javascript:void(0)" class="excluir_telefone">Excluir</a></td>';
+	    row += '</tr>';
+
+	    var rowElement = $(row).appendTo($('#' + tableId));
+
+	    rowElement.find('.modificar_telefone').click(function() {
+                data.telefone_id = data.id;
+                $('#' + TELEFONE_DIALOG_ID).dialog('option', 'isUpdate', 1);
+                $('#' + TELEFONE_DIALOG_ID).dialog('option', 'attributes', data);
+                $('#' + TELEFONE_DIALOG_ID).dialog('open');
+	    });
+
+	    rowElement.find('.excluir_telefone').click(function() {
+                $.getJSON(URL_TELEFONE_CONSUMIDOR, {'deleteHash': data.hash, 'hash_consumidor': hashConsumidor}, function(e) {
+                    listTelefonesConsumidor(e, tableId, hashConsumidor);
+                });
+	    });
+	});
+    } else {
+	$('#' + tableId + ' .row_data').remove();
+	$('<tr class="row_data"><td colspan="9">Nenhum telefone cadastrado</td></tr>').appendTo($('#' + tableId));
+    }
+}
+
+function addTelefoneConsumidor(parameters, tableId, hashConsumidor, imgLoading) {
+    $('#mensagens_telefone').empty().append($('<img src="' + imgLoading.src + '" alt="Carregando" title="Carregando" />'));
+    var mergedParameters = $.merge(parameters, [{'name': 'hash_consumidor', 'value': hashConsumidor}]);
+    
+    $.post(URL_TELEFONE_CONSUMIDOR, mergedParameters, function(data) {
+	if(!isEmpty(data)) {
+	    if(!data.errors) {
+		listTelefonesConsumidor(data, tableId, hashConsumidor);
+		$('#' + TELEFONE_DIALOG_ID).dialog('close');
+	    } else {
+		$('#mensagens_telefone').empty();
+		$.each(data.errors, function(index, key) {
+		    $('#mensagens_telefone').append($('<div class="msg error">&raquo; ' + key.error + '</div>'));
+		});
+	    }
+	}
+    }, 'json');
+}
+
 function listEnderecosConsumidor(arrayEnderecos, tableId, hashConsumidor) {
     if(!isEmpty(arrayEnderecos)) {
 	$('#' + tableId + ' .row_data').remove();
@@ -220,7 +273,7 @@ function listEnderecosConsumidor(arrayEnderecos, tableId, hashConsumidor) {
 	
 	$.each(arrayEnderecos, function(index, data) {
 	    var row = '<tr class="row_data">';
-	    row += '<input type="hidden" name="hash_endereco" value="' + data.hash + '" />';
+	    //row += '<input type="hidden" name="hash_endereco" value="' + data.hash + '" />';
 	    row += '<td>' + data.__toString + '</td>';
 	    row += '<td align="center">' + (data.favorito ? '<strong>X</strong>' : '') + '</td>'
 	    row += '<td align="center"><a href="javascript:void(0)" class="modificar_endereco">Modificar</a></td>';

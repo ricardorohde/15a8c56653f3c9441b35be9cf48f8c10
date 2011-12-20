@@ -14,6 +14,10 @@ class Cidade extends ActiveRecord\Model {
 	array('nome', 'message' => 'já existe')
     );
 
+    public static function all() {
+	return parent::all(array('order' => 'nome asc', 'conditions' => array('ativa' => 1)));
+    }
+
 }
 
 ?>

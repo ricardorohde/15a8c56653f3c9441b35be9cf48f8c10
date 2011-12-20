@@ -29,11 +29,18 @@ $bairros = Bairro::all();
 
 <a href="admin/restaurante/" title="Cancelar">Cancelar</a>
 
-<form action="admin/restaurante/controller" method="post">
+<form action="admin/restaurante/controller" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     
     <label class="normal">Nome:</label>
     <input class="formfield w50" type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" />
+    
+    <label class="normal">Foto:</label>
+    <input class="formfield w50" type="file" name="imagem" maxlength="100" />
+    <? if($obj->imagem) { ?>
+    <br clear="all" /><img src="<?= $obj->getUrlImagem() ?>" class="left" alt="<?= $obj->nome ?>" />
+    <a href="admin/php/controller/exclude_image" class="left bold red" onclick="return confirm('Excluir imagem?')">X</a>
+    <? } ?>
     
     <label class="normal">Cidade:</label>
     <? if($obj->cidade_id) { ?>

@@ -56,7 +56,7 @@ class Administrador extends ActiveRecord\Model implements UsuarioInterface {
     }
     
     public static function all() {
-	return parent::all(array("joins" => "inner join usuario on  " . static::$table_name . ".usuario_id = usuario.id", "order" => "usuario.nome asc"));
+	return parent::all(array('joins' => 'inner join usuario on  ' . static::$table_name . '.usuario_id = usuario.id', 'order' => 'usuario.nome asc'));
     }
 
 }

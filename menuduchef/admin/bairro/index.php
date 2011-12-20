@@ -1,7 +1,7 @@
 <?
 include('../../include/header_admin.php');
 
-$itens = Bairro::all(array("order" => "cidade_id asc, nome asc"));
+$itens = Bairro::all();
 ?>
 
 <h2><a href="admin/area_administrativa">Menu Principal</a> &raquo; Gerenciar Bairros</h2>

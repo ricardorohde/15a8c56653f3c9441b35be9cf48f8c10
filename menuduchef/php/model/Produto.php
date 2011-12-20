@@ -30,6 +30,11 @@ class Produto extends ActiveRecord\Model {
 	array('preco', 'greater_than' => 0, 'message' => 'obrigatório')
     );
     static $after_save = array('save_relationships');
+    var $image_x = 100;
+
+    public function getUrlImagem() {
+	return PATH_IMAGE_UPLOAD . '/' . strtolower(get_class($this)) . '/' . $this->imagem;
+    }
 
     public function save_relationships() {
 	/*

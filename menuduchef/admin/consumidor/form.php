@@ -4,9 +4,16 @@ include('../../include/header_admin.php');
 $obj = HttpUtil::getActiveRecordObjectBySessionOrGetId("Consumidor");
 
 $cidades = Cidade::all(array("order" => "nome asc"));
-$hash_consumidor = 'consumidor' . time();
+$now = time();
+$hash_consumidor = 'consumidor' . $now;
+$hash_consumidor2 = 'consumidor' . ($now + 1);
+
 $enderecosJson = StringUtil::arrayActiveRecordToJson($obj->enderecos, array('methods' => array('hash', '__toString'), 'include' => array('bairro' => array('include' => 'cidade'))));
 $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
+
+$telefonesJson = StringUtil::arrayActiveRecordToJson($obj->telefones, array('methods' => array('hash', '__toString')));
+$_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
+
 ?>
 
 <script type="text/javascript">
@@ -29,6 +36,7 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
         });
 
         listEnderecosConsumidor(<?= $enderecosJson ?>, 'enderecos', '<?= $hash_consumidor ?>');
+        listTelefonesConsumidor(<?= $telefonesJson ?>, 'telefones', '<?= $hash_consumidor2 ?>');
         
 	var imgLoading = new Image();
 	imgLoading.src = '<?= PATH_IMAGE_LOADING ?>';
@@ -36,6 +44,39 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
         $('#add_endereco').click(function() {
 	    $('#form_endereco').dialog('option', 'first', $(this).data('first'));
             $('#form_endereco').dialog('open');
+        });
+	
+	$('#add_telefone').click(function() {
+            $('#form_telefone').dialog('open');
+        });
+	
+	$('#form_telefone').dialog({
+            autoOpen: false,
+            modal: true,
+            width: '20%',
+            resizable: false,
+            buttons: {
+                'Salvar': function() {
+                    addTelefoneConsumidor($('input, select, textarea', this).serializeArray(), 'telefones', '<?= $hash_consumidor2 ?>', imgLoading);
+                },
+                'Cancelar': function () {
+                    $(this).dialog('close');
+                }
+            },
+            open: function() {
+                var isUpdate = parseInt($(this).dialog('option', 'isUpdate'));
+                var attributes = $(this).dialog('option', 'attributes');
+		
+                if(isUpdate) {
+                    $(this).populateForm(attributes);
+                }
+            },
+            close: function() {
+                $(this).clearFormElements();
+                $(this).dialog('option', 'isUpdate', null);
+                $(this).dialog('option', 'attributes', null);
+                $('#mensagens_telefone').empty();
+            }
         });
 	
         $('#form_endereco').dialog({
@@ -87,6 +128,7 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
 <form action="admin/consumidor/controller" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     <input type="hidden" id="hash_consumidor" name="hash_consumidor" value="<?= $hash_consumidor ?>" />
+    <input type="hidden" id="hash_consumidor2" name="hash_consumidor2" value="<?= $hash_consumidor2 ?>" />
 
     <label class="normal">Nome:</label>
     <input class="formfield w50" type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" />
@@ -101,7 +143,24 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
     <input class="formfield w15" type="text" name="sexo" value="<?= $obj->sexo ?>" maxlength="100" />
 
     <label class="normal">Telefones:</label>
-    <div class="left w100" id="telInput">
+    <a id="add_telefone" class="left w100 bottom10" href="javascript:void(0)">Adicionar</a>
+    <br /><br />
+    <div id="form_telefone" title="Adicionar telefone">
+        <div id="mensagens_telefone"></div>
+        <input type="hidden" id="telefone_id" name="telefone_id" value="" />
+        <input type="hidden" name="hash" value="" />
+	<label for="numero_telefone" class="normal">Número:</label>
+        <input class="formfield w90" type="text" id="numero_telefone" name="numero" />
+    </div>
+    <table class="list w25" id="telefones">
+        <tr>
+	    <th>Telefone</th>
+            <th width="10%"></th>
+            <th width="10%"></th>
+        </tr>
+    </table>
+    
+    <?/*div class="left w100" id="telInput">
         <?
         if ($obj->telefones) {
             $telc = 1;
@@ -114,7 +173,7 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
         }
         ?>
     </div>
-    <input class="btn" type="button" value="  +  " id="addPagina_t" />
+    <input class="btn" type="button" value="  +  " id="addPagina_t" /*/?>
 
     <label class="normal">Endereços:</label>
     <a id="add_endereco" class="left w100 bottom10" href="javascript:void(0)">Adicionar</a>
@@ -123,7 +182,7 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
         <div id="mensagens_endereco"></div>
 
         <input type="hidden" id="endereco_id" name="endereco_id" value="" />
-        <input type="hidden" id="hash" name="hash" value="" />
+        <input type="hidden" name="hash" value="" />
 
         <label for="cidade_endereco" class="normal">Cidade:</label>
 
@@ -154,9 +213,9 @@ $_SESSION[$hash_consumidor] = json_decode($enderecosJson, true);
         <label class="adjacent top10" for="checkbox_endereco_favorito">Atribuir como endereço favorito</label>
     </div>
 
-    <table class="list w100" id="enderecos">
+    <table class="list w60" id="enderecos">
         <tr>
-	    <th width="60%">Endereço</th>
+	    <th>Endereço</th>
             <th width="5%">Favorito</th>
             <th width="10%"></th>
             <th width="10%"></th>
