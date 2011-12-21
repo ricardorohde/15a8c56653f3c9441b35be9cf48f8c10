@@ -117,7 +117,7 @@ $(document).ready(function(){
 	else if(screen.width==1280){
 		$("#carrinho").css("left","91%");
 		left_car="91%";
-		retorno_car="74%"; 
+		retorno_car="74.1%"; 
 	}
 	else if(screen.width==1366){
 		$("#carrinho").css("left","91.5%");
