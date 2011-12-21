@@ -98,11 +98,6 @@ function menos(x){
     }
 }
 
-function move_barra(x){
-
-	$("#carrinho").animate({left: x}, 4000);
-	//$("#barra_move").animate({width: y},300);
-}
 </script>
 
 <script src="js/jquery.js" type="text/javascript"></script>
@@ -112,13 +107,39 @@ function move_barra(x){
     
 
 $(document).ready(function(){  
-    
+	left_car=0;
+	retorno_car=0;
+	if(screen.width==1024){
+		$("#carrinho").css("left","88.5%");
+		left_car="88.5%";
+		retorno_car="67.5%"; 
+	}
+	else if(screen.width==1280){
+		$("#carrinho").css("left","91%");
+		left_car="91%";
+		retorno_car="74%"; 
+	}
+	else if(screen.width==1366){
+		$("#carrinho").css("left","91.5%");
+		left_car="91.5%";
+		retorno_car="75.8%"; 
+	}
+	else if(screen.width==320){
+		$("#carrinho").css("left","88.5%");
+		left_car="88.5%";
+		retorno_car="67.5%"; 
+	}
+	else{
+		$("#carrinho").css("left","91.5%");
+		left_car="91.5%";
+		retorno_car="75.8%"; 
+	}
     //Horizontal Sliding 
 	  
     $('#carrinho').hover(function(){  
-        $("#carrinho").stop().animate({left:'74%'},{queue:false,duration:300});  
+        $("#carrinho").stop().animate({left:retorno_car},{queue:false,duration:300});  
     }, function() {  
-        $("#carrinho").stop().animate({left:'91%'},{queue:false,duration:300});  
+        $("#carrinho").stop().animate({left:left_car},{queue:false,duration:300});  
     });  
   
 });  
