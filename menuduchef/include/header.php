@@ -20,6 +20,7 @@ if (HttpUtil::isLocalhost()) {
     >
 <html lang="pt">
     <head>
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><?= SITE_TITLE ?></title>
         <base href="<?= $baseHref ?>" />
         <script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
@@ -29,9 +30,9 @@ if (HttpUtil::isLocalhost()) {
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link rel="stylesheet" type="text/css" href="css/menu.css" />
 	<link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" />
-	<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
-	<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">  
-	<link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen"> 
+	<link rel="stylesheet" href="css_/blueprint/screen.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="css_/blueprint/print.css" type="text/css" media="print">  
+	<link rel="stylesheet" href="css_/estilo.css" type="text/css" media="screen"> 
 	<!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
     </head>
     <body>

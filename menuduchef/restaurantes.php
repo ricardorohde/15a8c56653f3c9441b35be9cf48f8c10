@@ -264,7 +264,7 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                                 if($pag>1){
                                     $contagem_pag .= "onclick='indica_pagina(".($pag - 1).");' ";
                                 }
-                                $contagem_pag .= "style='position:relative; float:left; margin: 0 5px; cursor:pointer'><<</div>";
+                                $contagem_pag .= "style='position:relative; float:left; margin: 0 2px; cursor:pointer'>«</div>";
                                 for($j=0;$j<$pags;$j++){
                                     $contagem_pag .= "<div class='pagina' onclick='indica_pagina(".($j + 1).");' style='position:relative; float:left; margin: 0 5px; cursor:pointer'>".($j+1)."</div>";
                                 }
@@ -272,7 +272,7 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                                 if($pag<$pags){
                                     $contagem_pag .= "onclick='indica_pagina(".($pag + 1).");' ";
                                 }
-                                $contagem_pag .= " style='position:relative; float:left; margin: 0 5px; cursor:pointer'>>></div>";
+                                $contagem_pag .= " style='position:relative; float:left; margin: 0 2px; cursor:pointer'>»</div>";
                                 $contagem_pag .= "</div>";
                             }
                             echo $contagem_pag;
@@ -322,7 +322,9 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                                 
                                 ?>
                             </div>
-                            <div class="texto_box" id="b4">Tempo de entrega: <?= $restaurante->tempo_entrega ?> min | Taxa de entrega: <?= StringUtil::doubleToCurrency($restaurante->preco_entrega) ?></div>
+                            <div class="texto_box" id="b4"><img src="background/relogio.gif" width="15" height="14" title="Tempo de entrega">
+                            <?= $restaurante->tempo_entrega ?> min | <img src="background/entrega.gif" width="20" height="14" title="Taxa de entrega"> 
+                            <?= StringUtil::doubleToCurrency($restaurante->preco_entrega) ?></div>
                         </div>
                         <div id="box_botoes">
                         	<div style="width:110px; height:72px;">
