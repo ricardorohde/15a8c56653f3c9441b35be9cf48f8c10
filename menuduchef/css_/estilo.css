@@ -1,4 +1,4 @@
-@charset "utf-8";
+ @charset "utf-8";
 /* CSS Document */
 
 a:link{
@@ -52,15 +52,8 @@ a:hover{color:#CCC}
 	
 #login{
 	height:63px;
-	width:436px;
+	width:218px;
 	float:right;
-	padding:0;
-	position:relative;
-	}
-	
-.botao_ok{
-	position:absolute;
-	z-index:2;
 	}
 	
 .radios{
@@ -68,6 +61,84 @@ a:hover{color:#CCC}
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	}
+
+
+/* Index.php */
+
+.transparencia {
+   opacity: .25;
+   -moz-opacity: .25;
+   filter:alpha(opacity=25);
+   float: left;
+} 
+
+#central_principal{
+	background:#730815;
+	height:743px;
+	box-shadow: 1px 1px 3px #AE6D1A;
+	-webkit-box-shadow:2px 1px 3px #AE6D1A;
+    -moz-box-shadow: 1px 1px 3px #333;
+	-moz-border-radius-topleft:0;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-top-left-radius:0;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	}
+	
+#lateral_esquerda{
+	float:left;
+	width:156px;
+	height:743px;
+	}
+
+#lateral_direita{	
+	float:left;
+	width:794px;
+	height:743px;
+	
+	}
+
+#direita_interna{
+	float:left;
+	padding:25px 16px;
+	width:762px;
+	height:693px;
+	}
+
+#banner_dinamico{
+	width:762px;
+	height:412px;
+	}
+
+#botoes{
+	width:762px;
+	height:162px;
+	padding:25px 0;
+	}
+
+.botao_principal{
+	height:162px;
+	width:240px;
+	float:left;
+	}
+	
+.fonte_lateral{
+	font-family:'BebasNeueRegular';
+	color:#FFE500;
+	font-size:27px;
+	}
+	
+.fonte_cep{
+	font-family:Arial, Helvetica, sans-serif;
+	color:#FFF;
+	font-size:11px;
+	}
+
+	
+
 	
 /*Restaurante.php */ 
 
@@ -88,7 +159,7 @@ a:hover{color:#CCC}
 	-webkit-border-top-right-radius:0;
 	-webkit-border-bottom-left-radius: 10px;
 	-webkit-border-bottom-right-radius: 10px;
-	padding-bottom:30px;
+	padding-bottom:20px;
 	}
 
 #barra_esquerda{
@@ -107,7 +178,7 @@ a:hover{color:#CCC}
 	background-color:#f1f1f2;
 	width:220px;
 	float:right; 
-    height:1200px;
+    height:1160px;
 	position:relative;
 	z-index:3;
 	}
@@ -126,14 +197,33 @@ a:hover{color:#CCC}
 	}
 	
 #caixa_sup{
-	background-color:#f1f1f2;
-	width:700px; 
-	height:52px;
+	width:685px; 
+	height:30px;
 	position:relative;
+	margin-top:27px;  
+	padding-left:13px;
+	}
+
+#rest_titulo{
+	width:180px; 
+	float:left;
+	font:Arial; 
+	font-size:29px; 
+	color:#E51B21;
+	font-weight:normal;
+	}
+	
+#contagem_pag{
+	height:20px; 
+	float:right; 
+	margin-right:12px;
+	margin-top:8px;
+	color:#E51B21;
+	font:Arial;
+	font-size:11px; 
 	}
 	
 #box_restaurante{
-	background-color:#f1f1f2;
 	width:698px; 
 	height:128px;
 	position:relative;
@@ -168,31 +258,12 @@ a:hover{color:#CCC}
 	width:700px;
 	height:45px;
 	}	
-	
-#rest_titulo{
-	width:180px; 
-	height:40px; 
-	float:left;
-	margin-left:14px;
-	margin-top:6px;
-	
-	}
-	
+		
 #numero_rest{
 	width:145px; 
-	height:20px; 
-	float:left; 
-	margin-top:25px; 
-	background:#E51B21;
+	height:45px; 
+	float:left;
 	}	
-	
-#contagem_pag{
-	width:295px;
-	height:20px; 
-	float:right; 
-	margin:12px; 
-	background:#FC6; 
-	}
 
 #status_pedido{
 	width:540px; 
@@ -205,6 +276,7 @@ a:hover{color:#CCC}
 	margin-left:10px;
 	font-family:Arial, Helvetica, sans-serif;	
 	}
+	
 #b1{
 	padding-left:2px; 
 	margin-left:10px;
@@ -216,7 +288,6 @@ a:hover{color:#CCC}
 	}
 #b2{
 	font-size:18px;
-	font-weight:bold;
 	color:#E51B21;
 	height:30px;
 	}
@@ -239,4 +310,389 @@ a:hover{color:#CCC}
 	position:relative;
 	z-index:2;
 	}
+	
+.texti{
+	font-family:'BebasNeueRegular';; 
+   	font-size: 31px; /* optional. just to increase the font size. */ 
+	display: block; 
+    line-height: 1em; 
+    color:transparent; /* shadow color */ 
+    background-color: transparent; 
+    white-space: nowrap; /* wrapping breaks the effect */ 
+} 
 
+.texti:before, 
+.texti:after{ 
+   content: "Restaurantes"; /* O mesmo texto que queremos mostrar sombreado */ 
+   display: block; 
+} 
+
+.texti:before{ 
+   margin-bottom: -1.00em; 
+   margin-left: 0.0001ex;
+   color:#D6D7D8; /* shadow color */ 
+   background-color: transparent; 
+} 
+
+.texti:after{ 
+   margin-top: -1.05em; 
+   margin-left: -0.1ex; 
+   color:#E51B21; /* text color */ 
+   background-color: transparent; 
+}
+
+
+
+/* Cardapio */ 
+
+#info_restaurante{
+	width:172px; 
+	height:250px; 
+	margin-top:96px; 
+	padding:0 24px;
+	}
+	
+#categoria_rest{
+	width:172px; 
+	height:14px; 
+	font:Arial;
+	font-size:13px;
+	color:#6E7072;
+	}
+	
+#nome_rest{
+	width:172px; 
+	height:26px; 
+	font:Arial;
+	font-size:20px;
+	color:#E51B21;
+	}
+		
+#avatar_rest{
+	width:172px; 
+	height:135px; 
+	margin-top:6px;
+	}
+
+#formas_pagamento{
+	width:172px; 
+	height:28px; 
+	margin-top:3px;
+	font:Arial;
+	font-size:14px;
+	color:#E51B21;
+	}
+
+	
+#tempo_entrega{
+	width:172px; 
+	height:33px;
+	font:Arial;
+	font-size:11px;
+	color:#6E7072;
+	}
+
+
+/* Box_destaque */ 
+
+#box_destaque{
+	margin-top:8px;
+	background-color:;
+	width:674px; 
+	height:283px;
+	padding:12px 12px;
+	position:relative;
+	}
+
+#titulo_box_destaque{
+	height:30px; 
+	width:686px; 
+	margin-top:27px; 
+	color:#E51B21; 
+	font:Arial; 
+	font-size:28px; 
+	padding-left:12px;
+	}
+
+.destaque{
+	height:292px;
+	width:214px;
+	float:left;
+	}
+
+.avatar_destaque{
+	height:136px;
+	width:212px;
+	border:thin solid #bcbec0; 
+	float:left;
+	}
+
+.titulo_destaque{
+	height:20px;
+	width:212px;
+    padding:0 1px; 
+	font:Arial;
+	font-size:12px;
+	font-weight:bold;
+	color:#666;
+	float:left;
+	margin-top:4px;
+	}
+	
+.descricao_destaque{
+	height:80px;
+	width:212px;
+    padding:0 1px;
+	margin:6px 0;
+	text-align:justify; 
+	font:Arial;
+	font-size:11px;
+	float:left;
+	color:#999;
+	}
+	
+.preco_destaque{
+	height:28px;
+	width:212px;
+    padding:0 1px;
+	float:left;
+	font:Arial;
+	text-decoration:overline;
+	font-size:14px;
+	color:#E51B21;
+	}
+
+/* Box_categoria */
+
+.titulo_box_categoria{
+	height:30px; 
+	width:500px; 
+	margin-top:14px; 
+	color:#E51B21; 
+	font:Arial; 
+	font-size:24px; 
+	padding-left:12px; 
+	}
+
+#box_categoria{
+	margin-top:4px;
+	background-color:;
+	width:698px; 
+	padding:12px 0px;
+	position:relative;
+	} 
+	
+
+/* Carrinho */
+#carrinho{
+	cursor:pointer; 
+	width:325px; 
+	height:360px; 
+	z-index:2; 
+	bottom:30px; 
+	position:fixed;}
+
+#aba_carrinho{
+	box-shadow:2px 2px 1px #AE6D1A;
+	-webkit-box-shadow:2px 2px 1px #AE6D1A;
+    -moz-box-shadow:2px 2px 1px #AE6D1A;
+	-moz-border-radius-topleft:7px;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright:0;
+	-moz-border-radius-bottomleft:7px;
+	-webkit-border-top-left-radius:7px;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius:7px;
+	-webkit-border-bottom-right-radius:0;
+	width:320px; 
+	height:33px; 
+	background:#E51B21;
+	float:left;
+	z-index:5;
+
+}
+
+#topo_carrinho{
+	width:92px; 
+	height:24px; 
+	margin:5px; 
+	float:left; 
+	background:#EE646B; 
+	-moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright:0;
+	-moz-border-radius-bottomleft:5px;
+	-webkit-border-top-left-radius:5px;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius:5px;
+	-webkit-border-bottom-right-radius:0;
+	z-index:5;
+	}
+        
+#borda_carrinho{
+	width:32px; 
+	height:362px; 
+	background:#E51B21; 
+	top:0px; 
+	left:110px;  
+	position:absolute;
+	z-index:5;
+	}
+    
+#corpo_carrinho{
+	width:210px; 
+	height:360px; 
+	background:#FFE500; 
+	top:0px; 
+	left:115px;  
+	position:absolute;
+	border:#E51B21 1px solid;
+	z-index:5;
+	}
+	
+#info_pedido{
+	width:200px; 
+	height:59px; 
+	margin:0 5px; 
+	font-family:Arial; 
+	font-weight:bold; 
+	font-size:11px; 
+	color:#FFF;
+	z-index:5;
+	}
+	
+#voucher_promocional{
+	width:200px; 
+	height:26px; 
+	margin:5px;
+	z-index:5;
+	}
+	
+#id_promo{
+	width:160px; 
+	height:26px; 
+	background:#FFF; 
+	float:left; 
+	opacity:0.65;
+	-moz-opacity: 0.65;
+	filter: alpha(opacity=65);
+	z-index:5;
+	}
+
+#ok_buton{
+	width:35px; 
+	height:26px; 
+	background:#E51B21; 
+	float:left; 
+	margin-left:5px; 
+	font-family:'BebasNeueRegular'; 
+	font-size:20px; 
+	color:#FFF;
+	z-index:5;
+	}
+	
+#campo_pedido_detalhado{
+	width:200px; 
+	height:260px; 
+	margin:5px; 
+	background:#FFF; 
+	opacity:0.65;
+	-moz-opacity: 0.65;
+	filter: alpha(opacity=65);
+	z-index:5;
+	}
+	
+.radios_10{
+	-moz-border-radius-topleft:10px; 
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright:0;
+	-moz-border-radius-bottomleft:10px;
+	-webkit-border-top-left-radius:10px;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius:10px;
+	-webkit-border-bottom-right-radius:0;
+	}
+	
+.radios_5{
+	-moz-border-radius-topleft:5px; 
+	-moz-border-radius-topright:5px;
+	-moz-border-radius-bottomright:5px;
+	-moz-border-radius-bottomleft:5px;
+	-webkit-border-top-left-radius:5px;
+	-webkit-border-top-right-radius:5px;
+	-webkit-border-bottom-left-radius:5px;
+	-webkit-border-bottom-right-radius:5px;
+	}
+	
+/* Produto */
+
+.produto{
+	width:674px; 
+	padding:6px 12px; 
+	height:60px;
+	z-index:3;
+	}
+
+.titulo_produto{
+	width:444px;
+	float:left; 
+	font:Arial; 
+	font-size:14px; 
+	font-weight:bold; 
+	color:#666;
+	}
+	
+.sup_produto{
+	width:230px; 
+	height:21px; 
+	float:right;
+	}
+	
+.define_quantidade{
+	float:right; 
+	width:47px; 
+	height:19px; 
+	padding-top:2px; 
+	margin:0 4px; 
+	}
+	
+.preco_produto{
+	font:arial; 
+	color:#E51B21; 
+	font-size:14px; 
+	float:right; 
+	margin:0 4px;
+	}
+	
+.texto_produto{
+	width:444px; 
+	float:left; 
+	font:Arial; 
+	font-size:11px; 
+	color:#999; 
+	}
+	
+/*Pagamento*/
+
+#box_pedido{
+	background-color:;
+	width:674px; 
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	padding:12px 12px;
+	position:relative;
+	border:1px solid #bcbec0;  
+	}
+	
+.titulo_box_pedido{
+	margin-top:10px;
+	color:#777;
+	font:Arial; 
+	font-size:18px;
+	padding:2px 12px; 
+	}
+	
+.tabela_pedido{
+	width:340px;
+	
+	}

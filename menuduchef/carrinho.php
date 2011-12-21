@@ -2,7 +2,7 @@
 	<div id="movi">
     <div id="aba_carrinho">
     	<div id="topo_carrinho">
-   	    	<img src="background/carrinho.png" width="31" height="23" style="position:absolute; z-index:4; top:6px; left:81px;">
+   	    	<img src="background/carrinho.png" width="31" height="23" style="position:absolute; z-index:6; top:6px; left:81px;">
         </div> 
     </div>
     
