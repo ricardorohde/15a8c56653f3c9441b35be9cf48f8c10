@@ -8,7 +8,7 @@ $ultimo_modificar = -1;
 $ccriar = 0;
 $cmodificar = 0;
 foreach($_POST as $key => $valor){
-    echo $key." == ".$valor."<br/>";
+
     $pre = explode("_",$key);
     if($pre[0]=="novo"){
         $pos = explode("-",$key);
@@ -31,6 +31,7 @@ foreach($_POST as $key => $valor){
 
 for($j=0;$j<sizeof($a_criar);$j++){
     $i = $fila_criar[$j];
+    unset($data);
     if($a_criar[$i]['novo_nome']!=""){
         $data['nome'] = $a_criar[$i]['novo_nome'];
         $data['preco_adicional'] = $a_criar[$i]['novo_preco_adicional'];
@@ -40,12 +41,13 @@ for($j=0;$j<sizeof($a_criar);$j++){
         $data['ativo'] = 1;
 
         $obj = new ProdutoAdicional($data);
+        //echo $obj->id." ~ ".$obj->nome." ".$a_criar[$i]['preco_adicional']."<br/>";
         $obj->save();
     }
 }
 for($j=0;$j<sizeof($a_modificar);$j++){
     $i = $fila_modificar[$j];
-    
+    unset($data);
     if($a_modificar[$i]['nome']!=""){
 
         $data['id'] = $a_modificar[$i]['id'];
@@ -57,7 +59,7 @@ for($j=0;$j<sizeof($a_modificar);$j++){
         $data['ativo'] = $a_modificar[$i]['ativo'];
 
         $obj = ProdutoAdicional::find($data['id']);
-        echo $obj->id." ~ ".$obj->nome."<br/>";
+        echo var_dump($data)."<br/><br/>";
         $obj->update_attributes($data);
     }
 }
