@@ -136,7 +136,7 @@ $(document).ready(function(){
 	}
     //Horizontal Sliding 
 	  
-    $('#carrinho').hover(function(){  
+    $('#movi').hover(function(){  
         $("#carrinho").stop().animate({left:retorno_car},{queue:false,duration:300});  
     }, function() {  
         $("#carrinho").stop().animate({left:left_car},{queue:false,duration:300});  
