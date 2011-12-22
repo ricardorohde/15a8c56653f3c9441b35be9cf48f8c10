@@ -13,7 +13,7 @@ if($_SESSION['restaurante_id']){
 }
 ?>
 
-<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="js/mask.js"></script>
 
 <script>
