@@ -1,7 +1,7 @@
 <?
 session_start();
 
-include("../include/header.php");
+include("include/header2.php");
 
 $_SESSION['restaurante_administrado_id'] = 1;
 
@@ -14,7 +14,7 @@ $pedpre=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao=?","p
 $pedconcan=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao=? OR situacao=?","pedido_concluido","pedido_cancelado")));
 ?>
 
- <link rel="stylesheet" type="text/css" href="../css_/estilo_.css" >
+ <link rel="stylesheet" type="text/css" href="css_/estilo_.css" >
  <script src="js/jquery-1.6.4.min.js"></script>
  <script>
  $(document).ready( function (){

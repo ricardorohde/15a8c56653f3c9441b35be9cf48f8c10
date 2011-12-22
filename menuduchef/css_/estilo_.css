@@ -1,0 +1,175 @@
+*{
+  margin:0;
+  padding:0;
+}
+
+
+
+#area{
+      border:1px solid #000;
+      width:1206px;
+      height:630px;
+      padding:0;
+     }
+     
+#novo_ped{
+          border-right:1px solid #000;
+          width:400px;
+          height:203px;
+          position:relative;
+          float:left;
+          overflow:auto;
+         }
+         
+#ped_pre{
+         border-right:1px solid #000;
+         width:400px;
+         height:203px;
+         position:relative;
+         float:left;
+         overflow:auto;
+        }
+        
+#ped_con_can{
+             overflow:auto;
+             width:400px;
+             height:203px;
+             position:relative;
+             float:left;
+            }
+            
+#form_dado{
+           border-top:1px solid #000;
+           border-right:1px solid #000;
+           width:801px;
+           height:426px;
+           position:relative;
+           float:left;
+          }
+            
+#dados_ped{
+           border-right:1px solid #000;
+           width:400px;
+           height:200px;
+           position:relative;
+           float:left;
+          }
+          
+#form_pag{
+          
+          width:400px;
+          height:200px;
+          position:relative;
+          float:left;
+          }
+          
+#botoes{
+        border-top:1px solid #000;
+        width:801px;
+        height:220px;
+        position:relative;
+        float:left;      
+       }
+          
+#deta_ped{
+          
+          border-top:1px solid #000;
+          width:404px;
+          height:420px;
+          position:relative;
+          float:left;
+          
+         }
+         
+.table{
+      width:100%;
+     }
+     
+.novo_ped{
+         background-color:#FFD700; 
+        }
+        
+.ped_pre{
+        background-color:#3CB371;    
+        }
+        
+.ped_con{
+         background-color:#4682B4;   
+        }
+        
+.ped_can{
+         background-color:#B22222;   
+        }
+        
+.avancar{
+         width:200px; 
+         height:40px;
+         font-size:20pt;
+         background-color:#3CB371;
+         border-radius:10px 10px 10px 10px;
+	 -moz-border-radius:10px 10px 10px 10px;
+         
+        }
+        
+.avancar:hover{
+               background-color:#228B22;
+              }
+        
+.cancelar{
+         width:150px; 
+         height:100%;
+         font-size:15pt;
+         background-color:#B22222;
+         border-radius:10px 10px 10px 10px;
+	 -moz-border-radius:10px 10px 10px 10px;
+        }
+        
+.cancelar:hover{
+                background-color:#FF0000;
+               }
+
+.buscador{
+          bottom:0;
+          height:100%;
+         }
+         
+           
+#cancelar{
+          float:right;
+          top:0px;
+         }
+            
+#avancar{
+         float:left;
+         width:100%;
+         height:20%;
+         
+        }    
+            
+#formulario{
+            float:left;   
+           }
+           
+ #textarea{
+           width:100%;
+           height:100%;
+           margin-top:5px;
+          }
+          
+#cance_busca{
+             width:100%;
+             height:30%
+            }
+            
+#textapaga{
+         width:100%;
+         height:100%;
+         
+        }
+      
+label{
+      color:red;
+      font-size: 16pt;
+     }            
+            
+        
