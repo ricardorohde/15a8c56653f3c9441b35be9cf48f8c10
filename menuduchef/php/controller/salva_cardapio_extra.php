@@ -7,6 +7,8 @@ $ultimo_criar = -1;
 $ultimo_modificar = -1;
 $ccriar = 0;
 $cmodificar = 0;
+$gerente = unserialize($_SESSION['usuario_obj']);
+
 foreach($_POST as $key => $valor){
     
     $pre = explode("_",$key);
@@ -37,10 +39,11 @@ for($j=0;$j<sizeof($a_criar);$j++){
         $data['preco_adicional'] = $a_criar[$i]['novo_preco_adicional'];
         $data['disponivel'] = $a_criar[$i]['novo_disponivel'];
         $data['quantas_unidades_ocupa'] = $a_criar[$i]['novo_quantas_unidades_ocupa'];
-        $data['restaurante_id'] = $_SESSION['restaurante_editado_id'];
+        $data['restaurante_id'] = $gerente->restaurante_id;
         $data['ativo'] = 1;
 
         $obj = new ProdutoAdicional($data);
+	echo print_r($data, true)."<br/><br/>";
         //echo $obj->id." ~ ".$obj->nome." ".$a_criar[$i]['preco_adicional']."<br/>";
         $obj->save();
     }
@@ -55,11 +58,11 @@ for($j=0;$j<sizeof($a_modificar);$j++){
         $data['preco_adicional'] = $a_modificar[$i]['preco_adicional'];
         $data['disponivel'] = $a_modificar[$i]['disponivel'];
         $data['quantas_unidades_ocupa'] = $a_modificar[$i]['quantas_unidades_ocupa'];
-        $data['restaurante_id'] = $_SESSION['restaurante_editado_id'];
+        $data['restaurante_id'] = $gerente->restaurante_id;
         $data['ativo'] = $a_modificar[$i]['ativo'];
-
+	echo $data[id] . "\n\n";
         $obj = ProdutoAdicional::find($data['id']);
-        echo var_dump($data)."<br/><br/>";
+        echo print_r($data, true)."<br/><br/>";
         $obj->update_attributes($data);
     }
 }
