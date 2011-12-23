@@ -85,8 +85,10 @@ function copia(codigo,nome,data,hora,alvo){
              <table id="novoped" class="table" border="1px solid black">
              <? if($novoped){
                     foreach ($novoped as $np){
-                        $dh = $np->quando;
-                        $quebra = explode(" ", $dh);
+                        //$dh = strtodate('d/m/Y h:i:s',$np->quando);
+                        $dh = $np->quando->format('d/m/Y - H:i');
+                        
+                        $quebra = explode(" - ", $dh);
                         $data=$quebra[0];
                         $hora=$quebra[1];
                  
