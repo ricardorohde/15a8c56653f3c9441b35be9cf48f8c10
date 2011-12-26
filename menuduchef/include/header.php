@@ -20,7 +20,7 @@ if (HttpUtil::isLocalhost()) {
     >
 <html lang="pt">
     <head>
-    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
         <title><?= SITE_TITLE ?></title>
         <base href="<?= $baseHref ?>" />
         <script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>

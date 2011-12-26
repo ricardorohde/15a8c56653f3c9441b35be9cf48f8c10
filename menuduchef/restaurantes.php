@@ -1,9 +1,5 @@
 <?
-session_start();
-
 include("include/header.php");
-
-
 
 $bai = 0;
 
@@ -210,16 +206,16 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                                         }
                                         $num = sizeof($itens);
                                         if($num>0){
-										
-											$checked = "";
-											if($_POST){
-												if($_POST['checkrest_'.$categoria->id]=="on"){
-													$checked = "checked";
-												}else{
-													$checked = "";
-												}
-											}
-                                        ?>
+
+					    $checked = "";
+					    if($_POST){
+						    if($_POST['checkrest_'.$categoria->id]=="on"){
+							    $checked = "checked";
+						    }else{
+							    $checked = "";
+						    }
+					    }
+					?>
                                         <div style="color:#CC0000; padding-top:5px; padding-left:12px;"><input type="checkbox" class="refino" class="filtro_categoria" id="checkrest_<?= $categoria->id ?>" name="checkrest_<?= $categoria->id ?>" <?= $checked ?>> &nbsp;  <?= $categoria->nome ?> (<?= $num ?>)</div>
                                     <? 	}
                                     }
@@ -287,6 +283,7 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                 <div class="radios prepend-top" id="box_restaurante">
                 	<div id="box_interno">
                     	<div id="box_avatar">
+			    <img src="<?= $restaurante->getUrlImagem() ?>" alt="<?= $restaurante->nome ?>" />
                         </div>
                         <div id="box_textos">
                         	<div id="b1"><?= $restaurante->getNomeCategoria() ?></div>

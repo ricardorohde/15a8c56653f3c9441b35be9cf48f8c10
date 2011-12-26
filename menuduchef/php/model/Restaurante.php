@@ -27,7 +27,8 @@ class Restaurante extends ActiveRecord\Model {
 	array(array('nome', 'Cidade' => 'cidade_id'), 'message' => 'já existem')
     );
     static $after_save = array('save_tipos', 'save_tipos_de_produto', 'save_bairros_atendidos');
-    var $image_x = 100;
+    var $image_x = 130;
+    var $image_y = 98;
 
     public function getUrlImagem() {
 	return PATH_IMAGE_UPLOAD . '/' . strtolower(get_class($this)) . '/' . $this->imagem;
