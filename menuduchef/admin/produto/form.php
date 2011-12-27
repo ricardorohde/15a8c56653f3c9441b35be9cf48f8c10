@@ -25,6 +25,8 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
 
 <form action="admin/produto/controller" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
+    <input type="hidden" name="edita_tipos" value="1" />
+    <input type="hidden" name="edita_produtos_adicionais" value="1" />
     
     <label class="normal">Restaurante:</label>
     <? if($obj->restaurante_id){ ?>

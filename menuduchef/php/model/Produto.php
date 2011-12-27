@@ -37,46 +37,45 @@ class Produto extends ActiveRecord\Model {
     }
 
     public function save_relationships() {
-	/*
-	 * Criando objeto se ele já não existir
-	 */
 
-	// Tipos
-	if ($this->__request_attributes['tipos']) {
-	    foreach ($this->__request_attributes['tipos'] as $id_tipo) {
-		if (!$this->temTipo($id_tipo)) {
-		    ProdutoTemTipo::create(array('tipoproduto_id' => $id_tipo, 'produto_id' => $this->id));
+	//Tipos
+	if ($this->__request_attributes['edita_tipos']) {
+	    // Criando objeto se ele já não existir
+	    if ($this->__request_attributes['tipos']) {
+		foreach ($this->__request_attributes['tipos'] as $id_tipo) {
+		    if (!$this->temTipo($id_tipo)) {
+			ProdutoTemTipo::create(array('tipoproduto_id' => $id_tipo, 'produto_id' => $this->id));
+		    }
+		}
+	    }
+
+	    //Excluindo o objeto se ele for desmarcado do formulário
+	    if ($this->produto_tem_tipos) {
+		foreach ($this->produto_tem_tipos as $pt) {
+		    if (!$this->__request_attributes['tipos'] || !in_array($pt->tipoproduto_id, $this->__request_attributes['tipos'])) {
+			$pt->delete();
+		    }
 		}
 	    }
 	}
 
-	// Produtos adicionais
-	if ($this->__request_attributes['produtos_adicionais']) {
-	    foreach ($this->__request_attributes['produtos_adicionais'] as $id_produto_adicional) {
-		if (!$this->temProdutoAdicional($id_produto_adicional)) {
-		    ProdutoTemProdutoAdicional::create(array('produtoadicional_id' => $id_produto_adicional, 'produto_id' => $this->id));
+	//Produtos adicionais
+	if ($this->__request_attributes['edita_produtos_adicionais']) {
+	    // Criando objeto se ele já não existir
+	    if ($this->__request_attributes['produtos_adicionais']) {
+		foreach ($this->__request_attributes['produtos_adicionais'] as $id_produto_adicional) {
+		    if (!$this->temProdutoAdicional($id_produto_adicional)) {
+			ProdutoTemProdutoAdicional::create(array('produtoadicional_id' => $id_produto_adicional, 'produto_id' => $this->id));
+		    }
 		}
 	    }
-	}
 
-	/*
-	 * Excluindo o objeto se ele for desmarcado do formulário
-	 */
-
-	// Tipos
-	if ($this->produto_tem_tipos) {
-	    foreach ($this->produto_tem_tipos as $pt) {
-		if (!$this->__request_attributes['tipos'] || !in_array($pt->tipoproduto_id, $this->__request_attributes['tipos'])) {
-		    $pt->delete();
-		}
-	    }
-	}
-
-	// Produtos adicionais
-	if ($this->produto_tem_produtos_adicionais) {
-	    foreach ($this->produto_tem_produtos_adicionais as $ppa) {
-		if (!$this->__request_attributes['produtos_adicionais'] || !in_array($ppa->produtoadicional_id, $this->__request_attributes['produtos_adicionais'])) {
-		    $ppa->delete();
+	    //Excluindo o objeto se ele for desmarcado do formulário
+	    if ($this->produto_tem_produtos_adicionais) {
+		foreach ($this->produto_tem_produtos_adicionais as $ppa) {
+		    if (!$this->__request_attributes['produtos_adicionais'] || !in_array($ppa->produtoadicional_id, $this->__request_attributes['produtos_adicionais'])) {
+			$ppa->delete();
+		    }
 		}
 	    }
 	}
