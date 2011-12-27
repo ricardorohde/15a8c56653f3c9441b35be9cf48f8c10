@@ -675,7 +675,6 @@ a:hover{color:#CCC}
 	}
 	
 /*Pagamento*/
-
 #box_pedido{
 	background-color:;
 	width:674px; 
@@ -698,3 +697,43 @@ a:hover{color:#CCC}
 	width:340px;
 	
 	}
+	
+/*Concluir*/
+
+#box_concluir{
+	background-color:;
+	width:674px; 
+	padding:12px 12px;
+	position:relative;
+	border-top:1px solid #bcbec0;
+	}
+
+.titulo_box_concluir{
+	margin-top:10px;
+	color:#777;
+	font:Arial; 
+	font-size:15px;
+	padding:2px 12px; 
+	}
+	
+.espaco_status{
+	width:220px;
+	height:63px; 
+	float:left;
+	background:#F7F7F7;
+	}
+	
+.box_status{
+	width:50px; 
+	height:50px; 
+	}
+
+.descricao_status{
+	width:220px; 
+	background:#999; 
+	color:#FFF; 
+	font:Arial; 
+	font-size:12px; 
+	text-align:center;
+	}
+	
