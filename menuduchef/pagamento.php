@@ -62,9 +62,9 @@ u{
                             <tr><td>Feijão temperado</td><td>R$25,60</td><td>1x</td><td>R$51,20</td></tr>
                             <tr><td>Camarão</td><td>R$23,40</td><td>3x</td><td>R$70,20</td></tr>
                             <tr><td>Risoto de legumes</td><td>R$60,40</td><td>1x</td><td>R$60,40</td></tr>
-                            <tr><td style="color:#E51B21; cursor:pointer;">»Voltar ao carrinho«</td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><td></td><td></td></tr>
                             <tr><td></td><td></td><th style="text-align:right; color:#E51B21;">Taxa de entrega:</th><th>R$15,00</th></tr>
-                            <tr><td></td><td></td><th style="text-align:right; color:#E51B21;">Total:</th><th>R$240,00</th></tr>
+                            <tr><td style="text-align:right; color:#E51B21; text-align:left; cursor:pointer;">&nbsp;&nbsp;Voltar para o carrinho<img src="background/carrinho_dark.png" width="20" height="15" style="float:left;"></td><td></td><th style="text-align:right; color:#E51B21;">Total:</th><th>R$240,00</th></tr>
                         </table>
                     </div>
                     <div class="titulo_box_pedido">Dados para entrega
@@ -81,8 +81,6 @@ u{
                             <tr><th>Estado:</th><td><u>RN</u></td></tr>
                             <tr><th>Complemento:</th><td><u></u></td></tr>
                             <tr><th>Ponto de referência:</th><td><u>Lá longe</u></td></tr>
-                            <tr><td></td></tr>
-                            <tr><th></th><td style="color:#E51B21; cursor:pointer;"><u>Alterar endereço</u></td></tr>
                         </table>
                     </div>
                     <div class="titulo_box_pedido">Pagamento

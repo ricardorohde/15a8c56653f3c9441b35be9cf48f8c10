@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                             <div class="espaco_status radios_5" style="margin:0 7px;">
-                                <div class="box_status" style="padding:0 87px;">
+                                <div class="box_status" style="padding:0 85px;">
                                     <img src="background/wait.png" width="40" height="38" style="margin-top:6px;">
                                 </div>
                                 <div class="descricao_status">
@@ -74,7 +74,7 @@
                                 </div>
                             </div>
                             <div class="espaco_status radios_5">
-                                <div class="box_status" style="padding:0 87px;">
+                                <div class="box_status" style="padding:0 85px;">
                                     <img src="background/wait.png" width="40" height="38" style="margin-top:6px;">
                                 </div>
                                 <div class="descricao_status">
