@@ -43,7 +43,7 @@ for($j=0;$j<sizeof($a_criar);$j++){
         $data['ativo'] = 1;
 
         $obj = new ProdutoAdicional($data);
-	echo print_r($data, true)."<br/><br/>";
+	
         $obj->save();
     }
 }

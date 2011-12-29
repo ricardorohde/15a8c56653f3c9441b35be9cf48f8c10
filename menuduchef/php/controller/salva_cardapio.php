@@ -29,11 +29,16 @@ foreach($_POST as $key => $valor){
     }else{
         $pos = explode("-",$key);
         $po = explode("!",$pos[0]);
-        $a_modificar[$pos[1]][$po[1]] = $valor;
-        if($ultimo_modificar!=$pos[1]){
-            $ultimo_modificar=$pos[1];
-            $fila_modificar[$cmodificar] = $pos[1];
-            $cmodificar++;
+
+        if($po[1]=='adicional'){
+            $fila_adicionais[$pos[2]][$pos[1]] = 1;
+        }else{
+            $a_modificar[$pos[1]][$po[1]] = $valor;
+            if($ultimo_modificar!=$pos[1]){
+                $ultimo_modificar=$pos[1];
+                $fila_modificar[$cmodificar] = $pos[1];
+                $cmodificar++;
+            }
         }
     }
 }
@@ -79,9 +84,34 @@ for($j=0;$j<sizeof($a_modificar);$j++){
         $obj = Produto::find($data['id']);
 
         $obj->update_attributes($data);
+        
+        $adis = ProdutoAdicional::all(array("conditions"=>array("restaurante_id = ?",$gerente->restaurante_id)));
+        foreach($adis as $adi){
+            $what = ProdutoTemProdutoAdicional::find(array("conditions"=>array("produto_id = ? AND produtoadicional_id = ?",$data['id'],$adi->id)));
+            
+            if(isset($fila_adicionais[$data['id']][$adi->id])){
+
+                if($what){
+                    //nao acontece nada, pois ja existe essa relação
+                }else{
+                    $data2['produto_id'] = $data['id'];
+                    $data2['produtoadicional_id'] = $adi->id;
+                    
+                    $obj = new ProdutoTemProdutoAdicional($data2);
+                    $obj->save();
+                }
+            }else{
+
+                if($what){
+                    $what->delete();
+                }else{
+                    //nao acontece nada, pois ja nao existia essa relação
+                }
+            }
+        }
     }
 }
 
 
-//header("location: ../../edita_cardapio");
+header("location: ../../edita_cardapio");
 ?>

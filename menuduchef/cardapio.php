@@ -202,7 +202,7 @@ $(document).ready(function(){
                     
                     
 			<div id="box_destaque" class="radios" >
-            	<? $destaques=Produto::find_by_sql("SELECT * FROM produto WHERE destaque=1 ORDER BY rand() LIMIT 3");
+            	<? $destaques=Produto::find_by_sql("SELECT * FROM produto WHERE destaque=1 AND ativo=1 ORDER BY rand() LIMIT 3");
 					if($destaques){
 						$c=1;
 						foreach($destaques as $dest){ ?>
