@@ -11,22 +11,21 @@ $gerente = unserialize($_SESSION['usuario_obj']);
 
 foreach($_POST as $key => $valor){
     
-    $pre = explode("_",$key);
+    $pre = explode("!",$key);
     if($pre[0]=="categoria"){
         
     }
     else if($pre[0]=="novacategoria"){
         
     }
-    else if($pre[0]=="novo"){
+    else if($pre[0]=="novoproduto"){
         $pos = explode("-",$key);
-        $a_criar[$pos[1]][$pos[0]] = $valor;
-        if($ultimo_criar!=$pos[1]){
-            $ultimo_criar=$pos[1];
-            $fila_criar[$ccriar] = $pos[1];
-            $ccriar++;
-        }
-    }else{
+        $po = explode("!",$pos[0]);
+        
+        $a_criar[$pos[1]][$po[1]] = $valor;
+        $ccriar++;
+
+    }else if($pre[0]=="produto"){
         $pos = explode("-",$key);
         $po = explode("!",$pos[0]);
 
@@ -43,19 +42,29 @@ foreach($_POST as $key => $valor){
     }
 }
 
-for($j=0;$j<sizeof($a_criar);$j++){
-    $i = $fila_criar[$j];
+if($ccriar){
     unset($data);
+    $i=0;
     if($a_criar[$i]['novo_nome']!=""){
-        $data['nome'] = $a_criar[$i]['novo_nome'];
-        $data['preco_adicional'] = $a_criar[$i]['novo_preco_adicional'];
-        $data['disponivel'] = $a_criar[$i]['novo_disponivel'];
-        $data['quantas_unidades_ocupa'] = $a_criar[$i]['novo_quantas_unidades_ocupa'];
-        $data['restaurante_id'] = $gerente->restaurante_id;
-        $data['ativo'] = 1;
 
-        $obj = new ProdutoAdicional($data);
-	echo print_r($data, true)."<br/><br/>";
+        $data['nome'] = $a_modificar[$i]['nome'];
+        $data['preco'] = $a_modificar[$i]['preco'];
+        $data['disponivel'] = $a_modificar[$i]['disponivel'];
+        $data['esta_em_promocao'] = $a_modificar[$i]['esta_em_promocao'];
+        $data['preco_promocional'] = ($a_modificar[$i]['preco_promocional'] ? $a_modificar[$i]['preco_promocional'] : 0);
+        $data['texto_promocao'] = ($a_modificar[$i]['texto_promocao'] ? $a_modificar[$i]['texto_promocao'] : "");
+        $data['qtd_produto_adicional'] = ($a_modificar[$i]['qtd_produto_adicional'] ? $a_modificar[$i]['qtd_produto_adicional'] : 0);
+        $data['descricao'] = $a_modificar[$i]['descricao'];
+        $data['codigo'] = $a_modificar[$i]['codigo'];
+        $data['tamanho'] = ($a_modificar[$i]['tamanho'] ? $a_modificar[$i]['tamanho'] : "");
+        $data['imagem'] = ($a_modificar[$i]['tamanho'] ? $a_modificar[$i]['tamanho'] : "");
+        $data['restaurante_id'] = $gerente->restaurante_id;
+        $data['ativo'] = $a_modificar[$i]['ativo'];
+        $data['destaque'] = ($a_modificar[$i]['destaque'] ? $a_modificar[$i]['destaque'] : "");
+        $data['aceita_segundo_sabor'] = $a_modificar[$i]['aceita_segundo_sabor'];
+        $data['ordem'] = $a_modificar[$i]['ordem'];
+
+        $obj = new Produto($data);
         $obj->save();
     }
 }
@@ -80,6 +89,7 @@ for($j=0;$j<sizeof($a_modificar);$j++){
         $data['ativo'] = $a_modificar[$i]['ativo'];
         $data['destaque'] = ($a_modificar[$i]['destaque'] ? $a_modificar[$i]['destaque'] : "");
         $data['aceita_segundo_sabor'] = $a_modificar[$i]['aceita_segundo_sabor'];
+        $data['ordem'] = $a_modificar[$i]['ordem'];
 
         $obj = Produto::find($data['id']);
 

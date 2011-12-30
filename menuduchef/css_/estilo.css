@@ -52,7 +52,8 @@ a:hover{color:#CCC}
 	
 #login{
 	height:63px;
-	width:218px;
+	width:200px;
+	padding-left:18px;
 	float:right;
 	}
 	
@@ -281,7 +282,7 @@ a:hover{color:#CCC}
 	padding-left:2px; 
 	margin-left:10px;
 	font-family:Arial, Helvetica, sans-serif;
-	font-size:12px;
+	font-size:13px;
 	font-weight:bold;
 	color:#6E7072;
 	height:10px;
@@ -736,4 +737,11 @@ a:hover{color:#CCC}
 	font-size:12px; 
 	text-align:center;
 	}
+	
+/*Cadastro*/
+
+form { } 
+label { font-size:12px; font-family: Arial, Helvetica, sans-serif; color:#666; display: block; font-weight:bold; } 
+.campo { width:220px; height:26px; margin-bottom: 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#FF9930; } 
+#botao_enviar{width:36px; height:26px; border:2px Solid #F04047; background:#F04047; font-size:16px; font-weight:bold; margin-top:1px; color:#FFF; cursor:pointer;}  
 	
