@@ -31,7 +31,7 @@ class EnderecoConsumidor extends ActiveRecord\Model {
     
     public function __toString() {
 	return $this->logradouro . ($this->numero ? ", {$this->numero}" : '') . ($this->complemento ? ", {$this->complemento}" : '')
-	    . '<br />CEP: ' . $this->cep
+	    . '<br />CEP: ' . StringUtil::formataCep($this->cep)
 	    . '<br />' . $this->bairro->nome . ' - ' . $this->bairro->cidade->nome;
     }
 

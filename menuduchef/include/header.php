@@ -33,6 +33,11 @@ if (HttpUtil::isLocalhost()) {
 	<link rel="stylesheet" href="css_/blueprint/screen.css" type="text/css" media="screen, projection">
 	<link rel="stylesheet" href="css_/blueprint/print.css" type="text/css" media="print">  
 	<link rel="stylesheet" href="css_/estilo.css" type="text/css" media="screen"> 
+	<style type="text/css">
+	    /* ver se adiciona essas regras em algum arquivo css depois; não adicionei agora para evitar conflitos */
+	    #contagem_pag a { color: #E51B21; font-weight: bold; padding: 5px; }
+	    #contagem_pag a:hover, #contagem_pag a.marked { background-color: #E51B21; color: #fff; }
+	</style>
 	<!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
     </head>
     <body>

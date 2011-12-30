@@ -19,6 +19,10 @@ class Bairro extends ActiveRecord\Model {
     static $validates_uniqueness_of = array(
 	array(array('nome', 'Cidade' => 'cidade_id'), 'message' => 'já existem')
     );
+    
+    public function __toString() {
+	return $this->nome;
+    }
 
     public static function all() {
 	return parent::all(array('joins' => 'inner join cidade on  ' . static::$table_name . '.cidade_id = cidade.id', 'order' => 'cidade.nome asc, bairro.nome asc', 'conditions' => 'cidade.ativa = 1'));

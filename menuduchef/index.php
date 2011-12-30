@@ -1,10 +1,10 @@
-<? include('../menuduchef/include/header.php'); ?>
-<?php include "../menuduchef/menu.php" ?>
+<? include('include/header.php'); ?>
+<?php include "menu.php" ?>
 
 <div class="span-24" id="central_principal" >
     <div id="lateral_esquerda">
 	<div style="width:132px; height:114px; padding:3px 13px; margin-top:84px; ">
-	    <img src="../menuduchef/background/faca_pedido.gif" width="132" height="114">
+	    <img src="background/faca_pedido.gif" width="132" height="114">
 	</div>
 	<div style="width:132px; height:26px; padding:0 13px; margin-top:4px; ">
 	    <form action="php/controller/cep" method="post" onsubmit="if(!this.cep.value.trim()) { alert('Digite um CEP v&aacute;lido'); return false; }">
@@ -17,7 +17,7 @@
 	<div class="fonte_lateral" style="width:132px; height:28px; padding:0 13px; position:relative;">
 	    <span style="float:right; margin-top:-8px;">Buscar</span>
 	</div>
-	<img src="../menuduchef/background/fazer_pedido.gif" height="446" width="144" style="padding:0 7px; margin-top:-12px; position:relative;"/>
+	<img src="background/fazer_pedido.gif" height="446" width="144" style="padding:0 7px; margin-top:-12px; position:relative;"/>
     </div>
     <div id="lateral_direita" style="background:url(../menuduchef/background/central.jpg);">
 	<div id="direita_interna">
@@ -31,9 +31,9 @@
 		<div class="botao_principal">
 		</div>
 	    </div>
-	    <img src="../menuduchef/background/rodape_principal.gif" width="762" height="69"/>
+	    <img src="background/rodape_principal.gif" width="762" height="69"/>
 
 	</div>   
     </div> 
 </div>
-<? include('../menuduchef/include/footer.php'); ?>
+<? include('include/footer.php'); ?>

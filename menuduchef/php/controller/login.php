@@ -1,6 +1,5 @@
 <?
 session_cache_expire(15);
-session_start();
 include_once("../lib/config.php");
 
 $data = HttpUtil::getParameterArray();

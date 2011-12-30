@@ -42,6 +42,6 @@
 	    <? if($usuario_logado->tipo == Usuario::$GERENTE || $usuario_logado->tipo == Usuario::$ATENDENTE) { ?>- <?= $usuario_logado_obj->restaurante->nome ?><? } ?>
 	    |
 	<? } ?>
-	<a href="admin/sair" title="Sair">Sair</a>
+	<a href="php/controller/logout" title="Sair">Sair</a>
     </div>
 </div>
