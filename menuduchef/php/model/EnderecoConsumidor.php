@@ -10,6 +10,11 @@ class EnderecoConsumidor extends ActiveRecord\Model {
     static $has_many = array(
 	array('pedidos', 'foreign_key' => 'endereco_id', 'class_name' => 'Pedido')
     );
+    static $before_save = array('clean_attributes');
+    
+    public function clean_attributes() {
+	$this->cep = StringUtil::onlyNumbers($this->cep);
+    }
 
     public function hash() {
 	$md5 = '';

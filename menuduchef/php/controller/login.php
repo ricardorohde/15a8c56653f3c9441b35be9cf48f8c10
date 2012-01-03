@@ -35,7 +35,7 @@ if (trim($data['email']) && trim($data['senha'])) {
 		$redirect = '../../restaurantes';
 		$_SESSION['sessao_valida'] = 1;
 		$_SESSION['consumidor_id'] = $usuario_obj->id;
-		$endereco=EnderecoConsumidor::find_by_consumidor_id($usuario_obj->id);
+		$endereco = EnderecoConsumidor::find_by_consumidor_id($usuario_obj->id);
 		$_SESSION['bairro'] = $endereco->bairro_id;
 		break;
 	}

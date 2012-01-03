@@ -1,7 +1,7 @@
 <?
 
 class StringUtil {
-    
+
     static $conectores = array(' ', '-', '/', ',', ';', '\.', '\(');
     static $termosIrrelevantes = array('de', 'do', 'da', 'dos', 'das', 'em', 'na', 'no', 'nas', 'nos');
 
@@ -62,8 +62,8 @@ class StringUtil {
 	    if ($previousIndexOfWord >= 0) {
 		$concatString = substr($string, $previousIndexOfWord, 1);
 	    }
-	    
-	    if(in_array($word, static::$termosIrrelevantes)) {
+
+	    if (in_array($word, static::$termosIrrelevantes)) {
 		$result .= $concatString . $word;
 	    } else {
 		$result .= $concatString . static::capitalize($word);
@@ -73,8 +73,12 @@ class StringUtil {
 	return $result;
     }
 
+    static function onlyNumbers($cep) {
+	return preg_replace('/[^0-9]/', '', $cep);
+    }
+
     static function formataCep($cep) {
-	return preg_replace('/(.+)([0-9]{3})$/', '$1-$2', $cep);
+	return preg_replace('/(.+)([0-9]{3})$/', '$1-$2', static::onlyNumbers($cep));
     }
 
 }

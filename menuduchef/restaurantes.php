@@ -1,16 +1,31 @@
 <?
-//
 include("include/header.php");
+include("include/session_vars.php");
 
-$enderecoCep = unserialize($_SESSION['endereco_cep']);
 $page = $_GET['page'] ? : 1;
 
-$paginacao = new Paginacao('Restaurante', array(
-	'joins' => 'inner join restaurante_atende_bairro rab on rab.restaurante_id = restaurante.id',
-	'conditions' => 'rab.bairro_id = ' . $enderecoCep->bairro_id
-	), 'restaurantes', $page, 5, 5);
+$endereco = null;
 
-$restaurantes = $paginacao->list;
+if($_SESSION['endereco_cep']) {
+    $enderecoCep = unserialize($_SESSION['endereco_cep']);
+    $endereco = new EnderecoConsumidor();
+    $endereco->bairro_id = $enderecoCep->bairro_id;
+    $endereco->cep = $enderecoCep->cep;
+    $endereco->logradouro = $enderecoCep->logradouro;
+} elseif ($consumidorSession) {
+    if ($consumidorSession->enderecos) {
+	$endereco = $consumidorSession->enderecos[0];
+    }
+}
+
+if ($endereco) {
+    $paginacao = new Paginacao('Restaurante', array(
+	    'joins' => 'inner join restaurante_atende_bairro rab on rab.restaurante_id = restaurante.id',
+	    'conditions' => 'rab.bairro_id = ' . $endereco->bairro_id
+	    ), 'restaurantes', $page, 5, 5);
+
+    $restaurantes = $paginacao->list;
+}
 ?>
 
 <script type="text/javascript">
@@ -87,8 +102,10 @@ $restaurantes = $paginacao->list;
 	    <div id="seleciona_endereco">
 		<img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
 		<div style="width:198px; height:25px; margin-left:7px;">
-		    <? if ($enderecoCep) { ?>
-    		    <?= $enderecoCep ?>
+		    <? if ($endereco) { ?>
+			<?= $endereco->logradouro ?><br />
+			CEP: <?= StringUtil::formataCep($endereco->cep) ?><br />
+			<?= $endereco->bairro ?> - <?= $endereco->bairro->cidade ?>
 		    <? } else { ?>
     		    <select id="endereco_cliente" name="endereco_cliente" style="width:195px; margin-left:3px;">
 			    <?= $endereco ?>
@@ -116,42 +133,42 @@ $restaurantes = $paginacao->list;
 		    </div>
 		    <div class="span-18 last">
 			<div style="height: 1050px">
-			<div class="prepend-top" id="status">
-			    <div id="numero_rest"><span style="margin-left:8px;"> </span></div> 
-			    <div id="status_pedido">
-				<img src="background/passo.png" width="541" height="43" alt="passo1">
+			    <div class="prepend-top" id="status">
+				<div id="numero_rest"><span style="margin-left:8px;"> </span></div> 
+				<div id="status_pedido">
+				    <img src="background/passo.png" width="541" height="43" alt="passo1">
+				</div>
 			    </div>
-			</div>
-			
-			<div id="caixa_sup">
-			    <h1 id="rest_titulo">Restaurantes</h1>
-			    <? if($paginacao->getHtml()) { ?>
-			    <div id="contagem_pag">
-				<?= $paginacao->getHtml() ?>
+
+			    <div id="caixa_sup">
+				<h1 id="rest_titulo">Restaurantes</h1>
+				<? if ($paginacao && $paginacao->getHtml()) { ?>
+    				<div id="contagem_pag">
+					<?= $paginacao->getHtml() ?>
+    				</div>
+				<? } ?>
 			    </div>
+
+			    <?
+			    if ($restaurantes) {
+				foreach ($restaurantes as $restaurante) {
+				    ?>
+
+				    <? include 'box_restaurante.php' ?>
+
+				<? }
+			    } else { ?>
+    			    <br /><br />
+    			    <p>Nenhum restaurante encontrado na sua localidade</p>
 			    <? } ?>
-			</div>
 
-			<?
-			if ($restaurantes) {
-			    foreach ($restaurantes as $restaurante) {
-				?>
-
-				<? include 'box_restaurante.php' ?>
-
-			    <? }
-			} else { ?>
-    			<br /><br />
-    			<p>Nenhum restaurante encontrado na sua localidade</p>
-			<? } ?>
-			
-			<? if($paginacao->getHtml()) { ?>
-			<div class="radios prepend-top" id="caixa_sup">
-			    <div id="contagem_pag">
-				<?= $paginacao->getHtml() ?>
-			    </div>
-			</div>
-			<? } ?>
+			    <? if ($paginacao && $paginacao->getHtml()) { ?>
+    			    <div class="radios prepend-top" id="caixa_sup">
+    				<div id="contagem_pag">
+					<?= $paginacao->getHtml() ?>
+    				</div>
+    			    </div>
+			    <? } ?>
 			</div>
 			<div id="rodape" class="prepend-top">
 			    <img src="background/rodape.jpg" width="760" height="69" style="margin-left:-61px;">
