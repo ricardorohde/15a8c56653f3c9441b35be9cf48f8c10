@@ -1,12 +1,21 @@
-<?php
+<?
 
-$atendente = unserialize($_SESSION['usuario_obj']);
-if($_GET['status']=='novo_ped'){
+session_start();
+
+include("include/header2.php");
+
+if($_SESSION['sessao_valida']){
+    $atendente = unserialize($_SESSION['usuario_obj']);
+}
+
+if($_GET['sta']=='novoped'){
     $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?","novo_pedido",$atendente->restaurante_id)));
     $idtable = "novoped";
     $classtr = "novo_ped";
+    
+    
 }
-else if($_GET['status']=='ped_pre'){
+else if($_GET['sta']=='pedpre'){
     $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?","pedido_em_preparo",$atendente->restaurante_id)));
     $idtable = "pedpre";
     $classtr = "ped_pre";
@@ -33,4 +42,5 @@ if($pedidos){
     }
 }
 echo '</table>';
+
 ?>
