@@ -6,7 +6,7 @@ include("include/header2.php");
 if($_SESSION['restaurante_id']){
     $restaurante = $_SESSION['restaurante_id'];
     $usuario = unserialize($_SESSION['usuario']);
-    $categorias = RestauranteTemTipoProduto::all(array("conditions" => array("restaurante_id = ?",$restaurante)));
+    $categorias = RestauranteTemTipoProduto::all(array("order"=>"ordem","conditions" => array("restaurante_id = ?",$restaurante)));
 }
 ?>
 
@@ -20,7 +20,22 @@ if($_SESSION['restaurante_id']){
 
 $(document).ready(function() {
         
-
+    $("#botao_salvar_novo_item").click(function(){
+        
+        if($("#novoproduto_esta_em_promocao").attr("value")){
+            preco = $("#novoproduto_preco_promocional").attr("value");  
+        }else{
+            preco = $("#novoproduto_preco").attr("value");
+        }
+        
+        //if(preco==""){
+        //    alert("O novo item deve conter um preço.");
+        //}else{
+            if(confirm("O preço do novo item é R$"+preco+", você confirma?")){
+                $("#criar_novo_item").submit();
+            }
+        //}
+    });
     $(".promocao").change( function(){
         
         qual = $(this).attr("name");
@@ -53,6 +68,18 @@ $(document).ready(function() {
             $("#categoria_"+qual).hide();
             $("#categoria_ativa_"+qual).attr("value",1);
             $(".ativo_"+qual).attr("value",0);
+            nl = $("#categoria_qtd_"+qual).attr("value");
+            
+            if($("#categoria_ordem_ultimo_"+qual).attr("value")!=0){
+                $(".ordem").each(function(){
+                    if($("#categoria_ordem_ultimo_"+qual).attr("value")<$(this).attr("value")){
+                        ordem = parseInt($(this).attr("value")) - nl;
+                        $(this).attr("value", ordem);
+                    }
+                });
+            }
+            
+            $("#categoria_ordem_"+qual).attr("value",-1);
         }
     });
     
@@ -71,7 +98,20 @@ $(document).ready(function() {
              $tr.clone(true).insertBefore($prev[0]);
              $tr.remove();
              
-             //$(".produto_ordem_"+qual1).
+             vq1 = $("#categoria_ordem_"+qual1).attr("value");
+             vq2 = $("#categoria_ordem_"+qual2).attr("value");
+             $("#categoria_ordem_"+qual1).attr("value",vq2);
+             $("#categoria_ordem_"+qual2).attr("value",vq1);
+             
+             /*$(".produto_ordem_"+qual1).each(function(index){
+                 ordem = $(this).value("value") - parseInt(nl2);
+                 $(this).value("value",ordem);
+             });
+             
+             $(".produto_ordem_"+qual2).each(function(index){
+                 ordem = $(this).value("value") + parseInt(nl1);
+                 $(this).value("value",ordem);
+             });*/
         }
         
     });
@@ -89,6 +129,23 @@ $(document).ready(function() {
             //alert("HAYAYA");
              $tr.clone(true).insertAfter($next[0]);
              $tr.remove();
+             
+             vq1 = $("#categoria_ordem_"+qual1).attr("value");
+             vq2 = $("#categoria_ordem_"+qual2).attr("value");
+             $("#categoria_ordem_"+qual1).attr("value",vq2);
+             $("#categoria_ordem_"+qual2).attr("value",vq1);
+             
+             /*$(".produto_ordem_"+qual1).each(function(index){
+                 alert(index + $(this)[index].value);
+                 //ordem = $(this).value("value") + parseInt(nl2);
+                 //$(this).value("value",ordem);
+             });
+             
+             $(".produto_ordem_"+qual2).each(function(index){
+                 ordem = $(this).value("value") - parseInt(nl1);
+                 $(this).value("value",ordem);
+             }); */
+             
              
         }
         
@@ -123,8 +180,9 @@ $(document).ready(function() {
         $prev = $tr.prev();
         qual1 = $self.attr("qual");
         qual2 = $prev.attr("qual");
-        
+
         if ($prev.length > 0 && 'TR' === $prev[0].tagName) {
+            
              $tr.clone(true).insertBefore($prev[0]);
              $tr.remove();
              vq1 = $("#produto_ordem-"+qual1).attr("value");
@@ -159,6 +217,15 @@ function novo_item(){
         show("novo_item");
     }
 }
+
+function nova_categoria(){
+    oque = document.getElementById("jamexeu");
+    if(oque.value == 1){
+        alert("Antes salve ou cancele as alterações!");
+    }else{
+        show("nova_categoria");
+    }
+}
 </script>
 
 <form action="php/controller/salva_cardapio" method="post">
@@ -167,6 +234,7 @@ function novo_item(){
     <div style="float:left; position: relative; padding-left: 20px; padding-right: 50px;">
         <table class="list">
             <tr><td><input type="button" value="Acrescentar Item" onclick="novo_item()"></td></tr>
+            <tr><td><input type="button" value="Acrescentar Categoria" onclick="nova_categoria()"></td></tr>
             <tr><td><input type="submit" value="Salvar Altera&ccedil;&otilde;es"></td></tr>
             <tr><td><input type="button" onclick="location.href=('edita_cardapio');" value="Cancelar"></td></tr> 
             <tr><td><input type="button" onclick="location.href=('area_adm_restaurante');" value="Voltar"></td></tr>
@@ -180,21 +248,21 @@ function novo_item(){
             <? if($categorias){
                 
                   $contador = 0;
+                  $contador_categoria = 0;
                     foreach($categorias as $categoria){ ?>
                     <tr qual="<?= $categoria->tipoproduto_id ?>" id="categoria_<?= $categoria->tipoproduto_id ?>"><td>    
                         <table border='1'><tr><th><?= $categoria->tipo_produto->nome ?><div style="position:relative; float:right;"><input type="button" class="subirc sdc" value="^"><input type="button" class="descerc sdc" value="v">
                         <input type="button" class="desativarc" nome="<?= $categoria->tipo_produto->nome ?>" qual="<?= $categoria->tipoproduto_id ?>" value="X"></div></th></tr>
                         <input type="hidden" id="categoria_ativa_<?= $categoria->tipoproduto_id ?>" name="categoria!ativa-<?= $categoria->tipoproduto_id ?>" value="0">
-                        
+                        <input type="hidden" id="categoria_ordem_<?= $categoria->tipoproduto_id ?>" name="categoria!ordem-<?= $categoria->tipoproduto_id ?>" value="<?= $contador_categoria ?>">
                         <tbody>
                     <? 
                         $itens = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id INNER JOIN restaurante_tem_tipo_produto RTTP ON PTT.tipoproduto_id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = ".$restaurante." AND PTT.tipoproduto_id = ".$categoria->tipoproduto_id." AND P.restaurante_id = ".$restaurante." AND P.ativo = 1 ORDER BY P.ordem asc");
                         if($itens){
                             $num_linhas = sizeof($itens);
                             foreach($itens as $item){ ?>
-                                <input type="hidden" id="categoria_qtd_<?= $categoria->tipoproduto_id ?>" value="<?= $num_linhas ?>">
-                                <tr id="produto-<?= $item->id ?>" qual="<?= $item->id ?>"><td>
-                                        <input type="hidden" class="produto_ordem_<?= $categoria->tipoproduto_id ?>" id="produto_ordem-<?= $item->id ?>" name="produto!ordem-<?= $item->id ?>" value="<?= $contador ?>">
+                                <tr id="produto-<?= $item->id ?>" qual="<?= $item->id ?>"><input type="hidden" id="categoria_qtd_<?= $categoria->tipoproduto_id ?>" value="<?= $num_linhas ?>"><td>
+                                        <input type="hidden" class="produto_ordem_<?= $categoria->tipoproduto_id ?> ordem" id="produto_ordem-<?= $item->id ?>" name="produto!ordem-<?= $item->id ?>" value="<?= $contador ?>">
                                            <table border="0" cellspacing="0" style="width:650px; padding: 0px;">
                                                <input type="hidden" name="produto!id-<?= $item->id ?>" value="<?= $item->id ?>">
                                                <input type="hidden" id="ativo-<?= $item->id ?>" class="ativo_<?= $categoria->tipoproduto_id ?>" name="produto!ativo-<?= $item->id ?>" value="<?= $item->ativo ?>">
@@ -231,17 +299,20 @@ function novo_item(){
                                                <tr><td><div id="div_texto_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>;"><table><tr><td style="width:68px;">Texto da promo&ccedil;&atilde;o:</td><td><input type="text" style="width:300px;" name="produto!texto_promocao-<?= $item->id ?>" value="<?= $item->texto_promocao ?>"></td></tr></table>
                                      </table></td></tr>
 
-                           <? $contador++; }
-                        }
+                           <? $contador++; } ?>
+                                <input type="hidden" id="categoria_ordem_ultimo_<?= $categoria->tipoproduto_id ?>" value="<?= ($contador -1) ?>">
+                        <? }
                         else{ ?>
-                           <input type="hidden" id="categoria_qtd_<?= $categoria->tipoproduto_id ?>" value="0"> 
+                           <input type="hidden" id="categoria_qtd_<?= $categoria->tipoproduto_id ?>" value="0">
+                           <input type="hidden" id="categoria_ordem_ultimo_<?= $categoria->tipoproduto_id ?>" value="0">
                         <? }
                         ?>
                         </tbody>                      
                         </table>
                          </td></tr>
-                    <?}
-                
+                    <?
+                        $contador_categoria++;
+                    }
              } ?>
           </table>                                                
     </div>
@@ -249,7 +320,7 @@ function novo_item(){
 </form>
 
 <div id="novo_item" style="display:none; position:absolute; padding:10px; background: #CCF; z-index:50; left:40%; top:45%;">
- <form action="php/controller/salva_cardapio" method="post"> 
+ <form id="criar_novo_item" action="php/controller/salva_cardapio" method="post"> 
     Novo Item:
    <input type="hidden" name="novoproduto!ordem" value="<?= $contador ?>">
    <table border="0" cellspacing="0" style="width:650px; padding: 0px;">
@@ -272,13 +343,24 @@ function novo_item(){
                 if($exts){
                     echo "Por&ccedil;&otilde;es extras:<br/>";
                     foreach($exts as $ext){
-                        echo "<input type='checkbox' name='produto!adicional-".$ext->id."' value='1' >".$ext->nome."<br/>";
+                        echo "<input type='checkbox' name='novoproduto!adicional-".$ext->id."' value='1' >".$ext->nome."<br/>";
                     }
                 }
                      ?> </td></tr></table></div></td></tr></table></td></tr>
-       <tr><td><table><tr><td style="width:68px;">Est&aacute; em promo&ccedil;&atilde;o:</td><td style="width:45px; background:#AAA;"><select onchange="show('div_texto_promocional')" class="promocao" name="novoproduto!esta_em_promocao"><option value="1" > Sim </option><option value="0" selected> N&atilde;o </option></select></td><td style="background:#09f; width:130px;"><div id="div_label_preco" style="display:block; position:relative; float:right;">Pre&ccedil;o:</div><div id="div_label_preco_promocional" style="display:none; position:relative; float:right;">Pre&ccedil;o Promocional:</div></td><td style="width:10px; background: #006;">R$</td><td><div id="div_preco_promocional" style="display:none;"><input onkeyup="mask_moeda(this)"  class="preco" style="width:50px;" type="text" name="novoproduto!preco_promocional" value=""></div><div id="div_preco" style="display:block;"><input style="width:50px;" type="text" onkeyup="mask_moeda(this)" class="preco" name="novoproduto!preco" value=""></td></tr></table></div></td></tr>
+       <tr><td><table><tr><td style="width:68px;">Est&aacute; em promo&ccedil;&atilde;o:</td><td style="width:45px; background:#AAA;"><select onchange="show('div_texto_promocional')" class="promocao" id="novoproduto_esta_em_promocao" name="novoproduto!esta_em_promocao"><option value="1" > Sim </option><option value="0" selected> N&atilde;o </option></select></td><td style="background:#09f; width:130px;"><div id="div_label_preco" style="display:block; position:relative; float:right;">Pre&ccedil;o:</div><div id="div_label_preco_promocional" style="display:none; position:relative; float:right;">Pre&ccedil;o Promocional:</div></td><td style="width:10px; background: #006;">R$</td><td><div id="div_preco_promocional" style="display:none;"><input onkeyup="mask_moeda(this)"  class="preco" style="width:50px;" type="text" id="novoproduto_preco_promocional" name="novoproduto!preco_promocional" value=""></div><div id="div_preco" style="display:block;"><input style="width:50px;" type="text" onkeyup="mask_moeda(this)" class="preco" id="novoproduto_preco" name="novoproduto!preco" value=""></td></tr></table></div></td></tr>
        <tr><td><div id="div_texto_promocional" style="display:none"><table><tr><td style="width:68px;">Texto da promo&ccedil;&atilde;o:</td><td><input type="text" style="width:300px;" name="novoproduto!texto_promocao" value=""></td></tr></table>
-       <tr><td><input type="submit" value="Salvar"><input type="button" onclick="show('novo_item')" value="Cancelar"></td></tr>            
+       <tr><td><input type="button" id="botao_salvar_novo_item" value="Salvar"><input type="button" onclick="show('novo_item')" value="Cancelar"></td></tr>            
+</table>
+</form>   
+</div>
+               
+<div id="nova_categoria" style="display:none; position:absolute; padding:10px; background: #CCF; z-index:50; left:40%; top:45%;">
+ <form action="php/controller/salva_cardapio" method="post"> 
+    Nova Categoria:
+   <input type="hidden" name="novacategoria!ordem" value="<?= $contador_categoria ?>">
+   <table border="0" cellspacing="0" style="width:650px; padding: 0px;">
+       <tr><td>Nome: </td><td><input type="text" name="novacategoria!nome" value=""></td></tr>
+       <tr><td><input type="submit" value="Salvar"><input type="button" onclick="show('nova_categoria')" value="Cancelar"></td></tr>            
 </table>
 </form>   
 </div>
