@@ -35,6 +35,11 @@ $pedconcan=Pedido::all(array("order"=>"quando", "conditions"=>array("( situacao=
       $(this).css("background","#FFD700");
   });
   
+  $(".novo_ped").click(function(){
+      pedido = $("#copia").attr("value");
+      $("#dados_ped").load("dados_pedido.php?ped="+pedido);
+  });
+  
   $("#botao_avancar").click(function(){
       status_ = $("#copia_status").attr("value");
       pedido = $("#copia").attr("value");
@@ -43,6 +48,8 @@ $pedconcan=Pedido::all(array("order"=>"quando", "conditions"=>array("( situacao=
           $("#novo_ped").load("refresh_pedidos.php?sta="+status_);
       }
   });
+  
+  
      
  });
  
