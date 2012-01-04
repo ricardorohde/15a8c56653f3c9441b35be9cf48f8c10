@@ -20,16 +20,6 @@ if($_SESSION['restaurante_id']){
 
 $(document).ready(function() {
         
-    $("#ver_completo").click( function(){
-        $(".filtro_categoria").attr("checked","true");
-        $(".categoria").show();
-    });
-    
-    $("#filtrar").click( function(){
-        oque = $("#caixa_filtro").attr("value");
-        $(".produto").hide();
-        $("#produto_").hide();
-    });
 
     $(".promocao").change( function(){
         
@@ -55,26 +45,57 @@ $(document).ready(function() {
         }
     });
     
-   /* $(document.getElementsByTagName('tbody')[0].childNodes).find('a').bind('click',function(){
-
-      switch(_hash) {
-       case '.descer':
-           alert("DESCE");
-        if ($next.length > 0 && 'TR' === $next[0].tagName) {
-         $tr.clone(true).insertAfter($next[0]);
-         $tr.remove();
+    $(".desativarc").click( function(){
+        qual = $(this).attr("qual");
+        nome = $(this).attr("nome");
+        con = confirm("Tem certeza que deseja excluir a categoria "+nome+" e todos os seus itens?");
+        if(con){    
+            $("#categoria_"+qual).hide();
+            $("#categoria_ativa_"+qual).attr("value",1);
+            $(".ativo_"+qual).attr("value",0);
         }
-       break;
-       default:
-           alert("SUBIR");
+    });
+    
+    $(".subirc").click( function(){
+        
+        $self = $(this).parent().parent().parent().parent().parent().parent().parent();
+        $tr = $self;
+        $next = $tr.next();
+        $prev = $tr.prev();
+        qual1 = $self.attr("qual");
+        qual2 = $prev.attr("qual");
+        nl1 = $("#categoria_qtd_"+qual1).attr("value");
+        nl2 = $("#categoria_qtd_"+qual2).attr("value");
+        
         if ($prev.length > 0 && 'TR' === $prev[0].tagName) {
-         $tr.clone(true).insertBefore($prev[0]);
-         $tr.remove();
+             $tr.clone(true).insertBefore($prev[0]);
+             $tr.remove();
+             
+             //$(".produto_ordem_"+qual1).
         }
-      }
-     }); */
+        
+    });
+    
+    $(".descerc").click( function(){
+        
+        $self = $(this).parent().parent().parent().parent().parent().parent().parent();
+        $tr = $self;
+        $next = $tr.next();
+        $prev = $tr.prev();
+        qual1 = $self.attr("qual");
+        qual2 = $next.attr("qual");
+        
+        if ($next.length > 0 && 'TR' === $next[0].tagName) {
+            //alert("HAYAYA");
+             $tr.clone(true).insertAfter($next[0]);
+             $tr.remove();
+             
+        }
+        
+    });
     
     $(".descer").click( function(){
+        
         $self = $(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent();
         $tr = $self;
         $next = $tr.next();
@@ -83,6 +104,7 @@ $(document).ready(function() {
         qual2 = $next.attr("qual");
         
         if ($next.length > 0 && 'TR' === $next[0].tagName) {
+            //alert("HAYAYA");
              $tr.clone(true).insertAfter($next[0]);
              $tr.remove();
              vq1 = $("#produto_ordem-"+qual1).attr("value");
@@ -154,23 +176,28 @@ function novo_item(){
     
     
     <div onclick="ja_mexeu()" id="drop" style="float:left; position: relative;">
-        
+        <table>
             <? if($categorias){
                 
                   $contador = 0;
                     foreach($categorias as $categoria){ ?>
-                        <div class="itemDrag categoria" id="categoria_<?= $categoria->tipoproduto_id ?>" ><table border='1'><tr><th><?= $categoria->tipo_produto->nome ?><div style="position:relative; float:right;"><input type="button" class="subir sdc" value="^"><input type="button" class="descer sdc" value="v"><input type="button" class="desativarc" qual="<?= $categoria->id ?>" value="X"></div></th></tr>
+                    <tr qual="<?= $categoria->tipoproduto_id ?>" id="categoria_<?= $categoria->tipoproduto_id ?>"><td>    
+                        <table border='1'><tr><th><?= $categoria->tipo_produto->nome ?><div style="position:relative; float:right;"><input type="button" class="subirc sdc" value="^"><input type="button" class="descerc sdc" value="v">
+                        <input type="button" class="desativarc" nome="<?= $categoria->tipo_produto->nome ?>" qual="<?= $categoria->tipoproduto_id ?>" value="X"></div></th></tr>
+                        <input type="hidden" id="categoria_ativa_<?= $categoria->tipoproduto_id ?>" name="categoria!ativa-<?= $categoria->tipoproduto_id ?>" value="0">
+                        
                         <tbody>
                     <? 
                         $itens = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id INNER JOIN restaurante_tem_tipo_produto RTTP ON PTT.tipoproduto_id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = ".$restaurante." AND PTT.tipoproduto_id = ".$categoria->tipoproduto_id." AND P.restaurante_id = ".$restaurante." AND P.ativo = 1 ORDER BY P.ordem asc");
                         if($itens){
                             $num_linhas = sizeof($itens);
                             foreach($itens as $item){ ?>
+                                <input type="hidden" id="categoria_qtd_<?= $categoria->tipoproduto_id ?>" value="<?= $num_linhas ?>">
                                 <tr id="produto-<?= $item->id ?>" qual="<?= $item->id ?>"><td>
-                                        <input type="hidden" id="produto_ordem-<?= $item->id ?>" name="produto!ordem-<?= $item->id ?>" value="<?= $contador ?>">
+                                        <input type="hidden" class="produto_ordem_<?= $categoria->tipoproduto_id ?>" id="produto_ordem-<?= $item->id ?>" name="produto!ordem-<?= $item->id ?>" value="<?= $contador ?>">
                                            <table border="0" cellspacing="0" style="width:650px; padding: 0px;">
                                                <input type="hidden" name="produto!id-<?= $item->id ?>" value="<?= $item->id ?>">
-                                               <input type="hidden" id="ativo-<?= $item->id ?>" name="produto!ativo-<?= $item->id ?>" value="<?= $item->ativo ?>">
+                                               <input type="hidden" id="ativo-<?= $item->id ?>" class="ativo_<?= $categoria->tipoproduto_id ?>" name="produto!ativo-<?= $item->id ?>" value="<?= $item->ativo ?>">
                                                <tr><td><table><tr><td style="background:#F00;">Dispon&iacute;vel no momento: </td><td style="width:45px; background:#FF0;"><select name="produto!disponivel-<?= $item->id ?>"><option value="1" <? if($item->disponivel){ echo "selected"; } ?>> Sim </option><option value="0" <? if(!$item->disponivel){ echo "selected"; } ?>> N&atilde;o </option></select></td><td style="background:#F00;">ASS: </td><td style="width:45px; background:#FF0;"><select name="produto!aceita_segundo_sabor-<?= $item->id ?>"><option value="1" <? if($item->aceita_segundo_sabor){ echo "selected"; } ?>> Sim </option><option value="0" <? if(!$item->aceita_segundo_sabor){ echo "selected"; } ?>> N&atilde;o </option></select></td><td style="background:#F00;">DEST: </td><td style="width:45px; background:#FF0;"><select name="produto!destaque-<?= $item->id ?>"><option value="1" <? if($item->destaque){ echo "selected"; } ?>> Sim </option><option value="0" <? if(!$item->destaque){ echo "selected"; } ?>> N&atilde;o </option></select></td><td><input type="button" class="subir sd" qual="<?= $categoria->id ?>_<?= $item->id ?>_<?= $num_linhas ?>" value="^"><input type="button" class="descer sd" qual="<?= $categoria->id ?>_<?= $item->id ?>_<?= $num_linhas ?>" value="v"></td><td><input type="button" class="desativar" nome="<?= $item->nome ?>" qual="<?= $item->id ?>" value="X"></td></tr></table></td></tr>
                                                <tr><td><table><tr><td>C&oacute;digo: </td><td><input style="width:27px;" type="text" name="produto!codigo-<?= $item->id ?>" value="<?= $item->codigo ?>"></td><td>Nome: </td><td><input type="text" id="produto_nome-<?= $item->id ?>" name="produto!nome-<?= $item->id ?>" value="<?= $item->nome ?>"></td><td>Tamanho: </td><td><input type="text" style="width:80px;" name="produto!tamanho-<?= $item->id ?>" value="<?= $item->tamanho ?>"></td></tr></table></td></tr>
                                                <tr><td><table><tr><td>Descri&ccedil;&atilde;o:</td><td><input style="width:300px;" type="text"  name="produto!descricao-<?= $item->id ?>" value="<?= $item->descricao ?>"></td></tr></table></td></tr>
@@ -205,13 +232,18 @@ function novo_item(){
                                      </table></td></tr>
 
                            <? $contador++; }
-                        }?>
+                        }
+                        else{ ?>
+                           <input type="hidden" id="categoria_qtd_<?= $categoria->tipoproduto_id ?>" value="0"> 
+                        <? }
+                        ?>
                         </tbody>                      
                         </table>
-                         </div>
+                         </td></tr>
                     <?}
                 
              } ?>
+          </table>                                                
     </div>
 </div>
 </form>
@@ -222,7 +254,7 @@ function novo_item(){
    <input type="hidden" name="novoproduto!ordem" value="<?= $contador ?>">
    <table border="0" cellspacing="0" style="width:650px; padding: 0px;">
        <input type="hidden" name="novoproduto!ativo" value="1">
-       
+       <tr><td><table><tr><td>Categoria:</td><td><select name="novoproduto!categoria" ><? foreach($categorias as $categoria){ echo "<option value='".$categoria->tipo_produto->id."'>".$categoria->tipo_produto->nome."</option>"; } ?></select></td></tr></table></td></tr>
        <tr><td><table><tr><td style="background:#F00;">Dispon&iacute;vel no momento: </td><td style="width:45px; background:#FF0;"><select name="novoproduto!disponivel"><option value="1" selected> Sim </option><option value="0" > N&atilde;o </option></select></td><td style="background:#F00;">ASS: </td><td style="width:45px; background:#FF0;"><select name="novoproduto!aceita_segundo_sabor"><option value="1" > Sim </option><option value="0" selected> N&atilde;o </option></select></td><td style="background:#F00;">DEST: </td><td style="width:45px; background:#FF0;"><select name="novoproduto!destaque"><option value="1"> Sim </option><option value="0" selected> N&atilde;o </option></select></td></tr></table></td></tr>
        <tr><td><table><tr><td>C&oacute;digo: </td><td><input style="width:27px;" type="text" name="novoproduto!codigo" value=""></td><td>Nome: </td><td><input type="text" name="novoproduto!nome" value=""></td><td>Tamanho: </td><td><input type="text" style="width:80px;" name="novoproduto!tamanho" value=""></td></tr></table></td></tr>
        <tr><td><table><tr><td>Descri&ccedil;&atilde;o:</td><td><input style="width:300px;" type="text"  name="novoproduto!descricao" value=""></td></tr></table></td></tr>
@@ -244,7 +276,7 @@ function novo_item(){
                     }
                 }
                      ?> </td></tr></table></div></td></tr></table></td></tr>
-       <tr><td><table><tr><td style="width:68px;">Est&aacute; em promo&ccedil;&atilde;o:</td><td style="width:45px; background:#AAA;"><select onchange="show('div_texto_promocional')" class="promocao" name="novoproduto!esta_em_promocao"><option value="1" > Sim </option><option value="0" selected> N&atilde;o </option></select></td><td style="background:#09f; width:130px;"><div id="div_label_preco" style="display:block; position:relative; float:right;">Pre&ccedil;o:</div><div id="div_label_preco_promocional" style="display:none; position:relative; float:right;">Pre&ccedil;o Promocional:</div></td><td style="width:10px; background: #006;">R$</td><td><div id="div_preco_promocional" style="display:none;"><input onkeyup="mask_moeda(this)"  class="preco" style="width:50px;" type="text" name="novoproduto!preco_promocional" value=""></div><div id="div_preco" style="display:block;"><input style="width:50px;" type="text" onkeyup="mask_moeda(this)" class="preco" name="produto!preco" value=""></td></tr></table></div></td></tr>
+       <tr><td><table><tr><td style="width:68px;">Est&aacute; em promo&ccedil;&atilde;o:</td><td style="width:45px; background:#AAA;"><select onchange="show('div_texto_promocional')" class="promocao" name="novoproduto!esta_em_promocao"><option value="1" > Sim </option><option value="0" selected> N&atilde;o </option></select></td><td style="background:#09f; width:130px;"><div id="div_label_preco" style="display:block; position:relative; float:right;">Pre&ccedil;o:</div><div id="div_label_preco_promocional" style="display:none; position:relative; float:right;">Pre&ccedil;o Promocional:</div></td><td style="width:10px; background: #006;">R$</td><td><div id="div_preco_promocional" style="display:none;"><input onkeyup="mask_moeda(this)"  class="preco" style="width:50px;" type="text" name="novoproduto!preco_promocional" value=""></div><div id="div_preco" style="display:block;"><input style="width:50px;" type="text" onkeyup="mask_moeda(this)" class="preco" name="novoproduto!preco" value=""></td></tr></table></div></td></tr>
        <tr><td><div id="div_texto_promocional" style="display:none"><table><tr><td style="width:68px;">Texto da promo&ccedil;&atilde;o:</td><td><input type="text" style="width:300px;" name="novoproduto!texto_promocao" value=""></td></tr></table>
        <tr><td><input type="submit" value="Salvar"><input type="button" onclick="show('novo_item')" value="Cancelar"></td></tr>            
 </table>
