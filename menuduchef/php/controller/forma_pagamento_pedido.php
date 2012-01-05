@@ -2,7 +2,7 @@
 
 session_start();
 
-include("include/header2.php");
+include("../../include/header2.php");
 
 if($_SESSION['sessao_valida']){
     $atendente = unserialize($_SESSION['usuario_obj']);
