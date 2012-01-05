@@ -38,6 +38,8 @@ $pedconcan=Pedido::all(array("order"=>"quando", "conditions"=>array("( situacao=
   $(".novo_ped").click(function(){
       pedido = $("#copia").attr("value");
       $("#dados_ped").load("dados_pedido.php?ped="+pedido);
+      $("#form_pag").load("forma_pagamento_pedido.php?ped="+pedido);
+      $("#deta_ped").load("detalhes_pedido.php?ped="+pedido);
   });
   
   $("#botao_avancar").click(function(){
