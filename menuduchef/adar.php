@@ -111,11 +111,13 @@ $pedconcan=Pedido::all(array("order"=>"quando", "conditions"=>array("( situacao=
       status_ = $("#copia_status").attr("value");
       pedido = $("#copia").attr("value");
       if(status_=="novoped"){
-          $("#ped_pre").load("php/controller/update_pedidos.php?sta="+status_+"&ped="+pedido);
-          $("#novo_ped").load("php/controller/refresh_pedidos.php?sta="+status_);
+          status2 = "pedpre";
+          $("#ped_pre").load("php/controller/update_pedidos.php?sta="+status2+"&ped="+pedido);
+          $("#novo_ped").load("php/controller/refresh_pedidos.php?sta="+status_+"&ped="+pedido);
       }else if(status_=="pedpre"){
-          $("#ped_con_can").load("php/controller/update_pedidos.php?sta="+status_+"&ped="+pedido);
-          $("#ped_pre").load("php/controller/refresh_pedidos.php?sta="+status_);
+          status2 = "pedconcan";
+          $("#ped_con_can").load("php/controller/update_pedidos.php?sta="+status2+"&ped="+pedido);
+          $("#ped_pre").load("php/controller/refresh_pedidos.php?sta="+status_+"&ped="+pedido);
       }
   });
   

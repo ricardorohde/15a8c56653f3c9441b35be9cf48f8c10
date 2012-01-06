@@ -9,15 +9,15 @@ if($_SESSION['sessao_valida']){
 }
 
 if($_GET['sta']=='novoped'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?","novo_pedido",$atendente->restaurante_id)));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ? AND id <> ?","novo_pedido",$atendente->restaurante_id,$_GET['ped'])));
     $idtable = "novoped";
 }
 else if($_GET['sta']=='pedpre'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?","pedido_preparacao",$atendente->restaurante_id)));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ? AND id <> ?","pedido_preparacao",$atendente->restaurante_id,$_GET['ped'])));
     $idtable = "pedpre";
 }
 else if($_GET['sta']=='pedconcan'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("(situacao = ?  OR situacao = ?) AND restaurante_id = ?","pedido_concluido","cancelado",$atendente->restaurante_id)));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("(situacao = ?  OR situacao = ?) AND restaurante_id = ? AND id <> ?","pedido_concluido","cancelado",$atendente->restaurante_id,$_GET['ped'])));
     $idtable = "pedconcan";
 }
 
