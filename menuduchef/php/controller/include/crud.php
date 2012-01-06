@@ -57,8 +57,6 @@ if ($data) {
 		    if ($handle->processed) {
 			$obj->assign_attribute($param, $handle->file_dst_name);
 		    }
-		} elseif($obj) {
-		    $obj->assign_attribute($param, null);
 		}
 	    }
 	}

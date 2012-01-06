@@ -2,7 +2,7 @@
 
 include_once("../lib/config.php");
 
-$cep = $_POST['cep'];
+$cep = StringUtil::onlyNumbers($_POST['cep']);
 
 if ($cep) {
     $enderecoCep = EnderecoCep::find_by_cep($cep);

@@ -7,6 +7,7 @@
             <a href="admin/cidade/">Cidades</a>
             <a href="admin/bairro/">Bairros</a>
             <a href="admin/consumidor/">Clientes</a>
+            <a href="admin/forma_pagamento/">Formas de Pagamento</a>
         </div>
         <span class="qmdivider qmdividery"></span>
         <a href="javascript:void(0)">RESTAURANTES</a>

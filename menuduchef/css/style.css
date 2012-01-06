@@ -3,7 +3,7 @@
 body { width: 100%; background-color: #ccc; }
 #conteudo { float: left; width: 80%; margin: 0 10%; padding: 5px 5px 15px; background-color: #fff; }
 
-h1, h2, h3, h4, input, select, textarea, a, .msg, table.list tr td, table.list tr th, div { font: 12px Verdana; }
+h1, h2, h3, h4, input, select, textarea, a, .msg, table.list tr td, table.list tr th, div, label { font: 12px Verdana; }
 h1, h2 { float: left; width: 100%; margin-bottom: 10px; font-weight: bold; }
 h1 { font-size: 20px; }
 h2, h2 a { font-size: 16px; }
@@ -24,15 +24,12 @@ ul li span.title { font-weight: bold; }
 a { color: #999; font-weight: bold; text-decoration: underline; }
 a:hover { color: #555; }
 
-.adjacent { float: left; margin-top: 5px; }
-
 input, select, textarea { float: left; padding: 4px; }
 input.formfield, select.formfield, textarea.formfield { clear: both; }
 input.btn { clear: both; margin-top: 10px; }
 
 label { cursor: pointer; }
 label.normal { float: left; width: 100%; margin: 10px 0 5px 0; font-weight: bold; }
-label.adjacent { margin-left: 3px; margin-right: 10px; }
 
 #painel_area_administrativa { float:left; width: 100%; margin-bottom: 10px; border-bottom: #CCC solid 1px; }
 
@@ -62,6 +59,10 @@ label.adjacent { margin-left: 3px; margin-right: 10px; }
 .clear-left { clear: left; }
 .clear-right { clear: right; }
 .clear-both { clear: both; }
+.clear-none { clear: none; }
+
+.adjacent { float: left; margin-top: 5px; }
+label.adjacent { margin-left: 3px; margin-right: 10px; }
 
 .bold { font-weight: bold; }
 .red { color:red; }

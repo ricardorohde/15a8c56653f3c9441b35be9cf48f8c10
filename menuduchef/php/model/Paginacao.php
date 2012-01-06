@@ -15,9 +15,10 @@ class Paginacao {
     var $delimiter;
 
     /* Propriedades setadas ao inicializar */
-    var $total;
+    var $count;
     var $previous;
     var $next;
+    var $last;
     var $list;
 
     public function __construct($class, $options = null, $urlBase = '', $page = 1, $maxPerPage = 5, $visibleNumbers = 5, $delimiter = '/page/') {
@@ -33,12 +34,12 @@ class Paginacao {
 	$this->visibleNumbers = $visibleNumbers;
 	$this->delimiter = $delimiter;
 
-	$count = $class::count($this->options);
+	$this->count = $class::count($this->options);
 
-	if ($count) {
-	    $this->total = ceil($count / $this->maxPerPage);
+	if ($this->count) {
+	    $this->last = ceil($this->count / $this->maxPerPage);
 	    $this->previous = $this->page > 1 ? ($this->page - 1) : 1;
-	    $this->next = $this->page < $this->total ? ($this->page + 1) : $this->total;
+	    $this->next = $this->page < $this->last ? ($this->page + 1) : $this->last;
 
 	    $offset = ($this->page * $this->maxPerPage) - $this->maxPerPage;
 
@@ -49,7 +50,7 @@ class Paginacao {
     public function getHtml() {
 	$html = '';
 
-	if ($this->total > $this->maxPerPage) {
+	if ($this->count > $this->maxPerPage) {
 	    if ($this->page == 1) {
 		$html .= '<a href="javascript:void(0)"><<</a>';
 	    } else {
@@ -57,13 +58,13 @@ class Paginacao {
 	    }
 
 	    $initNumbers = ($this->page - $this->visibleNumbers) > 0 ? ($this->page - $this->visibleNumbers) : 1;
-	    $finishNumbers = ($this->page + $this->visibleNumbers) < $this->total ? ($this->page + $this->visibleNumbers) : $this->total;
+	    $finishNumbers = ($this->page + $this->visibleNumbers) < $this->last ? ($this->page + $this->visibleNumbers) : $this->last;
 
 	    for ($i = $initNumbers; $i <= $finishNumbers; $i++) {
 		$html .= '<a ' . ($i == $this->page ? 'class="marked"' : '') . ' href="' . $this->urlBase . $this->delimiter . $i . '/">' . $i . '</a>';
 	    }
 
-	    if ($this->page == $this->total) {
+	    if ($this->page == $this->last) {
 		$html .= '<a href="javascript:void(0)">>></a>';
 	    } else {
 		$html .= '<a href="' . $this->urlBase . $this->delimiter . $this->next . '/">>></a>';
