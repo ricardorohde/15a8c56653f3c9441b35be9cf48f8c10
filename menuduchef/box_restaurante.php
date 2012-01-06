@@ -6,8 +6,14 @@
 	<div id="box_textos">
 	    <div id="b1"><?= $restaurante->getNomeCategoria() ?></div>
 	    <div class="texto_box" id="b2"><?= $restaurante->nome ?></div>
-	    <div class="texto_box" id="b3">Horário de funcionamento  |  Forma de pagamento</div>
-	    <div class="texto_box" id="b4"></div>
+	    <div class="texto_box" id="b3">Horário de funcionamento | Forma de pagamento</div>
+            <? if($restaurante->getStrHorarios() || $restaurante->getStrFormasPagamento()) { ?>
+	    <div class="texto_box" id="b4">
+                <?= $restaurante->getStrHorarios() ?>
+                <?= $restaurante->getStrHorarios() && $restaurante->getStrFormasPagamento() ? '|' : '' ?>
+                <?= $restaurante->getStrFormasPagamento() ?>
+            </div>
+            <? } ?>
 	</div>
 	<div id="box_botoes">
 	    <div style="width:110px; height:72px;">

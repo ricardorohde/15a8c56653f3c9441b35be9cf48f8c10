@@ -4,6 +4,7 @@
 var AREA_MODIFICAR_SENHA_ID = 'areaModificarSenha';
 var ENDERECO_DIALOG_ID = 'form_endereco';
 var TELEFONE_DIALOG_ID = 'form_telefone';
+var HORARIO_RESTAURANTE_DIALOG_ID = 'form_horario_restaurante';
 var COMBO_BOX_DEFAULT_OPTION = '<option value="">-- Selecione --</option>';
 var COMBO_BOX_DEFAULT_ENDERECO = '<option value="">-- Selecione um cliente e um restaurante primeiro --</option>';
 var COMBO_BOX_DEFAULT_BAIRRO = '<option value="">-- Selecione uma cidade primeiro --</option>';
@@ -18,6 +19,7 @@ var URL_PRODUTOS_ADICIONAIS_JSON = 'php/controller/list_produtos_adicionais_json
 var URL_PRODUTO_SEGUNDO_SABOR = 'php/controller/list_segundo_sabor_json';
 var URL_ENDERECO_CONSUMIDOR = 'php/controller/endereco_consumidor_json';
 var URL_TELEFONE_CONSUMIDOR = 'php/controller/telefone_consumidor_json';
+var URL_HORARIO_RESTAURANTE = 'php/controller/horario_restaurante_json';
 
 function isEmpty(data) {
     return data == null || data == undefined || data == '' || data.length == 0;
@@ -213,6 +215,64 @@ function autoCompleteProdutosCheckBox(idRestaurante) { //seinao ainda
     } else {
 	target.empty().html('<label class="adjacent">Escolha um restaurante primeiro</label>');
     }
+}
+
+function listHorariosRestaurante(arrayHorarios, tableId, hashRestaurante) {
+    if(!isEmpty(arrayHorarios)) {
+	$('#' + tableId + ' .row_data').remove();
+	
+	$.each(arrayHorarios, function(index, data) {
+	    var row = '<tr class="row_data">';
+	    row += '<td>' + data.__toString + '</td>';
+	    row += '<td align="center"><a href="javascript:void(0)" class="modificar_horario">Modificar</a></td>';
+	    row += '<td align="center"><a href="javascript:void(0)" class="excluir_horario">Excluir</a></td>';
+	    row += '</tr>';
+
+	    var rowElement = $(row).appendTo($('#' + tableId));
+
+	    rowElement.find('.modificar_horario').click(function() {
+                data.horario_id = data.id;
+                if(data.hora_inicio1) data.hora_inicio1 = data.hora_inicio1.substring(0, 5);
+                if(data.hora_fim1) data.hora_fim1 = data.hora_fim1.substring(0, 5);
+                if(data.hora_inicio2) data.hora_inicio2 = data.hora_inicio2.substring(0, 5);
+                if(data.hora_fim2) data.hora_fim2 = data.hora_fim2.substring(0, 5);
+                if(data.hora_inicio3) data.hora_inicio3 = data.hora_inicio3.substring(0, 5);
+                if(data.hora_fim3) data.hora_fim3 = data.hora_fim3.substring(0, 5);
+                
+                $('#' + HORARIO_RESTAURANTE_DIALOG_ID).dialog('option', 'isUpdate', 1);
+                $('#' + HORARIO_RESTAURANTE_DIALOG_ID).dialog('option', 'attributes', data);
+                $('#' + HORARIO_RESTAURANTE_DIALOG_ID).dialog('open');
+	    });
+
+	    rowElement.find('.excluir_horario').click(function() {
+                $.getJSON(URL_HORARIO_RESTAURANTE, {'deleteHash': data.hash, 'hash_restaurante': hashRestaurante}, function(e) {
+                    listHorariosRestaurante(e, tableId, hashRestaurante);
+                });
+	    });
+	});
+    } else {
+	$('#' + tableId + ' .row_data').remove();
+	$('<tr class="row_data"><td colspan="9">Nenhum horário cadastrado</td></tr>').appendTo($('#' + tableId));
+    }
+}
+
+function addHorarioRestaurante(parameters, tableId, hashRestaurante, imgLoading) {
+    $('#mensagens_horario_restaurante').empty().append($('<img src="' + imgLoading.src + '" alt="Carregando" title="Carregando" />'));
+    var mergedParameters = $.merge(parameters, [{'name': 'hash_restaurante', 'value': hashRestaurante}]);
+    
+    $.post(URL_HORARIO_RESTAURANTE, mergedParameters, function(data) {
+	if(!isEmpty(data)) {
+	    if(!data.errors) {
+		listHorariosRestaurante(data, tableId, hashRestaurante);
+		$('#' + HORARIO_RESTAURANTE_DIALOG_ID).dialog('close');
+	    } else {
+		$('#mensagens_horario_restaurante').empty();
+		$.each(data.errors, function(index, key) {
+		    $('#mensagens_horario_restaurante').append($('<div class="msg error">&raquo; ' + key.error + '</div>'));
+		});
+	    }
+	}
+    }, 'json');
 }
 
 function listTelefonesConsumidor(arrayTelefones, tableId, hashConsumidor) {

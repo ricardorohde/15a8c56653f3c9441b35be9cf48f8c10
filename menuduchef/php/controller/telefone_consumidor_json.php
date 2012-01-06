@@ -11,15 +11,15 @@ if($parameters['deleteHash']) {
     HttpUtil::removeArrayFromSessionMatrix($parameters['hash_consumidor'], 'hash', $parameters['deleteHash']);
 } else {
     if (!empty($parameters['numero'])) {
-        $telefone = new TelefoneConsumidor($parameters);
+        $obj = new TelefoneConsumidor($parameters);
         $hashParameter = $parameters['hash'];
-        $hashCalculado = $telefone->hash();
-        $indexTelefoneByHash = HttpUtil::searchArrayInSessionMatrix($parameters['hash_consumidor'], 'hash', $hashParameter ? : $hashCalculado);
+        $hashCalculado = $obj->hash();
+        $indexByHash = HttpUtil::searchArrayInSessionMatrix($parameters['hash_consumidor'], 'hash', $hashParameter ? : $hashCalculado);
 
-        if ($hashParameter || $indexTelefoneByHash === null) {
+        if ($hashParameter || $indexByHash === null) {
             $parameters['hash'] = $hashCalculado;
             $parameters['id'] = $parameters['telefone_id'];
-            HttpUtil::saveArrayInSessionMatrix($parameters['hash_consumidor'], $parameters, $indexTelefoneByHash);
+            HttpUtil::saveArrayInSessionMatrix($parameters['hash_consumidor'], $parameters, $indexByHash);
         } else {
             $errors[] = "Telefone já existe";
         }

@@ -13,12 +13,12 @@ if($parameters['deleteHash']) {
     if (!empty($parameters['cidade_id']) && !empty($parameters['bairro_id']) &&
             !empty($parameters['logradouro']) && !empty($parameters['cep'])) {
         
-        $endereco = new EnderecoConsumidor($parameters);
+        $obj = new EnderecoConsumidor($parameters);
         $hashParameter = $parameters['hash'];
-        $hashCalculado = $endereco->hash();
-        $indexEnderecoByHash = HttpUtil::searchArrayInSessionMatrix($parameters['hash_consumidor'], 'hash', $hashParameter ? : $hashCalculado);
+        $hashCalculado = $obj->hash();
+        $indexByHash = HttpUtil::searchArrayInSessionMatrix($parameters['hash_consumidor'], 'hash', $hashParameter ? : $hashCalculado);
 
-        if ($hashParameter || $indexEnderecoByHash === null) {
+        if ($hashParameter || $indexByHash === null) {
             $parameters['hash'] = $hashCalculado;
             $parameters['id'] = $parameters['endereco_id'];
 	    
@@ -26,7 +26,7 @@ if($parameters['deleteHash']) {
 		HttpUtil::updateValuesOfArrayInSessionMatrix($parameters['hash_consumidor'], 'favorito', 0);
 	    }
 	    
-            HttpUtil::saveArrayInSessionMatrix($parameters['hash_consumidor'], $parameters, $indexEnderecoByHash);
+            HttpUtil::saveArrayInSessionMatrix($parameters['hash_consumidor'], $parameters, $indexByHash);
         } else {
             $errors[] = "Endereço já existe";
         }

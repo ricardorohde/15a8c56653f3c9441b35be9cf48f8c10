@@ -9,6 +9,13 @@ $administradores = Administrador::all(array("order" => "nome asc"));
 $tipos = TipoRestaurante::all();
 $tipos_produto = TipoProduto::all();
 $bairros = Bairro::all();
+$formasPagamento = FormaPagamento::all();
+
+$now = time();
+$hash_restaurante = 'restaurante' . $now;
+
+$horariosJson = StringUtil::arrayActiveRecordToJson($obj->horarios, array('methods' => array('hash', '__toString')));
+$_SESSION[$hash_restaurante] = json_decode($horariosJson, true);
 ?>
 
 <script type="text/javascript">
@@ -22,6 +29,44 @@ $bairros = Bairro::all();
 	$('#cidades').change(function() {
 	    autoCompleteBairrosCheckBox($(this).val());
 	});
+	
+	listHorariosRestaurante(<?= $horariosJson ?>, 'horarios', '<?= $hash_restaurante ?>');
+	
+	var imgLoading = new Image();
+	imgLoading.src = '<?= PATH_IMAGE_LOADING ?>';
+	
+	$('#add_horario_restaurante').click(function() {
+            $('#form_horario_restaurante').dialog('open');
+        });
+	
+	$('#form_horario_restaurante').dialog({
+            autoOpen: false,
+            modal: true,
+            width: '25%',
+            resizable: false,
+            buttons: {
+                'Salvar': function() {
+                    addHorarioRestaurante($('input, select, textarea', this).serializeArray(), 'horarios', '<?= $hash_restaurante ?>', imgLoading);
+                },
+                'Cancelar': function () {
+                    $(this).dialog('close');
+                }
+            },
+            open: function() {
+                var isUpdate = parseInt($(this).dialog('option', 'isUpdate'));
+                var attributes = $(this).dialog('option', 'attributes');
+		
+                if(isUpdate) {
+                    $(this).populateForm(attributes);
+                }
+            },
+            close: function() {
+                $(this).clearFormElements();
+                $(this).dialog('option', 'isUpdate', null);
+                $(this).dialog('option', 'attributes', null);
+                $('#mensagens_horario_restaurante').empty();
+            }
+        });
     });
 </script>
 
@@ -31,6 +76,7 @@ $bairros = Bairro::all();
 
 <form action="admin/restaurante/controller" method="post" enctype="multipart/form-data">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
+    <input type="hidden" id="hash_restaurante" name="hash_restaurante" value="<?= $hash_restaurante ?>" />
     
     <label class="normal">Nome:</label>
     <input class="formfield w50" type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" />
@@ -61,6 +107,39 @@ $bairros = Bairro::all();
 
     <label class="normal">Endereço:</label>
     <input class="formfield w50" type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br /><br />
+    
+    <label class="normal">Horários:</label>
+    <a id="add_horario_restaurante" class="left w100 bottom10" href="javascript:void(0)">Adicionar</a>
+    <br /><br />
+    <div id="form_horario_restaurante" title="Adicionar horário">
+        <div id="mensagens_horario_restaurante"></div>
+        <input type="hidden" id="horario_id" name="horario_id" value="" />
+        <input type="hidden" name="hash" value="" />
+	<label for="dia_da_semana" class="normal">Dias da semana:</label>
+        <input class="formfield w90" type="text" id="dia_da_semana" name="dia_da_semana" maxlength="50" />
+        
+        <label class="normal">1º horário:</label>
+        <input class="left w40" type="text" id="hora_inicio1" maxlength="5" name="hora_inicio1" onkeyup="mask_hora(this)" />
+        <span class="adjacent">&nbsp;até&nbsp;</span>
+        <input class="left w40" type="text" id="hora_fim1" maxlength="5" name="hora_fim1" onkeyup="mask_hora(this)" />
+        
+        <label class="normal">2º horário:</label>
+        <input class="left w40" type="text" id="hora_inicio2" maxlength="5" name="hora_inicio2" onkeyup="mask_hora(this)" />
+        <span class="adjacent">&nbsp;até&nbsp;</span>
+        <input class="left w40" type="text" id="hora_fim2" maxlength="5" name="hora_fim2" onkeyup="mask_hora(this)" />
+        
+        <label class="normal">3º horário:</label>
+        <input class="left w40" type="text" id="hora_inicio3" maxlength="5" name="hora_inicio3" onkeyup="mask_hora(this)" />
+        <span class="adjacent">&nbsp;até&nbsp;</span>
+        <input class="left w40" type="text" id="hora_fim3" maxlength="5" name="hora_fim3" onkeyup="mask_hora(this)" />
+    </div>
+    <table class="list w50" id="horarios">
+        <tr>
+	    <th>Horários</th>
+            <th width="10%"></th>
+            <th width="10%"></th>
+        </tr>
+    </table>
     
     <label class="normal">Ativo:</label>
     <input class="adjacent" id="ativo_sim" type="radio" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="checked"<? } ?> />
@@ -111,6 +190,17 @@ $bairros = Bairro::all();
     
     <input class="adjacent" type="checkbox" name="tipos_produto[]" value="<?= $tipo_produto->id ?>" id="tipo_produto_<?= $tipo_produto->id ?>" <? if($obj->temTipoProduto($tipo_produto->id)) { ?>checked="checked"<? } ?> />
     <label class="adjacent" for="tipo_produto_<?= $tipo_produto->id ?>"><?= $tipo_produto->nome ?></label>
+    
+    <? } } ?>
+    
+    <? if($formasPagamento) { ?>
+    
+    <label class="normal">Formas de pagamento aceitas:</label>
+    
+    <? foreach($formasPagamento as $forma) { ?>
+    
+    <input class="adjacent" type="checkbox" name="formas_pagamento[]" value="<?= $forma->id ?>" id="formapagamento_id_<?= $forma->id ?>" <? if($obj->temFormaPagamento($forma->id)) { ?>checked="checked"<? } ?> />
+    <label class="adjacent" for="formapagamento_id_<?= $forma->id ?>"><?= $forma->nome ?></label>
     
     <? } } ?>
     
