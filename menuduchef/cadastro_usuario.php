@@ -125,7 +125,7 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
         });
     });
 </script>
-<form action="admin/consumidor/controller" method="post">
+<form action="php/controller/consumidor_auto_cadastro" method="post">
     <input type="hidden" name="id" value="<?= $obj->id ?>" />
     <input type="hidden" id="hash_consumidor" name="hash_consumidor" value="<?= $hash_consumidor ?>" />
     <input type="hidden" id="hash_consumidor2" name="hash_consumidor2" value="<?= $hash_consumidor2 ?>" />
