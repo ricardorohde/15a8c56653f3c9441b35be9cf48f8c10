@@ -240,11 +240,6 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
         </tr>
     </table>
 
-    <label class="normal">Ativo:</label>
-    <input class="adjacent" type="radio" id="ativo_sim" name="ativo" value="1" <? if (!$obj->id || $obj->ativo === 1) { ?>checked="checked"<? } ?> />
-    <label for="ativo_sim" class="adjacent">Sim</label>
-    <input class="adjacent" type="radio" id="ativo_nao" name="ativo" value="0" <? if ($obj->id && $obj->ativo === 0) { ?>checked="checked"<? } ?> />
-    <label for="ativo_nao" class="adjacent">Não</label>
 
     <? include("include/inputs_email_senha.php"); ?>
 
