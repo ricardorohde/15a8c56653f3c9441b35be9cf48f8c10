@@ -12,11 +12,6 @@ include_once("{$libDirectory}/config.php");
 $usuario_logado = unserialize($_SESSION['usuario']);
 $usuario_logado_obj = unserialize($_SESSION['usuario_obj']);
 
-if(!$usuario_logado || $usuario_logado->tipo == Usuario::$CONSUMIDOR) {
-    $_SESSION['request_fail'] = $_SERVER["REQUEST_URI"];
-    HttpUtil::redirect('../404');
-}
-
 if (HttpUtil::isLocalhost()) {
     $baseHref = "http://{$_SERVER['HTTP_HOST']}/menuduchef/";
 } else {

@@ -72,12 +72,12 @@ if ($data) {
 	} else {
 	    $_SESSION["obj"] = $data;
 	    HttpUtil::showErrorMessages($obj->errors->full_messages());
-	    HttpUtil::redirect("../../../cadastro_cliente");
+	    HttpUtil::redirect("../../area_usuario");
 	}
     }
 
     if ($redirect) {
-	HttpUtil::redirect("../../../cadastro_cliente");
+	HttpUtil::redirect("../../area_usuario");
     }
 }
 ?>
