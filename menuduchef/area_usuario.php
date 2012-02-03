@@ -27,6 +27,15 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
 <link rel="stylesheet" type="text/css" href="css/menu.css" />
 <link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" />
 <script type="text/javascript">
+    var minut = 10;
+
+    function append() {           
+            minut--;
+            if(minut<0){
+                    $("#historico_pedidos").load("php/controller/confere_pedidos.php");
+            }
+    }
+    setInterval('append()', 1000);
     function show(x){
         oque = document.getElementById(x);
         if(oque.style.display=='block'){
@@ -141,6 +150,30 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
 </script>
 <div>
     <input type="button" onclick="show('dados_cadastrais')" value="Alterar Dados Cadastrais">
+</div>
+<div style="position: relative; float: right;">
+    <input type="button" onclick="show('historico_pedidos')" value="Pedidos">
+</div>
+<div id="historico_pedidos" style="display:none; position: relative; float:right; width:210px;">
+    <?
+        if($obj->pedidos){
+            foreach($obj->pedidos as $pedido){
+                    if($pedido->situacao=="novo_pedido"){
+                        $cor = "#FFD700";
+                    }else if($pedido->situacao=="cancelado"){
+                        $cor = "#DD6666";
+                    }else{
+                        $cor = "#4682B4";
+                    }
+                    $dh = $pedido->quando->format('d/m/Y - H:i');
+                        
+                    $quebra = explode(" - ", $dh);
+                    $data=$quebra[0];
+                    $hora=$quebra[1];
+                    echo "<div style='background:".$cor."; cursor:pointer; width:200px; height:30px; margin:3px;'>".$pedido->restaurante->nome." ".$data." ".$hora."</div>";
+            }
+        }
+    ?>
 </div>
 <div id="dados_cadastrais" style="display:none;">
 <form action="php/controller/consumidor_auto_cadastro" method="post">
