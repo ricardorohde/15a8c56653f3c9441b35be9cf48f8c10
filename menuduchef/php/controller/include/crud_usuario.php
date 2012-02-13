@@ -7,6 +7,8 @@ $redirect = isset ($redirect) ? $redirect : true;
 
 $obj = new $class();
 
+print_r($data);exit;
+
 if ($data) {
     $deleteId = array_key_exists("deleteId", $data) ? $data["deleteId"] : 0;
     $id = array_key_exists("id", $data) ? $data["id"] : $deleteId;
@@ -61,6 +63,7 @@ if ($data) {
 	    }
 	}
 	
+	print_r($obj);exit;
 	$obj->save();
 
 	if ($obj->is_valid() && $obj->errors->is_empty()) {

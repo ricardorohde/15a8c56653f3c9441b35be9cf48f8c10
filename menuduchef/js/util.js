@@ -232,12 +232,6 @@ function listHorariosRestaurante(arrayHorarios, tableId, hashRestaurante) {
 
 	    rowElement.find('.modificar_horario').click(function() {
                 data.horario_id = data.id;
-                if(data.hora_inicio1) data.hora_inicio1 = data.hora_inicio1.substring(0, 5);
-                if(data.hora_fim1) data.hora_fim1 = data.hora_fim1.substring(0, 5);
-                if(data.hora_inicio2) data.hora_inicio2 = data.hora_inicio2.substring(0, 5);
-                if(data.hora_fim2) data.hora_fim2 = data.hora_fim2.substring(0, 5);
-                if(data.hora_inicio3) data.hora_inicio3 = data.hora_inicio3.substring(0, 5);
-                if(data.hora_fim3) data.hora_fim3 = data.hora_fim3.substring(0, 5);
                 
                 $('#' + HORARIO_RESTAURANTE_DIALOG_ID).dialog('option', 'isUpdate', 1);
                 $('#' + HORARIO_RESTAURANTE_DIALOG_ID).dialog('option', 'attributes', data);

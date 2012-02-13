@@ -8,6 +8,7 @@ foreach ($libDirectoryArray as $directory) {
 }
 
 include_once("{$libDirectory}/config.php");
+include_once("session_vars.php");
 
 if (HttpUtil::isLocalhost()) {
     $baseHref = "http://{$_SERVER['HTTP_HOST']}/menuduchef/";
@@ -37,6 +38,7 @@ if (HttpUtil::isLocalhost()) {
 	    /* ver se adiciona essas regras em algum arquivo css depois; não adicionei agora para evitar conflitos */
 	    #contagem_pag a { color: #E51B21; font-weight: bold; padding: 5px; }
 	    #contagem_pag a:hover, #contagem_pag a.marked { background-color: #E51B21; color: #fff; }
+	    .abre_box { cursor: pointer; text-decoration: underline; }
 	</style>
 	<!--[if lt IE 8]><link rel="stylesheet" href="css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
     </head>

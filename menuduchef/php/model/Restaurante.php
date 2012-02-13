@@ -256,6 +256,10 @@ class Restaurante extends ActiveRecord\Model {
             return $categorias;
         }
     }
+    
+    public function getRestauranteAtendeBairro($bairro_id) {
+	return RestauranteAtendeBairro::find_by_restaurante_id_and_bairro_id($this->id, $bairro_id);
+    }
 
 }
 

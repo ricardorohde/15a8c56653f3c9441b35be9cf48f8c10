@@ -288,7 +288,8 @@ $categorias = TipoRestaurante::all(array("order" => "nome asc"));
                         <div id="box_textos">
                         	<div id="b1"><?= $restaurante->getNomeCategoria() ?></div>
                             <div class="texto_box" id="b2"><?= $restaurante->nome ?></div>
-                            <div class="texto_box" horario="horarios_<?= $restaurante->id ?>" id="b3"><span class="abre_horario" horario="horarios_<?= $restaurante->id ?>">Horario de funcionamento</span>  
+                            <div class="texto_box" horario="horarios_<?= $restaurante->id ?>" id="b3">
+				<span class="abre_horario" horario="horarios_<?= $restaurante->id ?>">Horario de funcionamento</span>  
                                 <?  $horarios = HorarioRestaurante::all(array("conditions" => array("restaurante_id = ?",$restaurante->id))); 
                                     if($horarios){ ?>
                                         <div id="horarios_<?= $restaurante->id ?>" style="display:none; z-index:3; background-color: #DDD; position: absolute;"><table>

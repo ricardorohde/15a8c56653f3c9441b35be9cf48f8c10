@@ -162,6 +162,8 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
                         $cor = "#FFD700";
                     }else if($pedido->situacao=="cancelado"){
                         $cor = "#DD6666";
+                    }else if($pedido->situacao=="pedido_preparacao"){
+                        $cor = "#3CB371";
                     }else{
                         $cor = "#4682B4";
                     }

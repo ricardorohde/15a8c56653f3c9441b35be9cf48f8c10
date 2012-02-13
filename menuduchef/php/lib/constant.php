@@ -24,6 +24,6 @@ define('PATH_IMAGE_UPLOAD', 'images');
 define('URL_PRODUCTION', 'http://www.agenciabiro.com.br/menuduchef/');
 define('SITE_TITLE', 'Delivery du Chef');
 
-define('ENABLE_URL_REWRITING', false);
+define('ENABLE_URL_REWRITING', true);
 
 ?>

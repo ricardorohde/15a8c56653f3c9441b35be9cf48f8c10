@@ -43,7 +43,7 @@ class Paginacao {
 
 	    $offset = ($this->page * $this->maxPerPage) - $this->maxPerPage;
 
-	    $this->list = $class::all(array_merge($options, array('limit' => $this->maxPerPage, 'offset' => $offset)));
+	    $this->list = $class::all(array_merge($this->options, array('limit' => $this->maxPerPage, 'offset' => $offset)));
 	}
     }
 

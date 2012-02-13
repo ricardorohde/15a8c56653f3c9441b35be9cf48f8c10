@@ -18,13 +18,17 @@ Options All -Indexes
     deny from all
 </Limit>
 
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule (.*) front_controller.php?uri=$1 [L]
+
 RewriteCond %{THE_REQUEST} ^.+$ [NC]
 RewriteRule .*robots\.txt - [F,L]
 
-RewriteRule (.+)page/([0-9]+)/?$ $1?page=$2 [L]
-RewriteRule ^(.+/)(\w+)/controller/?$ php/controller/$2.php [L]
-RewriteRule ^(.+/)(\w+\.php/)(\d+)/?$ $1$2?id=$3 [R,L]
-RewriteRule ^(.+/)([a-zA-Z_]+)/(\d+)/?$ $1$2.php?id=$3 [L]
+RewriteRule (.+)?page/([0-9]+)/?$ $1?page=$2 [L]
+RewriteRule ^(.+/)?(\w+)/controller/?$ php/controller/$2.php [L]
+RewriteRule ^(.+/)?(\w+\.php/)(\d+)/?$ $1$2?id=$3 [R,L]
+RewriteRule ^(.+/)?([a-zA-Z_]+)/(\d+)/?$ $1$2.php?id=$3 [L]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.+/)?([\w]+)/?$ $1$2.php [L]
 

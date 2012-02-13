@@ -12,9 +12,9 @@
         <span class="qmdivider qmdividery"></span>
         <a href="javascript:void(0)">RESTAURANTES</a>
         <div>
-            <a href="admin/tipo_restaurante/">Tipos de Restaurante</a>
             <a href="admin/restaurante/">Restaurantes</a>
             <a href="admin/usuario_restaurante/">Gerentes e Atendentes de Restaurantes</a>
+            <a href="admin/tipo_restaurante/">Tipos de Restaurante</a>
             <a href="admin/restaurante_tem_tipo/">Restaurantes tem Tipos</a>
             <a href="admin/restaurante_tem_tipo_produto/">Restaurantes tem Tipos de Produto</a>
             <a href="admin/restaurante_atende_bairro/">Restaurantes Atendem Bairros</a>
@@ -22,9 +22,9 @@
         <span class="qmdivider qmdividery"></span>
         <a href="javascript:void(0)">PRODUTOS</a>
         <div>
-            <a href="admin/tipo_produto/">Tipos de Produto</a>
             <a href="admin/produto/">Produtos</a>
             <a href="admin/produto_adicional/">Produtos Adicionais</a>
+            <a href="admin/tipo_produto/">Tipos de Produto</a>
         </div>
         <span class="qmdivider qmdividery"></span>
         <a href="javascript:void(0)">PEDIDOS</a>

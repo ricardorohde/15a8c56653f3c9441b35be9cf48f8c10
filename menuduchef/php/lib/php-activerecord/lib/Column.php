@@ -118,6 +118,7 @@ class Column
 		{
 			/* <MENU_DU_CHEF> */
 			case self::STRING:	return (string) htmlentities(html_entity_decode(trim($value)));
+			case self::TIME:	return \StringUtil::formataHora($value);
 			/* </MENU_DU_CHEF> */
 			case self::INTEGER:	return (int)$value;
 			case self::DECIMAL:	return (double)$value;
