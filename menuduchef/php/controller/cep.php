@@ -1,5 +1,4 @@
 <?
-echo 'aqui é cep.php, mano!<br />';
 include_once("../lib/config.php");
 
 $cep = StringUtil::onlyNumbers($_POST['cep']);
