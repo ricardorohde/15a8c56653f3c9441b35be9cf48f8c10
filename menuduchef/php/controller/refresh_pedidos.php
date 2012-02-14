@@ -41,7 +41,7 @@ if($pedidos){
         }      
          ?>
 
-        <tr class="<?= $classtr ?>" onclick="copia('<?= $pedido->id ?>','<?= $idtable ?>')" style="cursor:pointer;">
+        <tr class="<?= $classtr ?> pedidos" idped="<?= $pedido->id ?>" tipo="<?= $idtable ?>" style="cursor:pointer;">
             <td><?= $pedido->id ?></td>
             <td><?= $pedido->consumidor->nome ?></td>
             <td><?= $data ?></td>

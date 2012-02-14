@@ -22,121 +22,33 @@ $pedconcan=Pedido::all(array("order"=>"quando", "conditions"=>array("( situacao=
  <link rel="stylesheet" type="text/css" href="css_/estilo_.css" >
  <script src="js/jquery-1.6.4.min.js"></script>
  <script>
- $(document).ready( function (){   
-  $("#b_cancelar").click ( function (){
-      if($("#copia").attr("value")!=""){
-          if($("#copia_status").attr("value")!="pedcan"){
-              $("#areatext").show();
-              $("#b_cancelar").hide();
-              $("#formulario").hide();
-              $("#avancar").hide();
-          }else{
-              alert("Este pedido já está cancelado.");
-          }
-      }else{
-          alert("Selecione um pedido primeiro.");
-      }
-  });
-  
-  $(".confirmar").click( function (){
-          if($("#textapaga").attr("alterado")==0){
-              alert("Por favor, digite o motivo do cancelamento.");
-          }else{
-              $("#form_cancelamento").submit();
-          }
-  });
-  
-  
-  $(".novo_ped").mouseover(function(){
-      $(this).css("background","#7DD");
-  });
-  
-  $(".novo_ped").mouseout(function(){
-      $(this).css("background","#FFD700");
-  });
-  
-  $(".novo_ped").click(function(){
-      pedido = $("#copia").attr("value");
-      $("#dados_ped").load("php/controller/dados_pedido.php?ped="+pedido);
-      $("#form_pag").load("php/controller/forma_pagamento_pedido.php?ped="+pedido);
-      $("#deta_ped").load("php/controller/detalhes_pedido.php?ped="+pedido);
-  });
-  
-  $(".ped_pre").mouseover(function(){
-      $(this).css("background","#7DD");
-  });
-  
-  $(".ped_pre").mouseout(function(){
-      $(this).css("background","#3CB371");
-  });
-  
-  $(".ped_pre").click(function(){
-      pedido = $("#copia").attr("value");
-      $("#dados_ped").load("php/controller/dados_pedido.php?ped="+pedido);
-      $("#form_pag").load("php/controller/forma_pagamento_pedido.php?ped="+pedido);
-      $("#deta_ped").load("php/controller/detalhes_pedido.php?ped="+pedido);
-  });
-  
-  $(".ped_con").mouseover(function(){
-      $(this).css("background","#7DD");
-  });
-  
-  $(".ped_con").mouseout(function(){
-      $(this).css("background","#4682B4");
-  });
-  
-  $(".ped_con").click(function(){
-      pedido = $("#copia").attr("value");
-      $("#dados_ped").load("php/controller/dados_pedido.php?ped="+pedido);
-      $("#form_pag").load("php/controller/forma_pagamento_pedido.php?ped="+pedido);
-      $("#deta_ped").load("php/controller/detalhes_pedido.php?ped="+pedido);
-  });
-  
-  $(".ped_can").mouseover(function(){
-      $(this).css("background","#7DD");
-  });
-  
-  $(".ped_can").mouseout(function(){
-      $(this).css("background","#DD6666");
-  });
-  
-  $(".ped_can").click(function(){
-      pedido = $("#copia").attr("value");
-      $("#dados_ped").load("php/controller/dados_pedido.php?ped="+pedido);
-      $("#form_pag").load("php/controller/forma_pagamento_pedido.php?ped="+pedido);
-      $("#deta_ped").load("php/controller/detalhes_pedido.php?ped="+pedido);
-  });
-  
-  $("#botao_avancar").click(function(){
-      status_ = $("#copia_status").attr("value");
-      pedido = $("#copia").attr("value");
-      if(status_=="novoped"){
-          status2 = "pedpre";
-          $("#ped_pre").load("php/controller/update_pedidos.php?sta="+status2+"&ped="+pedido);
-          $("#novo_ped").load("php/controller/refresh_pedidos.php?sta="+status_+"&ped="+pedido);
-      }else if(status_=="pedpre"){
-          status2 = "pedconcan";
-          $("#ped_con_can").load("php/controller/update_pedidos.php?sta="+status2+"&ped="+pedido);
-          $("#ped_pre").load("php/controller/refresh_pedidos.php?sta="+status_+"&ped="+pedido);
-      }
-  });
-  
-  $(".cancelartext").click(function(){
-      $("#areatext").hide();
-      $("#b_cancelar").show();
-      $("#formulario").show();
-      $("#avancar").show();
-  });
-     
- });
+ var pedidos, novos, preparo, concluidos, cancelados;
  
+ function carregaPedidos() {
+	  pedidos = $(".pedidos");
+	  novos = $(".novo_ped");
+	  preparo = $(".ped_pre");
+	  concluidos = $(".ped_con");
+	  cancelados = $(".ped_can");
+ }
 
+ function carregaColuna(url, idDiv) {
+ 	$.ajax({
+			"url": url,
+			"success": function(data) {
+				$('#' + idDiv).empty().append($(data));
+				
+				carregaPedidos();
+			}
+  	});
+ }
  
 function copia(codigo,status){
      document.getElementById("copia").value = codigo;
      document.getElementById("copia2").value = codigo;
      document.getElementById("copia_status").value = status;
 }
+
  function apaga(x) {
 	conf = $("#"+x).attr('alterado');
 	if(conf=='0'){
@@ -144,6 +56,86 @@ function copia(codigo,status){
 		$("#"+x).attr('alterado','1');
 	}
 }
+
+$(document).ready( function (){
+	carregaPedidos();
+	
+	$("#b_cancelar").click ( function (){
+		  if($("#copia").attr("value")!=""){
+			  if($("#copia_status").attr("value")!="pedcan"){
+				  $("#areatext").show();
+				  $("#b_cancelar").hide();
+				  $("#formulario").hide();
+				  $("#avancar").hide();
+			  }else{
+				  alert("Este pedido já está cancelado.");
+			  }
+		  }else{
+			  alert("Selecione um pedido primeiro.");
+		  }
+	  });
+	  
+	  $("#botao_avancar").click(function(){
+		  status_ = $("#copia_status").attr("value");
+		  pedido = $("#copia").attr("value");
+		  if(status_=="novoped"){
+			  status2 = "pedpre";
+			  carregaColuna("php/controller/update_pedidos.php?sta="+status2+"&ped="+pedido, 'ped_pre');
+			  carregaColuna("php/controller/refresh_pedidos.php?sta="+status_+"&ped="+pedido, 'novo_ped');
+		  }else if(status_=="pedpre"){
+			  status2 = "pedconcan";
+			  carregaColuna("php/controller/update_pedidos.php?sta="+status2+"&ped="+pedido, 'ped_con_can');
+			  carregaColuna("php/controller/refresh_pedidos.php?sta="+status_+"&ped="+pedido, 'ped_pre');
+		  }
+		  
+	  });
+	  
+	  $(".confirmar").click( function (){
+			  if($("#textapaga").attr("alterado")==0){
+				  alert("Por favor, digite o motivo do cancelamento.");
+			  }else{
+				  $("#form_cancelamento").submit();
+			  }
+	  });
+	  
+	  $(".cancelartext").click(function(){
+		  $("#areatext").hide();
+		  $("#b_cancelar").show();
+		  $("#formulario").show();
+		  $("#avancar").show();
+	  });
+	  
+	  pedidos.mouseover(function(){
+		  $(this).css("background","#7DD");
+	  });
+	  
+	  novos.mouseout(function(){
+		  $(this).css("background","#FFD700");
+	  });
+	  
+	  preparo.mouseout(function(){
+		  $(this).css("background","#3CB371");
+	  });
+	  
+	  concluidos.mouseout(function(){
+		  $(this).css("background","#4682B4");
+	  });
+	  
+	  cancelados.mouseout(function(){
+		  $(this).css("background","#DD6666");
+	  });
+	  
+	  pedidos.click(function(){
+		  $("#copia").attr("value",$(this).attr("idped"));
+		  $("#copia2").attr("value",$(this).attr("idped"));
+		  $("#copia_status").attr("value",$(this).attr("tipo"));
+		  
+		  pedido = $("#copia").attr("value");
+		  carregaColuna("php/controller/dados_pedido.php?ped="+pedido, 'dados_ped');
+		  carregaColuna("php/controller/forma_pagamento_pedido.php?ped="+pedido, 'form_pag');
+		  carregaColuna("php/controller/detalhes_pedido.php?ped="+pedido, 'deta_ped');
+	  });
+});
  </script>
 
 
@@ -163,7 +155,7 @@ function copia(codigo,status){
                         $hora=$quebra[1];
                  
                                 ?>
-             <tr id="linha0011" class="novo_ped" onclick="copia('<?= $np->id ?>','novoped')" style="cursor:pointer;">
+             <tr class="novo_ped pedidos" idped="<?= $np->id ?>" tipo="novoped" style="cursor:pointer;">
                 <td><?= $np->id ?></td>
                 <td><?= $np->consumidor->nome ?></td>
                 <td><?= $data ?></td>
@@ -187,7 +179,7 @@ function copia(codigo,status){
                                 $hora=$quebra[1];
 
                                         ?>
-                     <tr id="linha0011" class="ped_pre" onclick="copia('<?= $np->id ?>','pedpre')" style="cursor:pointer;">
+                     <tr class="ped_pre pedidos" idped="<?= $np->id ?>" tipo="pedpre" style="cursor:pointer;">
                         <td><?= $np->id ?></td>
                         <td><?= $np->consumidor->nome ?></td>
                         <td><?= $data ?></td>
@@ -209,7 +201,7 @@ function copia(codigo,status){
                                     $hora=$quebra[1];
 
                                             ?>
-                         <tr class="<?= $np->situacao=="pedido_concluido" ? "ped_con" : "ped_can"  ?>" onclick="copia('<?= $np->id ?>','<?= $np->situacao=="pedido_concluido" ? "ped_con" : "ped_can"  ?>')" style="cursor:pointer;">
+                         <tr class="<?= $np->situacao=="pedido_concluido" ? "ped_con" : "ped_can"  ?> pedidos" idped="<?= $np->id ?>" tipo="<?= $np->situacao=="pedido_concluido" ? "ped_con" : "ped_can"  ?>" style="cursor:pointer;">
                             <td><?= $np->id ?></td>
                             <td><?= $np->consumidor->nome ?></td>
                             <td><?= $data ?></td>

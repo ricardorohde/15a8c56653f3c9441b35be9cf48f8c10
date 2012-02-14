@@ -16,7 +16,7 @@ $quebra = explode(" - ", $dh);
 $data=$quebra[0];
 $hora=$quebra[1];
 
-
+echo "<br/>";
 echo "N: ".$pedido->id."<br/>";
 echo "Cliente: ".$pedido->consumidor->nome."<br/>";
 echo "Data: ".$data."<br/>";

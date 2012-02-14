@@ -15,6 +15,7 @@ $preco_total = 0;
 $taxa_entrega = $pedido->preco_entrega;
 $desconto = 0;
 
+echo "<br/>";
 echo "N&uacute;mero do Pedido: ".$pedido->id."<br/>";
 echo "Forma de Pagamento: ".$pedido->forma_pagamento."<br/>";
 if($pedido->nome_cartao){

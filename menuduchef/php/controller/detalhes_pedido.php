@@ -14,6 +14,7 @@ $preco_total = 0;
 $taxa_entrega = $pedido->preco_entrega;
 $desconto = 0;
 
+echo "<br/>";
 echo "Pedido N: ".$pedido->id."<br/>";
 echo "<table border='1'>";
 
