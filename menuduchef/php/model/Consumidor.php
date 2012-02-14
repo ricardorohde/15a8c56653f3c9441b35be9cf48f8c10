@@ -12,7 +12,7 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
     static $has_many = array(
 	array('pedidos', 'class_name' => 'Pedido'),
 	/* o order garante que o primeiro endereço da lista é o favorito, se houver */
-	array('enderecos', 'class_name' => 'EnderecoConsumidor', 'order' => 'favorito desc, bairro_id asc, logradouro asc'),
+	array('enderecos', 'class_name' => 'EnderecoConsumidor', 'order' => 'favorito desc, id desc'),
 	array('telefones', 'class_name' => 'TelefoneConsumidor')
     );
     static $validates_presence_of = array(
