@@ -17,7 +17,8 @@ if($enderecoCepSession) {
     $enderecoSession->logradouro = $enderecoCepSession->logradouro;
 } elseif ($consumidorSession) {
     if ($consumidorSession->enderecos) {
-	$enderecoSession = $consumidorSession->enderecos[0];
+	//$enderecoSession = $consumidorSession->enderecos[0];
+        $enderecoSession = $consumidorSession->enderecos;
     }
 }
 ?>

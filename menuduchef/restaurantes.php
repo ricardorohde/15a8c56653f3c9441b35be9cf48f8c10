@@ -26,7 +26,7 @@ if ($enderecoSession) {
 	    'joins' => 'inner join restaurante_atende_bairro rab on rab.restaurante_id = restaurante.id',
 	    'conditions' => $conditions,
 	    'order' => 'nome asc'
-	    ), 'restaurantes', $page, 5, 5);
+	    ), 'restaurantes', $page, 6, 5);
 
     $restaurantes = $paginacao->list;
     
@@ -42,13 +42,17 @@ if ($enderecoSession) {
 	    <div id="seleciona_endereco">
 		<img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
 		<div style="width:198px; height:25px; margin-left:7px;">
-		    <? if ($enderecoSession) { ?>
+		    <? if ($enderecoCepSession) { ?>
 			<?= $enderecoSession->logradouro ?><br />
 			CEP: <?= StringUtil::formataCep($enderecoSession->cep) ?><br />
 			<?= $enderecoSession->bairro ?> - <?= $enderecoSession->bairro->cidade ?>
 		    <? } else { ?>
     		    <select id="endereco_cliente" name="endereco_cliente" style="width:195px; margin-left:3px;">
-			    <?= $enderecoSession ?>
+			    <? if($enderecoSession){
+                                foreach($enderecoSession as $es){ ?>
+                                    <option value="<?= $es->bairro_id ?>"><?= $es->bairro->nome ?></option>
+                            <? }
+                            }?>
     		    </select>
 		    <? } ?>
 		</div>
