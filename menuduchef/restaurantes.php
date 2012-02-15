@@ -6,7 +6,12 @@ $data = HttpUtil::getParameterArray();
 $page = $data['page'] ? : 1;
 $categoriasFiltro = $data['categorias'];
 
-$conditions = 'rab.bairro_id = ' . $enderecoSession->bairro_id;
+if($_POST['end_id']){
+    $end = explode("_",$_POST['end_id']);
+    $conditions = 'rab.bairro_id = ' . ((int)$end[1]);
+}else{
+    $conditions = 'rab.bairro_id = ' . $enderecoSession->bairro_id;
+}
 
 if($categoriasFiltro) {
     $categoriasToConditions = implode(',', $categoriasFiltro);
@@ -26,40 +31,65 @@ if ($enderecoSession) {
 	    'joins' => 'inner join restaurante_atende_bairro rab on rab.restaurante_id = restaurante.id',
 	    'conditions' => $conditions,
 	    'order' => 'nome asc'
-	    ), 'restaurantes', $page, 6, 5);
+	    ), 'restaurantes', $page, 6, 5, '?page=');
 
     $restaurantes = $paginacao->list;
-    
-    $categorias = TipoRestaurante::find_and_count_by_bairro_id($enderecoSession->bairro_id);
+
+    if($_POST['end_id']){
+        $end = explode("_",$_POST['end_id']);
+        $categorias = TipoRestaurante::find_and_count_by_bairro_id($end[1]);
+        $end_id = $end[0];
+    }else{
+        $categorias = TipoRestaurante::find_and_count_by_bairro_id($enderecoSession->bairro_id);
+        $end_id = $enderecoSession->id;
+    }
 }
 ?>
-
+<script>
+    $(function() {
+        $(".filtro_categoria").click(function(){
+            $("#page").attr("value",1);
+            $("form").submit();
+        });
+        $("#endereco_cliente").change(function(){
+            $("#end_id").attr("value",$(this).attr("value"));
+            $("form").submit();
+        });
+    });
+</script>
 <?php include "menu2.php" ?>
 
 <div id="central" class="span-24">
     <div class="span-6">
 	<div id="barra_esquerda">
+            <form action="restaurantes" method="post">
 	    <div id="seleciona_endereco">
 		<img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
 		<div style="width:198px; height:25px; margin-left:7px;">
-		    <? if ($enderecoCepSession) { ?>
-			<?= $enderecoSession->logradouro ?><br />
-			CEP: <?= StringUtil::formataCep($enderecoSession->cep) ?><br />
-			<?= $enderecoSession->bairro ?> - <?= $enderecoSession->bairro->cidade ?>
-		    <? } else { ?>
-    		    <select id="endereco_cliente" name="endereco_cliente" style="width:195px; margin-left:3px;">
-			    <? if($enderecoSession){
-                                foreach($enderecoSession as $es){ ?>
-                                    <option value="<?= $es->bairro_id ?>"><?= $es->bairro->nome ?></option>
-                            <? }
-                            }?>
+                    <select id="endereco_cliente" name="endereco_cliente" style="width:195px; margin-left:3px;">
+		    <? if ($enderecoSession->consumidor) { 
+                            foreach($enderecoSession->consumidor->enderecos as $end){
+                                $sel = "";
+                                if($_POST['end_id']){
+                                    if($_POST['end_id']==$end->id){
+                                        $sel="selected";
+                                    }
+                                }
+                    ?>
+                            <option value="<?= $end->id ?>_<?= $end->bairro_id ?>" <?= $sel ?>><?= $end->logradouro ?> - <?= $end->bairro ?> | <?= $end->bairro->cidade ?></option>
+		    <? }
+                    }else{ ?>
+                        <option value="<?= $enderecoSession->id ?>_<?= $enderecoSession->bairro_id ?>"><?= $enderecoSession->logradouro ?> - <?= $enderecoSession->bairro ?> | <?= $enderecoSession->bairro->cidade ?></option>
+                    <? }
+                    ?>
     		    </select>
-		    <? } ?>
+		    
 		</div>
 	    </div>
+            <input type="hidden" name="end_id" id="end_id" value="<?= $end_id ?>">    
 	    <br clear="all" /><br clear="all" />
-	    <form method="post">
-		<? if($paginacao) { ?><input type="hidden" name="page" value="<?= $paginacao->page ?>" /><? } ?>
+	    
+		<? if($paginacao) { ?><input type="hidden" id="page" name="page" value="<?= $paginacao->page ?>" /><? } ?>
 		<div id="busca">
 		    <img src="background/titulo_busca.gif" width="71" height="26" alt="Busca" style="margin-left:12px">
 		    <div style="width:198px; height:25px;  margin-left:10px;">
@@ -74,7 +104,7 @@ if ($enderecoSession) {
 			    <?
 			    if($categorias) {
 				foreach($categorias as $categoria) {
-				    $checked = !$categoriasFiltro || in_array($categoria->id, $categoriasFiltro);
+				    $checked = $categoriasFiltro && in_array($categoria->id, $categoriasFiltro);
 			    ?>
 			    <div style="color:#CC0000; padding-top:5px; padding-left:12px;">
 				<input type="checkbox" class="refino filtro_categoria" id="checkrest_<?= $categoria->id ?>" name="categorias[]" value="<?= $categoria->id ?>" <?= $checked ? 'checked="checked"' : '' ?> /> &nbsp; <?= $categoria->nome ?> (<?= $categoria->count ?>)
