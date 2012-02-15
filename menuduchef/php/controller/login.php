@@ -27,7 +27,7 @@ if (trim($data['email']) && trim($data['senha'])) {
 		break;
 	    case Usuario::$ATENDENTE:
 		$usuario_obj = UsuarioRestaurante::find_by_usuario_id($usuario->id);
-		$redirect = '../../adar';
+		$redirect = '../../painel_pedidos';
                 $_SESSION['sessao_valida'] = 1;
 		break;
 

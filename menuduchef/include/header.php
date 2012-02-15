@@ -8,7 +8,6 @@ foreach ($libDirectoryArray as $directory) {
 }
 
 include_once("{$libDirectory}/config.php");
-include_once("session_vars.php");
 
 if (HttpUtil::isLocalhost()) {
     $baseHref = "http://{$_SERVER['HTTP_HOST']}/menuduchef/";
