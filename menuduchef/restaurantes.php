@@ -13,6 +13,10 @@ if($_POST['end_id']){
     $conditions = 'rab.bairro_id = ' . $enderecoSession->bairro_id;
 }
 
+if($_POST['caixa_filtro']){
+    $conditions .= ' and restaurante.nome like "%' . $_POST['caixa_filtro'] . '%" ';
+}
+
 if($categoriasFiltro) {
     $categoriasToConditions = implode(',', $categoriasFiltro);
     
@@ -24,7 +28,10 @@ if($categoriasFiltro) {
 		and rtt.tiporestaurante_id in (' . $categoriasToConditions . ')
 	)
     ';
+    
+    
 }
+
 
 if ($enderecoSession) {
     $paginacao = new Paginacao('Restaurante', array(
@@ -38,10 +45,10 @@ if ($enderecoSession) {
     if($_POST['end_id']){
         $end = explode("_",$_POST['end_id']);
         $categorias = TipoRestaurante::find_and_count_by_bairro_id($end[1]);
-        $end_id = $end[0];
+        $end_id = $end[0]."_".$end[1];
     }else{
         $categorias = TipoRestaurante::find_and_count_by_bairro_id($enderecoSession->bairro_id);
-        $end_id = $enderecoSession->id;
+        $end_id = $enderecoSession->id."_".$enderecoSession->bairro_id;
     }
 }
 ?>
@@ -53,16 +60,17 @@ if ($enderecoSession) {
         });
         $("#endereco_cliente").change(function(){
             $("#end_id").attr("value",$(this).attr("value"));
+            $("#page").attr("value",1);
             $("form").submit();
         });
     });
 </script>
 <?php include "menu2.php" ?>
-
+<form action="restaurantes" method="post">
 <div id="central" class="span-24">
     <div class="span-6">
 	<div id="barra_esquerda">
-            <form action="restaurantes" method="post">
+            
 	    <div id="seleciona_endereco">
 		<img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
 		<div style="width:198px; height:25px; margin-left:7px;">
@@ -71,7 +79,8 @@ if ($enderecoSession) {
                             foreach($enderecoSession->consumidor->enderecos as $end){
                                 $sel = "";
                                 if($_POST['end_id']){
-                                    if($_POST['end_id']==$end->id){
+                                    $e = explode("_",$_POST['end_id']);
+                                    if($e[0]==$end->id){
                                         $sel="selected";
                                     }
                                 }
@@ -93,7 +102,7 @@ if ($enderecoSession) {
 		<div id="busca">
 		    <img src="background/titulo_busca.gif" width="71" height="26" alt="Busca" style="margin-left:12px">
 		    <div style="width:198px; height:25px;  margin-left:10px;">
-			<input id="caixa_filtro" name="caixa_filtro" type="text" style="float:left; margin: auto 0; width:140px; position:relative;"> 
+			<input id="caixa_filtro" name="caixa_filtro" type="text" style="float:left; margin: auto 0; width:140px; position:relative;" value="<?= $_POST['caixa_filtro'] ?>"> 
 			<input type="image" class="refino" value="submit" id="filtrar" src="background/botao_ok.gif" style="float:right; margin-top:-4px; border:0; width:40px; height:24px; position:relative; cursor:pointer;">                   	    	
 		    </div>
 		</div>
@@ -113,7 +122,7 @@ if ($enderecoSession) {
 			</div>
 		    </div>
 		</div>
-	    </form>
+	    
 	</div>
     </div>
     <div class="span-18 last">
@@ -160,4 +169,5 @@ if ($enderecoSession) {
 	</div>
     </div>
 </div>
+</form>    
 <? include('include/footer.php'); ?>
