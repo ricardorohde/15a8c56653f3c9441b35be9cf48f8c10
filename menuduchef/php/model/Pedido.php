@@ -40,7 +40,7 @@ class Pedido extends ActiveRecord\Model {
 
 		if ($ptp->pedido_tem_produtos_adicionais) {
 		    foreach ($ptp->pedido_tem_produtos_adicionais as $ptpa) {
-			$valor_adicional += $adi->preco;
+			$valor_adicional += $ptpa->preco;
 		    }
 		}
 

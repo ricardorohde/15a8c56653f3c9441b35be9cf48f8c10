@@ -1,6 +1,7 @@
 <?
 include("include/header.php");
 
+
 #$itens = Produto::find_all_by_restaurante_id($_GET['id'], array("order" => "nome asc"));
 if ($enderecoSession) {
     $categorias = RestauranteTemTipoProduto::all(array('conditions' => array('restaurante_id = ?', $_GET['id'])));
@@ -47,6 +48,10 @@ if ($enderecoSession) {
         $('.abreformapagamento').mouseout(function() {
 	    $("#formapagamento").hide();
         });
+        $(".poe_carrinho").click( function(){
+	    idprod = $(this).attr("produto");
+            
+	});
     });
     function poe_no_carrinho(x){
 	conteudo = document.getElementById('carrinho');
@@ -204,7 +209,7 @@ if ($enderecoSession) {
 
 	<div id="box_destaque" class="radios" >
 	    <?
-	    $destaques = Produto::find_by_sql("SELECT * FROM produto WHERE destaque=1 AND ativo=1 ORDER BY rand() LIMIT 3");
+	    $destaques = Produto::find_by_sql("SELECT * FROM produto WHERE destaque=1 AND ativo=1 AND restaurante_id =".$restaurante->id." ORDER BY rand() LIMIT 3");
 	    if ($destaques) {
 		$c = 1;
 		foreach ($destaques as $dest) {
@@ -279,7 +284,10 @@ if ($categorias) {
 				<div style="width:230px; height:21px; float:right;  padding-top:10px;">
 
 				    <div style="float:right; position:relative;">
-					<img src="background/botao_add.gif" width="25" height="21" style="margin:0 8px; cursor:pointer;"/>
+                                        <input type="hidden" id="carda_id_<?= $prod->id ?>" value="<?= $prod->id ?>">
+                                        <input type="hidden" id="carda_nome_<?= $prod->id ?>" value="<?= $prod->nome ?>">
+                                        
+					<img class="poe_carrinho" produto="<?= $prod->id ?>" src="background/botao_add.gif" width="25" height="21" style="margin:0 8px; cursor:pointer;"/>
 				    </div>
 				    <div style="float:right; width:50px; margin-right:19px; height:21px; background:#B2B2B2; border:0;" class="radios">
 				    </div>

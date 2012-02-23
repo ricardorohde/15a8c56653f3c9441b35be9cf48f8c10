@@ -49,6 +49,21 @@ class PedidoTemProduto extends ActiveRecord\Model {
         }
 	$this->preco_unitario = $preco;
     }
+    
+    public function getTotal() {
+	$preco = 0;
+
+        if ($this->pedido_tem_produtos_adicionais) {
+            foreach ($this->pedido_tem_produtos_adicionais as $ptpa) {
+                $preco += $ptpa->preco;
+            }
+        }
+
+        $preco_total = ( ($this->preco_unitario + $preco) * $this->qtd);
+
+
+	return $preco_total;
+    }
 
 }
 
