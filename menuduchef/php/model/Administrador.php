@@ -55,8 +55,14 @@ class Administrador extends ActiveRecord\Model implements UsuarioInterface {
 	$this->usuario->delete();
     }
     
-    public static function all() {
-	return parent::all(array('joins' => 'inner join usuario on  ' . static::$table_name . '.usuario_id = usuario.id', 'order' => 'usuario.nome asc'));
+    public static function all($paramOptions = null) {
+	$options = array('joins' => 'inner join usuario on  ' . static::$table_name . '.usuario_id = usuario.id', 'order' => 'usuario.nome asc');
+	
+	if($paramOptions) {
+	    $options = array_merge($options, $paramOptions);
+	}
+	
+	return parent::all($options);
     }
 
 }

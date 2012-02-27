@@ -18,8 +18,14 @@ class Cidade extends ActiveRecord\Model {
 	return "{$this->nome} - {$this->uf->sigla}";
     }
 
-    public static function all() {
-	return parent::all(array('order' => 'nome asc', 'conditions' => array('ativa' => 1)));
+    public static function all($paramOptions = null) {
+	$options = array('order' => 'nome asc', 'conditions' => array('ativa' => 1));
+	
+	if($paramOptions) {
+	    $options = array_merge($options, $paramOptions);
+	}
+	
+	return parent::all($options);
     }
 
 }

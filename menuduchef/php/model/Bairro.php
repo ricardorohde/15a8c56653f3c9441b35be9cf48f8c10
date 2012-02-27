@@ -24,8 +24,14 @@ class Bairro extends ActiveRecord\Model {
 	return $this->nome;
     }
 
-    public static function all() {
-	return parent::all(array('joins' => 'inner join cidade on  ' . static::$table_name . '.cidade_id = cidade.id', 'order' => 'cidade.nome asc, bairro.nome asc', 'conditions' => 'cidade.ativa = 1'));
+    public static function all($paramOptions = null) {
+	$options = array('joins' => 'inner join cidade on  ' . static::$table_name . '.cidade_id = cidade.id', 'order' => 'cidade.nome asc, bairro.nome asc', 'conditions' => 'cidade.ativa = 1');
+	
+	if($paramOptions) {
+	    $options = array_merge($options, $paramOptions);
+	}
+	
+	return parent::all($options);
     }
 
 }
