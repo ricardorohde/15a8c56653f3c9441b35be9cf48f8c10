@@ -29,7 +29,7 @@ if ($enderecoSession) {
 	$(".down").click( function(){
 	    qual=$(this).attr("qual");
 	    qtd=$("#qtd_"+qual).attr("value");
-	    if(parseInt(qtd)>0){
+	    if(parseInt(qtd)>1){
 		qtd= parseInt(qtd) - 1;
 		$("#qtd_"+qual).attr("value",qtd);
 		$("#qtd2_"+qual).html(qtd);
@@ -50,7 +50,26 @@ if ($enderecoSession) {
         });
         $(".poe_carrinho").click( function(){
 	    idprod = $(this).attr("produto");
-            
+            qtd = $("#qtd_"+idprod).attr("value");
+            obsprod = $("#carda_obs_"+idprod).attr("value");
+            ja_tem_no_carrinho = 0;
+            vetor = document.getElementsByTagName("input");
+            for(var i in vetor){
+                qual = vetor[i].id;
+                qual = qual.split("_");
+                if((qual[0]=="id")&&(qual[1]=="prod")){
+                    if(vetor[i].value==idprod){
+                        obs = document.getElementById("obs_prod_"+qual[2]).value;
+                        
+                        if(obs==obsprod){ //depois acrscente o criterio dos acompanhamentos
+                            ja_tem_no_carrinho = 1;
+                            qtd = parseInt(qtd) + parseInt(document.getElementById("qtd_prod_"+qual[2]).value);
+                            document.getElementById("qtd_prod_"+qual[2]).value = qtd;
+                            document.getElementById("span_qtd_prod_"+qual[2]).innerHTML = qtd+"x";
+                        }
+                    }
+                }
+            }
 	});
     });
     function poe_no_carrinho(x){
@@ -253,9 +272,36 @@ if ($categorias) {
 			$c = 1;
 			foreach ($produtos as $prod) {
 			    ?>   
-			    <div class="produto" <? if ($c % 2 == 1) {
+                            <div id="box_produto_<?= $prod->id ?>" class="produto" <? if ($c % 2 == 1) {
 				echo"style='background:#F0F0F0;'";
 			    } ?>>
+                                
+                               
+                                    <? /*  <div id="div_adicionais_<?= $prod->id ?>" style="background:#EEE; display: absolute; display: block;"><table><tr><td><? 
+                                            
+                                            if($prod->produto_tem_produtos_adicionais){
+                                                $aco = "";
+                                                $ext = "";
+                                                $prodadi = "";
+                                                $prodext = "";
+                                                foreach($prod->produto_tem_produtos_adicionais as $ptpa){
+                                                    if($ptpa->produto_adicional->quantas_unidades_ocupa>0){
+                                                        $aco = "Acompanhamentos:<br/>";
+                                                        $prodadi .= "<input type='checkbox' name='produto!adicional-".$ptpa->produto_adicional->id."-".$prod->id."' value='1' >&nbsp;".$ptpa->produto_adicional->nome."<br/>";
+                                                    }
+                                                    if($ptpa->produto_adicional->quantas_unidades_ocupa==0){
+                                                        $ext = "Por&ccedil;&otilde;es extras:<br/>";
+                                                        $prodext .= "<input type='checkbox' name='produto!adicional-".$ptpa->produto_adicional->id."-".$prod->id."' value='1' >&nbsp;".$ptpa->produto_adicional->nome."<br/>";
+                                                    }
+                                                }
+                                                echo $aco;
+                                                echo $prodadi;
+                                                echo "</td><td>";
+                                                echo $ext;
+                                                echo $prodext;
+                                            }                                      
+                                                 ?></td></tr></table></div> */ ?>
+                                
 				<div class="titulo_produto">
 		<?= $prod->nome ?>
 				</div>
@@ -266,7 +312,7 @@ if ($categorias) {
 					    <img src="background/seta_down.gif" class="down" qual="<?= $prod->id ?>" width="10" height="10" style="cursor:pointer" />
 					</div>
 					<div style="float:right; margin:0 3px;">
-					    <input type="hidden" value="0" name="qtd_<?= $prod->id ?>" id="qtd_<?= $prod->id ?>" /><div id="qtd2_<?= $prod->id ?>">0</div>
+					    <input type="hidden" value="1" name="qtd_<?= $prod->id ?>" id="qtd_<?= $prod->id ?>" /><div id="qtd2_<?= $prod->id ?>">1</div>
 					</div> 
 					<div style="float:right">
 					    <img src="background/seta_up.gif" class="up" qual="<?= $prod->id ?>" width="10" height="10" style="cursor:pointer" />
@@ -289,9 +335,12 @@ if ($categorias) {
                                         
 					<img class="poe_carrinho" produto="<?= $prod->id ?>" src="background/botao_add.gif" width="25" height="21" style="margin:0 8px; cursor:pointer;"/>
 				    </div>
-				    <div style="float:right; width:50px; margin-right:19px; height:21px; background:#B2B2B2; border:0;" class="radios">
+				    <div style="float:right; width:50px; margin-right:19px; height:21px; background:#B2B2B2; border:0;" class="radios" onclick="show('carda_obs_<?= $prod->id ?>')">
 				    </div>
-				</div>      
+				</div> 
+                                <div id="obs_box_<?= $prod->id ?>">
+                                    <textarea id="carda_obs_<?= $prod->id ?>" style="width:300px; height:40px; display:none;"></textarea>
+                                </div>
 			    </div>
 			<?
 			$c++;

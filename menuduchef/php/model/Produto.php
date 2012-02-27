@@ -18,7 +18,7 @@ class Produto extends ActiveRecord\Model {
 	array('pedido_tem_produtos_adicionais', 'class_name' => 'PedidoTemProdutoAdicional'),
 	array('produto_tem_tipos'),
 	array('tipos', 'through' => 'produto_tem_tipos', 'class_name' => 'TipoProduto'),
-	array('produto_tem_produtos_adicionais', 'class_name' => 'ProdutoTemProdutoAdicional'),
+	array('produto_tem_produtos_adicionais', "foreign_key" => "produto_id", 'class_name' => 'ProdutoTemProdutoAdicional'),
 	array('produtos_adicionais', 'through' => 'produto_tem_produtos_adicionais', 'class_name' => 'ProdutoAdicional')
     );
     static $validates_presence_of = array(
