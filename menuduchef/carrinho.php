@@ -8,6 +8,13 @@
     <div id="movi">
 	<div id="aba_carrinho">
 	    <div id="topo_carrinho">
+                <div id="total_carrinho"><?
+                                if($pedido){
+                                    echo StringUtil::doubleToCurrency($pedido->getTotal() + $rxb->preco_entrega);
+                                }else{
+                                    echo StringUtil::doubleToCurrency($rxb->preco_entrega);
+                                }
+                            ?></div>
 		<img src="background/carrinho.png" width="31" height="23" style="position:absolute; z-index:6; top:6px; left:81px;">
 	    </div> 
 	</div>
@@ -21,16 +28,17 @@
 	    <img src="background/logo_pq.png" width="56" height="54" style="position:absolute; z-index:4; left:150px; top:2px;" />
 	    <div id="info_pedido">
 		<div style="width:200px; height:18px; padding-top:5px; float:left;" >
-		    Sub-total:<div style="color:#EE646B; display:inline"> <?
+		    Sub-total:<div id="subtotal_carrinho" style="color:#EE646B; display:inline"> <?
                                 if($pedido){
                                     echo StringUtil::doubleToCurrency($pedido->getTotal());
                                 }
                             ?></div>
 		</div>
 		<div style="width:200px; height:18px; float:left;" >
-		    Frete:<div style="color:#EE646B; display:inline"><? 
-                        //echo StringUtil::doubleToCurrency($pedido->getTotal());      
+		    Frete:<div style="color:#EE646B; display:inline"> <? 
+                        echo StringUtil::doubleToCurrency($rxb->preco_entrega);      
                     ?></div>
+                    <input type="hidden" id="taxa_de_entrega" value="<?= $rxb->preco_entrega ?>">
 		</div>
 		<div style="width:200px; height:18px; float:left;" >
 		    Desconto:<div style="color:#EE646B; display:inline"> R$0</div>
@@ -55,8 +63,9 @@
                                         <input type="hidden" id="qtd_prod_<?= $count ?>" name="qtd_prod_<?= $count ?>" value="<?= $prod->qtd ?>">
 
                                         <?= $prod->produto->nome ?>
-                                        <input type="hidden" id="id_prod_<?= $count ?>" name="id_prod_<?= $count ?>" value="<?= $prod->produto_id ?>">
-                                        <div style="float:right;"><?= StringUtil::doubleToCurrency($prod->getTotal()) ?></div>
+                                        <input type="hidden" id="id_prod_<?= $count ?>" name="id_prod_<?= $count ?>" class="lista_carrinho" value="<?= $prod->produto_id ?>">
+                                        <div id="div_preco_prod_<?= $count ?>" style="float:right;"><?= StringUtil::doubleToCurrency($prod->getTotal()) ?></div>
+                                        <input type="hidden" id="preco_prod_<?= $count ?>" value="<?= $prod->getTotal() ?>" >
                                     </div>
                                     <? 
                                         if($prod->pedido_tem_produtos_adicionais){
@@ -84,7 +93,9 @@
                             $count++;
                         }
                     }
+                    
                 ?>
+                <input type="hidden" id="contador_itens" value="<?= $count ?>" >
 	    </div>
         </div>
     </div>

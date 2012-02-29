@@ -6,13 +6,68 @@ include("include/header.php");
 if ($enderecoSession) {
     $categorias = RestauranteTemTipoProduto::all(array('conditions' => array('restaurante_id = ?', $_GET['id'])));
     $restaurante = Restaurante::find($_GET['id']);
-    $resxbai = RestauranteAtendeBairro::all(array('conditions' => array('restaurante_id = ? and bairro_id=?', $_GET['id'], $enderecoSession->bairro_id)));
+    $rxb = RestauranteAtendeBairro::find(array('conditions' => array('restaurante_id = ? and bairro_id=?', $_GET['id'], $enderecoSession->bairro_id)));
 }
 ?>
+<script>
+    var allHTMLTags = new Array();
+    var selectedElements = new Array();
+    function getElementByClass(theClass) {
+        var allHTMLTags=document.getElementsByTagName("*");
+        for (i=0; i<allHTMLTags.length; i++) {
+            if (allHTMLTags[i].className==theClass) {
+                selectedElements.push(allHTMLTags[i]);
+            }
+        }
+        return selectedElements;
+    }
+    
+    function number_format( number, decimals, dec_point, thousands_sep ) {
+        // %        nota 1: Para 1000.55 retorna com precisão 1 no FF/Opera é 1,000.5, mas no IE é 1,000.6
+        // *     exemplo 1: number_format(1234.56);
+        // *     retorno 1: '1,235'
+        // *     exemplo 2: number_format(1234.56, 2, ',', ' ');
+        // *     retorno 2: '1 234,56'
+        // *     exemplo 3: number_format(1234.5678, 2, '.', '');
+        // *     retorno 3: '1234.57'
+        // *     exemplo 4: number_format(67, 2, ',', '.');
+        // *     retorno 4: '67,00'
+        // *     exemplo 5: number_format(1000);
+        // *     retorno 5: '1,000'
+        // *     exemplo 6: number_format(67.311, 2);
+        // *     retorno 6: '67.31'
 
+        var n = number, prec = decimals;
+        n = !isFinite(+n) ? 0 : +n;
+        prec = !isFinite(+prec) ? 0 : Math.abs(prec);
+        var sep = (typeof thousands_sep == "undefined") ? ',' : thousands_sep;
+        var dec = (typeof dec_point == "undefined") ? '.' : dec_point;
+
+        var s = (prec > 0) ? n.toFixed(prec) : Math.round(n).toFixed(prec); //fix for IE parseFloat(0.55).toFixed(0) = 0;
+
+        var abs = Math.abs(n).toFixed(prec);
+        var _, i;
+
+        if (abs >= 1000) {
+            _ = abs.split(/\D/);
+            i = _[0].length % 3 || 3;
+
+            _[0] = s.slice(0,i + (n < 0)) +
+                  _[0].slice(i).replace(/(\d{3})/g, sep+'$1');
+
+            s = _.join(dec);
+        } else {
+            s = s.replace('.', dec);
+        }
+
+        return s;
+    }
+</script>
 <script>
 
     $(document).ready(function() {
+        contador = 0; //usado pra impedir que o vetor com a lista de pedidos do carrinho se repita
+        
 	$("#ver_completo").click( function(){
 	    $(".filtro_categoria").attr("checked","true");
 	    $(".categoria").show();
@@ -51,27 +106,81 @@ if ($enderecoSession) {
         $(".poe_carrinho").click( function(){
 	    idprod = $(this).attr("produto");
             qtd = $("#qtd_"+idprod).attr("value");
+            nome = $("#carda_nome_"+idprod).attr("value");
             obsprod = $("#carda_obs_"+idprod).attr("value");
             ja_tem_no_carrinho = 0;
-            vetor = document.getElementsByTagName("input");
+            alvo = "";
+            valor_total = 0; //esse é o valor de todos os itens somados, que da o total la do carrinho
+            taxa_entrega = parseInt($("#taxa_de_entrega").attr("value"));
+            
+            if(contador==0){
+                vetor = getElementByClass("lista_carrinho");
+                contador++;
+            }
+            
             for(var i in vetor){
                 qual = vetor[i].id;
-                qual = qual.split("_");
-                if((qual[0]=="id")&&(qual[1]=="prod")){
-                    if(vetor[i].value==idprod){
-                        obs = document.getElementById("obs_prod_"+qual[2]).value;
-                        
-                        if(obs==obsprod){ //depois acrscente o criterio dos acompanhamentos
-                            ja_tem_no_carrinho = 1;
-                            qtd = parseInt(qtd) + parseInt(document.getElementById("qtd_prod_"+qual[2]).value);
-                            document.getElementById("qtd_prod_"+qual[2]).value = qtd;
-                            document.getElementById("span_qtd_prod_"+qual[2]).innerHTML = qtd+"x";
+                if(qual.substr(0,7)=="id_prod"){
+                    qual = qual.split("_");
+                    if((qual[0]=="id")&&(qual[1]=="prod")){
+                        if(vetor[i].value==idprod){
+                            obs = document.getElementById("obs_prod_"+qual[2]).value;
+
+                            if(obs==obsprod){ //depois acrscente o criterio dos acompanhamentos
+                                ja_tem_no_carrinho = 1;
+                                alvo = qual[2];
+                            }
                         }
+                        valor_total += parseInt(document.getElementById("preco_prod_"+qual[2]).value);
                     }
                 }
             }
+
+            preco = obter_preco(idprod);
+            
+            if(ja_tem_no_carrinho==0){
+                numero = parseInt(document.getElementById("contador_itens").value);
+                document.getElementById("contador_itens").value = numero + 1;
+                item_no_carrinho = '<div id="produto_box_'+numero+'" style="margin:5px;">';
+                item_no_carrinho += '<div><span id="span_qtd_prod_'+numero+'">'+qtd+'x</span>';
+                item_no_carrinho += '<input type="hidden" id="qtd_prod_'+numero+'" name="qtd_prod_'+numero+'" value="'+qtd+'">';
+                item_no_carrinho += nome;                        
+                item_no_carrinho += '<input type="hidden" id="id_prod_'+numero+'" name="id_prod_'+numero+'" class="lista_carrinho" value="'+idprod+'">';
+                preco *= qtd;
+                item_no_carrinho += '<div id="div_preco_prod_'+numero+'" style="float:right;">R$ '+number_format(preco, 2, ',', '.')+'</div>';
+                item_no_carrinho += '<input type="hidden" id="preco_prod_'+numero+'" value="'+preco+'" >';
+                item_no_carrinho += '</div>';
+                
+                item_no_carrinho += '<div>';
+                item_no_carrinho += '<span  style="font-size:10px;" id="span_obs_prod_'+numero+'">'+obsprod+'</span>';
+                item_no_carrinho += '<input type="hidden" id="obs_prod_'+numero+'" name="obs_prod_'+numero+'" value="'+obsprod+'">';
+                item_no_carrinho += '</div>';
+
+                item_no_carrinho += '</div>';
+                $('#campo_pedido_detalhado').append($(item_no_carrinho));
+                
+                delete vetor;
+                vetor = getElementByClass("lista_carrinho");
+                
+                valor_total += preco;
+            }else{
+                qtd_ = parseInt(qtd) + parseInt(document.getElementById("qtd_prod_"+alvo).value);
+                valor_total += (qtd * preco);
+                preco *= qtd_;
+                document.getElementById("qtd_prod_"+alvo).value = qtd_;
+                document.getElementById("span_qtd_prod_"+alvo).innerHTML = qtd_+"x";
+                document.getElementById("div_preco_prod_"+alvo).innerHTML = "R$ "+number_format(preco, 2, ',', '.');
+                document.getElementById("preco_prod_"+alvo).value = preco;
+            }
+            document.getElementById("subtotal_carrinho").innerHTML = "R$ "+number_format(valor_total, 2, ',', '.');
+            document.getElementById("total_carrinho").innerHTML = "R$ "+number_format((valor_total + taxa_entrega), 2, ',', '.');
 	});
     });
+    function obter_preco(x){
+        preco = document.getElementById("carda_preco_"+x).value;
+        return preco;
+        //acrescente os produtos adicionais depois
+    }
     function poe_no_carrinho(x){
 	conteudo = document.getElementById('carrinho');
 	produto = document.getElementById('nome_'+x).value;
@@ -193,11 +302,9 @@ if ($enderecoSession) {
 
 		</div>
 		<div id="tempo_entrega">Tempo de entrega:<img src="background/relogio.gif" width="20" height="19" style="position:relative; top:6px; left:4px;">&nbsp;&nbsp;&nbsp;<?
-		    if ($resxbai) {
-			foreach ($resxbai as $rxb) {
-			    echo $rxb->tempo_entrega . "min";
-			}
-		    }
+		    
+                        echo $rxb->tempo_entrega . "min";
+			
 		    ?> 
 		</div>
 	    </div>
@@ -320,7 +427,8 @@ if ($categorias) {
 				    </div>
 
 				    <div class="preco_produto" ><?= StringUtil::doubleToCurrency($prod->preco) ?>
-				    </div> 
+				    </div>
+                                    <input type="hidden" id="carda_preco_<?= $prod->id ?>" value="<?= $prod->preco ?>">
 				</div>
 
 				<div class="texto_produto">

@@ -5,10 +5,14 @@ $data = HttpUtil::getParameterArray();
 
 $page = $data['page'] ? : 1;
 $categoriasFiltro = $data['categorias'];
+unset($_SESSION['pedido_id']); //variavel criada por Paulo
 
-if($_POST['end_id']){
+if($_POST['end_id']){ //essa variavel "end_id" guarda o id do ENDERECO e do BAIRRO, separados por um _
     $end = explode("_",$_POST['end_id']);
     $conditions = 'rab.bairro_id = ' . ((int)$end[1]);
+    
+    $dados_end = EnderecoConsumidor::find($end[0]);
+    $_SESSION['endereco'] = serialize($dados_end);
 }else{
     $conditions = 'rab.bairro_id = ' . $enderecoSession->bairro_id;
 }
