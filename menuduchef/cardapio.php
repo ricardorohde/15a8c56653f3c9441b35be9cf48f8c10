@@ -2,17 +2,80 @@
 include("include/header.php");
 
 
-#$itens = Produto::find_all_by_restaurante_id($_GET['id'], array("order" => "nome asc"));
+//$itens = Produto::find_all_by_restaurante_id($_GET['id'], array("order" => "nome asc"));
 if ($enderecoSession) {
     $categorias = RestauranteTemTipoProduto::all(array('conditions' => array('restaurante_id = ?', $_GET['id'])));
     $restaurante = Restaurante::find($_GET['id']);
     $rxb = RestauranteAtendeBairro::find(array('conditions' => array('restaurante_id = ? and bairro_id=?', $_GET['id'], $enderecoSession->bairro_id)));
 }
+
+if($_POST){
+    if($_POST['action']=='finaliza_carrinho'){
+        echo "<script>alert('fifi')</script>";
+        $de_buenas = 1;
+        foreach($_POST as $key => $valor){
+            if(substr($key,0,9)=="qtd_prod_"){
+                if($valor<1){
+                    $de_buenas = 0;
+                }
+            }
+        }
+        if($de_buenas){
+            echo "<script>alert('debubu')</script>";
+            if($_SESSION['pedido_id']){
+                $idped = $_SESSION['pedido_id'];
+                $prods=PedidoTemProduto::all(array("conditions"=>array("pedido_id = ?",$idped)));
+                foreach($prods as $prod){
+                    $prod->delete();
+                }
+            }else{
+                echo "<script>alert('cricri')</script>";
+                $data['consumidor_id'] = $consumidorSession->id;
+                $data['restaurante_id'] = $restaurante->id;
+                $data['forma_pagamento'] = "";
+                $data['troco'] = 0;
+                $data['cupom'] = "";
+                $data['endereco'] = "";
+                $data['situacao'] = "";
+                $data['pagamento_efetuado'] = 0;
+                $data['preco_entrega'] = $rxb->preco_entrega;
+                
+                $ped = new Pedido($data);
+                $ped->save();
+                var_dump($ped);
+                $idped = $ped->id;
+                
+                echo "<br/><br/>".$idped;
+            }
+            foreach($_POST as $key => $valor){
+                if(substr($key,0,8)=="id_prod_"){
+                    $quebra = explode("_",$key);
+                    $prod=Produto::find(array("conditions"=>array("restaurante_id = ? AND id = ?",$restaurante->id,$quebra[2])));
+                    if($prod){
+                        $data2['pedido_id'] = $idped;
+                        $data2['produto_id'] = $prod->id;
+                        $data2['qtd'] = $_POST['qtd_prod_'.$quebra[2]];
+                        $data2['obs'] = $_POST['obs_prod_'.$quebra[2]];
+                        $data2['tamanho'] = "";
+                        $data2['produto_id2'] = 0;
+                        $data2['produto_id3'] = 0;
+                        $data2['produto_id4'] = 0;
+                        $data2['preco_unitario'] = $_POST['qtd_prod_'.$quebra[2]];
+                        
+                        $pro = new PedidoTemProduto($data2);
+                        $pro->save();
+                    }
+                }
+            }     
+        }
+    }
+}
 ?>
 <script>
-    var allHTMLTags = new Array();
-    var selectedElements = new Array();
+    
     function getElementByClass(theClass) {
+        var allHTMLTags = new Array();
+        var selectedElements = new Array();
         var allHTMLTags=document.getElementsByTagName("*");
         for (i=0; i<allHTMLTags.length; i++) {
             if (allHTMLTags[i].className==theClass) {
@@ -113,10 +176,7 @@ if ($enderecoSession) {
             valor_total = 0; //esse é o valor de todos os itens somados, que da o total la do carrinho
             taxa_entrega = parseInt($("#taxa_de_entrega").attr("value"));
             
-            if(contador==0){
-                vetor = getElementByClass("lista_carrinho");
-                contador++;
-            }
+            vetor = getElementByClass("lista_carrinho");
             
             for(var i in vetor){
                 qual = vetor[i].id;
@@ -131,6 +191,7 @@ if ($enderecoSession) {
                                 alvo = qual[2];
                             }
                         }
+                        
                         valor_total += parseInt(document.getElementById("preco_prod_"+qual[2]).value);
                     }
                 }
@@ -142,13 +203,14 @@ if ($enderecoSession) {
                 numero = parseInt(document.getElementById("contador_itens").value);
                 document.getElementById("contador_itens").value = numero + 1;
                 item_no_carrinho = '<div id="produto_box_'+numero+'" style="margin:5px;">';
+                item_no_carrinho += '<div onclick=\'destroi_box("'+numero+'")\'>X</div>';
                 item_no_carrinho += '<div><span id="span_qtd_prod_'+numero+'">'+qtd+'x</span>';
                 item_no_carrinho += '<input type="hidden" id="qtd_prod_'+numero+'" name="qtd_prod_'+numero+'" value="'+qtd+'">';
                 item_no_carrinho += nome;                        
                 item_no_carrinho += '<input type="hidden" id="id_prod_'+numero+'" name="id_prod_'+numero+'" class="lista_carrinho" value="'+idprod+'">';
                 preco *= qtd;
                 item_no_carrinho += '<div id="div_preco_prod_'+numero+'" style="float:right;">R$ '+number_format(preco, 2, ',', '.')+'</div>';
-                item_no_carrinho += '<input type="hidden" id="preco_prod_'+numero+'" value="'+preco+'" >';
+                item_no_carrinho += '<input type="hidden" id="preco_prod_'+numero+'"  class="preco_carrinho" value="'+preco+'" >';
                 item_no_carrinho += '</div>';
                 
                 item_no_carrinho += '<div>';
@@ -157,10 +219,8 @@ if ($enderecoSession) {
                 item_no_carrinho += '</div>';
 
                 item_no_carrinho += '</div>';
-                $('#campo_pedido_detalhado').append($(item_no_carrinho));
                 
-                delete vetor;
-                vetor = getElementByClass("lista_carrinho");
+                $('#campo_pedido_detalhado').append($(item_no_carrinho));
                 
                 valor_total += preco;
             }else{
@@ -176,25 +236,31 @@ if ($enderecoSession) {
             document.getElementById("total_carrinho").innerHTML = "R$ "+number_format((valor_total + taxa_entrega), 2, ',', '.');
 	});
     });
+    function destroi_box(x){
+        qual = document.getElementById("produto_box_"+x);
+        carrinho = document.getElementById("campo_pedido_detalhado");
+        carrinho.removeChild(qual);
+        
+        valor_total = 0;
+        taxa_entrega = parseInt($("#taxa_de_entrega").attr("value"));
+ 
+        vet = getElementByClass("preco_carrinho");
+        
+        for(var i in vet){
+            preco = vet[i].value;
+            valor_total += parseInt(preco);
+        }
+        
+        document.getElementById("subtotal_carrinho").innerHTML = "R$ "+number_format(valor_total, 2, ',', '.');
+        document.getElementById("total_carrinho").innerHTML = "R$ "+number_format((valor_total + taxa_entrega), 2, ',', '.'); 
+    }
+    function passa_etapa(){
+        $("#form_carrinho").submit();
+    }
     function obter_preco(x){
         preco = document.getElementById("carda_preco_"+x).value;
         return preco;
         //acrescente os produtos adicionais depois
-    }
-    function poe_no_carrinho(x){
-	conteudo = document.getElementById('carrinho');
-	produto = document.getElementById('nome_'+x).value;
-	idprod = document.getElementById('idprod_'+x).value;
-	qtdprod = document.getElementById('qtdprod_'+x).value;
-	obsprod = document.getElementById('obsbox_'+x).value;
-    
-	conteudo.innerHTML += "<div>";
-	conteudo.innerHTML += "<input type='hidden' id='idprod_carrinho_"+idprod+"' value='"+idprod+"'>";
-	conteudo.innerHTML += "<input type='hidden' id='qtdprod_carrinho_"+idprod+"' value='"+qtdprod+"'>";
-	conteudo.innerHTML += "<input type='hidden' id='obsprod_carrinho_"+idprod+"' value='"+obsprod+"'>";
-	conteudo.innerHTML += qtdprod+"x "+produto+"<br/>";
-	conteudo.innerHTML += obsprod;
-	conteudo.innerHTML += "</div>";
     }
     function show(x){
 	oque = document.getElementById(x);
@@ -465,5 +531,8 @@ if ($categorias) {
 
     </div>
 </div>
+<form id="form_carrinho" action="" method="post">
+    <input type="hidden" name="action" id="action" value="finaliza_carrinho">
 <?php include "carrinho.php" ?>
+</form>    
 <? include("include/footer.php"); ?>

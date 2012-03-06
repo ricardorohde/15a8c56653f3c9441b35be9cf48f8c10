@@ -1,14 +1,15 @@
 <?
-    $_SESSION['pedido_id'] = 3;
+    
     if(isset($_SESSION['pedido_id'])){
         $pedido = Pedido::find($_SESSION['pedido_id']);
     }
 ?>
-<div id="carrinho">
+
+<div id="carrinho" >
     <div id="movi">
 	<div id="aba_carrinho">
 	    <div id="topo_carrinho">
-                <div id="total_carrinho"><?
+                <div id="total_carrinho" onclick="passa_etapa()"><?
                                 if($pedido){
                                     echo StringUtil::doubleToCurrency($pedido->getTotal() + $rxb->preco_entrega);
                                 }else{
@@ -58,6 +59,7 @@
                         foreach($pedido->pedido_tem_produtos as $prod){
                             ?>
                                 <div id="produto_box_<?= $count ?>" style="margin:5px;">
+                                    <div onclick="destroi_box('<?= $count ?>')">X</div>
                                     <div>
                                         <span id="span_qtd_prod_<?= $count ?>"><?= $prod->qtd ?>x</span>
                                         <input type="hidden" id="qtd_prod_<?= $count ?>" name="qtd_prod_<?= $count ?>" value="<?= $prod->qtd ?>">
@@ -65,7 +67,7 @@
                                         <?= $prod->produto->nome ?>
                                         <input type="hidden" id="id_prod_<?= $count ?>" name="id_prod_<?= $count ?>" class="lista_carrinho" value="<?= $prod->produto_id ?>">
                                         <div id="div_preco_prod_<?= $count ?>" style="float:right;"><?= StringUtil::doubleToCurrency($prod->getTotal()) ?></div>
-                                        <input type="hidden" id="preco_prod_<?= $count ?>" value="<?= $prod->getTotal() ?>" >
+                                        <input type="hidden" id="preco_prod_<?= $count ?>" class="preco_carrinho" value="<?= $prod->getTotal() ?>" >
                                     </div>
                                     <? 
                                         if($prod->pedido_tem_produtos_adicionais){
