@@ -43,6 +43,12 @@ if($_POST){
                 $ped = new Pedido($data);
                 $ped->save();
                 var_dump($ped);
+		
+		if($ped->is_invalid()) {
+		    HttpUtil::showErrorMessages($ped->errors->full_messages());
+		    HttpUtil::redirect($_SERVER['REQUEST_URI']);
+		}
+		
                 $idped = $ped->id;
                 
                 echo "<br/><br/>".$idped;
