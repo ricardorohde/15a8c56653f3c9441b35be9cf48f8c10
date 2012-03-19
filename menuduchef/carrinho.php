@@ -9,7 +9,7 @@
     <div id="movi">
 	<div id="aba_carrinho">
 	    <div id="topo_carrinho">
-                <div id="total_carrinho" onclick="passa_etapa()"><?
+                <div id="total_carrinho"><?
                                 if($pedido){
                                     echo StringUtil::doubleToCurrency($pedido->getTotal() + $rxb->preco_entrega);
                                 }else{
@@ -73,16 +73,17 @@
                                         if($prod->pedido_tem_produtos_adicionais){
                                             $counta = 0;
                                             foreach($prod->pedido_tem_produtos_adicionais as $adi){
-                                                if($counta>0){
-                                                    echo ", ";
-                                                }
-                                              ?>
-                                                    <span style="font-size:10px;" id="span_adi_prod_<?= $count ?>_<?= $counta ?>">
-                                                        <?= $adi->produto_adicional->nome ?>
-                                                        <input type="hidden" id="adi_prod_<?= $count ?>_<?= $counta ?>" name="adi_prod_<?= $count ?>_<?= $counta ?>" value="<?= $adi->pedidotemproduto_id ?>">
-                                                    </span>
-                                              <?
-                                                $counta++;
+                                                  if($counta>0){
+                                                      echo ", ";
+                                                  }
+                                                  ?>
+                                                        <span style="font-size:10px;" id="span_adi_prod_<?= $count ?>_<?= $counta ?>">
+                                                            <?= $adi->produto_adicional->nome ?>
+                                                            <input type="hidden" class="adi_prod_nome_<?= $count ?>" id="adi_prod_nome_<?= $count ?>_<?= $counta ?>" value="<?= $adi->produto_adicional->nome ?>"> 
+                                                            <input type="hidden" class="adi_prod_<?= $count ?>" id="adi_prod_<?= $count ?>_<?= $counta ?>" name="adi_prod_<?= $count ?>_<?= $counta ?>" value="<?= $adi->produtoadicional_id ?>">
+                                                        </span>
+                                                  <?
+                                                  $counta++;
                                             }
                                         }
                                     ?>
@@ -90,6 +91,53 @@
                                         <span  style="font-size:10px;" id="span_obs_prod_<?= $count ?>"><?= $prod->obs ?></span>
                                         <input type="hidden" id="obs_prod_<?= $count ?>" name="obs_prod_<?= $count ?>" value="<?= $prod->obs ?>">
                                     </div>
+                                    <div>
+                                        <?
+                                            
+                                            /*
+                                            if($prod->pedido_tem_produtos_adicionais){
+                                                $countad = 0;
+                                                foreach($prod->pedido_tem_produtos_adicionais as $aaa){
+                                                    if($countad>0){
+                                                        for($i=0;$i<sizeof($vetor_acomp);$i++){
+                                                            $quebra = explode("~~",$vetor_acomp[$i]);
+                                                            
+                                                            if($quebra[1]==$aaa->produto_adicional->nome){
+                                                                $num = (int)$quebra[0];
+                                                                $num++;
+                                                                $vetor_acomp[$i] = $num."~~".$quebra[1];
+                                                                //echo $vetor_acomp[$i];
+                                                            }else{
+                                                                $vetor_acomp[$countad] = "1~~".$aaa->produto_adicional->nome;
+                                                                $countad++;
+                                                                //echo $vetor_acomp[$i];
+                                                            }
+                                                        }
+                                                    }else{
+                                                        $vetor_acomp[$countad] = "1~~".$aaa->produto_adicional->nome;
+                                                        $countad++;
+                                                    }
+                                                }
+                                                $countad = 0;
+                                                $acomps = "";
+                                                for($i=0;$i<sizeof($vetor_acomp);$i++){
+                                                    echo $vetor_acamp[$i]."!";
+                                                    if($countad==0){
+                                                        $acomps .= $vetor_acamp[$i];
+                                                    }else{
+                                                        $acomps .= ", ".$vetor_acamp[$i];
+                                                    }
+                                                    $countad++;
+                                                }
+                                                ?>
+                                                    <span style="font-size:10px;" id="span_acomp_prod_<?= $count ?>"><?= $acomps ?></span>
+                                                    <input type="hidden" id="acomp_prod_<?= $count ?>" name="acomp_prod_<?= $count ?>" value="<?= $prod->obs ?>">
+                                                <?
+                                            }
+                                            unset($vetor_acomps); */
+                                        ?>
+                                        
+                                    </div>    
                                 </div>
                             <?
                             $count++;
@@ -99,6 +147,7 @@
                 ?>
                 <input type="hidden" id="contador_itens" value="<?= $count ?>" >
 	    </div>
+            <img src="background/finalizar_car.png" onclick="passa_etapa()" style="width:198px; height:26px; position:relative; float:left; margin-left:6px;">
         </div>
     </div>
 

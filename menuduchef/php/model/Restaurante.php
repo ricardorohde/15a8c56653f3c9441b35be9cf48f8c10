@@ -231,7 +231,7 @@ class Restaurante extends ActiveRecord\Model {
         if ($this->categoria_personalizada) {
             return $this->categoria_personalizada;
         } else {
-            $cats = RestauranteTemTipo::find_by_sql("SELECT TR.* FROM restaurante_tem_tipo RTT INNER JOIN tipo_restaurante TR ON RTT.tiporestaurante_id = TR.id WHERE RTT.restaurante_id = " . $this->id . " ORDER BY TR.nome desc");
+            $cats = RestauranteTemTipo::find_by_sql("SELECT TR.* FROM restaurante_tem_tipo RTT INNER JOIN tipo_restaurante TR ON RTT.tiporestaurante_id = TR.id WHERE RTT.restaurante_id = " . $this->id . " ORDER BY TR.nome desc LIMIT 1");
             if ($cats) {
                 if (sizeof($cats) == 1) {
                     foreach ($cats as $cat) {

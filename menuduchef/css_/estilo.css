@@ -52,8 +52,8 @@ a:hover{color:#CCC}
 	
 #login{
 	height:63px;
-	width:200px;
-	padding-left:18px;
+	width:180px;
+	padding-left:38px;
 	float:right;
 	}
 	
@@ -208,8 +208,8 @@ a:hover{color:#CCC}
 #rest_titulo{
 	width:180px; 
 	float:left;
-	font:Arial; 
-	font-size:29px; 
+	font-family:Arial; 
+	font-size:29px;
 	color:#E51B21;
 	font-weight:normal;
 	}
@@ -347,6 +347,7 @@ a:hover{color:#CCC}
 /* Cardapio */ 
 
 #info_restaurante{
+	position:relative;
 	width:172px; 
 	height:250px; 
 	margin-top:96px; 
@@ -595,7 +596,7 @@ a:hover{color:#CCC}
 	
 #campo_pedido_detalhado{
 	width:200px; 
-	height:260px; 
+	height:228px; 
 	margin:5px; 
 	background:#FFF; 
 	opacity:0.65;
@@ -677,7 +678,6 @@ a:hover{color:#CCC}
 	
 /*Pagamento*/
 #box_pedido{
-	background-color:;
 	width:674px; 
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
@@ -745,3 +745,196 @@ label { font-size:12px; font-family: Arial, Helvetica, sans-serif; color:#666; d
 .campo { width:220px; height:26px; margin-bottom: 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#FF9930; } 
 #botao_enviar{width:36px; height:26px; border:2px Solid #F04047; background:#F04047; font-size:16px; font-weight:bold; margin-top:1px; color:#FFF; cursor:pointer;}  
 	
+
+/*Dados usuário*/
+#dados_cliente{
+	position:relative;
+	width:172px; 
+	height:31px; 
+	}
+
+.desloca{
+	cursor:pointer;
+	}
+	
+.exc{ border:#FFF solid 1px; text-align:center; background:#CCC; color:#FFF; cursor:pointer }
+.alt{ color:#FF9930; cursor:pointer; text-align:center; }	
+
+/*Gerente*/
+
+#gerente_menu{
+	background: url(../background/gerente_menu.jpg);
+	width:514px;
+	height:63px;
+	float:right;
+	}
+	
+/*Gerente - cardapio */
+
+.titulo_cat{
+	font-family:arial; 
+	color:#E51B21; 
+	font-size:17px;
+	text-align:center;
+	font-weight:normal;
+	}
+	
+.botoes_cat{
+	width:18px; 
+	height:18px; 
+	float:left; 
+	position:relative;
+	text-align:center;
+	border:#bcbec0 solid 1px;
+	color:#FFF; 
+	cursor:pointer;
+	font-weight:normal;
+	}
+	
+.titulo_item{
+	font-family:arial; 
+	color:#666; 
+	font-size:14px;
+	text-align:center;
+	font-weight:normal;
+	}
+	
+.inp_ger{
+	background:#fff;
+	width:94px;
+	height:18px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0;
+	}
+	
+.sel_ger{
+	background:#fff;
+	width:96px;
+	height:20px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0;
+	}
+	
+/*pop - up*/
+
+#pop-up{
+	box-shadow: 1px 1px 2px #333;
+	-webkit-box-shadow:1px 1px 2px #333;
+    -moz-box-shadow: 1px 1px 2px #333;
+	position:absolute;
+	margin:0 auto;
+	width:564px;
+	background:#f1f1f2;
+	-moz-border-radius:8px; 
+	-webkit-border-radius:8px;
+	border:0;
+	padding:20px;
+	font-family:Arial, Helvetica, sans-serif;
+	}
+	
+.titulo_pop{
+	font-family:arial; 
+	color:#E51B21; 
+	font-size:28px;
+	text-align:center;
+	font-weight:normal;
+	margin-top:24px;
+	}	
+	
+/*Extras*/
+
+.box_extra{
+	width:330px;  
+	float:left; 
+	position:relative;
+	background:#f1f1f2;
+	font-family:Arial;
+	font-size:12px;
+	}
+
+.titulo_extra{
+	font-family:arial; 
+	color:#666; 
+	font-size:13px;
+	text-align:center;
+	font-weight:normal;
+	}
+	
+.inp_ext{
+	background:#fff;
+	width:52px;
+	height:18px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0 auto;
+	}
+	
+/*Principal*/
+
+.inp_pri{
+	background:#fff;
+	width:96px;
+	height:18px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0 auto;
+	}
+	
+/*Acompanhamentos*/
+
+.pop-follow{
+	box-shadow: 1px 1px 2px #333;
+	-webkit-box-shadow:1px 1px 2px #333;
+    -moz-box-shadow: 1px 1px 2px #333;
+	position:absolute;
+	margin:0 auto;
+	width:264px;
+	background:#f1f1f2;
+	-moz-border-radius:8px; 
+	-webkit-border-radius:8px;
+	border:0;
+	padding:20px;
+	font-family:Arial, Helvetica, sans-serif;
+	}
+	
+.titulo_follow{
+	font-family:arial; 
+	color:#E51B21; 
+	font-size:18px;
+	text-align:center;
+	font-weight:normal;
+	}
+	
+.inp_fol{
+	background:#fff;
+	width:36px;
+	height:16px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0 auto;
+	}
+.link_extra{
+        display:inline;
+        font-family:arial;
+        font-size:9px;
+        font-weight:normal;
+        color:#F90;
+        cursor:pointer;
+        }
