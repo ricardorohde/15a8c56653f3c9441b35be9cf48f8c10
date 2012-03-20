@@ -115,16 +115,8 @@ if($_POST){
                         }
                     }
                 }
-            }
-            
-            //finalizando o carrinho, chega a hora de decidir pra qual pagina ir: a do login ou a do pagamento:
-            if($usuarioSession){
-                header("location:pagamento");
-            }else{
-                header("location:cadastre");
-            }
+            }     
         }
-        
     }
 }
 ?>

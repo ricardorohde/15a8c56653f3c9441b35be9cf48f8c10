@@ -52,7 +52,7 @@
 		<div class="radios_5" id="ok_buton"><div style="margin-top:0; margin-left:10px;">OK</div>
 		</div>
 	    </div>
-	    <div class="radios_5" id="campo_pedido_detalhado">
+	    <div class="radios_5" id="campo_pedido_detalhado" style="overflow-x:auto;">
                 <?
                     $count = 0;
                     if($pedido->pedido_tem_produtos){
@@ -69,10 +69,12 @@
                                         <div id="div_preco_prod_<?= $count ?>" style="float:right;"><?= StringUtil::doubleToCurrency($prod->getTotal()) ?></div>
                                         <input type="hidden" id="preco_prod_<?= $count ?>" class="preco_carrinho" value="<?= $prod->getTotal() ?>" >
                                     </div>
+                                    <div>
                                     <? 
                                         if($prod->pedido_tem_produtos_adicionais){
                                             $counta = 0;
                                             foreach($prod->pedido_tem_produtos_adicionais as $adi){
+                                                if($adi->produto_adicional->quantas_unidades_ocupa>0){
                                                   if($counta>0){
                                                       echo ", ";
                                                   }
@@ -84,58 +86,40 @@
                                                         </span>
                                                   <?
                                                   $counta++;
+                                                }
                                             }
                                         }
                                     ?>
+                                    </div>
+                                    <div>
+                                    <? 
+                                        if($prod->pedido_tem_produtos_adicionais){
+                                            $countb = 0;
+                                            foreach($prod->pedido_tem_produtos_adicionais as $adi){
+                                                if($adi->produto_adicional->quantas_unidades_ocupa==0){
+                                                  if($countb>0){
+                                                      echo ", ";
+                                                  }
+                                                  ?>
+                                                        <span style="font-size:10px;" id="span_adi_prod_<?= $count ?>_<?= $counta ?>">
+                                                            <?= "+".$adi->produto_adicional->nome ?>
+                                                            <input type="hidden" class="adi_prod_nome_<?= $count ?>" id="adi_prod_nome_<?= $count ?>_<?= $counta ?>" value="<?= $adi->produto_adicional->nome ?>"> 
+                                                            <input type="hidden" class="adi_prod_<?= $count ?>" id="adi_prod_<?= $count ?>_<?= $counta ?>" name="adi_prod_<?= $count ?>_<?= $counta ?>" value="<?= $adi->produtoadicional_id ?>">
+                                                        </span>
+                                                  <?
+                                                  $counta++;
+                                                  $countb++;
+                                                }  
+                                            }
+                                        }
+                                    ?>
+                                    </div>
                                     <div>
                                         <span  style="font-size:10px;" id="span_obs_prod_<?= $count ?>"><?= $prod->obs ?></span>
                                         <input type="hidden" id="obs_prod_<?= $count ?>" name="obs_prod_<?= $count ?>" value="<?= $prod->obs ?>">
                                     </div>
                                     <div>
-                                        <?
-                                            
-                                            /*
-                                            if($prod->pedido_tem_produtos_adicionais){
-                                                $countad = 0;
-                                                foreach($prod->pedido_tem_produtos_adicionais as $aaa){
-                                                    if($countad>0){
-                                                        for($i=0;$i<sizeof($vetor_acomp);$i++){
-                                                            $quebra = explode("~~",$vetor_acomp[$i]);
-                                                            
-                                                            if($quebra[1]==$aaa->produto_adicional->nome){
-                                                                $num = (int)$quebra[0];
-                                                                $num++;
-                                                                $vetor_acomp[$i] = $num."~~".$quebra[1];
-                                                                //echo $vetor_acomp[$i];
-                                                            }else{
-                                                                $vetor_acomp[$countad] = "1~~".$aaa->produto_adicional->nome;
-                                                                $countad++;
-                                                                //echo $vetor_acomp[$i];
-                                                            }
-                                                        }
-                                                    }else{
-                                                        $vetor_acomp[$countad] = "1~~".$aaa->produto_adicional->nome;
-                                                        $countad++;
-                                                    }
-                                                }
-                                                $countad = 0;
-                                                $acomps = "";
-                                                for($i=0;$i<sizeof($vetor_acomp);$i++){
-                                                    echo $vetor_acamp[$i]."!";
-                                                    if($countad==0){
-                                                        $acomps .= $vetor_acamp[$i];
-                                                    }else{
-                                                        $acomps .= ", ".$vetor_acamp[$i];
-                                                    }
-                                                    $countad++;
-                                                }
-                                                ?>
-                                                    <span style="font-size:10px;" id="span_acomp_prod_<?= $count ?>"><?= $acomps ?></span>
-                                                    <input type="hidden" id="acomp_prod_<?= $count ?>" name="acomp_prod_<?= $count ?>" value="<?= $prod->obs ?>">
-                                                <?
-                                            }
-                                            unset($vetor_acomps); */
-                                        ?>
+
                                         
                                     </div>    
                                 </div>
