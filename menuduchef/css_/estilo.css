@@ -459,7 +459,7 @@ a:hover{color:#CCC}
     padding:0 1px;
 	float:left;
 	font:Arial;
-	text-decoration:overline;
+	/*text-decoration:overline;*/
 	font-size:14px;
 	color:#E51B21;
 	}
@@ -677,7 +677,7 @@ a:hover{color:#CCC}
 	}
 	
 /*Pagamento*/
-#box_pedido{
+.box_pedido{
 	width:674px; 
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;

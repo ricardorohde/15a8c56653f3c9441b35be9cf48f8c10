@@ -1,8 +1,11 @@
+<?
+    include("include/header2.php");
+ 
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 "http://www.w3.org/TR/html4/strict.dtd"
 >
-<html lang="pt">
-<head>
+<script src="js/jquery-1.6.4.min.js"></script>
 <meta http-equiv="content-type" content="text/html" charset="UTF-8" />  
 <title>Delivery du Chef</title>
    <link rel="stylesheet" href="css_/blueprint/screen.css" type="text/css" media="screen, projection">
@@ -15,8 +18,31 @@ u{
 	color:#FF9930;
 	}
 </style>
-</head>
-<body>
+<script>
+    function show(x){
+        oque = document.getElementById(x);
+        if(oque.style.display=='block'){
+            oque.style.display = "none";
+        }else{
+            oque.style.display = "block";
+        }
+    }
+    $(function() {
+       $("#seleend").click(function(){
+           $("#action").attr("value","sele");
+           $("#escolhe_endereco").submit();
+       });
+       $("#novoend").click(function(){
+           $("#action").attr("value","novo");
+           $("#escolhe_endereco").submit();
+       });
+       $("#b_novousu").click(function(){
+           $("#action2").attr("value","novo_usuario");
+           $("#novousu").submit();
+       });
+    });
+</script>    
+
 <div class="container">
 	<div id="background_container">
     	<?php include "menu2.php" ?>
@@ -24,15 +50,15 @@ u{
 			<div class="span-6">
             	<div id="barra_esquerda">
                 	<div id="info_restaurante">
-                    	<div id="categoria_rest">Pizzaria
+                    	<div id="categoria_rest">
                         </div>
-                        <div id="nome_rest">Reis Magos
+                        <div id="nome_rest">
                         </div>
                         <div id="avatar_rest">
                         </div>
-                        <div id="formas_pagamento">Formas de pagamento
+                        <div id="formas_pagamento">
                         </div>
-                        <div id="tempo_entrega">Tempo de entrega:<img src="background/relogio.gif" width="20" height="19" style="position:relative; top:6px; left:4px;">&nbsp;&nbsp;&nbsp;300min
+                        <div id="tempo_entrega">
                         </div>
                     </div>
                     
@@ -54,31 +80,116 @@ u{
                     </div>
                     <div class="titulo_box_pedido" style="margin-top:4px;">Sou cadastrado
 					</div>
-                    <div id="box_pedido">
-                    <form>
-                        <label for="login">Login:</label><input type="text" name="login" maxlength="100" class="campo">
-                        <label for="senha">Senha:</label><input type="password" name="senha" maxlength="100" class="campo">
+                    <div class="box_pedido">
+                        <form action="../menuduchef/php/controller/login2" method="post">
+                        <input type="hidden" name="onde_estava" value="cadastro">
+                        <label for="email">Login:</label><input type="text" name="email" maxlength="50" class="campo">
+                        <label for="senha">Senha:</label><input type="password" name="senha" maxlength="50" class="campo">
                         <div style="width:40px; height:28px; border:1px Solid #333; background:#F04047; font-size:16px; cursor:pointer; position:absolute; top:96px; left:240px; ">
                         	<input type="submit" name="Enviar" value="OK" id="botao_enviar">
                         </div>
                         <br/>
                         <u>Esqueci minha senha</u>
-                      
-                    </form>    
+                        </form>
+                        <? if($_SESSION['consumidor_id']){
+                            
+                            $usuario_obj = unserialize($_SESSION['usuario_obj']);
+                            $endoriginal = unserialize($_SESSION['endereco']);
+                            ?>
+                        <form id="escolhe_endereco" action="php/controller/salva_pedido_aguardando" method="post">
+                            <input id="action" name="action" type="hidden">    
+                            <div style="position:absolute; background:#EEE; z-index:30; top:-30px;">
+                                <div id="sele_end" style="display:block;">
+                                <?
+                                    $tem_ends = 0;
+                                    if($usuario_obj->enderecos){ 
+                                        
+                                        ?>
+                                        <table>
+                                        <? foreach($usuario_obj->enderecos as $end){ 
+                                            
+                                            if($end->cep==$endoriginal->cep){
+                                                $tem_ends++;
+                                            ?>
+                                                <tr><td><input type="radio" name="endereco_escolhido" value="<?= $end->id ?>"><?= $end->logradouro ?>, <?= $end->numero ?> - <?= $end->bairro->nome ?></td></tr>
+                                            <?
+                                            }
+                                        }
+                                        ?>
+                                        </table>    
+                                        
+                                       <?     
+                                    }
+                                    if($tem_ends==0){
+                                        echo "N&atilde;o h&aacute; endere&ccedil;os cadastrados para o CEP fornecido.";
+                                    }else{ ?>
+                                        <input type="button" id="seleend" value="Selecionar endere&ccedil;o">
+                                 <?       
+                                    }
+                                ?>
+                                        <br/><br/>
+                                </div>        
+                                
+                                
+                                <input type="button" style="display:block;" id="button_cne" onclick="show('cad_novo_end'); show('button_cne'); show('sele_end')" value="Cadastrar novo endere&ccedil;o">
+                                <div id="cad_novo_end" style="display:none;">
+                                    
+                                    <div id="form_endereco">
+                                        <div>
+                                            <div id="mensagens_endereco"></div>
+
+                                            <input type="hidden" id="endereco_id" name="endereco_id" value="" />
+                                            <input type="hidden" name="hash" value="" />
+
+                                            <label for="cidade_endereco" class="normal">Cidade:</label>
+                                            <input type="text" readonly="true" style="background:#EEE;" value="<?= $endoriginal->bairro->cidade->nome ?>">
+
+                                            <label for="bairro_endereco" class="normal">Bairro:</label>
+                                            <input type="text" readonly="true" style="background:#EEE;" value="<?= $endoriginal->bairro->nome ?>">
+
+                                            <label for="logradouro_endereco" class="normal">Logradouro:</label>
+                                            <input type="text" readonly="true" style="background:#EEE;" value="<?= $endoriginal->logradouro ?>">
+
+                                            <label for="numero_endereco" class="normal">N&uacute;mero:</label>
+                                            <input class="formfield w15" type="text" id="numero_endereco" name="numero" />
+
+                                            <label for="complemento_endereco" class="normal">Complemento:</label>
+                                            <input class="formfield w25" type="text" id="complemento_endereco" name="complemento" />
+                                            
+                                            <label for="referencia_endereco" class="normal">Refer&ecirc;ncia:</label>
+                                            <input class="formfield w25" type="text" id="referencia_endereco" name="referencia" />
+
+                                            <label for="cep_endereco" class="normal">CEP:</label>
+                                            <input class="formfield w25" type="text" id="cep_endereco" name="cep" readonly="true" style="background:#EEE;" value="<?= $endoriginal->cep ?>" />
+                                        </div>
+                                        <div>
+                                            <input type="button" id="novoend" value="Usar novo endere&ccedil;o"> <input type="button" onclick="show('cad_novo_end'); show('button_cne'); show('sele_end')" value="Voltar">
+                                        </div>   
+                                    </div>
+                                
+                                </div>
+                                
+                            </div>
+                            </form>    
+                        <? } ?>
+                        
                     </div>
-                    <div class="titulo_box_pedido">Não sou cadastrado <b style="color:#E51B21">.</b> Dados pessoais
+                    <form id="novousu" action="php/controller/salva_pedido_aguardando" method="post">
+                        <input type="hidden" name="action2" id="action2" value="novo_usuario">
+                    <div class="titulo_box_pedido">Não sou cadastrado <b style="color:#E51B21;">.</b> Dados pessoais
 					</div>
-                    <div id="box_pedido" style="height:342px">
-                        <form>
+                    <div class="box_pedido" style="height:342px">
+                        
                         <div style="width:330px; float:left;">
                             
                                 
                             <label>Nome*</label><input type="text" name="nome" maxlength="100" class="campo"> 
                             <label>CPF*</label><input type="text" name="cpf" maxlength="100" class="campo"> 
                             <label>Sexo</label>			
-                                                        <select name="Sexo" class="campo"> 
-                                                        <option value="1">Cabra homi 
-                                                        <option value="2">Mulherzinha
+                                                        <select name="sexo" class="campo">
+                                                            <option value="">Selecione</option>    
+                                                            <option value="Masculino">Masculino</option>  
+                                                            <option value="Feminino">Feminino</option> 
                                                         </select>
                             <label>Nascimento</label>
                             
@@ -98,12 +209,12 @@ u{
                         	<label for="senha">Senha </label><input type="password" name="senha" maxlength="100" class="campo">
                             <label for="senha">Senha Confirmação</label><input type="password" name="senhaconf" maxlength="100" class="campo">
                         </div>
-                        </form>   
+                           
                     </div> 
                     <div class="titulo_box_pedido">Endereço de entrega   	
 					</div>
-                    <div id="box_pedido" style="height:290px">
-                    	<form> 
+                    <div class="box_pedido" style="height:290px">
+                    	
                    		<div style="width:330px; float:left;">
                             <label>CEP*</label><input type="text" name="cep" maxlength="100" class="campo"> 
                             <label>Endereço*</label><input type="text" name="endereco" maxlength="100" class="campo">
@@ -116,14 +227,14 @@ u{
                             <label>Complemento</label><input type="text" name="complemento" maxlength="100" class="campo"> 
                             <label>Ponto de referência</label><input type="text" name="pr" maxlength="100" class="campo">    
                         </div>
-                        <img src="background/cadastrar.png" width="118" height="32" style="margin-top:8px; cursor:pointer;">
-                    	</form>
+                        <img src="background/cadastrar.png" id="b_novousu" width="118" height="32" style="margin-top:8px; cursor:pointer;">
+                    
                     
                     </div>
+                    </form>
                               
           </div>
 		</div>
 	</div>
 </div>
-</body>
-</html>
+<? include("include/footer.php"); ?>

@@ -16,6 +16,27 @@ class TipoProduto extends ActiveRecord\Model {
     static $validates_uniqueness_of = array(
 	array('nome', 'message' => 'já existe')
     );
+    
+    /*public static function find_and_count_by_restaurante_id($restaurante_id) {
+	if ($restaurante_id) {
+	    return self::find_by_sql('
+		SELECT
+		    tp.id, tp.nome, tp.COUNT(1) AS count
+		FROM
+		    tipo_produto tp
+		INNER JOIN
+		    restaurante_tem_tipo_produto rttp ON rttp.tipoproduto_id = tp.id
+		WHERE
+		    rttp.restaurante_id = ?
+		GROUP BY
+		    tp.id, tp.nome
+		ORDER BY
+		    tp.nome ASC
+	    ', array($restaurante_id));
+	}
+	
+	return null;
+    }*/
 
 }
 

@@ -1,7 +1,5 @@
 <?
 include("include/header.php");
-ob_start();
-
 
 //$itens = Produto::find_all_by_restaurante_id($_GET['id'], array("order" => "nome asc"));
 if ($enderecoSession) {
@@ -28,30 +26,35 @@ if($_POST){
                     $prod->delete();
                 }
             }else{
-                $data['consumidor_id'] = $consumidorSession->id;
-                $data['restaurante_id'] = $restaurante->id;
-                $data['forma_pagamento'] = "ainda_nao";
-                $data['troco'] = 0;
-                $data['cupom'] = "";
-                $data['endereco'] = "";
-                $data['situacao'] = "";
-                $data['pagamento_efetuado'] = 0;
-                $data['preco_entrega'] = $rxb->preco_entrega;
-                $data['endereco_id'] = $enderecoSession->id;
                 
-                $ped = new Pedido($data);
-                $ped->save();
-                
-		
-		if($ped->is_invalid()) {
-		    HttpUtil::showErrorMessages($ped->errors->full_messages());
-		    HttpUtil::redirect($_SERVER['REQUEST_URI']);
-		}
-		
-                $idped = $ped->id;
-                $_SESSION['pedido_id'] = $idped;
-                
+                    $data['consumidor_id'] = $consumidorSession->id;
+                    $data['restaurante_id'] = $restaurante->id;
+                    $data['forma_pagamento'] = "ainda_nao";
+                    $data['troco'] = 0;
+                    $data['cupom'] = "";
+                    $data['endereco'] = "";
+                    $data['situacao'] = "";
+                    $data['pagamento_efetuado'] = 0;
+                    $data['preco_entrega'] = $rxb->preco_entrega;
+                    $data['endereco_id'] = $enderecoSession->id;
+
+                    if($_SESSION['usuario']){
+                        $ped = new Pedido($data);
+                        $ped->save();
+
+                        if($ped->is_invalid()) {
+                            HttpUtil::showErrorMessages($ped->errors->full_messages());
+                            HttpUtil::redirect($_SERVER['REQUEST_URI']);
+                        }
+                        
+                        $idped = $ped->id;
+                        $_SESSION['pedido_id'] = $idped;
+                    }else{
+                        $_SESSION['pedido_aguardando'] = serialize($data);
+                    }
             }
+            $count_aguardando = 0;
+            $count_adicional_aguardando = 0;
             foreach($_POST as $key => $valor){
                 if(substr($key,0,8)=="id_prod_"){                 
                     $quebra = explode("_",$key);
@@ -65,11 +68,19 @@ if($_POST){
                         $data2['produto_id2'] = 0;
                         $data2['produto_id3'] = 0;
                         $data2['produto_id4'] = 0;
-                        $data2['preco_unitario'] = $prod->preco;
+                        if($prod->esta_em_promocao){
+                            $data2['preco_unitario'] = $prod->preco;
+                        }else{
+                            $data2['preco_unitario'] = $prod->preco_promocional;
+                        }
                         
-                        $pro = new PedidoTemProduto($data2);
-                        $pro->save();
-                        
+                        if($_SESSION['usuario']){
+                            $pro = new PedidoTemProduto($data2);
+                            $pro->save();
+                        }else{
+                            $_SESSION['produto_aguardando'][$count_aguardando] = serialize($data2);
+                            
+                        }
                         $qtd_acomp = $prod->qtd_produto_adicional;
                         
                         foreach($_POST as $key2 => $valor2){
@@ -97,13 +108,21 @@ if($_POST){
                                             $prodadi=ProdutoAdicional::find(array("conditions"=>array("restaurante_id = ? AND id = ? AND ativo = ? AND disponivel = ? AND quantas_unidades_ocupa <= ?",$restaurante->id,$valor2,1,1,$qtd_acomp)));
                                             if($prodadi){
                                                 if(($qtd_acomp -$prodadi->quantas_unidades_ocupa)>=0){
-                                                    $data3['pedidotemproduto_id'] = $pro->id;
+                                                    if($_SESSION['usuario']){
+                                                        $data3['pedidotemproduto_id'] = $pro->id;
+                                                    }else{
+                                                        $data3['pedidotemproduto_id'] = 0; 
+                                                    }
                                                     $data3['produtoadicional_id'] = $prodadi->id;
                                                     $data3['preco'] = $prodadi->preco_adicional;
 
-
-                                                    $ptpa = new PedidoTemProdutoAdicional($data3);
-                                                    $ptpa->save();
+                                                    if($_SESSION['usuario']){
+                                                        $ptpa = new PedidoTemProdutoAdicional($data3);
+                                                        $ptpa->save();
+                                                    }else{
+                                                        $_SESSION['produto_adicional_aguardando'][$count_aguardando][$count_adicional_aguardando] = serialize($data3);
+                                                        $count_adicional_aguardando++;
+                                                    }
 
                                                     $qtd_acomp -= $prodadi->quantas_unidades_ocupa;
                                                 }
@@ -113,15 +132,21 @@ if($_POST){
                                 }
                             
                         }
+                        if($_SESSION['usuario']){
+                            
+                        }else{
+                            
+                            $count_aguardando++;
+                        }
                     }
                 }
             }
             
             //finalizando o carrinho, chega a hora de decidir pra qual pagina ir: a do login ou a do pagamento:
-            if($usuarioSession){
-                header("location:pagamento");
+            if($_SESSION['usuario']){
+                echo "<script> window.location.href = 'pagamento' </script>";
             }else{
-                header("location:cadastre");
+               echo "<script> window.location.href = 'cadastro' </script>";
             }
         }
         
@@ -188,6 +213,32 @@ if($_POST){
     $(document).ready(function() {
         contador = 0; //usado pra impedir que o vetor com a lista de pedidos do carrinho se repita
         
+        $(".filtro_categoria").click( function(){
+	    algum = 0;
+            $(".filtro_categoria").each(function(){
+                if($(this).attr("checked")){
+                    algum = 1;
+                }
+            });
+            if(algum){
+                $(".filtro_categoria").each(function(){
+                    if($(this).attr("checked")){
+                        qual = $(this).attr("value");
+                        $("#box_box_categoria_"+qual).show();
+                    }else{
+                        qual = $(this).attr("value");
+                        $("#box_box_categoria_"+qual).hide();
+                    }
+                });
+                
+            }else{
+                $(".filtro_categoria").each(function(){
+                    qual = $(this).attr("value");
+                    $("#box_box_categoria_"+qual).show();
+                });
+            }
+	});
+        
 	$("#ver_completo").click( function(){
 	    $(".filtro_categoria").attr("checked","true");
 	    $(".categoria").show();
@@ -223,6 +274,137 @@ if($_POST){
         $('.abreformapagamento').mouseout(function() {
 	    $("#formapagamento").hide();
         });
+        $(".poe_destaque_carrinho").click( function(){
+            prosseguir = 0;
+            count = 0;
+            $(".carda_destaque_acomp_"+$(this).attr("produto")).each(function(){
+                $(this).show();
+                count++;
+            });
+            if($(this).attr("quemsou")=="botao_add_acomp"){
+                prosseguir = 1;
+                $(".carda_destaque_acomp_"+$(this).attr("produto")).each(function(){
+                    $(this).hide();
+                });
+            }
+            if(count==0){
+                prosseguir = 1;
+            }
+            if(prosseguir){
+                idprod = $(this).attr("produto");
+                qtd = 1;
+                nome = $("#carda_nome_"+idprod).attr("value");
+                obsprod = "";
+                              
+                
+                ja_tem_no_carrinho = 0;
+                alvo = "";
+                valor_total = 0; //esse é o valor de todos os itens somados, que da o total la do carrinho
+                taxa_entrega = parseInt($("#taxa_de_entrega").attr("value"));
+
+                vetor = getElementByClass("lista_carrinho");
+
+                for(var i in vetor){
+                    qual = vetor[i].id;
+                    if(qual.substr(0,7)=="id_prod"){
+                        qual = qual.split("_");
+                        if((qual[0]=="id")&&(qual[1]=="prod")){
+                            if(vetor[i].value==idprod){
+                                obs = document.getElementById("obs_prod_"+qual[2]).value;
+
+                                if(obs==obsprod){
+                                    if(confere_se_acomp_e_igual(qual[2],idprod,"destaque")){          
+                                            ja_tem_no_carrinho = 1;
+                                            alvo = qual[2];
+                                    }
+                                }
+                            }
+
+                            valor_total += parseInt(document.getElementById("preco_prod_"+qual[2]).value);
+                        }
+                    }
+                }
+
+                preco = obter_preco2(idprod);
+
+                if(ja_tem_no_carrinho==0){
+                    numero = parseInt(document.getElementById("contador_itens").value);
+                    document.getElementById("contador_itens").value = numero + 1;
+                    item_no_carrinho = '<div id="produto_box_'+numero+'" style="margin:5px;">';
+                    item_no_carrinho += '<div onclick=\'destroi_box("'+numero+'")\'>X</div>';
+                    item_no_carrinho += '<div><span id="span_qtd_prod_'+numero+'">'+qtd+'x</span>';
+                    item_no_carrinho += '<input type="hidden" id="qtd_prod_'+numero+'" name="qtd_prod_'+numero+'" value="'+qtd+'">';
+                    item_no_carrinho += nome;                        
+                    item_no_carrinho += '<input type="hidden" id="id_prod_'+numero+'" name="id_prod_'+numero+'" class="lista_carrinho" value="'+idprod+'">';
+                    preco *= qtd;
+                    item_no_carrinho += '<div id="div_preco_prod_'+numero+'" style="float:right;">R$ '+number_format(preco, 2, ',', '.')+'</div>';
+                    item_no_carrinho += '<input type="hidden" id="preco_prod_'+numero+'"  class="preco_carrinho" value="'+preco+'" >';
+                    item_no_carrinho += '</div>';
+                    
+                    
+                    if($(this).attr("quemsou")=="botao_add_acomp"){
+                        item_no_carrinho += '<div>';
+                        item_no_carrinho += arruma_destaque_acompanhamentos(idprod);
+                        item_no_carrinho += '</div>';
+                    }
+
+                    item_no_carrinho += '<div>';
+                    item_no_carrinho += '<span  style="font-size:10px;" id="span_obs_prod_'+numero+'">'+obsprod+'</span>';
+                    item_no_carrinho += '<input type="hidden" id="obs_prod_'+numero+'" name="obs_prod_'+numero+'" value="'+obsprod+'">';
+                    item_no_carrinho += '</div>';
+
+                    item_no_carrinho += '</div>';
+
+                    $('#campo_pedido_detalhado').append($(item_no_carrinho));
+
+                    valor_total += preco;
+                }else{
+                    qtd_ = parseInt(qtd) + parseInt(document.getElementById("qtd_prod_"+alvo).value);
+                    valor_total += (qtd * preco);
+                    preco *= qtd_;
+                    document.getElementById("qtd_prod_"+alvo).value = qtd_;
+                    document.getElementById("span_qtd_prod_"+alvo).innerHTML = qtd_+"x";
+                    document.getElementById("div_preco_prod_"+alvo).innerHTML = "R$ "+number_format(preco, 2, ',', '.');
+                    document.getElementById("preco_prod_"+alvo).value = preco;
+                }
+                document.getElementById("subtotal_carrinho").innerHTML = "R$ "+number_format(valor_total, 2, ',', '.');
+                document.getElementById("total_carrinho").innerHTML = "R$ "+number_format((valor_total + taxa_entrega), 2, ',', '.');
+                
+                $(".carda_destaque_acomp_qtd_"+idprod).each(function(){
+                    $(this).empty();
+                });
+                $(".carda_destaque_acomp_preco_unitario_"+idprod).each(function(){
+                    $(this).empty();
+                });
+                $("#carda_destaque_obs_"+idprod).attr("value","");
+                $("#carda_destaque_obs_"+idprod).hide();
+                
+                $(".carda_destaque_extr_"+idprod).each(function(){
+                    
+                    $(this).hide();
+                });
+                $(".carda_destaque_extr_qtd_"+idprod).each(function(){
+                    $(this).empty();
+                });
+
+                $(".carda_destaque_extr_preco_unitario_"+idprod).each(function(){
+                    $(this).empty();
+                });
+
+
+                $("#carda_destaque_extr_total_"+quebra[0]).html("+ R$ 0,00");
+                
+
+                $("#carda_destaque_acomp_total_"+idprod).html("+ R$0,00");
+                dir = $("#acomp_destaque_direito_"+idprod).attr("valor");
+                $("#acomp_destaque_direito_"+idprod).html(dir);
+            }
+            if($(this).attr("quemsou")=="botao_add_acomp"){
+                $(".carda_destaque_acomp_qtd_"+$(this).attr("produto")).each(function(){
+                    $(this).empty();
+                });
+            }
+	});
         $(".poe_carrinho").click( function(){
             prosseguir = 0;
             count = 0;
@@ -263,7 +445,7 @@ if($_POST){
                                 obs = document.getElementById("obs_prod_"+qual[2]).value;
 
                                 if(obs==obsprod){
-                                    if(confere_se_acomp_e_igual(qual[2],idprod)){          
+                                    if(confere_se_acomp_e_igual(qual[2],idprod,"normal")){          
                                             ja_tem_no_carrinho = 1;
                                             alvo = qual[2];
                                     }
@@ -362,6 +544,7 @@ if($_POST){
             }
 	});
         $(".poe_acomp").click( function(){
+        
             qual = $(this).attr("produto");
             quebra = qual.split("_");
             dir = parseInt($("#acomp_direito_"+quebra[0]).html());
@@ -382,7 +565,6 @@ if($_POST){
                 
                 preco_unitario = number_format(preco_unitario, 2, ',', '.');
                 $("#carda_acomp_preco_unitario_"+qual).html("+ R$"+preco_unitario);
-                
 
                 $(".carda_acomp_qtd_"+quebra[0]).each(function(){
                     idadi = $(this).attr("id");
@@ -406,6 +588,58 @@ if($_POST){
 
                 
                 $("#acomp_direito_"+quebra[0]).html(dir);
+            }
+             
+        });
+        $(".poe_destaque_acomp").click( function(){
+        
+            qual = $(this).attr("produto");
+            quebra = qual.split("_");
+            dir = parseInt($("#acomp_destaque_direito_"+quebra[0]).html());
+            dir = parseInt(dir) - parseInt($("#carda_destaque_acomp_ocupa_"+qual).attr("value"));
+            if(dir>=0){
+                preco_total = 0;        
+                qtd = parseInt($("#carda_destaque_acomp_qtd_"+qual).html());
+
+                if(qtd){
+                    qtd += 1;
+                }else{
+                    qtd = 1;
+                }
+                $("#carda_destaque_acomp_qtd_"+qual).html(qtd);
+                
+                preco_unitario = parseInt($("#carda_destaque_acomp_preco_"+qual).attr("value"));
+                
+                preco_unitario *= qtd;
+               
+                preco_unitario = number_format(preco_unitario, 2, ',', '.');
+                $("#carda_destaque_acomp_preco_unitario_"+qual).html("+ R$"+preco_unitario);
+
+                $(".carda_destaque_acomp_qtd_"+quebra[0]).each(function(){
+                    idadi = $(this).attr("id");
+                    idadi = idadi.split("_");
+                    idadi = idadi[5];
+                    
+                    if($(this).html()==""){
+                       qtdadi = 0;
+                    }else{
+                        qtdadi = parseInt($(this).html());
+                    }
+                    
+                    
+                    preco_total += (qtdadi * parseInt($("#carda_destaque_acomp_preco_"+quebra[0]+"_"+idadi).attr("value")));
+                    
+                });
+
+                if(preco_total==0){
+                    $("#carda_destaque_acomp_total_"+quebra[0]).html("+ R$0,00");
+                }else{
+                    preco_total = number_format(preco_total, 2, ',', '.');
+                    $("#carda_destaque_acomp_total_"+quebra[0]).html("+ R$"+preco_total);
+                }
+
+                
+                $("#acomp_destaque_direito_"+quebra[0]).html(dir);
             }
              
         });
@@ -454,6 +688,22 @@ if($_POST){
 
              
         });
+
+        $(".fechar_segundosabor").click( function(){
+            qual = $(this).attr("produto");
+            quebra = qual.split("_");
+            
+            $(".carda_segundosabor_"+qual).each(function(){
+                $(this).hide();
+            });
+            
+            $(".carda_segundosabor_preco_"+qual).each(function(){
+                $(this).empty();
+            });
+
+            $("#carda_segundosabor_total_"+quebra[0]).html("+ R$ 0,00");
+                          
+        });
         $(".fechar_acomp").click( function(){
             qual = $(this).attr("produto");
             quebra = qual.split("_");
@@ -473,6 +723,27 @@ if($_POST){
             dir = $("#acomp_direito_"+quebra[0]).attr("valor");
             $("#acomp_direito_"+quebra[0]).html(dir);
             $("#carda_acomp_total_"+quebra[0]).html("+ R$ 0,00");
+                          
+        });
+        $(".fechar_destaque_acomp").click( function(){
+            qual = $(this).attr("produto");
+            quebra = qual.split("_");
+            
+            $(".carda_destaque_acomp_"+qual).each(function(){
+                $(this).hide();
+            });
+            
+            $(".carda_destaque_acomp_qtd_"+qual).each(function(){
+                $(this).empty();
+            });
+            
+            $(".carda_destaque_acomp_preco_unitario_"+qual).each(function(){
+                $(this).empty();
+            });
+            
+            dir = $("#acomp_destaque_direito_"+quebra[0]).attr("valor");
+            $("#acomp_destaque_direito_"+quebra[0]).html(dir);
+            $("#carda_destaque_acomp_total_"+quebra[0]).html("+ R$ 0,00");
                           
         });
         $(".fechar_extr").click( function(){
@@ -533,6 +804,25 @@ if($_POST){
     function passa_etapa(){
         $("#form_carrinho").submit();
     }
+    function obter_preco2(x){
+        preco = parseInt(document.getElementById("carda_preco_"+x).value);
+        
+        precoa = 0;        
+        $(".carda_destaque_acomp_qtd_"+x).each(function(){
+            qtda = parseInt($(this).html());
+            y = $(this).attr("id");
+            y = y.split("_");
+            y = y[5];
+            for(i=0;i<qtda;i++){
+                precoa += parseInt($("#carda_destaque_acomp_preco_"+x+"_"+y).attr("value"));
+            }
+        });
+        
+        preco += precoa;
+        
+        return preco;
+        
+    }
     function obter_preco(x){
         preco = parseInt(document.getElementById("carda_preco_"+x).value);
         
@@ -561,6 +851,31 @@ if($_POST){
         
         return preco;
         
+    }
+    function arruma_destaque_acompanhamentos(idprod){
+        counta = 0;
+        item_no_carrinho = "";
+        $(".carda_destaque_acomp_qtd_"+idprod).each(function(){
+            qtda = parseInt($(this).html());
+
+            for(i=0;i<qtda;i++){
+              if(counta>0){
+                  item_no_carrinho += ", ";
+              }
+                    item_no_carrinho += "<span style='font-size:10px;' id='span_adi_prod_"+numero+"_"+counta+"'>";
+                        idadi = $(this).attr("id");
+                        idadi = idadi.split("_");
+
+                        item_no_carrinho += $("#carda_destaque_acomp_nome_"+idadi[4]+"_"+idadi[5]).html();
+                        item_no_carrinho += "<input type='hidden' class='adi_prod_nome_"+numero+"' id='adi_prod_nome_"+numero+"_"+counta+"' value='"+$("#carda_destaque_acomp_nome_"+idadi[4]+"_"+idadi[5]).html()+"'>"; 
+                        item_no_carrinho += "<input type='hidden'  class='adi_prod_"+numero+"' id='adi_prod_"+numero+"_"+counta+"' name='adi_prod_"+numero+"_"+counta+"' value='"+idadi[5]+"'>";
+
+                    item_no_carrinho += "</span>";
+
+              counta++;
+            }  
+        });
+        return item_no_carrinho;
     }
     function arruma_acompanhamentos(idprod){
         counta = 0;
@@ -657,13 +972,38 @@ if($_POST){
         });
         return item_no_carrinho;
     }
-    function confere_se_acomp_e_igual(x,y){
+    function arruma_acompanhamentos3(idprod){
+        counta = 0;
+        item_no_carrinho = "";
+        $(".carda_destaque_acomp_qtd_"+idprod).each(function(){
+            qtda = parseInt($(this).html());
+
+            for(i=0;i<qtda;i++){
+              if(counta>0){
+                  item_no_carrinho += ", ";
+              }
+
+                        idadi = $(this).attr("id");
+                        idadi = idadi.split("_");
+
+                        item_no_carrinho += $("#carda_destaque_acomp_nome_"+idadi[4]+"_"+idadi[5]).html();
+
+              counta++;
+            }  
+        });
+        return item_no_carrinho;
+    }
+    function confere_se_acomp_e_igual(x,y,z){
         resposta = 0;
         
         acomps1 = "";
         acomps2 = "";
         
-        acomps1 = arruma_acompanhamentos2(y);
+        if(z=="normal"){
+            acomps1 = arruma_acompanhamentos2(y);
+        }else{
+            acomps1 = arruma_acompanhamentos3(y);
+        }
         c = 0;
         
         apn = getElementByClass("adi_prod_nome_"+x);
@@ -802,6 +1142,23 @@ if($_POST){
 	    </div>
 	    <div id="filtro" class="prepend-top">
 		<img src="background/titulo_filtro.gif" width="74" height="26" alt="Filtro" style="margin-left:25px">
+                
+		    <div style="padding-top:5px;">
+			<div style="color:#CC0000; padding-top:5px; padding-left:12px;">
+			    <?
+			    if($categorias) {
+				foreach($categorias as $categoria) {
+                                   $num=0;
+                                   $produtos = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id WHERE PTT.tipoproduto_id = " . $categoria->tipo_produto->id . " AND ativo = 1 AND disponivel = 1 AND P.restaurante_id = " . $_GET['id']);
+                                   $num=sizeof($produtos);
+			    ?>
+			    <div style="color:#CC0000; padding-top:5px; padding-left:12px;">
+				<input type="checkbox" class="refino filtro_categoria" id="checkrest_<?= $categoria->tipo_produto->id ?>" value="<?= $categoria->tipo_produto->id ?>" /> &nbsp; <?= $categoria->tipo_produto->nome ?> (<?= $num ?>)
+			    </div>
+			    <? } } ?>
+			</div>
+		    </div>
+		
 	    </div>	
 
 
@@ -843,12 +1200,86 @@ if($_POST){
 			</div>
 			<div class="descricao_destaque">
 	<?= $dest->descricao ?>
+                            <? if($dest->esta_em_promocao){ ?>
+                            <div style="color:#F70;"><?= $dest->texto_promocao ?></div>
+                            <? } ?>
 			</div>
 			<div class="preco_destaque">
-
-		    <?= StringUtil::doubleToCurrency($dest->preco) ?>
-			    <img src="background/botao_add.gif" width="36" height="30" style="float:left; cursor:pointer;" /> 
+                                
+                            <? if($dest->esta_em_promocao){ ?>
+                                <span style="text-decoration: overline;"><?= StringUtil::doubleToCurrency($dest->preco_promocional); ?></span>&nbsp;&nbsp;
+                                <span style="color:#666; font-size:10px; text-decoration: line-through;"><?= StringUtil::doubleToCurrency($dest->preco); ?></span>
+                            <? }else{ ?>
+                                <span><?= StringUtil::doubleToCurrency($dest->preco); ?></span>
+                            <? } ?>
+                                
+			    <img src="background/botao_add.gif" class="poe_destaque_carrinho" quemsou="botao_add" produto="<?= $dest->id ?>" width="36" height="30" style="float:left; cursor:pointer;" /> 
 			</div>
+                        <? 
+                            $tem_acomp = 0;
+                            if($dest->produto_tem_produtos_adicionais){
+                                foreach($dest->produto_tem_produtos_adicionais as $aaa){
+                                    if(($aaa->produto_adicional->quantas_unidades_ocupa>0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
+                                        $tem_acomp = 1;
+                                    }
+                                }
+                            }
+                            if($tem_acomp){ 
+                                
+                                ?>
+                    
+                            <div class="carda_destaque_acomp_<?= $dest->id ?> pop-follow" style="position:absolute; z-index:10; display:none;">
+                                <img src="background/logo_noback.png" height="48" width="46" style="position:absolute; top:2px; left:4px; z-index:2; "> <img class="fechar_destaque_acomp"  produto="<?= $dest->id ?>" src="background/close.png" height="22" width="22" style="position:absolute; top:6px; right:3px; z-index:2; cursor:pointer;">
+                                        <div style="width:264px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">
+                                  <div class="titulo_follow">Acompanhamentos</div>
+                                  </div>
+                                  <table style="background:#F4F4F4; font-size:12px; width:264px; color:#999; float:left; position:relative; margin-top:10px;">
+
+                                    <? foreach($dest->produto_tem_produtos_adicionais as $aaa){ 
+                                        if(($aaa->produto_adicional->quantas_unidades_ocupa>0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
+                                        ?>
+
+
+
+
+
+                                                    <input type="hidden" class="carda_destaque_acomp_preco_<?= $dest->id ?>" id="carda_destaque_acomp_preco_<?= $dest->id ?>_<?= $aaa->produto_adicional->id ?>" value="<?= $aaa->produto_adicional->preco_adicional ?>">
+                                                    <input type="hidden" id="carda_destaque_acomp_ocupa_<?= $dest->id ?>_<?= $aaa->produto_adicional->id ?>" value="<?= $aaa->produto_adicional->quantas_unidades_ocupa ?>">
+                                                    <tr>
+                                                      <td><img src="background/botao_add.gif" height="16" width="20" class="poe_destaque_acomp" produto="<?= $dest->id ?>_<?= $aaa->produto_adicional->id ?>" style="cursor:pointer;" /></td>
+                                                      <td id="carda_destaque_acomp_nome_<?= $dest->id ?>_<?= $aaa->produto_adicional->id ?>"><?= $aaa->produto_adicional->nome ?> </td>
+                                                      <td class="carda_destaque_acomp_qtd_<?= $dest->id ?>" id="carda_destaque_acomp_qtd_<?= $dest->id ?>_<?= $aaa->produto_adicional->id ?>"></td>
+                                                      <td class="carda_destaque_acomp_preco_unitario_<?= $dest->id ?>" id="carda_destaque_acomp_preco_unitario_<?= $dest->id ?>_<?= $aaa->produto_adicional->id ?>"></td>
+                                                      <td></td> 
+                                                      <td></td>
+                                                    </tr>
+
+
+
+                                <? }} ?>
+                                        <tr>
+                                      <td></td>
+                                      <td  colspan="1" style="color:#E51B21;">Total</td>
+                                      <td></td>
+                                      <td id="carda_destaque_acomp_total_<?= $dest->id ?>" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>
+                                      <td></td>
+                                        </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                     <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                      <td colspan="6" style="color:#F90; text-align:center;">Voc&ecirc; tem direito a <span id="acomp_destaque_direito_<?= $dest->id ?>" valor="<?= $dest->qtd_produto_adicional ?>"><?= $dest->qtd_produto_adicional ?></span> por&ccedil;&otilde;es</td>
+                                        </tr>
+                                    <tr>
+                                        <td colspan="6" style="text-align:center;"><img class="poe_destaque_carrinho" quemsou="botao_add_acomp" style="cursor:pointer" produto="<?= $dest->id ?>" src="background/avancar.png"></td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                            <? }  ?>
 		    </div>
 		<?
 		$c++;
@@ -861,7 +1292,7 @@ if($_POST){
 $categorias = TipoProduto::find_by_sql("SELECT TP.* FROM tipo_produto TP INNER JOIN restaurante_tem_tipo_produto RTTP ON TP.id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = " . $_GET['id']);
 if ($categorias) {
     foreach ($categorias as $cat) {
-	?>      
+	?>  <div id="box_box_categoria_<?= $cat->id ?>">    
 		<div class="titulo_box_categoria"><?= $cat->nome ?>
 		</div>
 
@@ -932,13 +1363,28 @@ if ($categorias) {
 					</div>
 				    </div>
 
-				    <div class="preco_produto" ><?= StringUtil::doubleToCurrency($prod->preco) ?>
+				    <div class="preco_produto" ><? if($prod->esta_em_promocao){ ?>
+                                        <span style="color:#666; font-size:10px; text-decoration: line-through;"><?= StringUtil::doubleToCurrency($prod->preco); ?></span>
+                                            &nbsp;&nbsp;<span><?= StringUtil::doubleToCurrency($prod->preco_promocional); ?></span>
+                                            
+                                        <? }else{ ?>
+                                            <span><?= StringUtil::doubleToCurrency($prod->preco); ?></span>
+                                        <? } ?>
 				    </div>
-                                    <input type="hidden" id="carda_preco_<?= $prod->id ?>" value="<?= $prod->preco ?>">
+                                    <input type="hidden" id="carda_preco_<?= $prod->id ?>" value="<? 
+                                        if($prod->esta_em_promocao){ 
+                                            echo $prod->preco_promocional;
+                                        }else{
+                                            echo $prod->preco;
+                                        }    
+                                        ?>">
 				</div>
 
 				<div class="texto_produto">
 		<?= $prod->descricao ?>
+                            <? if($prod->esta_em_promocao){ ?>
+                                <div style="color:#E51B21;"><?= $prod->texto_promocao ?></div>
+                            <? } ?>
 				</div>
 
 				<div style="width:230px; height:21px; float:right;  padding-top:10px;">
@@ -947,6 +1393,115 @@ if ($categorias) {
                                         <input type="hidden" id="carda_id_<?= $prod->id ?>" value="<?= $prod->id ?>">
                                         <input type="hidden" id="carda_nome_<?= $prod->id ?>" value="<?= $prod->nome ?>">
                                         <?
+                                        if($prod->aceita_segundo_sabor){
+                                            $sss=Produto::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND disponivel = ? AND aceita_segundo_sabor = ? AND id <> ? AND tamanho = ?",$restaurante->id,1,1,1,$prod->id,$prod->tamanho)));
+                                            if($sss){ 
+                                                if($restaurante->qtd_max_sabores==2){
+                                                    $titulo = "Selecione o outro sabor";
+                                                }else{
+                                                    $titulo = "Selecione os outros sabores";
+                                                }
+                                                ?>
+                                            
+                                                <div class="carda_segundosabor_<?= $prod->id ?> pop-follow" style="position:absolute; z-index:10; left:-500px; top:-200px; display:block;">
+                                                    <img src="background/logo_noback.png" height="48" width="46" style="position:absolute; top:2px; left:4px; z-index:2; "> <img class="fechar_segundosabor"  produto="<?= $prod->id ?>" src="background/close.png" height="22" width="22" style="position:absolute; top:6px; right:3px; z-index:2; cursor:pointer;">
+                                                    <div style="width:264px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">
+                                                      <div class="titulo_follow"><?= $titulo ?></div>
+                                                      </div>
+                                                      <table style="background:#F4F4F4; font-size:12px; width:264px; color:#999; float:left; position:relative; margin-top:10px;">
+                                                                <input type="hidden" class="carda_segundosabor_preco_<?= $prod->id ?>" id="carda_segundosabor_preco_<?= $prod->id ?>_0" value="0">
+                                                                    
+                                                                    <tr>
+                                                                      <td><input type="radio" class="radio_segundo" produto="<?= $prod->id ?>" id="carda_segundo_<?= $prod->id ?>_0" name="carda_segundo_<?= $prod->id ?>" value="" checked></td>
+                                                                      <td id="carda_segundosabor_nome_<?= $prod->id ?>_0"> Nenhum </td>
+                                                                    
+                                                                      <td class="carda_segundosabor_preco_<?= $prod->id ?>" id="carda_segundosabor_preco_<?= $prod->id ?>_0"></td>
+                                                                      <td></td> <!-- aqui -->
+                                                                      <td></td>
+                                                                    </tr>
+                                                                    
+                                                                    <? if($restaurante->qtd_max_sabores>2){ ?>
+                                                                                  <td><input type="radio" class="radio_terceiro" produto="<?= $prod->id ?>" id="carda_terceiro_<?= $prod->id ?>_0" name="carda_terceiro_<?= $prod->id ?>" value="" checked></td>
+                                                                                  <td id="carda_terceirosabor_nome_<?= $prod->id ?>_0">Nenhum </td>
+
+                                                                                  <td class="carda_terceirosabor_preco_<?= $prod->id ?>" id="carda_terceirosabor_preco_<?= $prod->id ?>_0"></td>
+                                                                                  <td></td> <!-- aqui -->
+                                                                                  <td></td>
+                                                                      <? }
+                                                                         if($restaurante->qtd_max_sabores>3){ ?>
+                                                                                  <td><input type="radio" class="radio_quarto" produto="<?= $prod->id ?>" id="carda_quarto_<?= $prod->id ?>_0" name="carda_quarto_<?= $prod->id ?>" value="" checked></td>
+                                                                                  <td id="carda_quartosabor_nome_<?= $prod->id ?>_0">Nenhum </td>
+
+                                                                                  <td class="carda_quartosabor_preco_<?= $prod->id ?>" id="carda_quartosabor_preco_<?= $prod->id ?>_0"></td>
+                                                                                  <td></td> <!-- aqui -->
+                                                                                  <td></td>
+                                                                      <?            
+                                                                         }
+                                                                      ?>
+                                        <?
+                                                foreach($sss as $ss){
+                                                        $precoss = $prod->preco - $ss->preco;
+                                                        if($precoss<0){
+                                                            $precoss==0;
+                                                        }
+                                         ?>           
+                                                                    <input type="hidden" class="carda_segundosabor_preco_<?= $prod->id ?>" id="carda_segundosabor_preco_<?= $prod->id ?>_<?= $ss->id ?>" value="<?= $precoss ?>">
+                                                                    
+                                                                    <tr>
+                                                                                                                                             
+                                                                      <td><input type="radio" class="radio_segundo" produto="<?= $prod->id ?>" id="carda_segundo_<?= $prod->id ?>_<?= $ss->id ?>" name="carda_segundo_<?= $prod->id ?>" value=""></td>
+                                                                      <td id="carda_segundosabor_nome_<?= $prod->id ?>_<?= $ss->id ?>"><?= $ss->nome ?> </td>
+                                                                    
+                                                                      <td class="carda_segundosabor_preco_<?= $prod->id ?>" id="carda_segundosabor_preco_<?= $prod->id ?>_<?= $ss->id ?>"></td>
+                                                                      <td></td> <!-- aqui -->
+                                                                      <td></td>
+                                                                      
+                                                                      <? if($restaurante->qtd_max_sabores>2){ ?>
+                                                                                  <td><input type="radio" class="radio_terceiro" produto="<?= $prod->id ?>" id="carda_terceiro_<?= $prod->id ?>_<?= $ss->id ?>" name="carda_terceiro_<?= $prod->id ?>" value=""></td>
+                                                                                  <td id="carda_terceirosabor_nome_<?= $prod->id ?>_<?= $ss->id ?>"><?= $ss->nome ?> </td>
+
+                                                                                  <td class="carda_terceirosabor_preco_<?= $prod->id ?>" id="carda_terceirosabor_preco_<?= $prod->id ?>_<?= $ss->id ?>"></td>
+                                                                                  <td></td> <!-- aqui -->
+                                                                                  <td></td>
+                                                                      <? }
+                                                                         if($restaurante->qtd_max_sabores>3){ ?>
+                                                                                  <td><input type="radio" class="radio_quarto" produto="<?= $prod->id ?>" id="carda_quarto_<?= $prod->id ?>_<?= $ss->id ?>" name="carda_quarto_<?= $prod->id ?>" value=""></td>
+                                                                                  <td id="carda_quartosabor_nome_<?= $prod->id ?>_<?= $ss->id ?>"><?= $ss->nome ?> </td>
+
+                                                                                  <td class="carda_quartosabor_preco_<?= $prod->id ?>" id="carda_quartosabor_preco_<?= $prod->id ?>_<?= $ss->id ?>"></td>
+                                                                                  <td></td> <!-- aqui -->
+                                                                                  <td></td>
+                                                                      <?            
+                                                                         }
+                                                                      ?>
+                                                                      
+                                                                    </tr>
+                                               <? 
+                                               
+                                               }
+                                               ?>
+                                                        <tr>
+                                                          <td></td>
+                                                          <td  colspan="1" style="color:#E51B21;">Total</td>
+                                                          <td></td>
+                                                          <td id="carda_segundosabor_total_<?= $prod->id ?>" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>
+                                                          <td></td>
+                                                            </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td></td>
+                                                        </tr>
+                                                        
+                                                        <tr>
+                                                            <td colspan="6" style="text-align:center;"><img class="poe_segundosabor" quemsou="botao_add_segundosabor" style="cursor:pointer" produto="<?= $prod->id ?>" src="background/avancar.png"></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                               <?
+                                            }
+                                        }
                                         $tem_acomp = 0;
                                         $tem_extr = 0;
                                         if($prod->produto_tem_produtos_adicionais){
@@ -1083,6 +1638,7 @@ if ($categorias) {
 		}
 		?>
 		</div>
+        </div>
     <? }
 } ?> 
 

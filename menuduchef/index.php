@@ -1,5 +1,8 @@
 <? include('include/header.php'); ?>
-<?php include "menu.php" ?>
+<? 
+    include "menu.php";
+    session_destroy();
+?>
 
 <div class="span-24" id="central_principal" >
     <div id="lateral_esquerda">
