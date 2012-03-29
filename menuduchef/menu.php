@@ -12,22 +12,26 @@
 </script>
 <style>
 label{font-size:10px;}
-input[type=text]{font:Arial; font-size:10px; color:#FF9930; margin:0 0; width:120px; height:16px; padding:0 0;}
-input[type=password]{font:Arial; font-size:10px; color:#FF9930; margin:2px 0; width:120px; height:16px; padding:0 0;}
-.campo_log{text-indent:-999px; width:28px; height:18px; background:url(background/ok_inicial.gif); border:1px Solid #EBEBEB; margin-left:-6px; top:-2px;}
+.nome_log{font-family:Arial; font-size:10px; color:#FF9930; margin-top:12px; float:left; width:120px; height:20px; padding:0 0;}
+.pass_log{font-family:Arial; font-size:10px; color:#FF9930; margin: 1px 0px; float:left; width:120px; height:20px; padding:0 0;}
+.campo_log{text-indent:-999px; width:29px; height:18px; background:url(background/ok_inicial.gif); border:1px Solid #EBEBEB;}
 </style>
 <div class="div-24-last">
     <div id="menu" class="text">
 	<!-- A div abaixo destinada para login! -->
-        <div id="login">
-	    <form action="../menuduchef/php/controller/login" method="post">
-		<label style="font-size:14px;" for="email">E-mail:</label>
-		<input  type="text" name="email" maxlength="50" style="float:right; padding:0; margin-right:8px;"/>
-		<label style="font-size:14px;" for="senha">Senha:</label>
-		<input  type="password" name="senha" maxlength="50" style="float:right; padding:0; margin-right:8px;"/>
-		<input class="botao_ok" style="padding:0; margin-left:180px; margin-top:3px; position:absolute; z-index:3;" type="submit" value="OK"/>  
-	    </form>
+        <div class="tool" style="float:left; color: #0C3; padding-top:15px;"><a href="" style="color:#F90">logar-se</a>
+        <div class="log">
+          <form action="php/controller/login" method="post">
+            <input  placeholder="Nome" type="text" name="email" maxlength="40"/>
+            <input  placeholder="Senha" type="password" name="senha" maxlength="40"/>
+            <div style="position:relative; float:left;">
+              <input class="campo_log" type="submit" value="OK"/>
+            </div>
+             <a href="#"><div style="font-size:9px; font-family:Arial, Helvetica, sans-serif; font-weight:normal; color:#F94;">&nbsp;Esqueci minha senha</div></a>
+          </form>
         </div>
+      </div>
+                 
         <!-- Termina aqui! -->
         <div id="itens_menu">
 	    <div style="padding-top:15px;">

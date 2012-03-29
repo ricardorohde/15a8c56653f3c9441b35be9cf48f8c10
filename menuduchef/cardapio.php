@@ -1115,12 +1115,15 @@ if($_POST){
     <div class="span-6">
 	<div id="barra_esquerda">
 	    <div id="info_restaurante">
-		<div id="categoria_rest"><?= $restaurante->getNomeCategoria() ?>
-		</div>
-		<div id="nome_rest"><?= $restaurante->nome ?>
-		</div>
-		<div id="avatar_rest">
-		</div>
+   
+                <div id="categoria_rest"><?= $restaurante->getNomeCategoria() ?>
+                </div>
+                <div id="nome_rest"><?= $restaurante->nome ?>
+                </div>
+                <div id="avatar_rest">
+                    <img src="images/restaurante/<?= $restaurante->imagem ?>">
+                </div>
+
 		<div id="formas_pagamento"><div class="abreformapagamento" >Formas de pagamento</div>
 		    <? $fps = RestauranteAceitaFormaPagamento::all(array("conditions" => array("restaurante_id=?", $restaurante->id)));
 		    if ($fps) { ?>

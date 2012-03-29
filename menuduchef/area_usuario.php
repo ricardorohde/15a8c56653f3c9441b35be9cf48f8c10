@@ -146,6 +146,7 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
                 $('#mensagens_endereco').empty();
             }
         });
+        
     });
 </script>
 <div>

@@ -53,7 +53,7 @@ a:hover{color:#CCC}
 #login{
 	height:63px;
 	width:180px;
-	padding-left:38px;
+	padding-left:18px;
 	float:right;
 	}
 	
@@ -938,3 +938,91 @@ label { font-size:12px; font-family: Arial, Helvetica, sans-serif; color:#666; d
         color:#F90;
         cursor:pointer;
         }
+        
+/* css/tooltip.css -- fancy tooltips */
+
+div.tool {
+  position: relative;   /* this is key */
+  cursor: help;
+}
+ 
+div.tool div.tip{
+  display: none;        /* so is this */
+}
+
+div.tool div.log{
+  display: none;        /* so is this */
+}
+/* tooltip will display on :hover event */
+
+div.tool:hover div.tip {
+  display: block;
+  z-index: 100;
+  position: absolute;
+  top: 1.6em;
+  left: 0;
+  width: auto;
+  padding: 3px 7px 4px 6px;
+  border: 1px dashed #F90;
+  background-color: transparent;
+  font: normal 0.9em/1.2em arial, helvetica, sans-serif;
+  text-align: left;
+  color: #000;
+}
+
+div.tool:hover div.log {
+  display: block;
+  z-index: 100;
+  position: absolute;
+  top: 44px;
+  left: -8px;
+  width: auto;
+  padding: 3px 7px 4px 6px;
+  border: 1px dashed #F90;
+  background-color: transparent;
+  font: normal 0.9em/1.2em arial, helvetica, sans-serif;
+  text-align: left;
+  color: #000;
+}
+
+#content div.tool::after {
+  padding-left: 2px;            /* eye candy */
+  content: url(/img/bubble.gif);
+}
+
+/* css/tooltip.css */
+
+/* css/tooltip.css -- fancy tooltips */
+
+span.tool {
+  position: relative;   /* this is key */
+  cursor: help;
+}
+ 
+span.tool span.tip {
+  display: none;        /* so is this */
+}
+
+/* tooltip will display on :hover event */
+
+span.tool:hover span.tip {
+  display: block;
+  z-index: 100;
+  position: absolute;
+  top: 1.6em;
+  left: 0;
+  width: auto;
+  padding: 3px 7px 4px 6px;
+  border: 1px dashed #F90;
+  background-color: transparent;
+  font: normal 0.9em/1.2em arial, helvetica, sans-serif;
+  text-align: left;
+  color: #000;
+}
+
+#content span.tool::after {
+  padding-left: 2px;            /* eye candy */
+  content: url(/img/bubble.gif);
+}
+
+/* css/tooltip.css */

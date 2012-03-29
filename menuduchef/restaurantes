@@ -89,7 +89,7 @@ if ($enderecoSession) {
                                     }
                                 }
                     ?>
-                            <option value="<?= $end->id ?>_<?= $end->bairro_id ?>" <?= $sel ?>><?= $end->logradouro ?> - <?= $end->bairro ?> | <?= $end->bairro->cidade ?></option>
+                            <option value="<?= $end->id ?>_<?= $end->bairro_id ?>" <?= $sel ?>><?= $end->logradouro ?>, <?= $end->numero ?> - <?= $end->bairro ?> | <?= $end->bairro->cidade ?></option>
 		    <? }
                     }else{ ?>
                         <option value="<?= $enderecoSession->id ?>_<?= $enderecoSession->bairro_id ?>"><?= $enderecoSession->logradouro ?> - <?= $enderecoSession->bairro ?> | <?= $enderecoSession->bairro->cidade ?></option>

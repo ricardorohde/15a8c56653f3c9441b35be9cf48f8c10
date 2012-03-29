@@ -3,6 +3,14 @@
     
     
     $pedido = Pedido::find($_SESSION['pedido_id']);
+    $apaga_pagamento['troco'] = 0;
+    $apaga_pagamento['forma_pagamento'] = "ainda_nao";
+    $apaga_pagamento['nome_carta'] = NULL;
+    $apaga_pagamento['num_cartao'] = NULL;
+    $apaga_pagamento['validade_cartao'] = NULL;
+    $apaga_pagamento['cod_seguranca_cartao'] = NULL;
+    $pedido->update_attributes($apaga_pagamento);
+    
     $restaurante = Restaurante::find($pedido->restaurante_id);
     $telefones = TelefoneConsumidor::all(array("conditions"=>array("consumidor_id = ?",$pedido->consumidor_id)));
     
@@ -17,6 +25,9 @@
             });
             
             $("#aux_"+qual).show();
+        });
+        $("#confirma_pagamento").click(function(){
+            $("#confpag").submit();
         });
     });
 </script>
@@ -148,6 +159,7 @@ u{
                     <div class="titulo_box_pedido">Pagamento
 					</div>
                     <div class="box_pedido">
+                        <form id="confpag" action="php/controller/salva_forma_pagamento" method="post">
                     <table style="margin-left:-4px; width:534px;">
                     	<?
                             if($restaurante->restaurante_pagamentos){
@@ -158,7 +170,12 @@ u{
                                                 <? if($rp->forma_pagamento->nome=="Dinheiro"){ ?>
                                                     <input type="text" name="troco" placeholder="Troco para...">
                                                 <? }else{ ?>
-                                                    <input type="text" name="troco" placeholder="Trocouheiaushvesa">
+                                                    <table>
+                                                    <tr><td><input type="text" name="nome_cartao" placeholder="Nome no cart&atilde;o"></td></tr>
+                                                    <tr><td><input type="text" name="num_cartao" placeholder="N&uacute;mero cart&atilde;o"></td></tr>
+                                                    <tr><td><input type="text" name="validade_cartao" placeholder="Validade cart&atilde;o"></td></tr>
+                                                    <tr><td><input type="text" name="cod_seguranca_cartao" placeholder="C&oacute;digo seguran&ccedil; cart&atilde;o"></td></tr>
+                                                    </table>
                                                 <? } ?>
                                             </div>
                                         </td></tr>
@@ -167,7 +184,8 @@ u{
                         ?>
                     </table>
 
-                    <img src="background/botao_fin.png" width="121" height="33" style="float:right; cursor:pointer; position:absolute; margin-top:-38px; margin-left:534px">
+                    <img src="background/botao_fin.png" id="confirma_pagamento" width="121" height="33" style="float:right; cursor:pointer; position:absolute; margin-top:-38px; margin-left:534px">
+                        </form>
                     </div>
                     <div class="box_pedido" style="display:none;">
                         
