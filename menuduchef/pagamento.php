@@ -27,7 +27,18 @@
             $("#aux_"+qual).show();
         });
         $("#confirma_pagamento").click(function(){
-            $("#confpag").submit();
+            ok = 0;
+            $(".select_pag").each(function(){
+                if($(this).attr("checked")){
+                    ok = 1;
+                }
+            });
+            if(ok){
+                $("#confpag").submit();
+            }else{
+                alert("Selecione uma forma de pagamento.");
+            }
+            
         });
     });
 </script>
@@ -45,15 +56,18 @@ u{
 			<div class="span-6">
             	<div id="barra_esquerda">
                 	<div id="info_restaurante">
-                    	<div id="categoria_rest">Pizzaria
+                    	<div id="categoria_rest"><?= $restaurante->getNomeCategoria() ?>
                         </div>
-                        <div id="nome_rest">Reis Magos
+                        <div id="nome_rest"><?= $restaurante->nome ?>
                         </div>
                         <div id="avatar_rest">
+                            <img src="images/restaurante/<?= $restaurante->imagem ?>">
                         </div>
                         <div id="formas_pagamento">Formas de pagamento
                         </div>
-                        <div id="tempo_entrega">Tempo de entrega:<img src="background/relogio.gif" width="20" height="19" style="position:relative; top:6px; left:4px;">&nbsp;&nbsp;&nbsp;300min
+                        <div style="color:#E51B21; font:Arial; font-size:24px; display:inline;">(84)3206-7888
+                        </div>
+                      <div id="tempo_entrega">Tempo de entrega:<img src="background/relogio.gif" width="20" height="19" style="position:relative; top:6px; left:4px;">&nbsp;&nbsp;&nbsp; <?= $rxb->tempo_entrega ?>min
                         </div>
                     </div>
                     

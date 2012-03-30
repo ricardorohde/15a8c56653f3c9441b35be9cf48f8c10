@@ -64,8 +64,34 @@
                                         <span id="span_qtd_prod_<?= $count ?>"><?= $prod->qtd ?>x</span>
                                         <input type="hidden" id="qtd_prod_<?= $count ?>" name="qtd_prod_<?= $count ?>" value="<?= $prod->qtd ?>">
 
-                                        <?= $prod->produto->nome ?>
-                                        <input type="hidden" id="id_prod_<?= $count ?>" name="id_prod_<?= $count ?>" class="lista_carrinho" value="<?= $prod->produto_id ?>">
+                                        <? 
+                                            $val_prod = "";
+                                            if($prod->produto->aceita_segundo_sabor){
+                                                if($prod->produto_id2){
+                                                    if($prod->produto_id3){
+                                                        if($prod->produto_id4){
+                                                            $val_prod = $prod->produto_id."/".$prod->produto_id2."/".$prod->produto_id3."/".$prod->produto_id4;
+                                                            echo "1/4".$prod->produto->nome.",1/4".$prod->produto2->nome.",1/4".$prod->produto3->nome.",1/4".$prod->produto4->nome;
+                                                        }else{
+                                                            $val_prod = $prod->produto_id."/".$prod->produto_id2."/".$prod->produto_id3;
+                                                            echo "1/3".$prod->produto->nome.",1/3".$prod->produto2->nome.",1/3".$prod->produto3->nome;
+                                                        }
+                                                    }else{
+                                                        $val_prod = $prod->produto_id."/".$prod->produto_id2;
+                                                        echo "1/2".$prod->produto->nome.",1/2".$prod->produto2->nome;
+                                                    }
+                                                }else{
+                                                   $val_prod = $prod->produto_id;
+                                                   echo $prod->produto->nome;
+                                                }
+                                            }else{
+                                                $val_prod = $prod->produto_id;
+                                                echo $prod->produto->nome;
+                                            }
+                                             
+                                    
+                                        ?>
+                                        <input type="hidden" id="id_prod_<?= $count ?>" name="id_prod_<?= $count ?>" class="lista_carrinho" value="<?= $val_prod ?>">
                                         <div id="div_preco_prod_<?= $count ?>" style="float:right;"><?= StringUtil::doubleToCurrency($prod->getTotal()) ?></div>
                                         <input type="hidden" id="preco_prod_<?= $count ?>" class="preco_carrinho" value="<?= $prod->getTotal() ?>" >
                                     </div>

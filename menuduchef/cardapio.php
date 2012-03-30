@@ -58,21 +58,74 @@ if($_POST){
             foreach($_POST as $key => $valor){
                 if(substr($key,0,8)=="id_prod_"){                 
                     $quebra = explode("_",$key);
-                    $prod=Produto::find(array("conditions"=>array("restaurante_id = ? AND id = ? AND ativo = ? AND disponivel = ?",$restaurante->id,$valor,1,1)));
-                    if($prod){
+                    $prodok = 1;
+                    if(strpbrk($valor,'/')){
+                        
+                        $prodqueb = explode("/",$valor);
+                        $prod=Produto::find(array("conditions"=>array("restaurante_id = ? AND id = ? AND ativo = ? AND disponivel = ?",$restaurante->id,$prodqueb[0],1,1)));
+                        if(!$prod){
+                            $prodok = 0;
+                        }
+                        if((sizeof($prodqueb)>1)&&($prodqueb[1])){
+                            $prod2=Produto::find(array("conditions"=>array("restaurante_id = ? AND id = ? AND ativo = ? AND disponivel = ?",$restaurante->id,$prodqueb[1],1,1)));
+                            if(!$prod2){
+                                $prodok = 0;
+                            }
+                        }
+                        if((sizeof($prodqueb)>2)&&($prodqueb[2])){
+                            $prod3=Produto::find(array("conditions"=>array("restaurante_id = ? AND id = ? AND ativo = ? AND disponivel = ?",$restaurante->id,$prodqueb[2],1,1)));
+                            if(!$prod3){
+                                $prodok = 0;
+                            }
+                        }
+                        if((sizeof($prodqueb)>3)&&($prodqueb[3])){
+                            $prod4=Produto::find(array("conditions"=>array("restaurante_id = ? AND id = ? AND ativo = ? AND disponivel = ?",$restaurante->id,$prodqueb[3],1,1)));
+                            if(!$prod4){
+                                $prodok = 0;
+                            }
+                        }
+                    }else{
+                        
+                        $prod=Produto::find(array("conditions"=>array("restaurante_id = ? AND id = ? AND ativo = ? AND disponivel = ?",$restaurante->id,$valor,1,1)));
+                        if(!$prod){
+                            $prodok = 0;
+                        }
+                    }
+
+                    if($prodok){
                         $data2['pedido_id'] = $idped;
                         $data2['produto_id'] = $prod->id;
                         $data2['qtd'] = $_POST['qtd_prod_'.$quebra[2]];
                         $data2['obs'] = $_POST['obs_prod_'.$quebra[2]];
                         $data2['tamanho'] = "";
-                        $data2['produto_id2'] = 0;
-                        $data2['produto_id3'] = 0;
-                        $data2['produto_id4'] = 0;
-                        if($prod->esta_em_promocao){
+                        if($prod2){
+                            $data2['produto_id2'] = $prod2->id;
+                            if($prod3){
+                                $data2['produto_id3'] = $prod3->id;
+                                if($prod4){
+                                    $data2['produto_id4'] = $prod4->id;
+                                }else{
+                                    $data2['produto_id4'] = 0;
+                                }
+                            }else{
+                                $data2['produto_id4'] = 0;
+                                $data2['produto_id3'] = 0;
+                            }
+                        }else{
+                            $data2['produto_id4'] = 0;
+                            $data2['produto_id3'] = 0;
+                            $data2['produto_id2'] = 0;
+                        }
+                       
+                        if($prod->esta_em_promocao){ //conferir se os precos dos outros pedacos tao senod elvados em conta
                             $data2['preco_unitario'] = $prod->preco;
                         }else{
                             $data2['preco_unitario'] = $prod->preco_promocional;
                         }
+                        
+                        unset($prod2);
+                        unset($prod3);
+                        unset($prod4);
                         
                         if($_SESSION['usuario']){
                             $pro = new PedidoTemProduto($data2);
@@ -144,7 +197,7 @@ if($_POST){
             
             //finalizando o carrinho, chega a hora de decidir pra qual pagina ir: a do login ou a do pagamento:
             if($_SESSION['usuario']){
-                echo "<script> window.location.href = 'pagamento' </script>";
+               echo "<script> window.location.href = 'pagamento' </script>";
             }else{
                echo "<script> window.location.href = 'cadastro' </script>";
             }
@@ -155,6 +208,14 @@ if($_POST){
 ?>
 <script>
     
+    function strpbrk (haystack, char_list) {
+        for (var i = 0, len = haystack.length; i < len; ++i) {
+            if (char_list.indexOf(haystack.charAt(i)) >= 0) {
+                return haystack.slice(i);
+            }
+        }
+        return false;
+    }
     function getElementByClass(theClass) {
         var allHTMLTags = new Array();
         var selectedElements = new Array();
@@ -309,13 +370,15 @@ if($_POST){
                     if(qual.substr(0,7)=="id_prod"){
                         qual = qual.split("_");
                         if((qual[0]=="id")&&(qual[1]=="prod")){
-                            if(vetor[i].value==idprod){
+                            if(confere_se_id_e_igual(vetor[i].value,idprod)){
                                 obs = document.getElementById("obs_prod_"+qual[2]).value;
 
                                 if(obs==obsprod){
-                                    if(confere_se_acomp_e_igual(qual[2],idprod,"destaque")){          
+                                    if(confere_se_acomp_e_igual(qual[2],idprod,"destaque")){    
+                                        
                                             ja_tem_no_carrinho = 1;
                                             alvo = qual[2];
+                                          
                                     }
                                 }
                             }
@@ -441,13 +504,16 @@ if($_POST){
                     if(qual.substr(0,7)=="id_prod"){
                         qual = qual.split("_");
                         if((qual[0]=="id")&&(qual[1]=="prod")){
-                            if(vetor[i].value==idprod){
+                            
+                            if(confere_se_id_e_igual(vetor[i].value,idprod)){
                                 obs = document.getElementById("obs_prod_"+qual[2]).value;
 
                                 if(obs==obsprod){
-                                    if(confere_se_acomp_e_igual(qual[2],idprod,"normal")){          
+                                    if(confere_se_acomp_e_igual(qual[2],idprod,"normal")){
+                                        
                                             ja_tem_no_carrinho = 1;
                                             alvo = qual[2];
+                                        
                                     }
                                 }
                             }
@@ -466,8 +532,37 @@ if($_POST){
                     item_no_carrinho += '<div onclick=\'destroi_box("'+numero+'")\'>X</div>';
                     item_no_carrinho += '<div><span id="span_qtd_prod_'+numero+'">'+qtd+'x</span>';
                     item_no_carrinho += '<input type="hidden" id="qtd_prod_'+numero+'" name="qtd_prod_'+numero+'" value="'+qtd+'">';
-                    item_no_carrinho += nome;                        
-                    item_no_carrinho += '<input type="hidden" id="id_prod_'+numero+'" name="id_prod_'+numero+'" class="lista_carrinho" value="'+idprod+'">';
+
+                    if($("#aceita_seg_sab_"+idprod).attr("value")){
+                        prodval = idprod;
+                                               
+                        if(parseInt($("#carda_sabor_extra_id_"+idprod+"_2").attr("value"))){
+                           prodval += "/"+$("#carda_sabor_extra_id_"+idprod+"_2").attr("value");
+                           if(parseInt($("#carda_sabor_extra_id_"+idprod+"_3").attr("value"))){
+                               prodval += "/"+$("#carda_sabor_extra_id_"+idprod+"_3").attr("value");
+                               if(parseInt($("#carda_sabor_extra_id_"+idprod+"_4").attr("value"))){
+                                   prodval += "/"+$("#carda_sabor_extra_id_"+idprod+"_4").attr("value");
+                                   prodnom = "1/4"+nome+",1/4"+$("#carda_sabor_extra_"+idprod+"_2").html()+",1/4"+$("#carda_sabor_extra_"+idprod+"_3").html()+",1/4"+$("#carda_sabor_extra_"+idprod+"_4").html();
+                               }
+                               else{
+                                   prodnom = "1/3"+nome+",1/3"+$("#carda_sabor_extra_"+idprod+"_2").html()+",1/3"+$("#carda_sabor_extra_"+idprod+"_3").html();
+                               }
+                           }
+                           else{
+                               prodnom = "1/2"+nome+",1/2"+$("#carda_sabor_extra_"+idprod+"_2").html();
+                           }
+                        }else{
+                            
+                            prodnom = nome;
+                        }
+
+                    }else{
+                        prodnom = nome;
+                        prodval = idprod;
+                    }
+
+                    item_no_carrinho += prodnom;
+                    item_no_carrinho += '<input type="hidden" id="id_prod_'+numero+'" name="id_prod_'+numero+'" class="lista_carrinho" value="'+prodval+'">';
                     preco *= qtd;
                     item_no_carrinho += '<div id="div_preco_prod_'+numero+'" style="float:right;">R$ '+number_format(preco, 2, ',', '.')+'</div>';
                     item_no_carrinho += '<input type="hidden" id="preco_prod_'+numero+'"  class="preco_carrinho" value="'+preco+'" >';
@@ -529,7 +624,18 @@ if($_POST){
                     $(this).empty();
                 });
 
-
+                $("#carda_sabor_extra_total_"+quebra[0]).html("+ R$ 0,00");
+                $("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_2").attr("value",0);
+                $("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_3").attr("value",0);
+                $("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_4").attr("value",0);
+                
+                $("#carda_sabor_extra_id_"+idprod+"_2").attr("value",0);
+                $("#carda_sabor_extra_id_"+idprod+"_3").attr("value",0);
+                $("#carda_sabor_extra_id_"+idprod+"_4").attr("value",0);
+                
+                $("#carda_sabor_extra_"+quebra[0]+"_2").html("Nenhum");
+                $("#carda_sabor_extra_"+quebra[0]+"_3").html("Nenhum");
+                $("#carda_sabor_extra_"+quebra[0]+"_4").html("Nenhum");
                 $("#carda_extr_total_"+quebra[0]).html("+ R$ 0,00");
                 
 
@@ -542,6 +648,7 @@ if($_POST){
                     $(this).empty();
                 });
             }
+            
 	});
         $(".poe_acomp").click( function(){
         
@@ -688,6 +795,65 @@ if($_POST){
 
              
         });
+        
+        $(".poe_segundo").click( function(){
+
+            qual = $(this).attr("produto");
+            quebra = qual.split("_");
+
+            num = 0;
+            
+            conf2 = $("#carda_sabor_extra_"+quebra[0]+"_2").html();
+            conf2 = conf2.split(" ");
+            conf2 = conf2.join("");
+            <? if($restaurante->qtd_max_sabores>2){ ?>
+            conf3 = $("#carda_sabor_extra_"+quebra[0]+"_3").html();
+            conf3 = conf3.split(" ");
+            conf3 = conf3.join("");
+            <? }
+                if($restaurante->qtd_max_sabores>3){
+            ?>
+            conf4 = $("#carda_sabor_extra_"+quebra[0]+"_4").html();
+            conf4 = conf4.split(" ");
+            conf4 = conf4.join("");
+            <? } ?>
+            
+            if(conf2=="Nenhum"){
+                num = 2;
+            }else if(conf3=="Nenhum"){
+                num = 3;
+            }else if(conf4=="Nenhum"){
+                num = 4;
+            }
+            
+            nome = $("#carda_sabor_extra_nome_"+qual).html();
+            $("#carda_sabor_extra_"+quebra[0]+"_"+num).html(nome);
+            
+            $("#carda_sabor_extra_id_"+quebra[0]+"_"+num).attr("value",quebra[1]);
+            
+            preco_unitario = parseInt($("#carda_sabor_extra_preco_"+qual).attr("value"));
+            $("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_"+num).attr("value",preco_unitario);
+            
+ 
+  
+            preco_total = 0;
+            
+            limite = <?= $restaurante->qtd_max_sabores - 1 ?>;
+            
+            for(i=0;i<limite;i++){
+                if(preco_total<parseInt($("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_"+(i+2)).attr("value"))){
+                    preco_total = parseInt($("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_"+(i+2)).attr("value"));
+                }
+            }
+            
+            if(preco_total==0){
+                $("#carda_sabor_extra_total_"+quebra[0]).html("+ R$0,00");
+            }else{
+                preco_total = number_format(preco_total, 2, ',', '.');
+                $("#carda_sabor_extra_total_"+quebra[0]).html("+ R$"+preco_total);
+            }
+
+        });
 
         $(".fechar_segundosabor").click( function(){
             qual = $(this).attr("produto");
@@ -697,11 +863,22 @@ if($_POST){
                 $(this).hide();
             });
             
-            $(".carda_segundosabor_preco_"+qual).each(function(){
-                $(this).empty();
+            limite = <?= $restaurante->qtd_max_sabores - 1 ?>;
+            for(i=0;i<limite;i++){
+                $("#carda_sabor_extra_"+quebra[0]+"_"+(i+2)).each(function(){
+                    $(this).html("Nenhum");
+                });
+            }
+            
+            $(".carda_sabor_extra_preco_incluso"+qual).each(function(){
+                $(this).attr("value",0);
             });
+            
+            $("#carda_sabor_extra_id_"+idprod+"_2").attr("value",0);
+            $("#carda_sabor_extra_id_"+idprod+"_3").attr("value",0);
+            $("#carda_sabor_extra_id_"+idprod+"_4").attr("value",0);
 
-            $("#carda_segundosabor_total_"+quebra[0]).html("+ R$ 0,00");
+            $("#carda_sabor_extra_total_"+quebra[0]).html("+ R$ 0,00");
                           
         });
         $(".fechar_acomp").click( function(){
@@ -775,6 +952,15 @@ if($_POST){
             });
                           
         });
+        $(".confirmar_sabor_extra").click( function(){
+            qual = $(this).attr("produto");
+            quebra = qual.split("_");
+            
+            $(".carda_segundosabor_"+qual).each(function(){
+                $(this).hide();
+            });
+                          
+        });
         $(".mostra_extra").click( function(){
             qual = $(this).attr("produto");
 
@@ -782,6 +968,14 @@ if($_POST){
                 $(this).show();
             });
         });
+        $(".mostra_sabor_extra").click( function(){
+            qual = $(this).attr("produto");
+
+            $(".carda_segundosabor_"+qual).each(function(){
+                $(this).show();
+            });
+        });
+        
     });
     function destroi_box(x){
         qual = document.getElementById("produto_box_"+x);
@@ -825,6 +1019,24 @@ if($_POST){
     }
     function obter_preco(x){
         preco = parseInt(document.getElementById("carda_preco_"+x).value);
+        
+        if(parseInt($("#aceita_seg_sab_"+x).attr("value"))){
+            m1 = parseInt($("#carda_sabor_extra_preco_incluso_"+x+"_2").attr("value"));
+            acrescimo = m1;
+            <? if($restaurante->qtd_max_sabores>2){ ?>
+                m2 = parseInt($("#carda_sabor_extra_preco_incluso_"+x+"_3").attr("value"));
+                acrescimo = Math.max(acrescimo,m2);
+            <? }
+               if($restaurante->qtd_max_sabores>3){
+            ?>
+               m3 = parseInt($("#carda_sabor_extra_preco_incluso_"+x+"_4").attr("value"));
+               acrescimo = Math.max(acrescimo,m3);
+            <?
+               }
+            ?>
+
+            preco += acrescimo;
+        }
         
         precoa = 0;        
         $(".carda_acomp_qtd_"+x).each(function(){
@@ -992,6 +1204,40 @@ if($_POST){
             }  
         });
         return item_no_carrinho;
+    }
+    function confere_se_id_e_igual(x,y){
+        resposta = 1;
+
+            v1 = x.split("/");
+            v1.sort();
+           
+            
+            var v2 = new Array();
+            v2[0] = y;
+            if(parseInt($("#carda_sabor_extra_id_"+y+"_2").attr("value"))){
+                v2[1] = $("#carda_sabor_extra_id_"+y+"_2").attr("value");
+                if(parseInt($("#carda_sabor_extra_id_"+y+"_3").attr("value"))){
+                    v2[2] = $("#carda_sabor_extra_id_"+y+"_3").attr("value");
+                    if(parseInt($("#carda_sabor_extra_id_"+y+"_4").attr("value"))){
+                        v2[3] = $("#carda_sabor_extra_id_"+y+"_4").attr("value");
+                    }
+                }
+            }
+
+            v2.sort();
+
+            if(v1.length==v2.length){
+                for(i=0;i<v1.length;i++){
+                    if(v1[i]!=v2[i]){
+                        resposta = 0;
+                    }
+                }
+            }else{
+                resposta = 0;
+            }
+           
+        
+        return resposta;
     }
     function confere_se_acomp_e_igual(x,y,z){
         resposta = 0;
@@ -1213,7 +1459,7 @@ if($_POST){
                                 <span style="text-decoration: overline;"><?= StringUtil::doubleToCurrency($dest->preco_promocional); ?></span>&nbsp;&nbsp;
                                 <span style="color:#666; font-size:10px; text-decoration: line-through;"><?= StringUtil::doubleToCurrency($dest->preco); ?></span>
                             <? }else{ ?>
-                                <span><?= StringUtil::doubleToCurrency($dest->preco); ?></span>
+                                <span style="text-decoration: overline;"><?= StringUtil::doubleToCurrency($dest->preco); ?></span>
                             <? } ?>
                                 
 			    <img src="background/botao_add.gif" class="poe_destaque_carrinho" quemsou="botao_add" produto="<?= $dest->id ?>" width="36" height="30" style="float:left; cursor:pointer;" /> 
@@ -1310,31 +1556,6 @@ if ($categorias) {
 				echo"style='background:#F0F0F0;'";
 			    } ?>>
                                 
-                               
-                                    <? /*  <div id="div_adicionais_<?= $prod->id ?>" style="background:#EEE; display: absolute; display: block;"><table><tr><td><? 
-                                            
-                                            if($prod->produto_tem_produtos_adicionais){
-                                                $aco = "";
-                                                $ext = "";
-                                                $prodadi = "";
-                                                $prodext = "";
-                                                foreach($prod->produto_tem_produtos_adicionais as $ptpa){
-                                                    if($ptpa->produto_adicional->quantas_unidades_ocupa>0){
-                                                        $aco = "Acompanhamentos:<br/>";
-                                                        $prodadi .= "<input type='checkbox' name='produto!adicional-".$ptpa->produto_adicional->id."-".$prod->id."' value='1' >&nbsp;".$ptpa->produto_adicional->nome."<br/>";
-                                                    }
-                                                    if($ptpa->produto_adicional->quantas_unidades_ocupa==0){
-                                                        $ext = "Por&ccedil;&otilde;es extras:<br/>";
-                                                        $prodext .= "<input type='checkbox' name='produto!adicional-".$ptpa->produto_adicional->id."-".$prod->id."' value='1' >&nbsp;".$ptpa->produto_adicional->nome."<br/>";
-                                                    }
-                                                }
-                                                echo $aco;
-                                                echo $prodadi;
-                                                echo "</td><td>";
-                                                echo $ext;
-                                                echo $prodext;
-                                            }                                      
-                                                 ?></td></tr></table></div> */ ?>
                                 
 				<div class="titulo_produto">
                                     <? 
@@ -1351,7 +1572,22 @@ if ($categorias) {
                                         ?>
                                     <div class="link_extra mostra_extra" produto="<?= $prod->id ?>"> +extras</div>
                                     <? } ?>
+                                    
+                                    <?
+                                        if($prod->aceita_segundo_sabor){
+                                            ?>
+                                                <input type="hidden" id="aceita_seg_sab_<?= $prod->id ?>" value="1">
+                                                <div class="link_extra mostra_sabor_extra" style="font-size:17px;" produto="<?= $prod->id ?>">M</div>
+                                            <?
+                                        }else{
+                                            ?>
+                                                <input type="hidden" id="aceita_seg_sab_<?= $prod->id ?>" value="0">
+                                            <?    
+                                        }
+                                    ?>
 				</div>
+                                
+                                
 
 				<div class="sup_produto">	        
 				    <div class="define_quantidade">
@@ -1397,7 +1633,7 @@ if ($categorias) {
                                         <input type="hidden" id="carda_nome_<?= $prod->id ?>" value="<?= $prod->nome ?>">
                                         <?
                                         if($prod->aceita_segundo_sabor){
-                                            $sss=Produto::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND disponivel = ? AND aceita_segundo_sabor = ? AND id <> ? AND tamanho = ?",$restaurante->id,1,1,1,$prod->id,$prod->tamanho)));
+                                            $sss=Produto::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND disponivel = ? AND aceita_segundo_sabor = ? AND tamanho = ?",$restaurante->id,1,1,1,$prod->tamanho)));
                                             if($sss){ 
                                                 if($restaurante->qtd_max_sabores==2){
                                                     $titulo = "Selecione o outro sabor";
@@ -1406,77 +1642,61 @@ if ($categorias) {
                                                 }
                                                 ?>
                                             
-                                                <div class="carda_segundosabor_<?= $prod->id ?> pop-follow" style="position:absolute; z-index:10; left:-500px; top:-200px; display:block;">
+                                                <div class="carda_segundosabor_<?= $prod->id ?> pop-follow" style="position:absolute; z-index:999; left:-500px; top:-200px; display:none;">
                                                     <img src="background/logo_noback.png" height="48" width="46" style="position:absolute; top:2px; left:4px; z-index:2; "> <img class="fechar_segundosabor"  produto="<?= $prod->id ?>" src="background/close.png" height="22" width="22" style="position:absolute; top:6px; right:3px; z-index:2; cursor:pointer;">
                                                     <div style="width:264px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">
                                                       <div class="titulo_follow"><?= $titulo ?></div>
                                                       </div>
+                                                      <table>
+                                                          <? 
+                                                            $vezes = $restaurante->qtd_max_sabores - 1;
+                                                            for($i=0;$i<$vezes;$i++){
+                                                                $sabor = "";
+                                                                switch($i){
+                                                                    case 0: $sabor="Segundo sabor:"; break;
+                                                                    case 1: $sabor="Terceiro sabor:"; break;
+                                                                    case 2: $sabor="Quarto sabor:"; break;
+                                                                }
+                                                                ?>
+                                                                    <input type="hidden" id="carda_sabor_extra_preco_incluso_<?= $prod->id ?>_<?= ($i + 2) ?>" value="0">
+                                                                    <tr><th><?= $sabor ?><input type="hidden" id="carda_sabor_extra_id_<?= $prod->id ?>_<?= ($i + 2) ?>" value="0"></th><th class="carda_sabor_extra_tabelinha_<?= $prod->id ?>" id="carda_sabor_extra_<?= $prod->id ?>_<?= ($i + 2) ?>">Nenhum</th></tr>
+                                                                <?
+                                                            }
+                                                          ?>
+                                                      </table>
                                                       <table style="background:#F4F4F4; font-size:12px; width:264px; color:#999; float:left; position:relative; margin-top:10px;">
-                                                                <input type="hidden" class="carda_segundosabor_preco_<?= $prod->id ?>" id="carda_segundosabor_preco_<?= $prod->id ?>_0" value="0">
-                                                                    
-                                                                    <tr>
-                                                                      <td><input type="radio" class="radio_segundo" produto="<?= $prod->id ?>" id="carda_segundo_<?= $prod->id ?>_0" name="carda_segundo_<?= $prod->id ?>" value="" checked></td>
-                                                                      <td id="carda_segundosabor_nome_<?= $prod->id ?>_0"> Nenhum </td>
-                                                                    
-                                                                      <td class="carda_segundosabor_preco_<?= $prod->id ?>" id="carda_segundosabor_preco_<?= $prod->id ?>_0"></td>
-                                                                      <td></td> <!-- aqui -->
-                                                                      <td></td>
-                                                                    </tr>
-                                                                    
-                                                                    <? if($restaurante->qtd_max_sabores>2){ ?>
-                                                                                  <td><input type="radio" class="radio_terceiro" produto="<?= $prod->id ?>" id="carda_terceiro_<?= $prod->id ?>_0" name="carda_terceiro_<?= $prod->id ?>" value="" checked></td>
-                                                                                  <td id="carda_terceirosabor_nome_<?= $prod->id ?>_0">Nenhum </td>
-
-                                                                                  <td class="carda_terceirosabor_preco_<?= $prod->id ?>" id="carda_terceirosabor_preco_<?= $prod->id ?>_0"></td>
-                                                                                  <td></td> <!-- aqui -->
-                                                                                  <td></td>
-                                                                      <? }
-                                                                         if($restaurante->qtd_max_sabores>3){ ?>
-                                                                                  <td><input type="radio" class="radio_quarto" produto="<?= $prod->id ?>" id="carda_quarto_<?= $prod->id ?>_0" name="carda_quarto_<?= $prod->id ?>" value="" checked></td>
-                                                                                  <td id="carda_quartosabor_nome_<?= $prod->id ?>_0">Nenhum </td>
-
-                                                                                  <td class="carda_quartosabor_preco_<?= $prod->id ?>" id="carda_quartosabor_preco_<?= $prod->id ?>_0"></td>
-                                                                                  <td></td> <!-- aqui -->
-                                                                                  <td></td>
-                                                                      <?            
-                                                                         }
-                                                                      ?>
+               
                                         <?
                                                 foreach($sss as $ss){
-                                                        $precoss = $prod->preco - $ss->preco;
+                                                        if($prod->esta_em_promocao){
+                                                            $precop = $prod->preco_promocional;
+                                                        }else{
+                                                            $precop = $prod->preco;
+                                                        }
+                                                        if($ss->esta_em_promocao){
+                                                            $precos = $ss->preco_promocional;
+                                                        }else{
+                                                            $precos = $ss->preco;
+                                                        }
+                                                        $precoss = $precos - $precop;
                                                         if($precoss<0){
-                                                            $precoss==0;
+                                                            $precoss=0;
                                                         }
                                          ?>           
-                                                                    <input type="hidden" class="carda_segundosabor_preco_<?= $prod->id ?>" id="carda_segundosabor_preco_<?= $prod->id ?>_<?= $ss->id ?>" value="<?= $precoss ?>">
+                                                                    <input type="hidden" class="carda_sabor_extra_preco_<?= $prod->id ?>" id="carda_sabor_extra_preco_<?= $prod->id ?>_<?= $ss->id ?>" value="<?= $precoss ?>">
                                                                     
                                                                     <tr>
                                                                                                                                              
-                                                                      <td><input type="radio" class="radio_segundo" produto="<?= $prod->id ?>" id="carda_segundo_<?= $prod->id ?>_<?= $ss->id ?>" name="carda_segundo_<?= $prod->id ?>" value=""></td>
-                                                                      <td id="carda_segundosabor_nome_<?= $prod->id ?>_<?= $ss->id ?>"><?= $ss->nome ?> </td>
+                                                                      <td>
+                                                                          <img src="background/botao_add.gif" id="carda_sabor_extra_add_<?= $prod->id ?>_<?= $ss->id ?>" height="16" width="20" class="poe_segundo" produto="<?= $prod->id ?>_<?= $ss->id ?>" style="cursor:pointer;" />
+                                                                      </td>
+                                                                      <td colspan="2" id="carda_sabor_extra_nome_<?= $prod->id ?>_<?= $ss->id ?>"><?= $ss->nome ?> </td>
                                                                     
-                                                                      <td class="carda_segundosabor_preco_<?= $prod->id ?>" id="carda_segundosabor_preco_<?= $prod->id ?>_<?= $ss->id ?>"></td>
-                                                                      <td></td> <!-- aqui -->
+                                                                      <td></td>
+                                                                      <td></td> 
                                                                       <td></td>
                                                                       
-                                                                      <? if($restaurante->qtd_max_sabores>2){ ?>
-                                                                                  <td><input type="radio" class="radio_terceiro" produto="<?= $prod->id ?>" id="carda_terceiro_<?= $prod->id ?>_<?= $ss->id ?>" name="carda_terceiro_<?= $prod->id ?>" value=""></td>
-                                                                                  <td id="carda_terceirosabor_nome_<?= $prod->id ?>_<?= $ss->id ?>"><?= $ss->nome ?> </td>
-
-                                                                                  <td class="carda_terceirosabor_preco_<?= $prod->id ?>" id="carda_terceirosabor_preco_<?= $prod->id ?>_<?= $ss->id ?>"></td>
-                                                                                  <td></td> <!-- aqui -->
-                                                                                  <td></td>
-                                                                      <? }
-                                                                         if($restaurante->qtd_max_sabores>3){ ?>
-                                                                                  <td><input type="radio" class="radio_quarto" produto="<?= $prod->id ?>" id="carda_quarto_<?= $prod->id ?>_<?= $ss->id ?>" name="carda_quarto_<?= $prod->id ?>" value=""></td>
-                                                                                  <td id="carda_quartosabor_nome_<?= $prod->id ?>_<?= $ss->id ?>"><?= $ss->nome ?> </td>
-
-                                                                                  <td class="carda_quartosabor_preco_<?= $prod->id ?>" id="carda_quartosabor_preco_<?= $prod->id ?>_<?= $ss->id ?>"></td>
-                                                                                  <td></td> <!-- aqui -->
-                                                                                  <td></td>
-                                                                      <?            
-                                                                         }
-                                                                      ?>
+                                                                      
                                                                       
                                                                     </tr>
                                                <? 
@@ -1487,7 +1707,7 @@ if ($categorias) {
                                                           <td></td>
                                                           <td  colspan="1" style="color:#E51B21;">Total</td>
                                                           <td></td>
-                                                          <td id="carda_segundosabor_total_<?= $prod->id ?>" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>
+                                                          <td id="carda_sabor_extra_total_<?= $prod->id ?>" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>
                                                           <td></td>
                                                             </tr>
                                                         <tr>
@@ -1498,7 +1718,7 @@ if ($categorias) {
                                                         </tr>
                                                         
                                                         <tr>
-                                                            <td colspan="6" style="text-align:center;"><img class="poe_segundosabor" quemsou="botao_add_segundosabor" style="cursor:pointer" produto="<?= $prod->id ?>" src="background/avancar.png"></td>
+                                                            <td colspan="6" style="text-align:center;"><img class="confirmar_sabor_extra" style="cursor:pointer" produto="<?= $prod->id ?>" src="background/avancar.png"></td>
                                                         </tr>
                                                     </table>
                                                 </div>

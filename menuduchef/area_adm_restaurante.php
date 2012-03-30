@@ -38,11 +38,12 @@ function show(x){
 </script>
 Ol&aacute;, <b><?= $usuario->nome ?></b>. Seja bem vindo ao painel do <b><?= $rest->nome ?></b>.
 <div>
+    <form action="php/controller/restaurante_auto_cadastro" method="post">  
     <div style="float:left; position: relative; padding-left: 20px; padding-right: 50px;">
         <table class="list">
-            <tr><td><input type="button" value="Salvar Altera&ccedil;&otilde;es"></td></tr>
+            <tr><td><input type="submit" value="Salvar Altera&ccedil;&otilde;es"></td></tr>
             <tr><td><input type="button" onclick="location.href=('area_adm_restaurante');" value="Cancelar"></td></tr>
-            <tr><td><input type="submit" value="Sair"></td></tr>
+            <tr><td><input type="button" onclick="location.href=('index');" value="Sair"></td></tr>
         </table>
     </div>
     
@@ -113,5 +114,6 @@ Ol&aacute;, <b><?= $usuario->nome ?></b>. Seja bem vindo ao painel do <b><?= $re
     </div>
     <input type="button" onclick="location.href=('edita_cardapio');" value="Editar Card&aacute;pio">
     <input type="button" onclick="location.href=('edita_extra');" value="Editar Acompanhamentos e Por&ccedil;&otilde;es Extras">
+    </form>
 </div>
 <? include("include/footer.php"); ?>

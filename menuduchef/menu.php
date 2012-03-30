@@ -19,17 +19,19 @@ label{font-size:10px;}
 <div class="div-24-last">
     <div id="menu" class="text">
 	<!-- A div abaixo destinada para login! -->
-        <div class="tool" style="float:left; color: #0C3; padding-top:15px;"><a href="" style="color:#F90">logar-se</a>
-        <div class="log">
-          <form action="php/controller/login" method="post">
-            <input  placeholder="Nome" type="text" name="email" maxlength="40"/>
-            <input  placeholder="Senha" type="password" name="senha" maxlength="40"/>
-            <div style="position:relative; float:left;">
-              <input class="campo_log" type="submit" value="OK"/>
+        <div id="login">
+            <div class="tool" style="float:left; color: #0C3; padding-top:15px;"><a href="" style="color:#F90">logar-se</a>
+            <div class="log">
+              <form action="php/controller/login" method="post">
+                <input  placeholder="E-mail" type="text" name="email" maxlength="40"/>
+                <input  placeholder="Senha" type="password" name="senha" maxlength="40"/>
+                <div style="position:relative; float:left;">
+                  <input class="campo_log" type="submit" style="cursor:pointer" value="OK"/>
+                </div>
+                 <a href="#"><div style="font-size:9px; float:right; font-family:Arial, Helvetica, sans-serif; font-weight:normal; color:#F94;">&nbsp;Esqueci minha senha</div></a>
+              </form>
             </div>
-             <a href="#"><div style="font-size:9px; font-family:Arial, Helvetica, sans-serif; font-weight:normal; color:#F94;">&nbsp;Esqueci minha senha</div></a>
-          </form>
-        </div>
+        </div>    
       </div>
                  
         <!-- Termina aqui! -->

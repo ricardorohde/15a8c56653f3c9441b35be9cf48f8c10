@@ -1025,4 +1025,14 @@ span.tool:hover span.tip {
   content: url(/img/bubble.gif);
 }
 
-/* css/tooltip.css */
+/* Espaço Cep */
+
+cep{
+	width:142px;
+	height:30px;
+	color:#f90;
+	font-family:Arial;
+	font-size:14px;
+	background:#63C;
+	
+	}
