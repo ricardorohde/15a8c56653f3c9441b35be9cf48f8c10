@@ -9,11 +9,21 @@
     <div id="movi">
 	<div id="aba_carrinho">
 	    <div id="topo_carrinho">
-                <div id="total_carrinho"><?
+                <div id="total_carrinho" style="padding:2px; font-size:14px; color:#FFF;"><?
                                 if($pedido){
-                                    echo StringUtil::doubleToCurrency($pedido->getTotal() + $rxb->preco_entrega);
+                                    if($pedido->getTotal() + $rxb->preco_entrega==0){
+                                        echo "R$ 0,00";
+                                    }else{
+                                        echo StringUtil::doubleToCurrency($pedido->getTotal() + $rxb->preco_entrega);
+                                    }
+                                    
                                 }else{
-                                    echo StringUtil::doubleToCurrency($rxb->preco_entrega);
+                                    if($rxb->preco_entrega==0){
+                                        echo "R$ 0,00";
+                                    }else{
+                                        echo StringUtil::doubleToCurrency($rxb->preco_entrega);
+                                    }
+                                    
                                 }
                             ?></div>
 		<img src="background/carrinho.png" width="31" height="23" style="position:absolute; z-index:6; top:6px; left:81px;">
@@ -31,13 +41,24 @@
 		<div style="width:200px; height:18px; padding-top:5px; float:left;" >
 		    Sub-total:<div id="subtotal_carrinho" style="color:#EE646B; display:inline"> <?
                                 if($pedido){
-                                    echo StringUtil::doubleToCurrency($pedido->getTotal());
+                                    if($pedido->getTotal()==0){
+                                        echo "R$ 0,00";
+                                    }else{
+                                        echo StringUtil::doubleToCurrency($pedido->getTotal());
+                                    }
+                                }else{
+                                    echo "R$ 0,00";
                                 }
                             ?></div>
 		</div>
 		<div style="width:200px; height:18px; float:left;" >
 		    Frete:<div style="color:#EE646B; display:inline"> <? 
-                        echo StringUtil::doubleToCurrency($rxb->preco_entrega);      
+                        if($rxb->preco_entrega==0){
+                            echo "R$ 0,00";
+                        }else{
+                            echo StringUtil::doubleToCurrency($rxb->preco_entrega);
+                        }
+                              
                     ?></div>
                     <input type="hidden" id="taxa_de_entrega" value="<?= $rxb->preco_entrega ?>">
 		</div>

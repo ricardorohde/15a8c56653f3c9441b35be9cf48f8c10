@@ -81,5 +81,5 @@ if ($data) {
     if ($redirect) {
 	HttpUtil::redirect("../../area_usuario");
     }
-}
+} 
 ?>

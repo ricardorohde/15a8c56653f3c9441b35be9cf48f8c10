@@ -19,7 +19,7 @@ if (trim($data['email']) && trim($data['senha'])) {
 
 	    case Usuario::$GERENTE:
                 $usuario_obj = UsuarioRestaurante::find_by_usuario_id($usuario->id);
-		$redirect = '../../area_adm_restaurante';
+		$redirect = '../../gerente_principal';
                 $_SESSION['sessao_valida'] = 1;
 		$_SESSION['usuario_id'] = $usuario_obj->id;
 		$_SESSION['restaurante_id'] = $usuario_obj->restaurante_id;

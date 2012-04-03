@@ -4,10 +4,14 @@ include("include/header.php");
 $data = HttpUtil::getParameterArray();
 
 $page = $data['page'] ? : 1;
-$categoriasFiltro = $data['categorias'];
+if($_POST){
+    unset($_SESSION['categorias']);
+    $_SESSION['categorias'] = $data['categorias'];
+}
+$categoriasFiltro = $_SESSION['categorias'];
 unset($_SESSION['pedido_id']); //variavel criada por Paulo
 
-if($_POST['end_id']){ //essa variavel "end_id" guarda o id do ENDERECO e do BAIRRO, separados por um _
+if(($_POST['end_id'])&&($_SESSION['usuario'])){ //essa variavel "end_id" guarda o id do ENDERECO e do BAIRRO, separados por um _
     $end = explode("_",$_POST['end_id']);
     $conditions = 'rab.bairro_id = ' . ((int)$end[1]);
     
@@ -19,6 +23,7 @@ if($_POST['end_id']){ //essa variavel "end_id" guarda o id do ENDERECO e do BAIR
 
 if($_POST['caixa_filtro']){
     $conditions .= ' and restaurante.nome like "%' . $_POST['caixa_filtro'] . '%" ';
+    
 }
 
 if($categoriasFiltro) {
@@ -32,8 +37,7 @@ if($categoriasFiltro) {
 		and rtt.tiporestaurante_id in (' . $categoriasToConditions . ')
 	)
     ';
-    
-    
+        
 }
 
 
@@ -58,6 +62,10 @@ if ($enderecoSession) {
 ?>
 <script>
     $(function() {
+        $("#filtrar").click(function(){
+            $("#page").attr("value",1);
+            $("form").submit();
+        });
         $(".filtro_categoria").click(function(){
             $("#page").attr("value",1);
             $("form").submit();
@@ -107,7 +115,7 @@ if ($enderecoSession) {
 		    <img src="background/titulo_busca.gif" width="71" height="26" alt="Busca" style="margin-left:12px">
 		    <div style="width:198px; height:25px;  margin-left:10px;">
 			<input id="caixa_filtro" name="caixa_filtro" type="text" style="float:left; margin: auto 0; width:140px; position:relative;" value="<?= $_POST['caixa_filtro'] ?>"> 
-			<input type="image" class="refino" value="submit" id="filtrar" src="background/botao_ok.gif" style="float:right; margin-top:-4px; border:0; width:40px; height:24px; position:relative; cursor:pointer;">                   	    	
+			<img class="refino" id="filtrar" src="background/botao_ok.gif" style="float:right; margin-top:-4px; border:0; width:40px; height:24px; position:relative; cursor:pointer;">                   	    	
 		    </div>
 		</div>
 		<div id="filtro">
@@ -119,7 +127,7 @@ if ($enderecoSession) {
 				foreach($categorias as $categoria) {
 				    $checked = $categoriasFiltro && in_array($categoria->id, $categoriasFiltro);
 			    ?>
-			    <div style="color:#CC0000; padding-top:5px; padding-left:12px;">
+			    <div style="color:#CC0000; padding-top:5px; padding-left:0px;">
 				<input type="checkbox" class="refino filtro_categoria" id="checkrest_<?= $categoria->id ?>" name="categorias[]" value="<?= $categoria->id ?>" <?= $checked ? 'checked="checked"' : '' ?> /> &nbsp; <?= $categoria->nome ?> (<?= $categoria->count ?>)
 			    </div>
 			    <? } } ?>

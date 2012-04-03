@@ -131,7 +131,21 @@ u{
                                         }
                                     ?>
                                                 </span></i>
-                                        </td><td><?= StringUtil::doubleToCurrency($ptp->getTotal()/$ptp->qtd) ?></td><td>x<?= $ptp->qtd ?></td><td><?= StringUtil::doubleToCurrency($ptp->getTotal()) ?></td></tr>
+                                        </td><td><? 
+                                        if($ptp->getTotal()/$ptp->qtd==0){
+                                            echo "R$ 0,00";
+                                        }else{
+                                            echo StringUtil::doubleToCurrency($ptp->getTotal()/$ptp->qtd);
+                                        }
+                                         
+                                                ?></td><td>x<?= $ptp->qtd ?></td><td><?
+                                                        if($ptp->getTotal()==0){
+                                                            echo "R$ 0,00";
+                                                        }else{
+                                                            echo StringUtil::doubleToCurrency($ptp->getTotal());
+                                                        }
+                                                         
+                                                                ?></td></tr>
                                     
                                     
                                     
@@ -139,7 +153,13 @@ u{
                             } ?>
                             
                             <tr><td></td><td></td><td></td><td></td></tr>
-                            <tr><td></td><td></td><th style="text-align:right; color:#E51B21;">Taxa de entrega:</th><th><?= StringUtil::doubleToCurrency($pedido->preco_entrega) ?></th></tr>
+                            <tr><td></td><td></td><th style="text-align:right; color:#E51B21;">Taxa de entrega:</th><th><?
+                                    if($pedido->preco_entrega==0){
+                                        echo "R$ 0,00";
+                                    }else{
+                                        echo StringUtil::doubleToCurrency($pedido->preco_entrega);
+                                    }    
+                                    ?></th></tr>
                             <tr><td style="text-align:right; color:#E51B21; text-align:left; cursor:pointer;" onClick="location.href='cardapio?id=<?= $restaurante->id ?>'">&nbsp;&nbsp;Voltar para o carrinho<img src="background/carrinho_dark.png" width="20" height="15" style="float:left;"></td><td></td><th style="text-align:right; color:#E51B21;">Total:</th><th><?= StringUtil::doubleToCurrency($pedido->preco_entrega + $pedido->getTotal()) ?></th></tr>
                         </table>
                     </div>
