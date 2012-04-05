@@ -244,7 +244,7 @@ $(document).ready( function (){
               <input type="hidden" id="jamexeu" value="0">
               <div id="dados_cliente" style="padding-top:62px;"> <img class="desloca" src="background/add_item.png" onclick="novo_item()" /> </div>
               <div id="dados_cliente"> <img class="desloca" src="background/add_cat.png" onclick="nova_categoria()" /> </div>
-              <div id="dados_cliente" title="Acompanhamentos e porções extras"> <a href="edita_extra.php"> <img class="desloca" src="background/add_extras.png" /> </a> </div>
+              <div id="dados_cliente" title="Acompanhamentos e porções extras"> <a href="gerente_extras.php"> <img class="desloca" src="background/add_extras.png" /> </a> </div>
               <div id="dados_cliente"> <img width="110" height="30" src="background/cancel.png" style="cursor:pointer;" onclick="location.href=('gerente_cardapio');" /> </div>
               <div id="dados_cliente" style="margin-top:8px; margin-left:0;">
                 <input style="margin-left:0; padding:0;" type="image" value="submit" width="110" height="30" src="background/salvar.png" />

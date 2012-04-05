@@ -194,7 +194,7 @@ u{
                     <div class="box_pedido">
                     	<table>
                             <tr><th>Nome:</th><td style="width:530px; u{color:#FF9930} "><u><?= $enderecoSession->consumidor->nome ?></u></td></tr>
-                            <tr><th>Telefone:</th><td><u><?
+                            <tr><th>Telefone(s):</th><td><u><?
                                 if($telefones){    
                                     $ctel = 0;
                                     foreach($telefones as $tel){

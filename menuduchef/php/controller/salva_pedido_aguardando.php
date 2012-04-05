@@ -43,43 +43,80 @@
         
         $usuario_obj = $c;*/
         
+        unset($_SESSION['aguardando']);
+        $ag['nome'] = $_POST['nome'];
+        $ag['login'] = $_POST['login'];
+        $ag['loginconf'] = $_POST['loginconf'];
+        $ag['cpf'] = $_POST['cpf'];
+        $ag['sexo'] = $_POST['sexo'];
+        $ag['dia'] = $_POST['diaNascimento'];
+        $ag['mes'] = $_POST['mesNascimento'];
+        $ag['ano'] = $_POST['anoNascimento'];
+        $ag['telefone'] = $_POST['telefone'];
+        $ag['celular'] = $_POST['celular'];
+        $ag['numero'] = $_POST['numero'];
+        $ag['complemento'] = $_POST['complemento'];
+        $ag['referencia'] = $_POST['pr'];
+        $_SESSION['aguardando'] = serialize($ag);
+        
+        
         connect(); 
         $nome = $_POST['nome'];
         $tipo = 4;
         $email = $_POST['login'];
         $senha = md5($_POST['senha']);
-        $sql="INSERT INTO usuario (tipo,nome,email,senha) VALUES ('$tipo','$nome','$email','$senha')";
-        mysql_query($sql);
         
-        $usuario_id = mysql_insert_id();
-        $ativo=1;
-        $cpf=$_POST['cpf'];
-        $data_nascimento=$_POST['diaNascimento']."/".$_POST['mesNascimento']."/".$_POST['anoNascimento'];
-        $sexo=$_POST['sexo'];
+        $sql="SELECT * FROM usuario WHERE email='$email'";
+        $sql=mysql_query($sql);
+        $sql=mysql_fetch_array($sql);
+        if($sql['id']){     
+            HttpUtil::redirect("../../cadastro?ja=1");
+        }else{
         
-        $sql="INSERT INTO consumidor (usuario_id,ativo,cpf,data_nascimento,sexo) VALUES ('$usuario_id','$ativo','$cpf','$data_nascimento','$sexo')";
-        mysql_query($sql);
-        
-        
-        
-        $idcon = mysql_insert_id();
-        mysql_close();
-        $usuario_obj=Consumidor::find($idcon);
-        
-        $end['consumidor_id'] = $usuario_obj->id;
-        $end['complemento'] = $_POST['complemento'];
-        $end['numero'] = $_POST['numero'];
-        $end['referencia'] = $_POST['pr'];
-        
-        $end['cep'] = $endereco->cep;
-        $end['bairro_id'] = $endereco->bairro_id;
-        $end['logradouro'] = $endereco->logradouro;
+            $sql="INSERT INTO usuario (tipo,nome,email,senha) VALUES ('$tipo','$nome','$email','$senha')";
+            mysql_query($sql);
 
-        $enderecoConsumidor = new EnderecoConsumidor($end);
-        $enderecoConsumidor->save();
-        
-        $tel['consumidor_id'] = $usuario_obj->id;
-        $tel['numero'] = $_POST['telefone'];
+            $usuario_id = mysql_insert_id();
+            $ativo=1;
+            $cpf=$_POST['cpf'];
+            $data_nascimento=$_POST['diaNascimento']."/".$_POST['mesNascimento']."/".$_POST['anoNascimento'];
+            $sexo=$_POST['sexo'];
+
+            $sql="INSERT INTO consumidor (usuario_id,ativo,cpf,data_nascimento,sexo) VALUES ('$usuario_id','$ativo','$cpf','$data_nascimento','$sexo')";
+            mysql_query($sql);
+
+
+            $idcon = mysql_insert_id();
+            mysql_close();
+            $usuario_obj=Consumidor::find($idcon);
+
+            $end['consumidor_id'] = $usuario_obj->id;
+            $end['complemento'] = $_POST['complemento'];
+            $end['numero'] = $_POST['numero'];
+            $end['referencia'] = $_POST['pr'];
+
+            $end['cep'] = $endereco->cep;
+            $end['bairro_id'] = $endereco->bairro_id;
+            $end['logradouro'] = $endereco->logradouro;
+
+            $enderecoConsumidor = new EnderecoConsumidor($end);
+            $enderecoConsumidor->save();
+
+            $tel['consumidor_id'] = $usuario_obj->id;
+            $tel['numero'] = $_POST['telefone'];
+
+            if($_POST['telefone']){
+                $telefone = new TelefoneConsumidor($tel);
+                $telefone->save();
+            }
+            
+            $tel['numero'] = $_POST['celular'];
+            
+            if($_POST['celular']){
+                $telefone = new TelefoneConsumidor($tel);
+                $telefone->save();
+            }
+        }
     }
     
     $_SESSION['endereco'] = serialize($enderecoConsumidor);

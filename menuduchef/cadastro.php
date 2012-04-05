@@ -1,6 +1,7 @@
 <?
     include("include/header2.php");
- 
+    $endereco = unserialize($_SESSION['endereco']);
+    $aguardando = unserialize($_SESSION['aguardando']);
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 "http://www.w3.org/TR/html4/strict.dtd"
@@ -19,6 +20,7 @@ u{
 	}
 </style>
 <script>
+    
     function show(x){
         oque = document.getElementById(x);
         if(oque.style.display=='block'){
@@ -38,7 +40,46 @@ u{
        });
        $("#b_novousu").click(function(){
            $("#action2").attr("value","novo_usuario");
-           $("#novousu").submit();
+           
+           ok=1;
+           frase="Por favor, preencha:\n";
+           if($("#nome").attr("value")==""){
+               frase+="-Nome\n";
+               ok=0;
+           }
+           if($("#cpf").attr("value")==""){
+               frase+="-CPF\n";
+               ok=0;
+           }
+           if($("#ema").attr("value")==""){
+               frase+="-E-mail\n";
+               ok=0;
+           }
+           if($("#celular").attr("value")==""){
+               frase+="-Celular\n";
+               ok=0;
+           }
+           if($("#numero").attr("value")==""){
+               frase+="-Número\n";
+               ok=0;
+           }
+           if(ok==1){
+               if($("#ema").attr("value")!=$("#emac").attr("value")){
+                   frase = "E-mail Confirmação diferente de E-mail.";
+                   ok=0;
+               }
+               
+               if($("#sen").attr("value")!=$("#senc").attr("value")){
+                   frase = "Senha Confirmação diferente de Senha.";
+                   ok=0;
+               }
+           }
+           
+           if(ok==1){
+              $("#novousu").submit();
+           }else{
+               alert(frase);
+           } 
        });
     });
 </script>    
@@ -183,31 +224,32 @@ u{
                         <div style="width:330px; float:left;">
                             
                                 
-                            <label>Nome*</label><input type="text" name="nome" maxlength="100" class="campo"> 
-                            <label>CPF*</label><input type="text" name="cpf" maxlength="100" class="campo"> 
+                            <label>Nome*</label><input type="text" id="nome" name="nome" value="<?= $aguardando['nome'] ?>" maxlength="100" class="campo"> 
+                            <label>CPF*</label><input type="text" id="cpf" name="cpf" value="<?= $aguardando['cpf'] ?>" maxlength="100" class="campo"> 
                             <label>Sexo</label>			
                                                         <select name="sexo" class="campo">
                                                             <option value="">Selecione</option>    
-                                                            <option value="Masculino">Masculino</option>  
-                                                            <option value="Feminino">Feminino</option> 
+                                                            <option <? if($aguardando['sexo']=="Masculino"){ echo "selected"; } ?> value="Masculino">Masculino</option>  
+                                                            <option <? if($aguardando['sexo']=="Feminino"){ echo "selected"; } ?> value="Feminino">Feminino</option> 
                                                         </select>
                             <label>Nascimento</label>
                             
-                            <input style="width:26px;" type="text" id="diaNascimento" name="diaNascimento" class="text campo" value="dd" maxlength="2" onBlur="if (this.value == '') {this.value = 'dd';}" onFocus="if (this.value == 'dd') {this.value = '';}" /> 
+                            <input style="width:26px;" type="text" id="diaNascimento" placeholder="dd" name="diaNascimento" value="<?= $aguardando['dia'] ?>" class="text campo" value="dd" maxlength="2"  /> 
         
-                            <input style="width:28px;" type="text" id="mesNascimento" name="mesNascimento" class="text campo" value="mm" maxlength="2" onBlur="if (this.value == '') {this.value = 'mm';}" onFocus="if (this.value == 'mm') {this.value = '';}" />
+                            <input style="width:28px;" type="text" id="mesNascimento"  placeholder="mm" name="mesNascimento" value="<?= $aguardando['mes'] ?>" class="text campo" value="mm" value="<?= $aguardando['mesn'] ?>" maxlength="2"  />
         
-                            <input style="width:40px;" type="text" id="anoNascimento" name="anoNascimento" class="text campo" value="aaaa" maxlength="4" onBlur="if (this.value == '') {this.value = 'aaaa';}" onFocus="if (this.value == 'aaaa') {this.value = '';}" />
+                            <input style="width:40px;" type="text" id="anoNascimento" placeholder="aaaa" name="anoNascimento" value="<?= $aguardando['ano'] ?>" class="text campo" value="aaaa" maxlength="4"  />
                
-                            <label>Telefone*</label><input type="text" name="telefone" maxlength="12" class="campo"><br/>
-                            <u>Adicionar outro número de contato</u>    
+                            <label>Tel. Fixo</label><input type="text" name="telefone" value="<?= $aguardando['telefone'] ?>" maxlength="12" class="campo"><br/>
+                            <? //<u>Adicionar outro número de contato</u>     ?>
                             
                         </div>
                         <div style="width:330px; margin-left:14px; float:left;">
-                        	<label for="login">E-mail</label><input type="text" name="login" maxlength="100" class="campo">
-                            <label for="login">E-mail Confirmação</label><input type="text" name="loginconf" maxlength="100" class="campo">
-                        	<label for="senha">Senha </label><input type="password" name="senha" maxlength="100" class="campo">
-                            <label for="senha">Senha Confirmação</label><input type="password" name="senhaconf" maxlength="100" class="campo">
+                        	<label for="login">E-mail*</label><input type="text" id="ema" name="login" value="<?= $aguardando['login'] ?>" maxlength="100" class="campo">
+                            <label for="login">E-mail Confirmação*</label><input type="text" id="emac" name="loginconf" value="<?= $aguardando['loginconf'] ?>" maxlength="100" class="campo">
+                        	<label for="senha">Senha </label><input type="password" id="sen" name="senha" maxlength="100" class="campo">
+                            <label for="senha">Senha Confirmação</label><input type="password" id="senc" name="senhaconf" maxlength="100" class="campo">
+                            <label>Celular*</label><input type="text" id="celular" name="celular" value="<?= $aguardando['celular'] ?>" maxlength="12" class="campo"><br/>
                         </div>
                            
                     </div> 
@@ -216,16 +258,16 @@ u{
                     <div class="box_pedido" style="height:290px">
                     	
                    		<div style="width:330px; float:left;">
-                            <label>CEP*</label><input type="text" name="cep" maxlength="100" class="campo"> 
-                            <label>Endereço*</label><input type="text" name="endereco" maxlength="100" class="campo">
-                            <label>Numero*</label><input type="text" name="numero" maxlength="100" class="campo"> 
-                            <label>Bairro*</label><input type="text" name="bairro" maxlength="100" class="campo">                    	
+                            <label>CEP</label><input type="text" style="background:#EEE" readonly="true" value="<?= $endereco->cep ?>" name="cep" maxlength="100" class="campo" > 
+                            <label>Endereço</label><input type="text" style="background:#EEE" readonly="true" value="<?= $endereco->logradouro ?>" name="endereco" maxlength="100" class="campo">
+                            <label>Número*</label><input type="text" id="numero" name="numero" value="<?= $aguardando['numero'] ?>" maxlength="100" class="campo"> 
+                            <label>Bairro</label><input type="text" value="<?= $endereco->bairro->nome ?>" style="background:#EEE" readonly="true" name="bairro" maxlength="100" class="campo">                    	
                     	</div>
                         <div style="width:330px; margin-left:14px; float:left;">
-                        	<label>Cidade*</label><input type="text" name="cidade" maxlength="100" class="campo"> 
-                            <label>Estado*</label><input type="text" name="estado" maxlength="100" class="campo">
-                            <label>Complemento</label><input type="text" name="complemento" maxlength="100" class="campo"> 
-                            <label>Ponto de referência</label><input type="text" name="pr" maxlength="100" class="campo">    
+                        	<label>Cidade</label><input type="text" style="background:#EEE" readonly="true" value="<?= $endereco->bairro->cidade->nome ?>" name="cidade" maxlength="100" class="campo"> 
+                            <label>Estado</label><input type="text" style="background:#EEE" readonly="true" value="<?= $endereco->bairro->cidade->uf->nome ?>" name="estado" maxlength="100" class="campo">
+                            <label>Complemento</label><input type="text" name="complemento" value="<?= $aguardando['complemento'] ?>" maxlength="100" class="campo"> 
+                            <label>Ponto de referência</label><input type="text" name="pr" value="<?= $aguardando['referencia'] ?>" maxlength="100" class="campo">    
                         </div>
                         <img src="background/cadastrar.png" id="b_novousu" width="118" height="32" style="margin-top:8px; cursor:pointer;">
                     
@@ -237,4 +279,11 @@ u{
 		</div>
 	</div>
 </div>
+   <?
+        if($_GET['ja']==1){
+            ?>
+                <script>alert("E-mail j� cadastrado, escolha outro.");</script>
+                <?
+        }
+    ?>
 <? include("include/footer.php"); ?>
