@@ -132,9 +132,15 @@ class Restaurante extends ActiveRecord\Model {
          */
         if ($this->__request_attributes['bairros']) {
             foreach ($this->__request_attributes['bairros'] as $index => $id_bairro) {
-                $preco_entrega = $this->__request_attributes['preco_entrega'][$index];
+                $preco_entrega = $this->__request_attributes['preco_entrega_'.$id_bairro];
+                $tempo_entrega = $this->__request_attributes['tempo_entrega_'.$id_bairro];
                 if (!$this->atendeBairro($id_bairro)) {
-                    RestauranteAtendeBairro::create(array('bairro_id' => $id_bairro, 'restaurante_id' => $this->id, 'preco_entrega' => $preco_entrega));
+                    RestauranteAtendeBairro::create(array('bairro_id' => $id_bairro, 'restaurante_id' => $this->id, 'preco_entrega' => $preco_entrega, 'tempo_entrega' => $tempo_entrega));
+                }else{
+                    $atbai = $this->getRestauranteAtendeBairro($id_bairro);
+                    $rxb['preco_entrega'] = $preco_entrega;
+                    $rxb['tempo_entrega'] = $tempo_entrega;
+                    $atbai->update_attributes($rxb);
                 }
             }
         }

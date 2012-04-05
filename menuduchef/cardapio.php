@@ -3,7 +3,7 @@ include("include/header.php");
 
 //$itens = Produto::find_all_by_restaurante_id($_GET['id'], array("order" => "nome asc"));
 if ($enderecoSession) {
-    $categorias = RestauranteTemTipoProduto::all(array('conditions' => array('restaurante_id = ?', $_GET['id'])));
+    $categorias = RestauranteTemTipoProduto::all(array("order"=>"ordem",'conditions' => array('restaurante_id = ?', $_GET['id'])));
     $restaurante = Restaurante::find($_GET['id']);
     $rxb = RestauranteAtendeBairro::find(array('conditions' => array('restaurante_id = ? and bairro_id=?', $_GET['id'], $enderecoSession->bairro_id)));
 }
@@ -1538,7 +1538,7 @@ if($_POST){
 	</div>                
 
 <?
-$categorias = TipoProduto::find_by_sql("SELECT TP.* FROM tipo_produto TP INNER JOIN restaurante_tem_tipo_produto RTTP ON TP.id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = " . $_GET['id']);
+$categorias = TipoProduto::find_by_sql("SELECT TP.* FROM tipo_produto TP INNER JOIN restaurante_tem_tipo_produto RTTP ON TP.id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = " . $_GET['id']." ORDER BY ordem");
 if ($categorias) {
     foreach ($categorias as $cat) {
 	?>  <div id="box_box_categoria_<?= $cat->id ?>">    
@@ -1547,7 +1547,7 @@ if ($categorias) {
 
 		<div id="box_categoria" class="radios" >
 		    <?
-		    $produtos = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id WHERE PTT.tipoproduto_id = " . $cat->id . " AND ativo = 1 AND disponivel = 1 AND P.restaurante_id = " . $_GET['id']);
+		    $produtos = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id WHERE PTT.tipoproduto_id = " . $cat->id . " AND ativo = 1 AND disponivel = 1 AND P.restaurante_id = " . $_GET['id']." ORDER BY ordem");
 		    if ($produtos) {
 			$c = 1;
 			foreach ($produtos as $prod) {

@@ -207,5 +207,5 @@ for($j=0;$j<sizeof($a_modificar);$j++){
 }
 
 
-header("location: ../../edita_cardapio");
+header("location: ../../gerente_cardapio");
 ?>

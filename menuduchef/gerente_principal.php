@@ -17,12 +17,14 @@ $tipos = TipoRestaurante::all();
 $tipos_produto = TipoProduto::all();
 $bairros = Bairro::all(array("conditions"=>array("cidade_id = ?",$cidade)));
 ?>
-<script type="text/javascript" src="js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="js/mask.js"></script>
 <script>
 
 $(document).ready(function() {
-    
+    $("#salvar").click(function(){
+        $("#form_gerente").submit();
+    });
 });
 
 function show(x){
@@ -42,12 +44,12 @@ function show(x){
       <div class="span-6">
         <div id="barra_esquerda">
           <div id="info_restaurante">
-            <div id="categoria_rest">Pizzaria </div>
-            <div id="nome_rest">Reis Magos </div>
-            <div id="avatar_rest"> <img src="background/img_avt.jpg" border="0"> </div>
+            <div id="categoria_rest"><?= $rest->getNomeCategoria() ?> </div>
+            <div id="nome_rest"><?= $rest->nome ?> </div>
+            <div id="avatar_rest"> <img src="images/restaurante/<?= $rest->imagem ?>" border="0"> </div>
             <div id="formas_pagamento">Formas de pagamento </div>
-            <div id="tempo_entrega"><span style="color:#E51B21;">Endereço:</span> Rua Des. Sinval Moreira Dias, Lorem Ipsum si dollor </div>
-            <img style="margin-top:12px;" width="110" height="30" src="background/cancel.png" onclick="location.href=('area_adm_restaurante');"> <img width="110" height="30" src="background/salvar.png" > </div>
+            <div id="tempo_entrega"><span style="color:#E51B21;">Endereço:</span> <?= $rest->endereco ?> </div>
+            <img style="margin-top:12px;" width="110" height="30" src="background/cancel.png" style="cursor:pointer;" onclick="location.href=('gerente_principal');"> <img width="110" height="30" id="salvar" style="cursor:pointer" src="background/salvar.png" > </div>
         </div>
       </div>
       <div class="span-18 last">
@@ -59,6 +61,9 @@ function show(x){
         </div>
         <div id="box_concluir">
           <div style="margin-top:16px;">
+            <form id="form_gerente" action="php/controller/restaurante_para_area_restaurante" method="post">
+            <input type="hidden" name="id" value="<?= $rest->id ?>">
+             
             <table style="width:674px; border:1px solid #bcbec0; font-family:Arial;">
               <tr>
                 <th style="padding-left:4px;">Incluir</th>
@@ -69,9 +74,8 @@ function show(x){
               <? if($bairros){
                     foreach($bairros as $bairro){
                         $atende = "";
-                        $atendes=RestauranteAtendeBairro::all(array("conditions"=>array("restaurante_id = ? AND bairro_id = ?",$obj->id,$bairro->id)));
-                        foreach($atendes as $atende){
-                        }
+                        $atende=RestauranteAtendeBairro::find(array("conditions"=>array("restaurante_id = ? AND bairro_id = ?",$obj->id,$bairro->id)));
+                        
                         ?>
               <tr>
               	<td style="padding-left:4px; margin-left:12px;">
@@ -81,25 +85,15 @@ function show(x){
                   <?= $bairro->nome ?>
                 </label></td>
                 <td>
-                <input type="text" value="<? if($atende){ echo $atende->preco_entrega; } ?>" ></td>
+                <input type="text" name="preco_entrega_<?= $atende->id ?>" value="<? if($atende){ echo $atende->preco_entrega; } ?>" ></td>
                 <td>
-                <input type="text" value="<? if($atende){ echo $atende->tempo_entrega; } ?>" ></td>
+                <input type="text" name="tempo_entrega_<?= $atende->id ?>" value="<? if($atende){ echo $atende->tempo_entrega; } ?>" ></td>
               </tr>
               <? }
                 } ?>
-              <tr>
-                <td style="padding-left:4px;">662657</td>
-                <td>CHINA IN BOX</td>
-                <td>28/10/11 as 17:53h</td>
-                <td>28/10/11 às 17:55h</td>
-              </tr>
-              <tr>
-                <td style="padding-left:4px;">662657</td>
-                <td>CHINA IN BOX</td>
-                <td>28/10/11 as 17:53h</td>
-                <td>28/10/11 às 17:55h</td>
-              </tr>
+
             </table>
+            </form>    
           </div>
         </div>
       </div>

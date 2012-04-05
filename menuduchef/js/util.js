@@ -142,7 +142,10 @@ function autoCompleteBairrosCheckBox(idCidade, idRestaurante) {
 		}, function(atende) {
 		    target.append($('<input class="adjacent clear-left top10" type="checkbox" name="bairros[]" value="' + key.id + '" id="bairro' + key.id + '" ' + (atende ? 'checked="checked"' : '') + ' />'));
 		    target.append($('<label class="adjacent top10" for="bairro' + key.id + '">' + key.nome + '</label>'));
-		    target.append($('<input class="adjacent" type="text" name="preco_entrega[]" value="' + (atende ? atende.preco_entrega : '') + '" id="preco_entrega' + key.id + '" />'));
+                    target.append($('<label class="adjacent top10" for="preco_entrega' + key.id + '"> R$</label>'));
+		    target.append($('<input class="adjacent" type="text" name="preco_entrega_'+ key.id +'" value="' + (atende ? atende.preco_entrega : '') + '" id="preco_entrega' + key.id + '" />'));
+                    target.append($('<label class="adjacent top10" for="tempo_entrega' + key.id + '"> Minutos:</label>'));
+                    target.append($('<input class="adjacent" type="text" name="tempo_entrega_'+ key.id +'" value="' + (atende ? atende.tempo_entrega : '') + '" id="tempo_entrega' + key.id + '" />'));
 		    target.append($('<br />'));
 		});
 	    });

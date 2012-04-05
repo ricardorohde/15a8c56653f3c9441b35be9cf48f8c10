@@ -67,5 +67,5 @@ for($j=0;$j<sizeof($a_modificar);$j++){
 }
 
 
-header("location: ../../edita_extra");
+header("location: ../../gerente_extras");
 ?>

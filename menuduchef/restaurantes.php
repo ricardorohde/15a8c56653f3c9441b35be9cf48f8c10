@@ -45,7 +45,7 @@ if ($enderecoSession) {
     $paginacao = new Paginacao('Restaurante', array(
 	    'joins' => 'inner join restaurante_atende_bairro rab on rab.restaurante_id = restaurante.id',
 	    'conditions' => $conditions,
-	    'order' => 'nome asc'
+	    'order' => 'ordem asc'
 	    ), 'restaurantes', $page, 6, 5, '?page=');
 
     $restaurantes = $paginacao->list;

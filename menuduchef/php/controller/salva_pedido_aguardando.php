@@ -1,5 +1,6 @@
 <?php
     include_once("../lib/config.php");
+    include("../lib/connect_p.php");
     ob_start();
 
     $usuario_obj = unserialize($_SESSION['usuario_obj']);
@@ -19,19 +20,19 @@
     }else if($_POST['action']=="sele"){ //se o endereco está sendo criado agora
         $enderecoConsumidor = EnderecoConsumidor::find($_POST['endereco_escolhido']);
     }else if($_POST['action2']=="novo_usuario"){ //se até o usuario está sendo criado só agora
-        /*$usu['tipo'] = 4;
-        $usu['nome'] = $_POST['nome'];
-        $usu['email'] = $_POST['login'];
-        $usu['senha'] = md5($_POST['senha']);
+        //$usu['tipo'] = 4;
+        //$usu['nome'] = $_POST['nome'];
+        //$usu['email'] = $_POST['login'];
+        //$usu['senha'] = md5($_POST['senha']);
         
-        $u = new Usuario($usu);
-        $u->save();*/
-
+        //$u = new Usuario($usu);
+        //$u->save();
+/*
         $con['nome'] = $_POST['nome'];
         $con['email'] = $_POST['login'];
         $con['senha'] = $_POST['senha'];
-        
-        //$con['usuario_id'] = $u->id;
+      
+        $con['usuario_id'] = $u->id;
         $con['ativo'] = 1;
         $con['cpf'] = $_POST['cpf'];
         $con['data_nascimento'] = $_POST['diaNascimento']."/".$_POST['mesNascimento']."/".$_POST['anoNascimento'];
@@ -40,7 +41,30 @@
         $c = new Consumidor($con);
         $c->save($con);
         
-        $usuario_obj = $c;
+        $usuario_obj = $c;*/
+        
+        connect(); 
+        $nome = $_POST['nome'];
+        $tipo = 4;
+        $email = $_POST['login'];
+        $senha = md5($_POST['senha']);
+        $sql="INSERT INTO usuario (tipo,nome,email,senha) VALUES ('$tipo','$nome','$email','$senha')";
+        mysql_query($sql);
+        
+        $usuario_id = mysql_insert_id();
+        $ativo=1;
+        $cpf=$_POST['cpf'];
+        $data_nascimento=$_POST['diaNascimento']."/".$_POST['mesNascimento']."/".$_POST['anoNascimento'];
+        $sexo=$_POST['sexo'];
+        
+        $sql="INSERT INTO consumidor (usuario_id,ativo,cpf,data_nascimento,sexo) VALUES ('$usuario_id','$ativo','$cpf','$data_nascimento','$sexo')";
+        mysql_query($sql);
+        
+        
+        
+        $idcon = mysql_insert_id();
+        mysql_close();
+        $usuario_obj=Consumidor::find($idcon);
         
         $end['consumidor_id'] = $usuario_obj->id;
         $end['complemento'] = $_POST['complemento'];
@@ -53,6 +77,9 @@
 
         $enderecoConsumidor = new EnderecoConsumidor($end);
         $enderecoConsumidor->save();
+        
+        $tel['consumidor_id'] = $usuario_obj->id;
+        $tel['numero'] = $_POST['telefone'];
     }
     
     $_SESSION['endereco'] = serialize($enderecoConsumidor);

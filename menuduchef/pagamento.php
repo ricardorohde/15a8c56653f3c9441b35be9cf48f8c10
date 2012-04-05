@@ -95,7 +95,33 @@ u{
                         	<tr style="font-size:12px;"><th class="tabela_pedido">Item</th><th>Valor</th><th>Quantidade</th><th>Valor Total</th></tr>
                             <? if($pedido->pedido_tem_produtos){
                                 foreach($pedido->pedido_tem_produtos as $ptp){ ?>
-                                    <tr><td><?= $ptp->produto->nome ?><i><span style="font-size:8px;">
+                                    <tr><td><? 
+                                            $val_prod = "";
+                                            if($ptp->produto->aceita_segundo_sabor){
+                                                if($ptp->produto_id2){
+                                                    if($ptp->produto_id3){
+                                                        if($ptp->produto_id4){
+                                                           
+                                                            echo "1/4".$ptp->produto->nome.",1/4".$ptp->produto2->nome.",1/4".$ptp->produto3->nome.",1/4".$ptp->produto4->nome;
+                                                        }else{
+                                                            
+                                                            echo "1/3".$ptp->produto->nome.",1/3".$ptp->produto2->nome.",1/3".$ptp->produto3->nome;
+                                                        }
+                                                    }else{
+                                                        
+                                                        echo "1/2".$ptp->produto->nome.",1/2".$ptp->produto2->nome;
+                                                    }
+                                                }else{
+                                                   
+                                                   echo $ptp->produto->nome;
+                                                }
+                                            }else{
+                                          
+                                                echo $ptp->produto->nome;
+                                            }
+                                           
+                                    
+                                        ?><i><span style="font-size:8px;">
                                     <?
                                         $tem_acomp = 0;
                                         $tem_extr = 0;
