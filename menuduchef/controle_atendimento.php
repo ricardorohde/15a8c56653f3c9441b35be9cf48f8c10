@@ -6,7 +6,6 @@ include("include/header4.php");
 
 if($_SESSION['restaurante_id']){
     $restaurante = $_SESSION['restaurante_id'];
-    $cidade = $_SESSION['cidade_id'];
     $rest = Restaurante::find($restaurante);
 }
 
@@ -15,7 +14,7 @@ $usuobj = unserialize($_SESSION['usuario_obj']);
 $obj = Restaurante::find($usuobj->restaurante_id);
 $tipos = TipoRestaurante::all();
 $tipos_produto = TipoProduto::all();
-$bairros = Bairro::all(array("conditions"=>array("cidade_id = ?",$cidade)));
+$funcionarios = UsuarioRestaurante::all(array("conditions"=>array("restaurante_id = ?",$_SESSION['restaurante_id'])));
 ?>
 <script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="js/mask.js"></script>
@@ -54,39 +53,46 @@ function show(x){
       </div>
       <div class="span-18 last">
         <div id="titulo_box_destaque"> Controle GerÃªncia </div>
-        <div class="titulo_box_concluir" style="margin-top:4px;">Controle de bairros atendidos por
+        <div class="titulo_box_concluir" style="margin-top:4px;">Relação de funcionários de
           <?= $rest->nome ?>, modificado por
           <div style="display:inline; font:Arial; color:#E51B21; font-size:13px;"><?= $usuario->nome ?>.</div>
         </div>
         <div id="box_concluir">
           <div style="margin-top:16px;">
-            <form id="form_gerente" action="php/controller/restaurante_auto_cadastro" method="post">
+            <form id="form_gerente" action="php/controller/restaurante_cadastro_funcionarios" method="post">
             <input type="hidden" name="id" value="<?= $rest->id ?>">
              
             <table style="width:674px; border:1px solid #bcbec0; font-family:Arial;">
               <tr>
-                <th style="padding-left:4px;">Incluir</th>
-                <th>Bairro</th>
-                <th>Taxa de Entrega</th>
-                <th>Tempo de Entrega</th>
+                
+                <th style="padding-left:4px;">Funcionario</th>
+                <th>E-mail</th>
+                <th>Tipo</th>
+                <th >Excluir</th>
               </tr>
-              <? if($bairros){
-                    foreach($bairros as $bairro){
-                        $atende = "";
-                        $atende=RestauranteAtendeBairro::find(array("conditions"=>array("restaurante_id = ? AND bairro_id = ?",$obj->id,$bairro->id)));
-                        
+              <? if($funcionarios){
+                    foreach($funcionarios as $fun){
+                       
                         ?>
               <tr>
-              	<td style="padding-left:4px; margin-left:12px;">
-                <input class="adjacent" type="checkbox" name="bairro_<?= $bairro->id ?>" value="<?= $bairro->id ?>" id="bairro_id_<?= $bairro->id ?>" <? if($obj->atendeBairro($bairro->id)) { ?>checked="checked"<? } ?> /></td>
+              	
+                <td style="padding-left:4px; margin-left:12px;">
+                  <?= $fun->nome ?>
+                </td>
                 <td>
-                <label class="adjacent" for="bairro_id_<?= $bairro->id ?>">
-                  <?= $bairro->nome ?>
-                </label></td>
+                  <?= $fun->email ?>
+                </td>
                 <td>
-                <input type="text" name="preco_entrega_<?= $bairro->id ?>" value="<? if($atende){ echo $atende->preco_entrega; } ?>" ></td>
-                <td>
-                <input type="text" name="tempo_entrega_<?= $bairro->id ?>" value="<? if($atende){ echo $atende->tempo_entrega; } ?>" ></td>
+                  <?
+                    if($fun->tipo==2){
+                        echo "Gerente";
+                    }else if($fun->tipo==3){
+                        echo "Atendente";
+                    }
+                  ?>
+                <td >
+                <div class="botoes_cat desativar" qual="<?= $fun->id ?>"> Ð¥ </div>    
+                </td>
               </tr>
               <? }
                 } ?>
