@@ -62,6 +62,7 @@ if ($data) {
 	}
 	
 	$obj->save();
+	$obj->reload();
 	$_SESSION['usuario'] = serialize($obj->usuario);
 	$_SESSION['usuario_obj'] = serialize($obj);
 
