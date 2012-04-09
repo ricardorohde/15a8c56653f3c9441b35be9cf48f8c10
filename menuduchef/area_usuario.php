@@ -2,7 +2,6 @@
 ob_start();
 
 include('include/header3.php');
-include("include/session_vars.php");
 
 if ($consumidorSession) {
 
