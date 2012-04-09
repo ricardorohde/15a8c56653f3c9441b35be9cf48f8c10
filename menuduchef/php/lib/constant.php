@@ -19,6 +19,7 @@ define('DEFAULT_INFO_SESSION_ATTRIBUTE_NAME', 'msg_info');
 define('DEFAULT_WARNING_SESSION_ATTRIBUTE_NAME', 'msg_warning');
 
 define('PATH_IMAGE_LOADING', 'img/loading.gif');
+define('PATH_IMAGE_LOADING_15x15', 'img/loading-15x15.gif');
 define('PATH_IMAGE_UPLOAD', 'images');
 
 define('URL_PRODUCTION', 'http://www.agenciabiro.com.br/menuduchef/');

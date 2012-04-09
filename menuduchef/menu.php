@@ -1,14 +1,18 @@
-<script src="js/jquery.js">
-</script>
-<script>
-	function apaga(x){
+<?
+$page = HttpUtil::getCurrentPage();
+
+$exibeMenu = in_array($page, array('404', 'painel_pedidos'));
+
+?>
+<script type="text/javascript">
+    function apaga(x){
 	conf = $("#"+x).attr('alterado');
 	if(conf=='0'){
-		document.getElementById(x).value = "";
-		$("#"+x).attr('alterado','1');
+	    document.getElementById(x).value = "";
+	    $("#"+x).attr('alterado','1');
 
 	}
-}
+    }
 </script>
 <style>
 label{font-size:10px;}

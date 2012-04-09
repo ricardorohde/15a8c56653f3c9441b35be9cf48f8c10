@@ -1,7 +1,5 @@
 <?
 
-
-
 $libDirectoryArray = array("php/lib", "../php/lib", "../../php/lib");
 
 foreach ($libDirectoryArray as $directory) {
@@ -19,4 +17,4 @@ if (HttpUtil::isLocalhost()) {
 }
 ?>
 
-		    <? include('messages.php'); ?>
+<? include('messages.php'); ?>
