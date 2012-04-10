@@ -50,6 +50,10 @@ class Pedido extends ActiveRecord\Model {
 
 	return $preco_total;
     }
+    
+    public function quandoFormatado() {
+	return $this->quando->format('d/m/Y - H:i');
+    }
 
     public function __toString() {
 	if ($this->id) {

@@ -15,6 +15,7 @@ if($atendenteSession || $gerenteSession) {
 
 <script type="text/javascript">
     function refreshPainel() {
+	reloadPedidos
 	var todos = $('.pedidos ul li');
 	
 	var novos = $('.pedidos#novos ul li'),
@@ -46,8 +47,28 @@ if($atendenteSession || $gerenteSession) {
 	});
     }
     
+    function reloadPedidos(situacao) {
+	if(situacao == 'novo_pedido') target = $('#novos');
+	if(situacao == 'pedido_preparacao') target = $('#preparacao');
+	if(situacao == 'pedido_concluido' || situacao == 'cancelado') target = $('#finalizados');
+	
+	$.getJSON('php/controller/painel_pedidos_json', {'situacao': situacao}, function(data) {
+	    if(!isEmpty(data)) {
+		target.find('h3 span').html('(' + data.length + ')');
+		
+		$.each(data, function(index, key) {
+		    target.find('ul').append(
+			key.quandoFormatado + '<br />' +
+			'<strong>' + key.consumidor.nome + '</strong>'
+		    );
+		});
+	    }
+	});
+    }
+    
     $(function() {
 	refreshPainel();
+	window.setInterval(refreshPainel, 5000);
     });
 </script>
 
