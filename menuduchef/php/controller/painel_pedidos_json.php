@@ -6,7 +6,6 @@ header('Content-type: application/json');
 
 if($atendenteSession || $gerenteSession) {
     $restaurante_id = $atendenteSession->restaurante_id ?: $gerenteSession->restaurante_id;
-    $restaurante = Restaurante::find($restaurante_id);
     
     $pedidos = Pedido::all(array("order" => "quando asc", "conditions" => array("restaurante_id = ?", $restaurante_id)));
     

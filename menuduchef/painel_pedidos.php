@@ -14,7 +14,7 @@ if($atendenteSession || $gerenteSession) {
 ?>
 
 <script type="text/javascript">
-    function refreshPainel() {
+    var refreshPainel = function() {
 	var todos = $('.pedidos ul li');
 	
 	var novos = $('.pedidos#novos ul li'),
@@ -33,6 +33,7 @@ if($atendenteSession || $gerenteSession) {
 	    $(this).css({'background-color': '#ccc', 'color': '#000'});
 	}).click(function () {
 	    var pedido = $(this).data('pedido');
+	    $('#btn-avancar, #btn-cancelar, #btn-retornar').data('pedido', pedido);
 	    
 	    $('#detalhes-cliente').empty().append($(
 		'<strong>#' + pedido.id + '</strong><br /><br />' +
@@ -47,10 +48,7 @@ if($atendenteSession || $gerenteSession) {
 		table.append($('<tr><th width="10%">Qtd.</th><th width="70%">Produto</th><th width="20%">Preço</th></tr>'));
 		
 		$.each(pedido.pedido_tem_produtos, function(index, key) {
-		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'))
-		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'))
-		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'))
-		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'))
+		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'));
 		});
 		
 		table.append($('<tr><th colspan="3">Total: ' + pedido.getTotalFormatado + '</th></tr>'));
@@ -73,7 +71,7 @@ if($atendenteSession || $gerenteSession) {
 	});
     }
     
-    function reloadPedidos() {
+    var reloadPedidos = function() {
 	$.getJSON('php/controller/painel_pedidos_json', function(data) {
 	    if(!isEmpty(data)) {
 		var qtdNovos = 0, qtdPreparacao = 0, qtdFinalizados = 0;
@@ -138,8 +136,32 @@ if($atendenteSession || $gerenteSession) {
 	reloadPedidos();
 	window.setInterval(reloadPedidos, 5000);
 	
-	$('#btn-avancar').click(function() {
+	$('#btn-avancar, #btn-cancelar, #btn-retornar').click(function() {
+	    var pedido = $(this).data('pedido');
 	    
+	    if(pedido) {
+		var isAvancar = $(this).attr('id') == 'btn-avancar',
+		    isRetornar = $(this).attr('id') == 'btn-retornar',
+		    isCancelar = $(this).attr('id') == 'btn-cancelar',
+		    op = null;
+		    
+		if(isAvancar) op = 'avancar';
+		if(isRetornar) op = 'retornar';
+		if(isCancelar) op = 'cancelar';
+		
+		if(op == 'cancelar') {
+		    if(!window.confirm('Cancelar o pedido #' + pedido.id + '?')) {
+			return;
+		    }
+		}
+
+		$.ajax('php/controller/painel_pedidos_salvar', {
+		    data: {'id': pedido.id, 'op': op},
+		    success: reloadPedidos
+		});
+	    } else {
+		alert('Nenhum pedido para ' + (isAvancar ? 'avançar' : 'cancelar'));
+	    }
 	});
     });
 </script>
@@ -167,6 +189,7 @@ if($atendenteSession || $gerenteSession) {
 </div>
 
 <div id="controles-pedido">
+    <input id="btn-retornar" type="button" value="<< Retornar" />
     <input id="btn-avancar" type="button" value="Avançar >>" />
     <input id="btn-cancelar" type="button" value="Cancelar pedido" />
 </div>
