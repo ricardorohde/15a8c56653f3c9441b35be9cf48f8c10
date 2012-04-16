@@ -9,15 +9,15 @@ if($_SESSION['sessao_valida']){
 }
 
 if($_GET['sta']=='novoped'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ? AND id <> ?","novo_pedido",$atendente->restaurante_id,$_GET['ped'])));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ? AND id <> ?",Pedido::$NOVO,$atendente->restaurante_id,$_GET['ped'])));
     $idtable = "novoped";
 }
 else if($_GET['sta']=='pedpre'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ? AND id <> ?","pedido_preparacao",$atendente->restaurante_id,$_GET['ped'])));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ? AND id <> ?",Pedido::$PREPARACAO,$atendente->restaurante_id,$_GET['ped'])));
     $idtable = "pedpre";
 }
 else if($_GET['sta']=='pedconcan'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("(situacao = ?  OR situacao = ?) AND restaurante_id = ? AND id <> ?","pedido_concluido","cancelado",$atendente->restaurante_id,$_GET['ped'])));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("(situacao = ?  OR situacao = ?) AND restaurante_id = ? AND id <> ?",Pedido::$CONCLUIDO,Pedido::$CANCELADO,$atendente->restaurante_id,$_GET['ped'])));
     $idtable = "pedconcan";
 }
 
@@ -30,13 +30,13 @@ if($pedidos){
         $data=$quebra[0];
         $hora=$quebra[1];
         
-        if($pedido->situacao=="novo_pedido"){
+        if($pedido->situacao==Pedido::$NOVO){
             $classtr = "novo_ped";
-        }else if($pedido->situacao=="pedido_preparacao"){
+        }else if($pedido->situacao==Pedido::$PREPARACAO){
             $classtr = "ped_pre";
-        }else if($pedido->situacao=="pedido_concluido"){
+        }else if($pedido->situacao==Pedido::$CONCLUIDO){
             $classtr = "ped_con";
-        }else if($pedido->situacao=="cancelado"){
+        }else if($pedido->situacao==Pedido::$CANCELADO){
             $classtr = "ped_can";
         }      
          ?>

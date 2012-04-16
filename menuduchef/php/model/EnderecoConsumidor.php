@@ -11,7 +11,7 @@ class EnderecoConsumidor extends ActiveRecord\Model {
 	array('pedidos', 'foreign_key' => 'endereco_id', 'class_name' => 'Pedido')
     );
     static $before_save = array('clean_attributes');
-    
+
     public function clean_attributes() {
 	$this->cep = StringUtil::onlyNumbers($this->cep);
     }
@@ -27,17 +27,17 @@ class EnderecoConsumidor extends ActiveRecord\Model {
 		    $to_md5 .= $attr . '-';
 		}
 	    }
-	    
+
 	    $md5 = md5($to_md5);
 	}
 
 	return $md5;
     }
-    
+
     public function __toString() {
 	return $this->logradouro . ($this->numero ? ", {$this->numero}" : '') . ($this->complemento ? ", {$this->complemento}" : '')
-	    . '<br />CEP: ' . StringUtil::formataCep($this->cep)
-	    . '<br />' . $this->bairro->nome . ' - ' . $this->bairro->cidade->nome;
+	    . ', ' . $this->bairro->nome . ' - ' . $this->bairro->cidade->nome . '/' . $this->bairro->cidade->uf->sigla
+	    . '<br />CEP: ' . StringUtil::formataCep($this->cep);
     }
 
 }

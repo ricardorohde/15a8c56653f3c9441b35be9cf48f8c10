@@ -89,7 +89,7 @@ function show(x){
                       
                       if($rest->pedidos){
                           foreach($rest->pedidos as $ped){
-                              if($ped->situacao=="pedido_concluido"){
+                              if($ped->situacao==Pedido::$CONCLUIDO){
                                   $qtd++;
                                   $pedval = $ped->getTotal();
                                   $val += $pedval;
@@ -104,7 +104,7 @@ function show(x){
                                       $qtd_mesret++;
                                       $val_mesret += $pedval;
                                   }
-                              }else if($ped->situacao=="cancelado"){
+                              }else if($ped->situacao==Pedido::$CANCELADO){
                                   $can++;
                                   $mesp = $ped->quando->format('m');
                                   if($mesp==$mes){

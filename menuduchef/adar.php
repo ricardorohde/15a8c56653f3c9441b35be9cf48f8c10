@@ -13,9 +13,9 @@ if ($_SESSION['restaurante_administrado_id']) {
     $restaurante = $_SESSION['restaurante_administrado_id'];
 }
 
-$novoped = Pedido::all(array("order" => "quando", "conditions" => array("situacao = ? AND restaurante_id = ?", "novo_pedido", $atendente->restaurante_id)));
-$pedpre = Pedido::all(array("order" => "quando", "conditions" => array("situacao =? AND restaurante_id = ?", "pedido_preparacao", $atendente->restaurante_id)));
-$pedconcan = Pedido::all(array("order" => "quando", "conditions" => array("( situacao=? OR situacao=? ) AND restaurante_id = ?", "pedido_concluido", "cancelado", $atendente->restaurante_id)));
+$novoped = Pedido::all(array("order" => "quando", "conditions" => array("situacao = ? AND restaurante_id = ?", Pedido::$NOVO, $atendente->restaurante_id)));
+$pedpre = Pedido::all(array("order" => "quando", "conditions" => array("situacao =? AND restaurante_id = ?", Pedido::$PREPARACAO, $atendente->restaurante_id)));
+$pedconcan = Pedido::all(array("order" => "quando", "conditions" => array("( situacao=? OR situacao=? ) AND restaurante_id = ?", Pedido::$CONCLUIDO, Pedido::$CANCELADO, $atendente->restaurante_id)));
 ?>
 
 <link rel="stylesheet" type="text/css" href="css_/estilo_.css" />
@@ -205,7 +205,7 @@ $pedconcan = Pedido::all(array("order" => "quando", "conditions" => array("( sit
 		    $data = $quebra[0];
 		    $hora = $quebra[1];
 		    ?>
-		    <tr class="<?= $np->situacao == "pedido_concluido" ? "ped_con" : "ped_can" ?> pedidos" idped="<?= $np->id ?>" tipo="<?= $np->situacao == "pedido_concluido" ? "ped_con" : "ped_can" ?>" style="cursor:pointer;">
+		    <tr class="<?= $np->situacao == Pedido::$CONCLUIDO ? "ped_con" : "ped_can" ?> pedidos" idped="<?= $np->id ?>" tipo="<?= $np->situacao == Pedido::$CONCLUIDO ? "ped_con" : "ped_can" ?>" style="cursor:pointer;">
 			<td><?= $np->id ?></td>
 			<td><?= $np->consumidor->nome ?></td>
 			<td><?= $data ?></td>

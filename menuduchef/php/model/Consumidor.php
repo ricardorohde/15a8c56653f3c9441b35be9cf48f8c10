@@ -135,6 +135,23 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
     public function destroy_usuario() {
 	$this->usuario->delete();
     }
+    
+    public function getTelefonesFormatado() {
+	$telefones = $this->telefones;
+	$arrayResult = array();
+	
+	if($telefones) {
+	    foreach($telefones as $telefone) {
+		$arrayResult[] = $telefone->numero;
+	    }
+	}
+	
+	if($arrayResult) {
+	    return implode(' / ', $arrayResult);
+	} else {
+	    return '---';
+	}
+    }
 
     public static function all($paramOptions = null) {
 	$options = array("joins" => "inner join usuario on " . static::$table_name . ".usuario_id = usuario.id", "order" => "usuario.nome asc");

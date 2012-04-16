@@ -16,7 +16,7 @@
         $data['cod_seguranca_cartao'] = $_POST['cod_seguranca_cartao'];
         $data['forma_pagamento'] = $formapag->nome;
     }
-    $data['situacao'] = "novo_pedido";
+    $data['situacao'] = Pedido::$NOVO;
     $data['quando'] = date('Y-m-d H:i:s');
     $pedido->update_attributes($data);
     

@@ -48,7 +48,11 @@ if (HttpUtil::isLocalhost()) {
 	    #controles-pedido input#btn-avancar { background-color: green;  margin-left: 25%; margin-right: 10%; }
 	    #controles-pedido input#btn-cancelar { background-color: red; }
 	    #detalhes-pedido { float: left; width: 100%; }
-	    #detalhes-cliente, #detalhes-produtos { float: left; height: 250px; width: 33.3%; padding-top: 5px; border-right: #000 solid 1px; }
+	    #detalhes-cliente, #detalhes-produtos { float: left; height: 300px; padding-top: 5px; }
+	    #detalhes-cliente { width: 32.3%; border-right: #000 solid 1px; padding-right: 1%; }
+	    #detalhes-produtos { width: 65.7%; padding-left: 1%; }
+	    #detalhes-produtos table { border-collapse: collapse; width: 100%; }
+	    #detalhes-produtos table td, #detalhes-produtos table th { border: #000 solid 1px; text-align: center; padding: 5px; font-size: 14px; }
 	</style>
     </head>
     <body>

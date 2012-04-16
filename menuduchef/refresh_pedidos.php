@@ -9,7 +9,7 @@ if($_SESSION['sessao_valida']){
 }
 
 if($_GET['sta']=='novoped'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?","novo_pedido",$atendente->restaurante_id)));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?",Pedido::$NOVO,$atendente->restaurante_id)));
     $idtable = "novoped";
     $classtr = "novo_ped";
     

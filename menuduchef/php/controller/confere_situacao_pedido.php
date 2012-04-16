@@ -35,7 +35,7 @@
                     </div>
                     <div class="espaco_status radios_5" style="margin:0 7px;">
                         <div class="box_status" style="padding:0 85px;">
-                            <? if(($pedido->situacao=="pedido_preparacao")||($pedido->situacao=="pedido_concluido")||($pedido->situacao=="cancelado")){ ?>
+                            <? if(($pedido->situacao==Pedido::$PREPARACAO)||($pedido->situacao==Pedido::$CONCLUIDO)||($pedido->situacao==Pedido::$CANCELADO)){ ?>
                                 <img src="background/fine.png" width="40" height="38" style="margin-top:6px;">
                             <? }else{ ?>
                                 <img src="background/wait.png" width="40" height="38" style="margin-top:6px;">
@@ -47,7 +47,7 @@
                     </div>
                     <div class="espaco_status radios_5">
                         <div class="box_status" style="padding:0 85px;">
-                            <? if(($pedido->situacao=="pedido_concluido")||($pedido->situacao=="cancelado")){ ?>
+                            <? if(($pedido->situacao==Pedido::$CONCLUIDO)||($pedido->situacao==Pedido::$CANCELADO)){ ?>
                                 <img src="background/fine.png" width="40" height="38" style="margin-top:6px;">
                             <? }else{ ?>
                                 <img src="background/wait.png" width="40" height="38" style="margin-top:6px;">
@@ -87,10 +87,10 @@
                         <td style="color:#E51B21"><?= 
                                         $sit = "";
                                         switch($pedido->situacao){
-                                            case "novo_pedido": $sit="Aguardando restaurante"; break;
-                                            case "pedido_preparacao": $sit="Pedido em peparo"; break;
-                                            case "pedido_concluido": $sit="Conclu&iacute;do"; break;   
-                                            case "cancelado": $sit="Cancelado"; break;    
+                                            case Pedido::$NOVO: $sit="Aguardando restaurante"; break;
+                                            case Pedido::$PREPARACAO: $sit="Pedido em peparo"; break;
+                                            case Pedido::$CONCLUIDO: $sit="Conclu&iacute;do"; break;   
+                                            case Pedido::$CANCELADO: $sit="Cancelado"; break;    
                                         }
                                         echo $sit; 
                                         ?></td></tr>

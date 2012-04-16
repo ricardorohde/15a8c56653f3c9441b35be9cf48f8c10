@@ -2,6 +2,10 @@
 
 class Pedido extends ActiveRecord\Model {
 
+    static $NOVO = 'novo_pedido';
+    static $PREPARACAO = 'pedido_preparacao';
+    static $CONCLUIDO = 'pedido_concluido';
+    static $CANCELADO = 'cancelado';
     static $table_name = 'pedido';
     static $belongs_to = array(
 	array('consumidor'),
@@ -36,21 +40,17 @@ class Pedido extends ActiveRecord\Model {
 
 	if ($this->pedido_tem_produtos) {
 	    foreach ($this->pedido_tem_produtos as $ptp) {
-		$valor_adicional = 0;
-
-		if ($ptp->pedido_tem_produtos_adicionais) {
-		    foreach ($ptp->pedido_tem_produtos_adicionais as $ptpa) {
-			$valor_adicional += $ptpa->preco;
-		    }
-		}
-
-		$preco_total += ( ($ptp->preco_unitario + $valor_adicional) * $ptp->qtd);
+		$preco_total += $ptp->getTotal();
 	    }
 	}
 
 	return $preco_total;
     }
     
+    public function getTotalFormatado() {
+	return StringUtil::doubleToCurrency($this->getTotal());
+    }
+
     public function quandoFormatado() {
 	return $this->quando->format('d/m/Y - H:i');
     }

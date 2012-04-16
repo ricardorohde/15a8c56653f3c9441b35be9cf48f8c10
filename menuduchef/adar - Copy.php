@@ -9,9 +9,9 @@ if($_SESSION['restaurante_administrado_id']){
     $restaurante = $_SESSION['restaurante_administrado_id'];
 }
 
-$novoped=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao=?","novo_pedido")));
+$novoped=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao=?",Pedido::$NOVO)));
 $pedpre=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao=?","pedido_preparaçao")));
-$pedconcan=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao=? OR situacao=?","pedido_concluido","pedido_cancelado")));
+$pedconcan=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao=? OR situacao=?",Pedido::$CONCLUIDO,"pedido_cancelado")));
 ?>
 
  <link rel="stylesheet" type="text/css" href="css_/estilo_.css" >

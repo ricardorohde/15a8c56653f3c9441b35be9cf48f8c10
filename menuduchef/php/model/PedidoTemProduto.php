@@ -64,6 +64,10 @@ class PedidoTemProduto extends ActiveRecord\Model {
 
 	return $preco_total;
     }
+    
+    public function getTotalFormatado() {
+	return StringUtil::doubleToCurrency($this->getTotal());
+    }
 
 }
 

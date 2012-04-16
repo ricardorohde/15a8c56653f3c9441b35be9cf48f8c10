@@ -10,25 +10,25 @@ if($_SESSION['sessao_valida']){
 
 $ped = Pedido::find(array("conditions"=>array("restaurante_id = ? AND id = ?",$atendente->restaurante_id,$_GET['ped'])));
 if($ped){
-    if($ped->situacao=="novo_pedido"){
-        $data['situacao'] = "pedido_preparacao";
-    }else if($ped->situacao=="pedido_preparacao"){
-        $data['situacao'] = "pedido_concluido";
+    if($ped->situacao==Pedido::$NOVO){
+        $data['situacao'] = Pedido::$PREPARACAO;
+    }else if($ped->situacao==Pedido::$PREPARACAO){
+        $data['situacao'] = Pedido::$CONCLUIDO;
     }
     $ped->update_attributes($data);
 }
 
 
 if($_GET['sta']=='novoped'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?","novo_pedido",$atendente->restaurante_id)));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?",Pedido::$NOVO,$atendente->restaurante_id)));
     $idtable = "novoped";
 }
 else if($_GET['sta']=='pedpre'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?","pedido_preparacao",$atendente->restaurante_id)));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("situacao = ? AND restaurante_id = ?",Pedido::$PREPARACAO,$atendente->restaurante_id)));
     $idtable = "pedpre";
 }
 else if($_GET['sta']=='pedconcan'){
-    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("(situacao = ?  OR situacao = ?) AND restaurante_id = ?","pedido_concluido","cancelado",$atendente->restaurante_id)));
+    $pedidos=Pedido::all(array("order"=>"quando", "conditions"=>array("(situacao = ?  OR situacao = ?) AND restaurante_id = ?",Pedido::$CONCLUIDO,Pedido::$CANCELADO,$atendente->restaurante_id)));
     $idtable = "pedconcan";
 }
 
@@ -41,13 +41,13 @@ if($pedidos){
         $data=$quebra[0];
         $hora=$quebra[1];
         
-        if($pedido->situacao=="novo_pedido"){
+        if($pedido->situacao==Pedido::$NOVO){
             $classtr = "novo_ped";
-        }else if($pedido->situacao=="pedido_preparacao"){
+        }else if($pedido->situacao==Pedido::$PREPARACAO){
             $classtr = "ped_pre";
-        }else if($pedido->situacao=="pedido_concluido"){
+        }else if($pedido->situacao==Pedido::$CONCLUIDO){
             $classtr = "ped_con";
-        }else if($pedido->situacao=="cancelado"){
+        }else if($pedido->situacao==Pedido::$CANCELADO){
             $classtr = "ped_can";
         }      
          ?>

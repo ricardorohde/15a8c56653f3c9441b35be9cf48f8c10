@@ -3,9 +3,9 @@ include("include/header2.php");
 
 if($atendenteSession || $gerenteSession) {
     $restaurante_id = $atendenteSession->restaurante_id ?: $gerenteSession->restaurante_id;
-    $novoped = Pedido::all(array("order" => "quando", "conditions" => array("situacao = ? AND restaurante_id = ?", "novo_pedido", $restaurante_id)));
-    $pedpre = Pedido::all(array("order" => "quando", "conditions" => array("situacao =? AND restaurante_id = ?", "pedido_preparacao", $restaurante_id)));
-    $pedconcan = Pedido::all(array("order" => "quando", "conditions" => array("( situacao=? OR situacao=? ) AND restaurante_id = ?", "pedido_concluido", "cancelado", $restaurante_id)));
+    $novoped = Pedido::all(array("order" => "quando", "conditions" => array("situacao = ? AND restaurante_id = ?", Pedido::$NOVO, $restaurante_id)));
+    $pedpre = Pedido::all(array("order" => "quando", "conditions" => array("situacao =? AND restaurante_id = ?", Pedido::$PREPARACAO, $restaurante_id)));
+    $pedconcan = Pedido::all(array("order" => "quando", "conditions" => array("( situacao=? OR situacao=? ) AND restaurante_id = ?", Pedido::$CONCLUIDO, Pedido::$CANCELADO, $restaurante_id)));
 } else {
     exit;
 }
@@ -202,7 +202,7 @@ if($atendenteSession || $gerenteSession) {
 		    $data = $quebra[0];
 		    $hora = $quebra[1];
 		    ?>
-		    <tr class="<?= $np->situacao == "pedido_concluido" ? "ped_con" : "ped_can" ?> pedidos" idped="<?= $np->id ?>" tipo="<?= $np->situacao == "pedido_concluido" ? "ped_con" : "ped_can" ?>" style="cursor:pointer;">
+		    <tr class="<?= $np->situacao == Pedido::$CONCLUIDO ? "ped_con" : "ped_can" ?> pedidos" idped="<?= $np->id ?>" tipo="<?= $np->situacao == Pedido::$CONCLUIDO ? "ped_con" : "ped_can" ?>" style="cursor:pointer;">
 			<td><?= $np->id ?></td>
 			<td><?= $np->consumidor->nome ?></td>
 			<td><?= $data ?></td>

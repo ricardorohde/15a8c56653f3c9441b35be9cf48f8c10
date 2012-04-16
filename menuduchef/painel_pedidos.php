@@ -5,9 +5,9 @@ if($atendenteSession || $gerenteSession) {
     $restaurante_id = $atendenteSession->restaurante_id ?: $gerenteSession->restaurante_id;
     $restaurante = Restaurante::find($restaurante_id);
     
-    $novos = Pedido::all(array("order" => "quando", "conditions" => array("situacao = ? AND restaurante_id = ?", "novo_pedido", $restaurante_id)));
-    $preparacao = Pedido::all(array("order" => "quando", "conditions" => array("situacao =? AND restaurante_id = ?", "pedido_preparacao", $restaurante_id)));
-    $finalizados = Pedido::all(array("order" => "quando", "conditions" => array("( situacao=? OR situacao=? ) AND restaurante_id = ?", "pedido_concluido", "cancelado", $restaurante_id)));
+    $novos = Pedido::all(array("order" => "quando", "conditions" => array("situacao = ? AND restaurante_id = ?", Pedido::$NOVO, $restaurante_id)));
+    $preparacao = Pedido::all(array("order" => "quando", "conditions" => array("situacao =? AND restaurante_id = ?", Pedido::$PREPARACAO, $restaurante_id)));
+    $finalizados = Pedido::all(array("order" => "quando", "conditions" => array("( situacao=? OR situacao=? ) AND restaurante_id = ?", Pedido::$CONCLUIDO, Pedido::$CANCELADO, $restaurante_id)));
 } else {
     exit;
 }
@@ -15,7 +15,6 @@ if($atendenteSession || $gerenteSession) {
 
 <script type="text/javascript">
     function refreshPainel() {
-	reloadPedidos
 	var todos = $('.pedidos ul li');
 	
 	var novos = $('.pedidos#novos ul li'),
@@ -32,6 +31,32 @@ if($atendenteSession || $gerenteSession) {
 	
 	todos.mouseover(function() {
 	    $(this).css({'background-color': '#ccc', 'color': '#000'});
+	}).click(function () {
+	    var pedido = $(this).data('pedido');
+	    
+	    $('#detalhes-cliente').empty().append($(
+		'<strong>#' + pedido.id + '</strong><br /><br />' +
+		'<strong>Cliente:</strong> ' + pedido.consumidor.usuario.nome + '<br /><br />' +
+		'<strong>Data e hora:</strong> ' + pedido.quandoFormatado + '<br /><br />' +
+		'<strong>Endereço:</strong> ' + pedido.endereco_consumidor.__toString + '<br /><br />' +
+		'<strong>Telefone(s):</strong> ' + pedido.consumidor.getTelefonesFormatado + '<br /><br />'
+	    ));
+		
+	    if(pedido.pedido_tem_produtos) {
+		var table = $('<table>');
+		table.append($('<tr><th width="10%">Qtd.</th><th width="70%">Produto</th><th width="20%">Preço</th></tr>'));
+		
+		$.each(pedido.pedido_tem_produtos, function(index, key) {
+		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'))
+		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'))
+		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'))
+		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'))
+		});
+		
+		table.append($('<tr><th colspan="3">Total: ' + pedido.getTotalFormatado + '</th></tr>'));
+		
+		$('#detalhes-produtos').empty().append(table);
+	    }
 	});
 	
 	novos.mouseout(function() {
@@ -43,32 +68,79 @@ if($atendenteSession || $gerenteSession) {
 	});
 	
 	finalizados.mouseout(function() {
+	    backgroundFinalizados = $(this).data('pedido').situacao == '<?= Pedido::$CONCLUIDO ?>' ? 'blue' : 'red';
 	    $(this).css({'background-color': backgroundFinalizados, 'color': corFinalizados});
 	});
     }
     
-    function reloadPedidos(situacao) {
-	if(situacao == 'novo_pedido') target = $('#novos');
-	if(situacao == 'pedido_preparacao') target = $('#preparacao');
-	if(situacao == 'pedido_concluido' || situacao == 'cancelado') target = $('#finalizados');
-	
-	$.getJSON('php/controller/painel_pedidos_json', {'situacao': situacao}, function(data) {
+    function reloadPedidos() {
+	$.getJSON('php/controller/painel_pedidos_json', function(data) {
 	    if(!isEmpty(data)) {
-		target.find('h3 span').html('(' + data.length + ')');
+		var qtdNovos = 0, qtdPreparacao = 0, qtdFinalizados = 0;
+		
+		$('#novos ul').empty();
+		$('#preparacao ul').empty();
+		$('#finalizados ul').empty();
 		
 		$.each(data, function(index, key) {
-		    target.find('ul').append(
-			key.quandoFormatado + '<br />' +
-			'<strong>' + key.consumidor.nome + '</strong>'
-		    );
+		    var target, backgroundFinalizado;
+		    
+		    if(key.situacao == '<?= Pedido::$NOVO ?>') {
+			target = $('#novos');
+			qtdNovos++;
+		    }
+		    
+		    if(key.situacao == '<?= Pedido::$PREPARACAO ?>') {
+			target = $('#preparacao');
+			qtdPreparacao++;
+		    }
+		    
+		    if(key.situacao == '<?= Pedido::$CONCLUIDO ?>' || key.situacao == '<?= Pedido::$CANCELADO ?>') {
+			if(key.situacao == '<?= Pedido::$CONCLUIDO ?>') {
+			    backgroundFinalizado = 'blue';
+			}
+			
+			if(key.situacao == '<?= Pedido::$CANCELADO ?>') {
+			    backgroundFinalizado = 'red';
+			}
+			
+			target = $('#finalizados');
+			qtdFinalizados++;
+		    }
+		    
+		    if(target) {
+			var elementPedido = $(
+			    '<li>' +
+				'<strong>#' + key.id + '</strong> ' +
+				key.quandoFormatado + '<br />' +
+				'<strong>' + key.consumidor.usuario.nome + '</strong>' +
+			    '</li>'
+			).data('pedido', key);
+			
+			if(backgroundFinalizado) {
+			    elementPedido.css('background-color', backgroundFinalizado);
+			}
+			
+			target.find('ul').append(elementPedido);
+		    }
 		});
+		
+		$('#novos h3 span').html('(' + qtdNovos + ')');
+		$('#preparacao h3 span').html('(' + qtdPreparacao + ')');
+		$('#finalizados h3 span').html('(' + qtdFinalizados + ')');
 	    }
+	    
+	    refreshPainel();
 	});
     }
     
     $(function() {
-	refreshPainel();
-	window.setInterval(refreshPainel, 5000);
+	reloadPedidos();
+	window.setInterval(reloadPedidos, 5000);
+	
+	$('#btn-avancar').click(function() {
+	    
+	});
     });
 </script>
 
@@ -79,39 +151,18 @@ if($atendenteSession || $gerenteSession) {
 
 <div id="colunas-pedidos">
     <div class="pedidos" id="novos">
-	<h3>Pedidos novos <span>(<?= sizeof($novos) ?>)</span></h3>
-	<ul>
-	    <? if($novos) foreach($novos as $pedido) { ?>
-	    <li>
-		<?= $pedido->quando->format('d/m/Y - H:i') ?><br />
-		<strong><?= $pedido->consumidor->nome ?></strong>
-	    </li>
-	    <? } ?>
-	</ul>
+	<h3>Pedidos novos <span></span></h3>
+	<ul></ul>
     </div>
 
     <div class="pedidos" id="preparacao">
-	<h3>Pedidos em preparo <span>(<?= sizeof($preparacao) ?>)</span></h3>
-	<ul>
-	    <? if($preparacao) foreach($preparacao as $pedido) { ?>
-	    <li>
-		<?= $pedido->quando->format('d/m/Y - H:i') ?><br />
-		<strong><?= $pedido->consumidor->nome ?></strong>
-	    </li>
-	    <? } ?>
-	</ul>
+	<h3>Pedidos em preparo <span></span></h3>
+	<ul></ul>
     </div>
 
     <div class="pedidos" id="finalizados">
-	<h3>Pedidos finalizados <span>(<?= sizeof($finalizados) ?>)</span></h3>
-	<ul>
-	    <? if($finalizados) foreach($finalizados as $pedido) { ?>
-	    <li>
-		<?= $pedido->quando->format('d/m/Y - H:i') ?><br />
-		<strong><?= $pedido->consumidor->nome ?></strong>
-	    </li>
-	    <? } ?>
-	</ul>
+	<h3>Pedidos finalizados <span></span></h3>
+	<ul></ul>
     </div>
 </div>
 
@@ -121,15 +172,8 @@ if($atendenteSession || $gerenteSession) {
 </div>
 
 <div id="detalhes-pedido">
-    <div id="detalhes-cliente">
-	<strong>#3232</strong><br /><br />
-	<strong>Cliente:</strong> José da Silva Sauro<br /><br />
-	<strong>Data e hora:</strong> 20/01/2012 - 19:00<br /><br />
-	<strong>Endereço:</strong> Rua Joseph de Souza, 1281, Bairro Tal - Natal/RN<br /><br />
-	<strong>Telefone(s):</strong> (84) 9999-0000 / (84) 1111-5555<br /><br />
-    </div>
-    <div id="detalhes-produtos">
-    </div>
+    <div id="detalhes-cliente"></div>
+    <div id="detalhes-produtos"></div>
 </div>
 
 <? include('include/footer3.php'); ?>

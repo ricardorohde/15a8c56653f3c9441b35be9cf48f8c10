@@ -12,11 +12,11 @@
         $obj=Consumidor::find($consumidorSession->id);
         if($obj->pedidos){
             foreach($obj->pedidos as $pedido){
-                    if($pedido->situacao=="novo_pedido"){
+                    if($pedido->situacao==Pedido::$NOVO){
                         $cor = "#FFD700";
-                    }else if($pedido->situacao=="cancelado"){
+                    }else if($pedido->situacao==Pedido::$CANCELADO){
                         $cor = "#DD6666";
-                    }else if($pedido->situacao=="pedido_preparacao"){
+                    }else if($pedido->situacao==Pedido::$PREPARACAO){
                         $cor = "#3CB371";
                     }else{
                         $cor = "#4682B4";
