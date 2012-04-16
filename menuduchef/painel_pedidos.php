@@ -138,12 +138,12 @@ if($atendenteSession || $gerenteSession) {
 	
 	$('#btn-avancar, #btn-cancelar, #btn-retornar').click(function() {
 	    var pedido = $(this).data('pedido');
+	    var isAvancar = $(this).attr('id') == 'btn-avancar',
+		isRetornar = $(this).attr('id') == 'btn-retornar',
+		isCancelar = $(this).attr('id') == 'btn-cancelar';
 	    
 	    if(pedido) {
-		var isAvancar = $(this).attr('id') == 'btn-avancar',
-		    isRetornar = $(this).attr('id') == 'btn-retornar',
-		    isCancelar = $(this).attr('id') == 'btn-cancelar',
-		    op = null;
+		var op = null;
 		    
 		if(isAvancar) op = 'avancar';
 		if(isRetornar) op = 'retornar';
@@ -160,7 +160,7 @@ if($atendenteSession || $gerenteSession) {
 		    success: reloadPedidos
 		});
 	    } else {
-		alert('Nenhum pedido para ' + (isAvancar ? 'avançar' : 'cancelar'));
+		alert('Nenhum pedido para ' + (isAvancar ? 'avançar' : (isRetornar ? 'retornar' : 'cancelar')));
 	    }
 	});
     });
