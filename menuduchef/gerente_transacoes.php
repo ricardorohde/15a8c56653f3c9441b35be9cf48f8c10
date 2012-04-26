@@ -43,17 +43,13 @@ function show(x){
       <div class="span-6">
         <div id="barra_esquerda">
           <div id="info_restaurante">
-            <div id="categoria_rest"><?= $rest->getNomeCategoria() ?> </div>
-            <div id="nome_rest"><?= $rest->nome ?> </div>
-            <div id="avatar_rest"> <img src="images/restaurante/<?= $rest->imagem ?>" border="0"> </div>
-            <div id="formas_pagamento">Formas de pagamento </div>
-            <div id="tempo_entrega"><span style="color:#E51B21;">EndereÃ§o:</span> <?= $rest->endereco ?> </div>
-            <img style="margin-top:12px;" width="110" height="30" src="background/cancel.png" style="cursor:pointer;" onclick="location.href=('gerente_principal');"> <img width="110" height="30" id="salvar" style="cursor:pointer" src="background/salvar.png" > </div>
+            
+            <img style="margin-top:12px;cursor:pointer;" width="110" height="30" src="background/cancel.png" onclick="location.href=('gerente_principal');"> <img width="110" height="30" id="salvar" style="cursor:pointer" src="background/salvar.png" > </div>
         </div>
       </div>
       <div class="span-18 last">
         <div id="titulo_box_destaque"> Controle GerÃªncia </div>
-        <div class="titulo_box_concluir" style="margin-top:4px;">Relatório de pedidos
+        <div class="titulo_box_concluir" style="margin-top:4px;">Relat&oacute;rio de pedidos
           <?= $rest->nome ?>, modificado por
           <div style="display:inline; font:Arial; color:#E51B21; font-size:13px;"><?= $usuario->nome ?>.</div>
         </div>
@@ -89,7 +85,7 @@ function show(x){
                       
                       if($rest->pedidos){
                           foreach($rest->pedidos as $ped){
-                              if($ped->situacao==Pedido::$CONCLUIDO){
+                              if($ped->situacao=="pedido_concluido"){
                                   $qtd++;
                                   $pedval = $ped->getTotal();
                                   $val += $pedval;
@@ -104,7 +100,7 @@ function show(x){
                                       $qtd_mesret++;
                                       $val_mesret += $pedval;
                                   }
-                              }else if($ped->situacao==Pedido::$CANCELADO){
+                              }else if($ped->situacao=="cancelado"){
                                   $can++;
                                   $mesp = $ped->quando->format('m');
                                   if($mesp==$mes){
@@ -119,19 +115,19 @@ function show(x){
                       }
               ?>
               Qtd total de pedidos: <?= $qtd ?><br/>
-              Qtd total de pedidos neste mês (<?= $mes ?>): <?= $qtd_mes ?><br/>
-              Qtd total de pedidos no mês passado (<?= $mespas ?>): <?= $qtd_mespas ?><br/>
-              Qtd total de pedidos no mês retrasado (<?= $mesret ?>): <?= $qtd_mesret ?><br/><br/>
+              Qtd total de pedidos neste m&ecirc;s (<?= $mes ?>): <?= $qtd_mes ?><br/>
+              Qtd total de pedidos no m&ecirc;s passado (<?= $mespas ?>): <?= $qtd_mespas ?><br/>
+              Qtd total de pedidos no m&ecirc;s retrasado (<?= $mesret ?>): <?= $qtd_mesret ?><br/><br/>
               
               Qtd total de pedidos cancelados: <?= $can ?><br/>
-              Qtd total de pedidos cancelados neste mês (<?= $mes ?>): <?= $can_mes ?><br/>
-              Qtd total de pedidos cancelados no mês passado (<?= $mespas ?>): <?= $can_mespas ?><br/>
-              Qtd total de pedidos cancelados no mês retrasado (<?= $mesret ?>): <?= $can_mesret ?><br/><br/>
+              Qtd total de pedidos cancelados neste m&ecirc;s (<?= $mes ?>): <?= $can_mes ?><br/>
+              Qtd total de pedidos cancelados no m&ecirc;s passado (<?= $mespas ?>): <?= $can_mespas ?><br/>
+              Qtd total de pedidos cancelados no m&ecirc;s retrasado (<?= $mesret ?>): <?= $can_mesret ?><br/><br/>
               
               Valor bruto dos pedidos: <?= StringUtil::doubleToCurrency($val) ?><br/>
-              Valor bruto dos pedidos neste mês (<?= $mes ?>): <?= StringUtil::doubleToCurrency($val_mes) ?><br/>
-              Valor bruto dos pedidos no mês passado (<?= $mespas ?>): <?= StringUtil::doubleToCurrency($val_mespas) ?><br/>
-              Valor bruto dos pedidos no mês retrasado (<?= $mesret ?>): <?= StringUtil::doubleToCurrency($val_mesret) ?><br/><br/>
+              Valor bruto dos pedidos neste m&ecirc;s (<?= $mes ?>): <?= StringUtil::doubleToCurrency($val_mes) ?><br/>
+              Valor bruto dos pedidos no m&ecirc;s passado (<?= $mespas ?>): <?= StringUtil::doubleToCurrency($val_mespas) ?><br/>
+              Valor bruto dos pedidos no m&ecirc;s retrasado (<?= $mesret ?>): <?= StringUtil::doubleToCurrency($val_mesret) ?><br/><br/>
               
               
           </div>

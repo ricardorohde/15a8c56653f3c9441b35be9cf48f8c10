@@ -16,4 +16,21 @@ function connect(){
 	}
 	return $r;
 }
+
+function filtrar_caracteres_malignos($s){
+    
+    $s = explode("/",$s);
+    $s = implode("",$s);
+    
+    
+    $s = explode("'",$s);
+    $s = implode("",$s);
+    
+    
+    $s = explode('"',$s);
+    $s = implode('',$s);
+    
+    
+    return $s;
+}
 ?>

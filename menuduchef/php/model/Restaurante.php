@@ -12,6 +12,7 @@ class Restaurante extends ActiveRecord\Model {
         array('horarios', 'class_name' => 'HorarioRestaurante'),
         array('usuarios', 'class_name' => 'UsuarioRestaurante'),
         array('produtos', 'class_name' => 'Produto'),
+        array('restaurante_aceita_cupons', 'class_name' => 'RestauranteAceitaCupom'),
         array('bairros_atendidos', 'class_name' => 'RestauranteAtendeBairro'),
         array('bairros', 'through' => 'bairros_atendidos', 'class_name' => 'Bairro'),
         array('restaurante_tem_tipo_produtos', 'class_name' => 'RestauranteTemTipoProduto'),
@@ -31,8 +32,8 @@ class Restaurante extends ActiveRecord\Model {
         array(array('nome', 'Cidade' => 'cidade_id'), 'message' => 'já existem')
     );
     static $after_save = array('save_tipos', 'save_tipos_de_produto', 'save_bairros_atendidos', 'save_horarios', 'save_formas_pagamento');
-    var $image_x = 130;
-    var $image_y = 98;
+    var $image_x = 172;
+    var $image_y = 130;
 
     public function getUrlImagem() {
         return PATH_IMAGE_UPLOAD . '/' . strtolower(get_class($this)) . '/' . $this->imagem;

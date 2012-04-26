@@ -10,7 +10,7 @@ if($atendenteSession || $gerenteSession) {
     $pedidos = Pedido::all(array("order" => "quando asc", "conditions" => array("restaurante_id = ?", $restaurante_id)));
     
     echo StringUtil::arrayActiveRecordToJson($pedidos, array(
-	'methods' => array('quandoFormatado', 'getTotal', 'getTotalFormatado'),
+	'methods' => array('quandoFormatado', 'quandoConfirmadoFormatado', 'quandoConcluiuFormatado', 'getTotal', 'getTotalFormatado'),
 	'include' => array(
 	    'endereco_consumidor' => array('methods' => '__toString'),
 	    'pedido_tem_produtos' => array('methods' => array('getTotal', 'getTotalFormatado'), 'include' => 'produto'),

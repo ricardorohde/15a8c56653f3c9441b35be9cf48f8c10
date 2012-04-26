@@ -3,13 +3,27 @@ ob_start();
 session_start();
 include("../../include/header2.php");
 
+function mascara($x){
+    $quebra = explode(".",$x);
+    $x = implode("",$quebra);
+    $quebra = explode(",",$x);
+    $centavos = $quebra[1];
+    $real = $quebra[0];
+    $quebra = explode(".",$real);
+    $real = implode("",$quebra);
+    $x = $real.".".$centavos;
+
+    return $x;
+}
+
 $ultimo_criar = -1;
 $ultimo_modificar = -1;
 $ccriar = 0;
 $cmodificar = 0;
 $gerente = unserialize($_SESSION['usuario_obj']);
 
-foreach($_POST as $key => $valor){
+$da = HttpUtil::getParameterArray2();
+foreach($da as $key => $valor){
     
     $pre = explode("_",$key);
     if($pre[0]=="novo"){
@@ -36,7 +50,7 @@ for($j=0;$j<sizeof($a_criar);$j++){
     unset($data);
     if($a_criar[$i]['novo_nome']!=""){
         $data['nome'] = $a_criar[$i]['novo_nome'];
-        $data['preco_adicional'] = $a_criar[$i]['novo_preco_adicional'];
+        $data['preco_adicional'] = mascara($a_criar[$i]['novo_preco_adicional']);
         $data['disponivel'] = $a_criar[$i]['novo_disponivel'];
         $data['quantas_unidades_ocupa'] = $a_criar[$i]['novo_quantas_unidades_ocupa'];
         $data['restaurante_id'] = $gerente->restaurante_id;
@@ -54,7 +68,7 @@ for($j=0;$j<sizeof($a_modificar);$j++){
 
         $data['id'] = $a_modificar[$i]['id'];
         $data['nome'] = $a_modificar[$i]['nome'];
-        $data['preco_adicional'] = $a_modificar[$i]['preco_adicional'];
+        $data['preco_adicional'] = mascara($a_modificar[$i]['preco_adicional']);
         $data['disponivel'] = $a_modificar[$i]['disponivel'];
         $data['quantas_unidades_ocupa'] = $a_modificar[$i]['quantas_unidades_ocupa'];
         $data['restaurante_id'] = $gerente->restaurante_id;

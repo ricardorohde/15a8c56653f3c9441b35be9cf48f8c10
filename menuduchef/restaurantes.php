@@ -20,7 +20,7 @@ if(($_POST['end_id'])&&($_SESSION['usuario'])){ //essa variavel "end_id" guarda 
 }else{
     $conditions = 'rab.bairro_id = ' . $enderecoSession->bairro_id;
 }
-
+$conditions .= ' and restaurante.ativo = 1 ';
 if($_POST['caixa_filtro']){
     $conditions .= ' and restaurante.nome like "%' . $_POST['caixa_filtro'] . '%" ';
     
@@ -77,16 +77,19 @@ if ($enderecoSession) {
         });
     });
 </script>
-<?php include "menu2.php" ?>
+<?php if($_SESSION['usuario']){
+        include "menu_user.php";
+    }else{
+        include "menu2.php"; 
+    } ?>
 <form action="restaurantes" method="post">
 <div id="central" class="span-24">
     <div class="span-6">
-	<div id="barra_esquerda">
-            
+	<div id="barra_esquerda">   
 	    <div id="seleciona_endereco">
 		<img src="background/titulo_endereco.gif" width="114" height="30" alt="Endereço" style="margin-left:12px">
 		<div style="width:198px; height:25px; margin-left:7px;">
-                    <select id="endereco_cliente" name="endereco_cliente" style="width:195px; margin-left:3px;">
+                    <select id="endereco_cliente" name="endereco_cliente" style="width:195px; margin-left:3px; border:1px solid #bcbec0;">
 		    <? if ($enderecoSession->consumidor) { 
                             foreach($enderecoSession->consumidor->enderecos as $end){
                                 $sel = "";
@@ -115,7 +118,7 @@ if ($enderecoSession) {
 		    <img src="background/titulo_busca.gif" width="71" height="26" alt="Busca" style="margin-left:12px">
 		    <div style="width:198px; height:25px;  margin-left:10px;">
 			<input id="caixa_filtro" name="caixa_filtro" type="text" style="float:left; margin: auto 0; width:140px; position:relative;" value="<?= $_POST['caixa_filtro'] ?>"> 
-			<img class="refino" id="filtrar" src="background/botao_ok.gif" style="float:right; margin-top:-4px; border:0; width:40px; height:24px; position:relative; cursor:pointer;">                   	    	
+			<img class="refino" id="filtrar" src="background/botao_ok.gif" style="float:right; border:0; width:40px; height:24px; position:relative; cursor:pointer;">                   	    	
 		    </div>
 		</div>
 		<div id="filtro">
@@ -128,7 +131,7 @@ if ($enderecoSession) {
 				    $checked = $categoriasFiltro && in_array($categoria->id, $categoriasFiltro);
 			    ?>
 			    <div style="color:#CC0000; padding-top:5px; padding-left:0px;">
-				<input type="checkbox" class="refino filtro_categoria" id="checkrest_<?= $categoria->id ?>" name="categorias[]" value="<?= $categoria->id ?>" <?= $checked ? 'checked="checked"' : '' ?> /> &nbsp; <?= $categoria->nome ?> (<?= $categoria->count ?>)
+				<input type="checkbox" class="refino filtro_categoria" id="checkrest_<?= $categoria->id ?>" name="categorias[]" value="<?= $categoria->id ?>" <?= $checked ? 'checked="checked"' : '' ?> /> &nbsp;<?= $categoria->nome ?> (<?= $categoria->count ?>)
 			    </div>
 			    <? } } ?>
 			</div>

@@ -85,7 +85,7 @@ $_SESSION[$hash_restaurante] = json_decode($horariosJson, true);
     <input class="formfield w50" type="file" name="imagem" maxlength="100" />
     <? if($obj->imagem) { ?>
     <br clear="all" /><img src="<?= $obj->getUrlImagem() ?>" class="left" alt="<?= $obj->nome ?>" />
-    <a href="admin/php/controller/exclude_image" class="left bold red" onclick="return confirm('Excluir imagem?')">X</a>
+    <? // <a href="admin/php/controller/exclude_image" class="left bold red" onclick="return confirm('Excluir imagem?')">X</a> ?>
     <? } ?>
     
     <label class="normal">Cidade:</label>
@@ -107,6 +107,10 @@ $_SESSION[$hash_restaurante] = json_decode($horariosJson, true);
 
     <label class="normal">Endereço:</label>
     <input class="formfield w50" type="text" name="endereco" value="<?= $obj->endereco ?>" maxlength="100" /><br /><br />
+    
+    <label class="normal">Telefone:</label>
+    <input class="formfield w50" type="text" name="telefone" value="<?= $obj->telefone ?>" maxlength="100" /><br /><br />
+    
     
     <label class="normal">Horários:</label>
     <a id="add_horario_restaurante" class="left w100 bottom10" href="javascript:void(0)">Adicionar</a>
@@ -168,7 +172,8 @@ $_SESSION[$hash_restaurante] = json_decode($horariosJson, true);
 	} ?>
     </select>
 
-    <label class="normal">Bairros que o restaurante atende:</label>
+    <label class="normal">Bairros que o restaurante atende: <br/><label style="font-size:10px; color:#F00;">Aten&ccedil;&atilde;o: Para centavos utilize ponto "." ao inv&eacute;s de v&iacute;rgula ","</label></label>
+    
     <div id="bairros"></div>
     
     <? if($tipos) { ?>

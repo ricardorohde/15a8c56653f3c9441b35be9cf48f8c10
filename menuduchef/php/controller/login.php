@@ -1,8 +1,9 @@
 <?
-session_cache_expire(15);
+session_cache_expire(20);
 include_once("../lib/config.php");
 
 $data = HttpUtil::getParameterArray();
+$erro = "";
 
 if (trim($data['email']) && trim($data['senha'])) {
     $usuario = Usuario::login($data['email'], $data['senha']);
@@ -48,11 +49,13 @@ if (trim($data['email']) && trim($data['senha'])) {
 	$_SESSION['usuario_obj'] = serialize($usuario_obj);
 	HttpUtil::redirect($redirect);
     } else {
-	HttpUtil::showErrorMessages(array('Usuário não encontrado'));
+	//HttpUtil::showErrorMessages(array('Usuário e/ou senha incorretos'));
+        $erro = 1;
     }
 } else {
-    HttpUtil::showErrorMessages(array('E-mail e Senha são campos obrigatórios'));
+    //HttpUtil::showErrorMessages(array('E-mail e Senha são campos obrigatórios'));
+    $erro = 2;
 }
 
-HttpUtil::redirect('../../');
+HttpUtil::redirect('../../?e='.$erro);
 ?>

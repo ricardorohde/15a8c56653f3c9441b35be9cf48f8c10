@@ -51,7 +51,7 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
     <input class="formfield w50" type="file" name="imagem" maxlength="100" />
     <? if($obj->imagem) { ?>
     <br clear="all" /><img src="<?= $obj->getUrlImagem() ?>" class="left" alt="<?= $obj->nome ?>" />
-    <a href="admin/php/controller/exclude_image" class="left bold red" onclick="return confirm('Excluir imagem?')">X</a>
+    <!--<a href="php/controller/exclude_image" class="left bold red" onclick="return confirm('Excluir imagem?')">X</a>-->
     <? } ?>
     
     <? if($tipos) { ?>
@@ -70,6 +70,9 @@ $tipos = TipoProduto::all(array("order" => "nome asc"));
     <label class="normal">Adicionais disponíveis para o produto:</label>
     <div id="adicionais"><label class="adjacent">Escolha um restaurante primeiro</label></div>
     <br />
+    <!-- medida tomada para que o fato de não carregar os adicionais disponiveis delete os ja cadastrados -->
+    <input type="hidden" name="nao_altere_adicionais" value="1"/>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     
     <label class="normal">Pre&ccedil;o:</label>
     <input class="formfield w15" type="text" name="preco" value="<?= $obj->preco ?>" maxlength="100" />

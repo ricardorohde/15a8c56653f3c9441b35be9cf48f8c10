@@ -24,17 +24,20 @@ if (trim($data['email']) && trim($data['senha'])) {
                                 
 		break;
                 
-            default: HttpUtil::showErrorMessages(array('Login n&atilde;o pertence a um usu&aacute;rio comum'));
+            default:  //HttpUtil::showErrorMessages(array('Login n&atilde;o pertence a um usu&aacute;rio comum'));
+                HttpUtil::redirect("../../".$_POST['onde_estava']."?e=2"); break;
 	}
 	
 	$_SESSION['usuario'] = serialize($usuario);
 	$_SESSION['usuario_obj'] = serialize($usuario_obj);
 	HttpUtil::redirect($redirect);
     } else {
-	HttpUtil::showErrorMessages(array('Usu&aacute;rio n&atilde;o encontrado'));
+	//HttpUtil::showErrorMessages(array('Usu&aacute;rio n&atilde;o encontrado'));
+        HttpUtil::redirect("../../".$_POST['onde_estava']."?e=3");
     }
 } else {
-    HttpUtil::showErrorMessages(array('E-mail e Senha s&atilde;o campos obrigat&oacute;rios'));
+    //HttpUtil::showErrorMessages(array('E-mail e Senha s&atilde;o campos obrigat&oacute;rios'));
+    HttpUtil::redirect("../../".$_POST['onde_estava']."?e=4");
 }
 
 HttpUtil::redirect("../../".$_POST['onde_estava']);

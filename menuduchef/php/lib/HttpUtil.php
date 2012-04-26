@@ -5,7 +5,19 @@ require_once("constant.php");
 class HttpUtil {
 
     static function getParameterArray() {
-        return $_POST ? : ($_GET ? : 0);
+        $ret = $_POST ? : ($_GET ? : 0);
+        //foreach($ret as $key=>$valor){
+        //    $ret[$key] = utf8_decode($valor);
+        //}
+        return $ret;
+    }
+    
+    static function getParameterArray2() {
+        $ret = $_POST ? : ($_GET ? : 0);
+        foreach($ret as $key=>$valor){
+            $ret[$key] = utf8_decode($valor);
+        }
+        return $ret;
     }
 
     static function getCurrentPage() {

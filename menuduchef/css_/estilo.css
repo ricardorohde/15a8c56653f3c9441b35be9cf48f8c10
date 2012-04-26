@@ -186,7 +186,7 @@ a:hover{color:#CCC}
 	
 #seleciona_endereco{
 	width:220px;
-	height:90px;
+	height:70px;
 	float:left;
 	margin-top:96px;
 	}
@@ -313,32 +313,32 @@ a:hover{color:#CCC}
 	}
 	
 .texti{
-	font-family:'BebasNeueRegular';; 
-   	font-size: 31px; /* optional. just to increase the font size. */ 
+	font-family:'BebasNeueRegular';
+   	font-size: 31px;  
 	display: block; 
     line-height: 1em; 
-    color:transparent; /* shadow color */ 
+    color:transparent; 
     background-color: transparent; 
-    white-space: nowrap; /* wrapping breaks the effect */ 
+    white-space: nowrap;  
 } 
 
 .texti:before, 
 .texti:after{ 
-   content: "Restaurantes"; /* O mesmo texto que queremos mostrar sombreado */ 
+   content: "Restaurantes"; 
    display: block; 
 } 
 
 .texti:before{ 
    margin-bottom: -1.00em; 
    margin-left: 0.0001ex;
-   color:#D6D7D8; /* shadow color */ 
+   color:#D6D7D8; 
    background-color: transparent; 
 } 
 
 .texti:after{ 
    margin-top: -1.05em; 
    margin-left: -0.1ex; 
-   color:#E51B21; /* text color */ 
+   color:#E51B21;  
    background-color: transparent; 
 }
 
@@ -348,6 +348,7 @@ a:hover{color:#CCC}
 
 #info_restaurante{
 	position:relative;
+	float:left;
 	width:172px; 
 	height:250px; 
 	margin-top:96px; 
@@ -355,6 +356,8 @@ a:hover{color:#CCC}
 	}
 	
 #categoria_rest{
+	position:relative;
+	float:left;
 	width:172px; 
 	height:14px; 
 	font:Arial;
@@ -363,6 +366,8 @@ a:hover{color:#CCC}
 	}
 	
 #nome_rest{
+	position:relative;
+	float:left;
 	width:172px; 
 	height:26px; 
 	font:Arial;
@@ -371,15 +376,19 @@ a:hover{color:#CCC}
 	}
 		
 #avatar_rest{
+	position:relative;
+	float:left;
 	width:172px; 
-	height:135px; 
+	height:130px; 
 	margin-top:6px;
 	}
 
 #formas_pagamento{
+	position:relative;
+	float:left;
 	width:172px; 
 	height:28px; 
-	margin-top:3px;
+	margin-top:8px;
 	font:Arial;
 	font-size:14px;
 	color:#E51B21;
@@ -387,14 +396,35 @@ a:hover{color:#CCC}
 
 	
 #tempo_entrega{
+	position:relative;
+	float:left;
 	width:172px; 
 	height:33px;
 	font:Arial;
 	font-size:11px;
 	color:#6E7072;
 	}
+	
+#filtro_{
+	position:relative;
+	float:left;
+	width:170px;
+	margin:30px 24px 0 24px;
+	position:relative;
+	border:1px dashed #bcbec0;
+	}
 
-
+#filtrar_per{
+	position:relative;
+	float:left;
+	width:172px; 
+	height:26px; 
+	font-family:Arial;
+	font-weight:normal;
+	border-top:1px solid #bcbec0; 
+	font-size:20px;
+	color:#E51B21;
+	}
 /* Box_destaque */ 
 
 #box_destaque{
@@ -459,7 +489,7 @@ a:hover{color:#CCC}
     padding:0 1px;
 	float:left;
 	font:Arial;
-	/*text-decoration:overline;*/
+	
 	font-size:14px;
 	color:#E51B21;
 	}
@@ -486,6 +516,7 @@ a:hover{color:#CCC}
 	
 
 /* Carrinho */
+
 #carrinho{
 	cursor:pointer; 
 	width:325px; 
@@ -633,7 +664,7 @@ a:hover{color:#CCC}
 	width:674px; 
 	padding:6px 12px; 
 	height:60px;
-	z-index:3;
+	/*z-index:3; isso aqui estava dando o bug dos pop ups e muitos outros o.O */
 	position:relative;
 	}
 
@@ -825,7 +856,7 @@ label { font-size:12px; font-family: Arial, Helvetica, sans-serif; color:#666; d
 	
 /*pop - up*/
 
-#pop-up{
+.pop-up{
 	box-shadow: 1px 1px 2px #333;
 	-webkit-box-shadow:1px 1px 2px #333;
     -moz-box-shadow: 1px 1px 2px #333;
@@ -839,7 +870,20 @@ label { font-size:12px; font-family: Arial, Helvetica, sans-serif; color:#666; d
 	padding:20px;
 	font-family:Arial, Helvetica, sans-serif;
 	}
-	
+.pop-cat{
+	box-shadow: 1px 1px 2px #333;
+	-webkit-box-shadow:1px 1px 2px #333;
+    -moz-box-shadow: 1px 1px 2px #333;
+	position:absolute;
+	margin:0 auto;
+	width:364px;
+	background:#f1f1f2;
+	-moz-border-radius:8px; 
+	-webkit-border-radius:8px;
+	border:0;
+	padding:20px;
+	font-family:Arial, Helvetica, sans-serif;
+	}	
 .titulo_pop{
 	font-family:arial; 
 	color:#E51B21; 
@@ -903,6 +947,7 @@ label { font-size:12px; font-family: Arial, Helvetica, sans-serif; color:#666; d
 	position:absolute;
 	margin:0 auto;
 	width:264px;
+        z-index:6;
 	background:#f1f1f2;
 	-moz-border-radius:8px; 
 	-webkit-border-radius:8px;
@@ -961,7 +1006,7 @@ div.tool:hover div.tip {
   position: absolute;
   top: 1.6em;
   left: 0;
-  width: auto;
+  /* width: auto; */
   padding: 3px 7px 4px 6px;
   border: 1px dashed #F90;
   background-color: transparent;
@@ -1011,7 +1056,7 @@ span.tool:hover span.tip {
   position: absolute;
   top: 1.6em;
   left: 0;
-  width: auto;
+  /* width: auto; */
   padding: 3px 7px 4px 6px;
   border: 1px dashed #F90;
   background-color: transparent;
@@ -1035,4 +1080,20 @@ cep{
 	font-size:14px;
 	background:#63C;
 	
+	}
+	
+	.dia{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	font-weight:bold;
+	color: #666;
+	background:#F3F3F3;
+	}
+		
+.sem{
+	width:auto;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:11px;
+	font-weight:normal;
+	color:#666;
 	}

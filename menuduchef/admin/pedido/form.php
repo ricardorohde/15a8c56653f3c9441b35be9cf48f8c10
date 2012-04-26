@@ -119,8 +119,8 @@ $preco_total = 0;
     <label class="normal">Troco:</label>
     <input class="formfield w15" type="text" name="troco" value="<?= $obj->troco ?>" maxlength="100" />
     
-    <label class="normal">Cupom:</label>
-    <input class="formfield w15" type="text" name="cupom" value="<?= $obj->cupom ?>" maxlength="100" />
+    <label class="normal">ID Cupom:</label>
+    <input class="formfield w15" type="text" name="cupom" value="<?= $obj->cupom_id ?>" maxlength="100" />
     
     <label class="normal">Situa&ccedil;&atilde;o:</label>
     <input class="formfield w15" type="text" name="situacao" value="<?= $obj->situacao ?>" maxlength="100" />

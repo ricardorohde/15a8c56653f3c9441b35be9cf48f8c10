@@ -39,7 +39,12 @@ $(document).ready(function() {
             $("#novo_adicional-"+qual).remove();
         });
     });
-
+    $("#botao_cancelar").click(function(){
+        con = confirm("Tem certeza que deseja cancelar?");
+        if(con){
+            location.href=('gerente_extras');
+        }
+    });
     
     
     //$("#porcoes").append("<tr id='novo_adicional-"+num_adi+"'><input type='hidden' name='novo_quantas_unidades_ocupa-"+num_adi+"' value='0'><th><input type='text' id='novo_nome-"+num_adi+"' name='novo_nome-"+num_adi+"' style='width:60px;' value=''></th><th><div style='position:relative; float: left;'>R$</div><div><input type='text' name='novo_preco_adicional-"+num_adi+"' style='width:50px; position:relative; float: left;' onkeyup='mask_moeda(this)' value='0,00'></div></th><th><div style='width:40px;'><input type='radio' name='novo_disponivel-"+num_adi+"' value='1' checked > Sim<br/><input type='radio' name='novo_disponivel-"+num_adi+"' value='0'> N&atilde;o</div></th><th><input type='hidden' id='novo_ativo-"+num_adi+"' name='novo_ativo-"+num_adi+"' value='1'><input type='button' class='desativar_novo' qual='"+num_adi+"' value='x"+num_adi+"'></th></tr>");
@@ -73,7 +78,7 @@ function show(x){
         <div class="span-6">
           <div id="barra_esquerda">
             <div id="info_restaurante">
-              <div id="dados_cliente"> <img width="110" height="30" style="cursor:pointer" onclick="location.href=('gerente_extras');" src="background/cancel.png" /> </div>
+              <div id="dados_cliente"> <img width="110" height="30" style="cursor:pointer" id="botao_cancelar" src="background/cancel.png" /> </div>
               <div id="dados_cliente" style="margin-top:8px;">
                 <input style="margin-left:0; padding:0;" type="image" value="submit" width="110" height="30" src="background/salvar.png" />
               </div>
@@ -114,7 +119,7 @@ function show(x){
                       <tr style="background:#F8F8F8;" id="adicional-<?= $countad ?>">
                         <input type="hidden" name="id-<?= $countad ?>" value="<?= $item->id ?>">
                         <td style="text-align:center;"><input class="inp_ext" type="text" id="nome-<?= $countad ?>" name="nome-<?= $countad ?>" value='<?= $item->nome ?>'></td>
-                        <td style="text-align:center;"><input class="inp_ext" type="text" name="preco_adicional-<?= $countad ?>" onkeyup="mask_moeda(this)" value='<?= $item->preco_adicional ?>'></td>
+                        <td style="text-align:center;"><input class="inp_ext" type="text" name="preco_adicional-<?= $countad ?>" onkeyup="mask_moeda(this)" value='<?= number_format($item->preco_adicional, 2, ',', '.') ?>'></td>
                         <td style="text-align:center;"><input type="radio" name="disponivel-<?= $countad ?>" value="1" <?= $item->disponivel ? "checked" : "" ?> >
                           Sim<br/>
                           <input type="radio" name="disponivel-<?= $countad ?>" value="0" <?= $item->disponivel ? "" : "checked" ?> >
@@ -149,7 +154,7 @@ function show(x){
                         <input type="hidden" name="quantas_unidades_ocupa-<?= $countad ?>" value="0">
                         <input type="hidden" name="id-<?= $countad ?>" value="<?= $item->id ?>">
                         <td><input class="inp_ext" type="text" id="nome-<?= $countad ?>" name="nome-<?= $countad ?>" value='<?= $item->nome ?>'></td>
-                        <td><input class="inp_ext" type="text" name="preco_adicional-<?= $countad ?>" onkeyup="mask_moeda(this)" value='<?= $item->preco_adicional ?>'>
+                        <td><input class="inp_ext" type="text" name="preco_adicional-<?= $countad ?>" onkeyup="mask_moeda(this)" value='<?= number_format($item->preco_adicional, 2, ',', '.') ?>'>
                           </td>
                         <td>
                             <input type="radio" name="disponivel-<?= $countad ?>" value="1" <?= $item->disponivel ? "checked" : "" ?> >

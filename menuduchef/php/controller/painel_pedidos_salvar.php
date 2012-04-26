@@ -2,46 +2,47 @@
 
 include_once('../lib/config.php');
 
-if($atendenteSession || $gerenteSession) {
+if ($atendenteSession || $gerenteSession) {
     $pedido_id = $_REQUEST['id'];
     $op = $_REQUEST['op'];
     
-    $pedido = Pedido::find($pedido_id);
-    $situacaoNova = null;
-    
-    switch($op) {
-	case 'avancar':
-	    switch ($pedido->situacao) {
-		case Pedido::$NOVO:
-		    $situacaoNova = Pedido::$PREPARACAO;
-		    break;
-
-		case Pedido::$PREPARACAO:
-		    $situacaoNova = Pedido::$CONCLUIDO;
-		    break;
-	    }
-	    break;
+    if ($pedido_id && in_array($op, array('avancar', 'retornar', 'cancelar'))) {
+	$pedido = Pedido::find($pedido_id);
 	
-	case 'retornar':
-	    switch ($pedido->situacao) {
-		case Pedido::$CONCLUIDO:
-		case Pedido::$CANCELADO:
-		    $situacaoNova = Pedido::$PREPARACAO;
-		    break;
+	switch ($op) {
+	    case 'avancar':
+		switch ($pedido->situacao) {
+		    case Pedido::$NOVO:
+			$pedido->situacao = Pedido::$PREPARACAO;
+			$pedido->quando_confirmado = date('Y-m-d H:i:s');
+			break;
 
-		case Pedido::$PREPARACAO:
-		    $situacaoNova = Pedido::$NOVO;
-		    break;
-	    }
-	    break;
-	
-	case 'cancelar':
-	    $situacaoNova = Pedido::$CANCELADO;
-	    break;
-    }
-    
-    if($situacaoNova) {
-	$pedido->update_attribute('situacao', $situacaoNova);
+		    case Pedido::$PREPARACAO:
+			$pedido->situacao = Pedido::$CONCLUIDO;
+			$pedido->quando_concluiu = date('Y-m-d H:i:s');
+			break;
+		}
+		break;
+
+	    case 'retornar':
+		switch ($pedido->situacao) {
+		    case Pedido::$CONCLUIDO:
+		    case Pedido::$CANCELADO:
+			$pedido->situacao = Pedido::$PREPARACAO;
+			break;
+
+		    case Pedido::$PREPARACAO:
+			$pedido->situacao = Pedido::$NOVO;
+			break;
+		}
+		break;
+
+	    case 'cancelar':
+		$pedido->situacao = Pedido::$CANCELADO;
+		break;
+	}
+
+	$pedido->save();
     }
 }
 ?>

@@ -22,13 +22,13 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 	array('senha', 'message' => 'obrigatória')
     );
     static $validates_uniqueness_of = array(
-	array('cpf', 'message' => 'já utilizado por outro cliente')
+	array('cpf', 'message' => 'já utilizado por outro usuário')
     );
     static $validates_format_of = array(
 	array('email', 'with' => '/^[^0-9][A-z0-9_]+([.][A-z0-9_]+)*[@][A-z0-9_]+([.][A-z0-9_]+)*[.][A-z]{2,4}$/', 'message' => 'inválido')
     );
     static $before_save = array('save_usuario');
-    static $after_save = array('save_enderecos', 'save_telefones');
+    static $after_save = array('save_enderecos', 'save_telefones', 'mascara_cpf');
     static $after_destroy = array('destroy_usuario');
 
     public function prepare_attributes(array &$attributes) {
@@ -58,6 +58,10 @@ class Consumidor extends ActiveRecord\Model implements UsuarioInterface {
 
 	$usuario->save();
 	$this->usuario_id = $usuario->id;
+    }
+    
+    public function mascara_cpf() {
+
     }
 
     public function save_enderecos() {

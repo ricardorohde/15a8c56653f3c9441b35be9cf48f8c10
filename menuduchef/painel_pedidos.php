@@ -29,31 +29,21 @@ if($atendenteSession || $gerenteSession) {
 	    corPreparacao = preparacao.css('color'),
 	    corFinalizados = finalizados.css('color');
 	
+	var pedidoSelecionado = $('#btn-avancar').data('pedido');
+	
+	if(pedidoSelecionado) {
+	    //console.log('Confirmado em: ' + pedidoSelecionado.quandoConfirmadoFormatado + '\nConcluído em:' + pedidoSelecionado.quandoConcluiuFormatado);
+	    //detalharPedido(pedidoSelecionado);
+	    console.log('Reload no detalhe para o pedido #' + pedidoSelecionado.id + ' confirmado em ' + pedidoSelecionado.quandoConfirmadoFormatado);
+	}
+	
 	todos.mouseover(function() {
 	    $(this).css({'background-color': '#ccc', 'color': '#000'});
 	}).click(function () {
 	    var pedido = $(this).data('pedido');
-	    $('#btn-avancar, #btn-cancelar, #btn-retornar').data('pedido', pedido);
 	    
-	    $('#detalhes-cliente').empty().append($(
-		'<strong>#' + pedido.id + '</strong><br /><br />' +
-		'<strong>Cliente:</strong> ' + pedido.consumidor.usuario.nome + '<br /><br />' +
-		'<strong>Data e hora:</strong> ' + pedido.quandoFormatado + '<br /><br />' +
-		'<strong>Endereço:</strong> ' + pedido.endereco_consumidor.__toString + '<br /><br />' +
-		'<strong>Telefone(s):</strong> ' + pedido.consumidor.getTelefonesFormatado + '<br /><br />'
-	    ));
-		
-	    if(pedido.pedido_tem_produtos) {
-		var table = $('<table>');
-		table.append($('<tr><th width="10%">Qtd.</th><th width="70%">Produto</th><th width="20%">Preço</th></tr>'));
-		
-		$.each(pedido.pedido_tem_produtos, function(index, key) {
-		    table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'));
-		});
-		
-		table.append($('<tr><th colspan="3">Total: ' + pedido.getTotalFormatado + '</th></tr>'));
-		
-		$('#detalhes-produtos').empty().append(table);
+	    if(pedido) {
+		detalharPedido(pedido);
 	    }
 	});
 	
@@ -69,6 +59,33 @@ if($atendenteSession || $gerenteSession) {
 	    backgroundFinalizados = $(this).data('pedido').situacao == '<?= Pedido::$CONCLUIDO ?>' ? 'blue' : 'red';
 	    $(this).css({'background-color': backgroundFinalizados, 'color': corFinalizados});
 	});
+    }
+    
+    var detalharPedido = function(pedido) {
+	$('#btn-avancar, #btn-cancelar, #btn-retornar').data('pedido', pedido);
+
+	$('#detalhes-cliente').empty().append($(
+	    '<strong>#' + pedido.id + '</strong><br /><br />' +
+	    '<strong>Cliente:</strong> ' + pedido.consumidor.usuario.nome + '<br /><br />' +
+	    '<strong>Data e hora:</strong> ' + pedido.quandoFormatado + '<br /><br />' +
+	    '<strong>Endereço:</strong> ' + pedido.endereco_consumidor.__toString + '<br /><br />' +
+	    '<strong>Telefone(s):</strong> ' + pedido.consumidor.getTelefonesFormatado + '<br /><br />' +
+	    (pedido.quando_confirmado ? ('<strong>Confirmado em:</strong> ' + pedido.quandoConfirmadoFormatado + '<br /><br />') : '') +
+	    (pedido.quando_concluiu ? ('<strong>Concluído em:</strong> ' + pedido.quandoConcluiuFormatado + '<br /><br />') : '')
+	));
+
+	if(pedido.pedido_tem_produtos) {
+	    var table = $('<table>');
+	    table.append($('<tr><th width="10%">Qtd.</th><th width="70%">Produto</th><th width="20%">Preço</th></tr>'));
+
+	    $.each(pedido.pedido_tem_produtos, function(index, key) {
+		table.append($('<tr><td>' + key.qtd + '</td><td>' + key.produto.nome + '</td><td>' + (key.getTotalFormatado) + '</td></tr>'));
+	    });
+
+	    table.append($('<tr><th colspan="3">Total: ' + pedido.getTotalFormatado + '</th></tr>'));
+
+	    $('#detalhes-produtos').empty().append(table);
+	}
     }
     
     var reloadPedidos = function() {
@@ -149,8 +166,8 @@ if($atendenteSession || $gerenteSession) {
 		if(isRetornar) op = 'retornar';
 		if(isCancelar) op = 'cancelar';
 		
-		if(op == 'cancelar') {
-		    if(!window.confirm('Cancelar o pedido #' + pedido.id + '?')) {
+		if(op == 'retornar' || op == 'cancelar') {
+		    if(!window.confirm((op == 'retornar' ? 'Retornar' : 'Cancelar') + ' o pedido #' + pedido.id + '?')) {
 			return;
 		    }
 		}

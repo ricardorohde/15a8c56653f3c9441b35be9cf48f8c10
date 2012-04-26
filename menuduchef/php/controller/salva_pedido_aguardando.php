@@ -2,14 +2,16 @@
     include_once("../lib/config.php");
     include("../lib/connect_p.php");
     ob_start();
+    
+    $da = HttpUtil::getParameterArray2();
 
     $usuario_obj = unserialize($_SESSION['usuario_obj']);
     $endereco = unserialize($_SESSION['endereco']);
     if($_POST['action']=="novo"){ //se o endereco já existia na lista do usuario
         $end['consumidor_id'] = $usuario_obj->id;
-        $end['complemento'] = $_POST['complemento'];
+        $end['complemento'] = $da['complemento'];
         $end['numero'] = $_POST['numero'];
-        $end['referencia'] = $_POST['referencia'];
+        $end['referencia'] = $da['referencia'];
         
         $end['cep'] = $endereco->cep;
         $end['bairro_id'] = $endereco->bairro_id;
@@ -54,6 +56,8 @@
         $ag['ano'] = $_POST['anoNascimento'];
         $ag['telefone'] = $_POST['telefone'];
         $ag['celular'] = $_POST['celular'];
+        $ag['como_conheceu'] = $_POST['como_conheceu'];
+        
         $ag['numero'] = $_POST['numero'];
         $ag['complemento'] = $_POST['complemento'];
         $ag['referencia'] = $_POST['pr'];
@@ -61,16 +65,16 @@
         
         
         connect(); 
-        $nome = $_POST['nome'];
+        $nome = filtrar_caracteres_malignos($da['nome']);
         $tipo = 4;
-        $email = $_POST['login'];
-        $senha = md5($_POST['senha']);
+        $email = filtrar_caracteres_malignos($_POST['login']);
+        $senha = md5(filtrar_caracteres_malignos($_POST['senha']));
         
         $sql="SELECT * FROM usuario WHERE email='$email'";
         $sql=mysql_query($sql);
         $sql=mysql_fetch_array($sql);
         if($sql['id']){     
-            HttpUtil::redirect("../../cadastro?ja=1");
+            HttpUtil::redirect("../../cadastro?e=1");
         }else{
         
             $sql="INSERT INTO usuario (tipo,nome,email,senha) VALUES ('$tipo','$nome','$email','$senha')";
@@ -78,22 +82,24 @@
 
             $usuario_id = mysql_insert_id();
             $ativo=1;
-            $cpf=$_POST['cpf'];
-            $data_nascimento=$_POST['diaNascimento']."/".$_POST['mesNascimento']."/".$_POST['anoNascimento'];
-            $sexo=$_POST['sexo'];
+            $cpf=filtrar_caracteres_malignos($_POST['cpf']);
+            $data_nascimento=filtrar_caracteres_malignos($_POST['diaNascimento'])."/".filtrar_caracteres_malignos($_POST['mesNascimento'])."/".filtrar_caracteres_malignos($_POST['anoNascimento']);
+            $sexo=filtrar_caracteres_malignos($_POST['sexo']);
+            $como_conheceu=filtrar_caracteres_malignos($_POST['como_conheceu']);
 
-            $sql="INSERT INTO consumidor (usuario_id,ativo,cpf,data_nascimento,sexo) VALUES ('$usuario_id','$ativo','$cpf','$data_nascimento','$sexo')";
+            $sql="INSERT INTO consumidor (usuario_id,ativo,cpf,data_nascimento,sexo,como_conheceu) VALUES ('$usuario_id','$ativo','$cpf','$data_nascimento','$sexo','$como_conheceu')";
             mysql_query($sql);
-
 
             $idcon = mysql_insert_id();
             mysql_close();
             $usuario_obj=Consumidor::find($idcon);
+            $_SESSION['usuario_obj'] = serialize($usuario_obj);
 
             $end['consumidor_id'] = $usuario_obj->id;
-            $end['complemento'] = $_POST['complemento'];
+            $end['complemento'] = $da['complemento'];
             $end['numero'] = $_POST['numero'];
-            $end['referencia'] = $_POST['pr'];
+            $end['referencia'] = $da['pr'];
+            $end['favorito'] = 1;
 
             $end['cep'] = $endereco->cep;
             $end['bairro_id'] = $endereco->bairro_id;
@@ -116,6 +122,14 @@
                 $telefone = new TelefoneConsumidor($tel);
                 $telefone->save();
             }
+            
+            $usuario = Usuario::login($email, $senha);
+            
+            $_SESSION['sessao_valida'] = 1;
+            $_SESSION['consumidor_id'] = $usuario_obj->id;
+            $_SESSION['usuario'] = serialize($usuario);
+            $_SESSION['usuario_obj'] = serialize($usuario_obj);
+            
         }
     }
     

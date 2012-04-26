@@ -4,7 +4,42 @@
         $pedido = Pedido::find($_SESSION['pedido_id']);
     }
 ?>
+<script>
+    $(function() {
+        $("#ok_promocao").click(function(){
+            codigo = $("#codigo_promocao").attr("value");
+            desconto_antigo = parseFloat(document.getElementById("valor_desconto").value);
+            $("#div_desconto").load("php/controller/verifica_desconto?cod="+codigo+"&res="+<?= $_GET['id'] ?>,
+            function(){
+                taxa_entrega = parseFloat($("#taxa_de_entrega").attr("value"));
+            
+                valor_total = document.getElementById("total_carrinho").innerHTML;
+                valor_total = valor_total.split(" ");
+                valor_total = valor_total[1];
+                valor_total = valor_total.split(",");
+                if(valor_total[1]){
+                    valor_total = valor_total[0]+"."+valor_total[1];
+                }else{
+                    valor_total = valor_total[0];
+                }
+                valor_total = parseFloat(valor_total);
+                valor_total = valor_total - taxa_entrega;
 
+                valor_desconto = parseFloat(document.getElementById("valor_desconto").value);
+
+                valor_total = valor_total - (valor_desconto - desconto_antigo);
+                if(valor_total<0){
+                    valor_total = 0;
+                }
+
+                document.getElementById("total_carrinho").innerHTML = "R$ "+number_format((valor_total + taxa_entrega), 2, ',', '.');
+            }
+            );
+
+            
+        });
+    });
+</script>    
 <div id="carrinho" >
     <div id="movi">
 	<div id="aba_carrinho">
@@ -62,15 +97,17 @@
                     ?></div>
                     <input type="hidden" id="taxa_de_entrega" value="<?= $rxb->preco_entrega ?>">
 		</div>
-		<div style="width:200px; height:18px; float:left;" >
-		    Desconto:<div style="color:#EE646B; display:inline"> R$0</div>
+		<div id="div_desconto" style="width:200px; height:18px; float:left;" >
+		    Desconto:<div style="color:#EE646B; display:inline"> R$ 0,00</div>
+                    <input type="hidden" id="valor_desconto" value="0">
 		</div>
 
 	    </div>
 	    <div id="voucher_promocional">
 		<div class="radios_5" id="id_promo">
+                    <input type="text" id="codigo_promocao" name="codigo_promocao" class="radios_5" value="" style="border:0; margin-top:0;">
 		</div>
-		<div class="radios_5" id="ok_buton"><div style="margin-top:0; margin-left:10px;">OK</div>
+		<div class="radios_5" id="ok_buton"><div id="ok_promocao" style="margin-top:0; margin-left:10px;">OK</div>
 		</div>
 	    </div>
 	    <div class="radios_5" id="campo_pedido_detalhado" style="overflow-x:auto;">
@@ -110,6 +147,9 @@
                                                 echo $prod->produto->nome;
                                             }
                                              
+                                            if($prod->produto->tamanho!=""){
+                                                echo " ".$prod->produto->tamanho;
+                                            }
                                     
                                         ?>
                                         <input type="hidden" id="id_prod_<?= $count ?>" name="id_prod_<?= $count ?>" class="lista_carrinho" value="<?= $val_prod ?>">

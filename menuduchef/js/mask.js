@@ -51,3 +51,11 @@ function mask_cep(e) {
 function mask_moeda(e) {
     e.value=e.value.replace(/\D/g,'').replace(/(\d{1})(\d{8})$/,'$1.$2').replace(/(\d{1})(\d{5})$/,'$1.$2').replace(/(\d{1})(\d{1,2})$/,'$1,$2');
 }
+
+function mask_valcard(e) {
+    e.value=e.value.replace(/\D/g,'').replace(/(\d{2})(\d)/,'$1/$2');
+}
+
+function mask_card(e) {
+    e.value=e.value.replace(/\D/g,'').replace(/(\d{4})(\d)/,'$1 $2').replace(/(\d{4})(\d)/,'$1 $2').replace(/(\d{4})(\d)/,'$1 $2');
+}

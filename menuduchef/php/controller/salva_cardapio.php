@@ -3,6 +3,19 @@ ob_start();
 session_start();
 include("../../include/header2.php");
 
+function mascara($x){
+    $quebra = explode(".",$x);
+    $x = implode("",$quebra);
+    $quebra = explode(",",$x);
+    $centavos = $quebra[1];
+    $real = $quebra[0];
+    $quebra = explode(".",$real);
+    $real = implode("",$quebra);
+    $x = $real.".".$centavos;
+
+    return $x;
+}
+
 $ultimo_criar = -1;
 $ultimo_modificar = -1;
 $categoria_criar = 0;
@@ -10,15 +23,21 @@ $ccriar = 0;
 $cmodificar = 0;
 $gerente = unserialize($_SESSION['usuario_obj']);
 
-
-foreach($_POST as $key => $valor){
+$da = HttpUtil::getParameterArray2();
+foreach($da as $key => $valor){
     
     $pre = explode("!",$key);
     if($pre[0]=="categoria"){
  
         $pos = explode("-",$pre[1]);
         $idtip = $pos[1];
-        if($pos[0]=="ativa"){
+        if($pos[0]=="mural"){
+            $catatu['mural']=$valor;
+            
+            $obj = RestauranteTemTipoProduto::find(array("conditions"=>array("restaurante_id = ? AND tipoproduto_id = ?",$gerente->restaurante_id,$idtip)));
+            $obj->update_attributes($catatu);
+            
+        }else if($pos[0]=="ativa"){
             if($valor==1){
                 $obj = RestauranteTemTipoProduto::find(array("conditions"=>array("restaurante_id = ? AND tipoproduto_id = ?",$gerente->restaurante_id,$idtip)));
                 $obj->delete();
@@ -49,6 +68,7 @@ foreach($_POST as $key => $valor){
         }
         
         $a_criar[$po[1]] = $valor;
+        
         $ccriar++;
 
     }else if($pre[0]=="produto"){
@@ -106,7 +126,7 @@ else if($ccriar){
     if($a_criar['nome']!=""){
 
         $data['nome'] = $a_criar['nome'];
-        $data['preco'] = $a_criar['preco'];
+        $data['preco'] = mascara($a_criar['preco']);
         $data['disponivel'] = $a_criar['disponivel'];
         $data['esta_em_promocao'] = $a_criar['esta_em_promocao'];
         $data['preco_promocional'] = ($a_criar['preco_promocional'] ? $a_criar['preco_promocional'] : 0);
@@ -115,7 +135,7 @@ else if($ccriar){
         $data['descricao'] = $a_criar['descricao'];
         $data['codigo'] = $a_criar['codigo'];
         $data['tamanho'] = ($a_criar['tamanho'] ? $a_criar['tamanho'] : "");
-        $data['imagem'] = ($a_criar['tamanho'] ? $a_criar['tamanho'] : "");
+        //$data['imagem'] = ($a_criar['tamanho'] ? $a_criar['tamanho'] : "");
         $data['restaurante_id'] = $gerente->restaurante_id;
         $data['ativo'] = $a_criar['ativo'];
         $data['destaque'] = ($a_criar['destaque'] ? $a_criar['destaque'] : "");
@@ -159,7 +179,7 @@ for($j=0;$j<sizeof($a_modificar);$j++){
 
         $data['id'] = $a_modificar[$i]['id'];
         $data['nome'] = $a_modificar[$i]['nome'];
-        $data['preco'] = $a_modificar[$i]['preco'];
+        $data['preco'] = mascara($a_modificar[$i]['preco']);
         $data['disponivel'] = $a_modificar[$i]['disponivel'];
         $data['esta_em_promocao'] = $a_modificar[$i]['esta_em_promocao'];
         $data['preco_promocional'] = ($a_modificar[$i]['preco_promocional'] ? $a_modificar[$i]['preco_promocional'] : 0);
@@ -168,7 +188,7 @@ for($j=0;$j<sizeof($a_modificar);$j++){
         $data['descricao'] = $a_modificar[$i]['descricao'];
         $data['codigo'] = $a_modificar[$i]['codigo'];
         $data['tamanho'] = ($a_modificar[$i]['tamanho'] ? $a_modificar[$i]['tamanho'] : "");
-        $data['imagem'] = ($a_modificar[$i]['tamanho'] ? $a_modificar[$i]['tamanho'] : "");
+        //$data['imagem'] = ($a_modificar[$i]['tamanho'] ? $a_modificar[$i]['tamanho'] : "");
         $data['restaurante_id'] = $gerente->restaurante_id;
         $data['ativo'] = $a_modificar[$i]['ativo'];
         $data['destaque'] = ($a_modificar[$i]['destaque'] ? $a_modificar[$i]['destaque'] : "");
@@ -176,6 +196,8 @@ for($j=0;$j<sizeof($a_modificar);$j++){
         $data['ordem'] = $a_modificar[$i]['ordem'];
 
         $obj = Produto::find($data['id']);
+        
+        $data['imagem'] = ($obj->imagem ? $obj->imagem : "");
 
         $obj->update_attributes($data);
         

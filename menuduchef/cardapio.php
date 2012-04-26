@@ -8,8 +8,307 @@ if ($enderecoSession) {
     $rxb = RestauranteAtendeBairro::find(array('conditions' => array('restaurante_id = ? and bairro_id=?', $_GET['id'], $enderecoSession->bairro_id)));
 }
 
+function invoca_produto($prod,$c,$display,$menor,$maior){
+    
+    $restaurante = Restaurante::find($_GET['id']); //estranho isso, mas tive que fazer..
+    
+    $box_produto = '<div id="box_produto_'.$prod->id.'" class="produto" style="'; 
+        if ($c % 2 == 1) {
+				$box_produto .= 'background:#F0F0F0;';
+			    }
+        if ($display==0) {
+				$box_produto .= 'display:none;';
+			    }
+    $box_produto .= '">';
+        $box_produto .= '<div class="titulo_produto">'.$prod->nome;            
+
+            $tem_extr = 0;
+            if($prod->produto_tem_produtos_adicionais){
+                foreach($prod->produto_tem_produtos_adicionais as $aaa){
+                    if(($aaa->produto_adicional->quantas_unidades_ocupa==0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
+                        $tem_extr = 1;
+                    }
+                }
+            }
+            
+            if($prod->tamanho!=""){
+                $box_produto .= '&nbsp;&nbsp;<div class="link_extra" id="muda_tamanho_'.$prod->id.'" produto="'.$prod->id.'"><span class="diminui" qual="'.$prod->id.'" menor="'.$menor.'" style="color:F00; cursor:pointer;">< </span>'.$prod->tamanho.'<span class="aumenta" qual="'.$prod->id.'" maior="'.$maior.'" style="color:F00; cursor:pointer;"> ></span></div>';
+            }
+            $box_produto .= '<input type="hidden" id="carda_tamanho_'.$prod->id.'" value="'.$prod->tamanho.'">';
+            
+            
+            if($prod->aceita_segundo_sabor){
+                $box_produto .= '<input type="hidden" id="aceita_seg_sab_'.$prod->id.'" value="1">';
+                $box_produto .= '&nbsp;&nbsp;<div class="link_extra mostra_sabor_extra" style="font-size:17px;" produto="'.$prod->id.'">M</div>';
+            }else{
+                $box_produto .= '<input type="hidden" id="aceita_seg_sab_'.$prod->id.'" value="0">';
+            }
+            
+            if($tem_extr){
+                $box_produto .= '&nbsp;&nbsp;<div class="link_extra mostra_extra" id="link_extra_'.$prod->id.'" produto="'.$prod->id.'"> +extras</div>';                         
+            }                                                               
+
+            
+
+        $box_produto .= '</div>';
+                                
+        $box_produto .= '<div class="sup_produto">';                        
+            $box_produto .= '<div class="define_quantidade">'; 
+                $box_produto .= '<div style="float:right">';
+                    $box_produto .= '<img src="background/seta_down.gif" class="down" qual="'.$prod->id.'" width="10" height="10" style="cursor:pointer" />';
+		$box_produto .= '</div>';			        
+		$box_produto .= '<div style="float:right; margin:0 3px;">';		    
+                    $box_produto .= '<input type="hidden" value="1" name="qtd_'.$prod->id.'" id="qtd_'.$prod->id.'" /><div id="qtd2_'.$prod->id.'">1</div>';
+		$box_produto .= '</div>';				    
+		$box_produto .= '<div style="float:right">';				
+                    $box_produto .= '<img src="background/seta_up.gif" class="up" qual="'.$prod->id.'" width="10" height="10" style="cursor:pointer" />';
+		$box_produto .= '</div>';			
+            $box_produto .= '</div>';
+           $box_produto .= '<div class="preco_produto" >';
+            if($prod->esta_em_promocao){
+		$box_produto .= '<span style="color:#666; font-size:10px; text-decoration: line-through;">'.StringUtil::doubleToCurrency($prod->preco).'</span>';		    
+                $box_produto .= '&nbsp;&nbsp;<span>'.StringUtil::doubleToCurrency($prod->preco_promocional).'</span>';                        
+            }else{
+                $box_produto .= '<span>'.StringUtil::doubleToCurrency($prod->preco).'</span>';                            
+            } 
+	    $box_produto .= '</div>';
+            if($prod->esta_em_promocao){ 
+                $var = $prod->preco_promocional;
+            }else{
+                $var = $prod->preco;
+            }            
+            $box_produto .= '<input type="hidden" id="carda_preco_'.$prod->id.'" value="'.$var.'">'; 
+       $box_produto .= '</div>';
+       $box_produto .= '<div class="texto_produto">'.$prod->descricao; 
+       if($prod->esta_em_promocao){
+            $box_produto .= '<div style="color:#E51B21;">'.$prod->texto_promocao.'</div>';
+       }
+       $box_produto .= '</div>';
+       $box_produto .= '<div style="width:230px; height:21px; float:right; padding-top:10px;">';
+            $box_produto .= '<div style="float:right; position:relative;">';
+                $box_produto .= '<input type="hidden" id="carda_id_'.$prod->id.'" value="'.$prod->id.'">';
+                $box_produto .= '<input type="hidden" id="carda_nome_'.$prod->id.'" value="'.$prod->nome.'">';
+                if($prod->aceita_segundo_sabor){
+                    $sss=Produto::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND disponivel = ? AND aceita_segundo_sabor = ? AND tamanho = ?",$restaurante->id,1,1,1,$prod->tamanho)));
+                    //$sss=Produto::find_by_sql("SELECT * FROM produto WHERE restaurante_id = '".$restaurante->id."' AND ativo = '1' AND disponivel = '1' AND aceita_segundo_sabor = '1' AND tamanho = '".$prod->tamanho."'");
+                    if($sss){
+                        
+                        if($restaurante->qtd_max_sabores==2){
+                            $titulo = "Selecione o outro sabor";
+                        }else{
+                            $titulo = "Selecione os outros sabores";
+                        }
+                        $box_produto .= '<div class="carda_segundosabor_'.$prod->id.' pop-follow" style="position:absolute; z-index:999; left:-500px; top:-200px; display:none;">';
+                            $box_produto .= '<img src="background/logo_noback.png" height="48" width="46" style="position:absolute; top:2px; left:4px; z-index:2; "> <img class="fechar_segundosabor"  produto="'.$prod->id.'" src="background/close.png" height="22" width="22" style="position:absolute; top:6px; right:3px; z-index:2; cursor:pointer;">';
+                            $box_produto .= '<div style="width:264px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">';
+                                $box_produto .= '<div class="titulo_follow">'.$titulo.'</div>';
+                            $box_produto .= '</div>';
+                            $box_produto .= '<table>';
+                            
+                            $vezes = $restaurante->qtd_max_sabores - 1;
+                            for($i=0;$i<$vezes;$i++){
+                                $sabor = "";
+                                switch($i){
+                                    case 0: $sabor="Segundo sabor:"; break;
+                                    case 1: $sabor="Terceiro sabor:"; break;
+                                    case 2: $sabor="Quarto sabor:"; break;
+                                }
+
+                                $box_produto .= '<input type="hidden" id="carda_sabor_extra_preco_incluso_'.$prod->id.'_'.($i + 2).'" value="0">';
+                                $box_produto .= '<tr><th>'.$sabor.'<input type="hidden" id="carda_sabor_extra_id_'.$prod->id.'_'.($i + 2).'" value="0"></th><th class="carda_sabor_extra_tabelinha_'.$prod->id.'" id="carda_sabor_extra_'.$prod->id.'_'.($i + 2).'">Nenhum</th></tr>';
+
+                            }
+                            $box_produto .= '</table>';
+                            $box_produto .= '<table style="background:#F4F4F4; font-size:12px; width:264px; color:#999; float:left; position:relative; margin-top:10px;">';
+                                foreach($sss as $ss){
+                                    
+                                    if($prod->esta_em_promocao){
+                                        $precop = $prod->preco_promocional;
+                                    }else{
+                                        $precop = $prod->preco;
+                                    }
+                                    if($ss->esta_em_promocao){
+                                        $precos = $ss->preco_promocional;
+                                    }else{
+                                        $precos = $ss->preco;
+                                    }
+                                    $precoss = $precos - $precop;
+                                    if($precoss<0){
+                                        $precoss=0;
+                                    }
+                                    $box_produto .= '<input type="hidden" class="carda_sabor_extra_preco_'.$prod->id.'" id="carda_sabor_extra_preco_'.$prod->id.'_'.$ss->id.'" value="'.$precoss.'">';
+                                    $box_produto .= '<tr>';
+                                        $box_produto .= '<td>';
+                                            $box_produto .= '<img src="background/botao_add.gif" id="carda_sabor_extra_add_'.$prod->id.'_'.$ss->id.'" height="16" width="20" class="poe_segundo" produto="'.$prod->id.'_'.$ss->id.'" style="cursor:pointer;" />';
+                                        $box_produto .= '</td>';
+                                        $box_produto .= '<td colspan="2" id="carda_sabor_extra_nome_'.$prod->id.'_'.$ss->id.'">'.$ss->nome.'</td>';
+                                        $box_produto .= '<td></td>';
+                                        $box_produto .= '<td></td>';
+                                        $box_produto .= '<td></td>';
+                                    $box_produto .= '</tr>';
+                                }
+                                $box_produto .= '<tr>';
+                                    $box_produto .= '<td></td>';
+                                    $box_produto .= '<td  colspan="1" style="color:#E51B21;">Total</td>';
+                                    $box_produto .= '<td></td>';
+                                    $box_produto .= '<td id="carda_sabor_extra_total_'.$prod->id.'" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>';
+                                    $box_produto .= '<td></td>';
+                                $box_produto .= '</tr>';
+                                $box_produto .= '<tr>';
+                                    $box_produto .= '<td></td>';
+                                $box_produto .= '</tr>';
+                                $box_produto .= '<tr>';
+                                    $box_produto .= '<td></td>';
+                                $box_produto .= '</tr>';
+                                $box_produto .= '<tr>';
+                                    $box_produto .= '<td colspan="6" style="text-align:center;"><img class="confirmar_sabor_extra" style="cursor:pointer" produto="'.$prod->id.'" src="background/addc.png"></td>';
+                                $box_produto .= '</tr>';
+                           $box_produto .= '</table>';
+                       $box_produto .= '</div>';
+                    }
+                }
+                $tem_acomp = 0;
+                $tem_extr = 0;
+                if($prod->produto_tem_produtos_adicionais){
+                    foreach($prod->produto_tem_produtos_adicionais as $aaa){
+                        if(($aaa->produto_adicional->quantas_unidades_ocupa>0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
+                            $tem_acomp = 1;
+                        }
+                        if(($aaa->produto_adicional->quantas_unidades_ocupa==0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
+                            $tem_extr = 1;
+                        }
+                    }
+                } 
+                if($tem_acomp){
+                    $box_produto .= '<div class="carda_acomp_'.$prod->id.' pop-follow" style="position:absolute; z-index:10; left:-500px; top:-200px; display:none;">';
+                        $box_produto .= '<img src="background/logo_noback.png" height="48" width="46" style="position:absolute; top:2px; left:4px; z-index:2; "> <img class="fechar_acomp"  produto="'.$prod->id.'" src="background/close.png" height="22" width="22" style="position:absolute; top:6px; right:3px; z-index:2; cursor:pointer;">';
+                        $box_produto .= '<div style="width:264px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">';
+                            $box_produto .= '<div class="titulo_follow">Acompanhamentos</div>';
+                        $box_produto .= '</div>';    
+                        $box_produto .= '<table style="background:#F4F4F4; font-size:12px; width:264px; color:#999; float:left; position:relative; margin-top:10px;">';    
+                                            foreach($prod->produto_tem_produtos_adicionais as $aaa){ 
+                                                 if(($aaa->produto_adicional->quantas_unidades_ocupa>0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
+                                                        $box_produto .= '<input type="hidden" class="carda_acomp_preco_'.$prod->id.'" id="carda_acomp_preco_'.$prod->id.'_'.$aaa->produto_adicional->id.'" value="'.$aaa->produto_adicional->preco_adicional.'">';
+                                                        $box_produto .= '<input type="hidden" id="carda_acomp_ocupa_'.$prod->id.'_'.$aaa->produto_adicional->id.'" value="'.$aaa->produto_adicional->quantas_unidades_ocupa.'">';                    
+                                                        $box_produto .= '<tr>';
+                                                            $box_produto .= '<td><img src="background/botao_add.gif" height="16" width="20" class="poe_acomp" produto="'.$prod->id.'_'.$aaa->produto_adicional->id.'" style="cursor:pointer;" /></td>';
+                                                            $box_produto .= '<td id="carda_acomp_nome_'.$prod->id.'_'.$aaa->produto_adicional->id.'">'.$aaa->produto_adicional->nome.'</td>';    
+                                                            $box_produto .= '<td class="carda_acomp_qtd_'.$prod->id.'" id="carda_acomp_qtd_'.$prod->id.'_'.$aaa->produto_adicional->id.'"></td>';
+                                                            $box_produto .= '<td class="carda_acomp_preco_unitario_'.$prod->id.'" id="carda_acomp_preco_unitario_'.$prod->id.'_'.$aaa->produto_adicional->id.'"></td>';
+                                                            $box_produto .= '<td></td>';
+                                                            $box_produto .= '<td></td>';
+                                                        $box_produto .= '</tr>';           
+                                                 }
+                                            }      
+                                            $box_produto .= '<tr>';        
+                                                $box_produto .= '<td></td>';            
+                                                $box_produto .= '<td  colspan="1" style="color:#E51B21;">Total</td>';
+                                                $box_produto .= '<td></td>';        
+                                                $box_produto .= '<td id="carda_acomp_total_'.$prod->id.'" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>';            
+                                                $box_produto .= '<td></td>';
+                                            $box_produto .= '</tr>';
+                                            $box_produto .= '<tr>';
+                                                $box_produto .= '<td></td>';
+                                            $box_produto .= '</tr>';
+                                            $box_produto .= '<tr>';
+                                                $box_produto .= '<td></td>';
+                                            $box_produto .= '</tr>';
+                                            $box_produto .= '<tr>';
+                                                $box_produto .= '<td colspan="6" style="color:#F90; text-align:center;">Voc&ecirc; tem direito a <span id="acomp_direito_'.$prod->id.'" valor="'.$prod->qtd_produto_adicional.'">'.$prod->qtd_produto_adicional.'</span> por&ccedil;&otilde;es</td>';
+                                            $box_produto .= '</tr>';
+                                            $box_produto .= '<tr>';
+                                                $box_produto .= '<td colspan="6" style="text-align:center;"><img class="poe_carrinho" quemsou="botao_add_acomp" style="cursor:pointer" produto="'.$prod->id.'" src="background/concluir.png"></td>';
+                                            $box_produto .= '</tr>';
+                       $box_produto .= '</table>';
+                   $box_produto .= '</div>';     
+                }    
+                if($tem_extr){   
+                    $box_produto .= '<div class="carda_extr_'.$prod->id.' pop-follow" style="position:absolute; z-index:10; left:-500px; top:-200px; display:none;">';
+                        $box_produto .= '<img src="background/logo_noback.png" height="48" width="46" style="position:absolute; top:2px; left:4px; z-index:2; "> <img class="fechar_extr"  produto="'.$prod->id.'" src="background/close.png" height="22" width="22" style="position:absolute; top:6px; right:3px; z-index:2; cursor:pointer;">';
+                        $box_produto .= '<div style="width:264px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">';
+                            $box_produto .= '<div class="titulo_follow">Extras</div>';
+                        $box_produto .= '</div>';
+                        $box_produto .= '<table style="background:#F4F4F4; font-size:12px; width:264px; color:#999; float:left; position:relative; margin-top:10px;">';
+                            foreach($prod->produto_tem_produtos_adicionais as $aaa){ 
+                                if(($aaa->produto_adicional->quantas_unidades_ocupa==0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
+                                    $box_produto .= '<input type="hidden" class="carda_extr_preco_'.$prod->id.'" id="carda_extr_preco_'.$prod->id.'_'.$aaa->produto_adicional->id.'" value="'.$aaa->produto_adicional->preco_adicional.'">';
+                                    $box_produto .= '<input type="hidden" id="carda_extr_ocupa_'.$prod->id.'_'.$aaa->produto_adicional->id.'" value="'.$aaa->produto_adicional->quantas_unidades_ocupa.'">';
+                                    $box_produto .= '<tr>';
+                                        $box_produto .= '<td><img src="background/botao_add.gif" height="16" width="20" class="poe_extr" produto="'.$prod->id.'_'.$aaa->produto_adicional->id.'" style="cursor:pointer;" /></td>';
+                                        $box_produto .= '<td id="carda_extr_nome_'.$prod->id.'_'.$aaa->produto_adicional->id.'">'.$aaa->produto_adicional->nome.'</td>';
+                                        $box_produto .= '<td class="carda_extr_qtd_'.$prod->id.'" id="carda_extr_qtd_'.$prod->id.'_'.$aaa->produto_adicional->id.'"></td>';
+                                        $box_produto .= '<td class="carda_extr_preco_unitario_'.$prod->id.'" id="carda_extr_preco_unitario_'.$prod->id.'_'.$aaa->produto_adicional->id.'"></td>';
+                                        $box_produto .= '<td></td>';
+                                        $box_produto .= '<td></td>';
+                                    $box_produto .= '</tr>';
+                                    $box_produto .= '';
+                                    $box_produto .= '';
+                                }
+                            }
+                            $box_produto .= '<tr>';
+                                $box_produto .= '<td></td>';
+                                $box_produto .= '<td  colspan="1" style="color:#E51B21;">Total</td>';
+                                $box_produto .= '<td></td>';
+                                $box_produto .= '<td id="carda_extr_total_'.$prod->id.'" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>';
+                                $box_produto .= '<td></td>';
+                            $box_produto .= '</tr>';
+                            $box_produto .= '<tr>';
+                                $box_produto .= '<td></td>';
+                            $box_produto .= '</tr>';
+                            $box_produto .= '<tr>';
+                                $box_produto .= '<td></td>';
+                            $box_produto .= '</tr>';
+                            $box_produto .= '<tr>';
+                                $box_produto .= '<td colspan="6" style="text-align:center;"><img class="confirmar_extr" style="cursor:pointer" produto="'.$prod->id.'" src="background/addc.png"></td>';
+                            $box_produto .= '</tr>';
+                            $box_produto .= '<tr>';
+                                $box_produto .= '<td colspan="6" style="text-align:center;"></td>';
+                            $box_produto .= '</tr>';
+                       $box_produto .= '</table>';
+                   $box_produto .= '</div>';
+                }        
+                $box_produto .= '<img class="poe_carrinho" quemsou="botao_add" produto="'.$prod->id.'" src="background/botao_add.gif" width="25" height="21" style="margin:0 8px; cursor:pointer;"/>';        
+            $box_produto .= '</div>';         
+            $box_produto .= '<div style="float:right; color:#FFF; font-family:Arial; font-size:12px; width:60px; margin-right:15px; height:18px; padding-top:3px; background:#B2B2B2; border:0; font-weight:bold; position:relative;" class="radios">';
+                $opacity = "opacity:0.4; filter:alpha(opacity=40);";
+                $imag = "";
+                if($prod->imagem!=""){
+                    $opacity = "opacity:1; filter:alpha(opacity=100);";
+                    $imag = "class='botao_foto'";
+                }
+            
+                $box_produto .= '<img '.$imag.' qual="'.$prod->id.'" src="background/_cam.png" width="16" height="15" style="margin-left:8px;  position:absolute; '.$opacity.'"/><span style="margin-left:30px; color:#EFEFEF; cursor:pointer;" class="botao_obs" onclick="show(\'carda_obs_'.$prod->id.'\')" id="botao_obs_'.$prod->id.'">Obs</span>'; 
+                if($prod->imagem!=""){
+                    $box_produto .= '<img style="position:absolute; display:none; z-index:10; border:1px solid #F90;" id="foto_'.$prod->id.'" src="images/produto/'.$prod->imagem.'">';
+                }
+            $box_produto .= '</div>'; 
+        $box_produto .= '</div>';
+    $box_produto .= '<div id="obs_box_'.$prod->id.'">';    
+        $box_produto .= '<textarea id="carda_obs_'.$prod->id.'" style="width:300px; height:40px; display:none;"></textarea>';
+    $box_produto .= '</div>';                  
+    $box_produto .= '</div>';
+    
+    return $box_produto;
+}
+
+$cuidado_apertar_minha_conta = 1;
+
+$ped=Pedido::find($_SESSION['pedido_id']);
+if($ped){
+    $cup=Cupom::find($ped->cupom_id);
+    if($cup){
+        $corrig2['pedido_id'] = NULL;
+        $corrig2['usado'] = 0;
+        $cup->update_attributes($corrig2);
+    }
+    $corrig['cupom_id'] = NULL;
+    $ped->update_attributes($corrig);
+}
+
 if($_POST){
     if($_POST['action']=='finaliza_carrinho'){
+     $hora_atual = date("U");   
+     if(($hora_atual - $restaurante->online)<=30){   
         $de_buenas = 1;
         foreach($_POST as $key => $valor){
             if(substr($key,0,9)=="qtd_prod_"){
@@ -21,17 +320,129 @@ if($_POST){
         if($de_buenas){
             if($_SESSION['pedido_id']){
                 $idped = $_SESSION['pedido_id'];
+                unset($_SESSION['cupom_id']);
                 $prods=PedidoTemProduto::all(array("conditions"=>array("pedido_id = ?",$idped)));
                 foreach($prods as $prod){
                     $prod->delete();
                 }
+                
+                if($_POST['codigo_promocao']!=""){
+
+                    $cod = $_POST['codigo_promocao'];
+                    $quebra = str_split($cod);
+                    $codigo = array_reverse($quebra);
+
+                    if(sizeof($codigo)>11){
+                        $tam = sizeof($codigo) - 11;
+                        $num = "";
+                        for($i=0;$i<$tam;$i++){
+                            $num .= $codigo[$i+1];
+                        }
+                    }else{
+                        $num = 0;
+                    }
+
+                    $lo = 0;
+
+                    try{
+                        $lote = LoteCupom::find($num);
+
+                        if($lote){
+                            $nomelote = str_split($lote->nome);
+                            $nomelote = array_reverse($nomelote);
+
+                            if($nomelote[3]){
+                                if(strtoupper($nomelote[3])==strtoupper($codigo[0])){
+                                    $lo = $lote->id;
+                                }
+                            }else{
+                                if(strtoupper($nomelote[0])==strtoupper($codigo[0])){
+                                    $lo = $lote->id;
+                                }
+                            }
+                        }
+                        if($lo){
+                            $cupom = Cupom::find_by_codigo($cod);
+                            $aceita=RestauranteAceitaCupom::find_by_lotecupom_id_and_restaurante_id($cupom->lotecupom_id,$restaurante->id);
+                            if($aceita){
+                                if($cupom->usado==0){
+                                    $data_atual = date("Y-m-d h:i:s");
+
+                                    if($data_atual<=$cupom->lote_cupom->validade->format("Y-m-d h:i:s")){
+                                        $atucup['usado'] = 1;
+                                        $cupom->update_attributes($atucup);
+                                        $_SESSION['cupom_id'] = $cupom->id;
+
+                                    }
+                                }
+                            }
+                        }
+                    }catch (ActiveRecord\RecordNotFound $e) {
+                        //nada acontece
+                    }
+                }
+                
             }else{
                 
                     $data['consumidor_id'] = $consumidorSession->id;
                     $data['restaurante_id'] = $restaurante->id;
                     $data['forma_pagamento'] = "ainda_nao";
                     $data['troco'] = 0;
-                    $data['cupom'] = "";
+                    if($_POST['codigo_promocao']!=""){
+
+                        $cod = $_POST['codigo_promocao'];
+                        $quebra = str_split($cod);
+                        $codigo = array_reverse($quebra);
+
+                        if(sizeof($codigo)>11){
+                            $tam = sizeof($codigo) - 11;
+                            $num = "";
+                            for($i=0;$i<$tam;$i++){
+                                $num .= $codigo[$i+1];
+                            }
+                        }else{
+                            $num = 0;
+                        }
+
+                        $lo = 0;
+
+                        try{
+                            $lote = LoteCupom::find($num);
+
+                            if($lote){
+                                $nomelote = str_split($lote->nome);
+                                $nomelote = array_reverse($nomelote);
+
+                                if($nomelote[3]){
+                                    if(strtoupper($nomelote[3])==strtoupper($codigo[0])){
+                                        $lo = $lote->id;
+                                    }
+                                }else{
+                                    if(strtoupper($nomelote[0])==strtoupper($codigo[0])){
+                                        $lo = $lote->id;
+                                    }
+                                }
+                            }
+                            if($lo){
+                                $cupom = Cupom::find_by_codigo($cod);
+                                $aceita=RestauranteAceitaCupom::find_by_lotecupom_id_and_restaurante_id($cupom->lotecupom_id,$restaurante->id);
+                                if($aceita){
+                                    if($cupom->usado==0){
+                                        $data_atual = date("Y-m-d h:i:s");
+
+                                        if($data_atual<=$cupom->lote_cupom->validade->format("Y-m-d h:i:s")){
+                                            $atucup['usado'] = 1;
+                                            $cupom->update_attributes($atucup);
+                                            $_SESSION['cupom_id'] = $cupom->id;
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }catch (ActiveRecord\RecordNotFound $e) {
+                            //nada acontece
+                        }
+                    }  
                     $data['endereco'] = "";
                     $data['situacao'] = "";
                     $data['pagamento_efetuado'] = 0;
@@ -197,13 +608,16 @@ if($_POST){
             
             //finalizando o carrinho, chega a hora de decidir pra qual pagina ir: a do login ou a do pagamento:
             if($_SESSION['usuario']){
-               echo "<script> window.location.href = 'pagamento' </script>";
+               echo "<script> location.href = '".URL_PRODUCTION."pagamento' </script>";
             }else{
-               echo "<script> window.location.href = 'cadastro' </script>";
+               echo "<script> location.href = '".URL_PRODUCTION."cadastro' </script>";
             }
         }
         
+    }else{
+      $mensagem_fechado = 1;  
     }
+  }  
 }
 ?>
 <script>
@@ -274,6 +688,14 @@ if($_POST){
     $(document).ready(function() {
         contador = 0; //usado pra impedir que o vetor com a lista de pedidos do carrinho se repita
         
+        $(".botao_foto").mouseover(function(){
+            qual = $(this).attr("qual");
+            $("#foto_"+qual).show();
+        });
+        $(".botao_foto").mouseout(function(){
+            qual = $(this).attr("qual");
+            $("#foto_"+qual).hide();
+        });
         $(".filtro_categoria").click( function(){
 	    algum = 0;
             $(".filtro_categoria").each(function(){
@@ -304,6 +726,26 @@ if($_POST){
 	    $(".filtro_categoria").attr("checked","true");
 	    $(".categoria").show();
 	});
+        
+        $(".diminui").click(function(){
+            
+            qual=$(this).attr("qual");
+            menor=$(this).attr("menor");
+
+            if(menor!="0"){
+                $("#box_produto_"+qual).hide();
+                $("#box_produto_"+menor).show();
+            }
+        });
+        $(".aumenta").click(function(){
+            qual=$(this).attr("qual");
+            maior=$(this).attr("maior");
+            
+            if(maior!="0"){
+                $("#box_produto_"+qual).hide();
+                $("#box_produto_"+maior).show();
+            }
+        });
     
 	$(".up").click( function(){
 	    qual=$(this).attr("qual");
@@ -329,6 +771,18 @@ if($_POST){
 	    $("#produto_").hide();
         
 	});
+        $(".botao_obs").click(function(){
+            id = $(this).attr("id");
+            id = id.split("_");
+            id = id[2];
+            
+            if($("#box_produto_"+id).css("height")=="115px"){
+                $("#box_produto_"+id).css("height","60px");
+            }else{
+                $("#box_produto_"+id).css("height","115px");
+            }
+
+        });
 	$('.abreformapagamento').mouseover(function() {
 	    $("#formapagamento").show();
         });
@@ -355,13 +809,18 @@ if($_POST){
                 idprod = $(this).attr("produto");
                 qtd = 1;
                 nome = $("#carda_nome_"+idprod).attr("value");
+                
+                if($("#carda_tamanho_"+idprod).attr("value")!=""){
+                    nome += " "+$("#carda_tamanho_"+idprod).attr("value");
+                }
+                
                 obsprod = "";
                               
                 
                 ja_tem_no_carrinho = 0;
                 alvo = "";
                 valor_total = 0; //esse é o valor de todos os itens somados, que da o total la do carrinho
-                taxa_entrega = parseInt($("#taxa_de_entrega").attr("value"));
+                taxa_entrega = parseFloat($("#taxa_de_entrega").attr("value"));
 
                 vetor = getElementByClass("lista_carrinho");
 
@@ -383,7 +842,7 @@ if($_POST){
                                 }
                             }
 
-                            valor_total += parseInt(document.getElementById("preco_prod_"+qual[2]).value);
+                            valor_total += parseFloat(document.getElementById("preco_prod_"+qual[2]).value);
                         }
                     }
                 }
@@ -431,6 +890,11 @@ if($_POST){
                     document.getElementById("preco_prod_"+alvo).value = preco;
                 }
                 document.getElementById("subtotal_carrinho").innerHTML = "R$ "+number_format(valor_total, 2, ',', '.');
+                valor_desconto = parseFloat(document.getElementById("valor_desconto").value);
+                valor_total = valor_total - valor_desconto;
+                if(valor_total<0){
+                    valor_total = 0;
+                }
                 document.getElementById("total_carrinho").innerHTML = "R$ "+number_format((valor_total + taxa_entrega), 2, ',', '.');
                 
                 $(".carda_destaque_acomp_qtd_"+idprod).each(function(){
@@ -488,14 +952,19 @@ if($_POST){
                 idprod = $(this).attr("produto");
                 qtd = $("#qtd_"+idprod).attr("value");
                 nome = $("#carda_nome_"+idprod).attr("value");
+                
                 obsprod = $("#carda_obs_"+idprod).attr("value");
                 
+                $("#link_extra_"+idprod).css("color","#F90");
+                $("#link_extra_"+idprod).html(" +extras");
+                $("#link_extra_"+idprod).css("font-size","9px");
                 
+                $("#box_produto_"+idprod).css("height","60px");
                 
                 ja_tem_no_carrinho = 0;
                 alvo = "";
                 valor_total = 0; //esse é o valor de todos os itens somados, que da o total la do carrinho
-                taxa_entrega = parseInt($("#taxa_de_entrega").attr("value"));
+                taxa_entrega = parseFloat($("#taxa_de_entrega").attr("value"));
 
                 vetor = getElementByClass("lista_carrinho");
 
@@ -518,7 +987,7 @@ if($_POST){
                                 }
                             }
 
-                            valor_total += parseInt(document.getElementById("preco_prod_"+qual[2]).value);
+                            valor_total += parseFloat(document.getElementById("preco_prod_"+qual[2]).value);
                         }
                     }
                 }
@@ -559,6 +1028,10 @@ if($_POST){
                     }else{
                         prodnom = nome;
                         prodval = idprod;
+                    }
+                    
+                    if($("#carda_tamanho_"+idprod).attr("value")!=""){
+                        prodnom += " "+$("#carda_tamanho_"+idprod).attr("value");
                     }
 
                     item_no_carrinho += prodnom;
@@ -601,6 +1074,11 @@ if($_POST){
                     document.getElementById("preco_prod_"+alvo).value = preco;
                 }
                 document.getElementById("subtotal_carrinho").innerHTML = "R$ "+number_format(valor_total, 2, ',', '.');
+                valor_desconto = parseFloat(document.getElementById("valor_desconto").value);
+                valor_total = valor_total - valor_desconto;
+                if(valor_total<0){
+                    valor_total = 0;
+                }
                 document.getElementById("total_carrinho").innerHTML = "R$ "+number_format((valor_total + taxa_entrega), 2, ',', '.');
                 
                 $(".carda_acomp_qtd_"+idprod).each(function(){
@@ -649,11 +1127,14 @@ if($_POST){
                 });
             }
             
+            
+            
 	});
         $(".poe_acomp").click( function(){
         
             qual = $(this).attr("produto");
             quebra = qual.split("_");
+            
             dir = parseInt($("#acomp_direito_"+quebra[0]).html());
             dir = parseInt(dir) - parseInt($("#carda_acomp_ocupa_"+qual).attr("value"));
             if(dir>=0){
@@ -665,9 +1146,10 @@ if($_POST){
                 }else{
                     qtd = 1;
                 }
-                $("#carda_acomp_qtd_"+qual).html(qtd);
                 
-                preco_unitario = parseInt($("#carda_acomp_preco_"+qual).attr("value"));
+                $("#carda_acomp_qtd_"+qual).html(qtd);
+
+                preco_unitario = parseFloat($("#carda_acomp_preco_"+qual).attr("value"));
                 preco_unitario *= qtd;
                 
                 preco_unitario = number_format(preco_unitario, 2, ',', '.');
@@ -683,7 +1165,7 @@ if($_POST){
                     }else{
                         qtdadi = parseInt($(this).html());
                     }       
-                    preco_total += (qtdadi * parseInt($("#carda_acomp_preco_"+quebra[0]+"_"+idadi).attr("value")));
+                    preco_total += (qtdadi * parseFloat($("#carda_acomp_preco_"+quebra[0]+"_"+idadi).attr("value")));
                 });
 
                 if(preco_total==0){
@@ -696,7 +1178,7 @@ if($_POST){
                 
                 $("#acomp_direito_"+quebra[0]).html(dir);
             }
-             
+            
         });
         $(".poe_destaque_acomp").click( function(){
         
@@ -715,7 +1197,7 @@ if($_POST){
                 }
                 $("#carda_destaque_acomp_qtd_"+qual).html(qtd);
                 
-                preco_unitario = parseInt($("#carda_destaque_acomp_preco_"+qual).attr("value"));
+                preco_unitario = parseFloat($("#carda_destaque_acomp_preco_"+qual).attr("value"));
                 
                 preco_unitario *= qtd;
                
@@ -734,7 +1216,7 @@ if($_POST){
                     }
                     
                     
-                    preco_total += (qtdadi * parseInt($("#carda_destaque_acomp_preco_"+quebra[0]+"_"+idadi).attr("value")));
+                    preco_total += (qtdadi * parseFloat($("#carda_destaque_acomp_preco_"+quebra[0]+"_"+idadi).attr("value")));
                     
                 });
 
@@ -765,7 +1247,7 @@ if($_POST){
                 }
                 $("#carda_extr_qtd_"+qual).html(qtd);
                 
-                preco_unitario = parseInt($("#carda_extr_preco_"+qual).attr("value"));
+                preco_unitario = parseFloat($("#carda_extr_preco_"+qual).attr("value"));
                 preco_unitario *= qtd;
                 
                 preco_unitario = number_format(preco_unitario, 2, ',', '.');
@@ -782,7 +1264,7 @@ if($_POST){
                     }else{
                         qtdadi = parseInt($(this).html());
                     }       
-                    preco_total += (qtdadi * parseInt($("#carda_extr_preco_"+quebra[0]+"_"+idadi).attr("value")));
+                    preco_total += (qtdadi * parseFloat($("#carda_extr_preco_"+quebra[0]+"_"+idadi).attr("value")));
                 });
 
                 if(preco_total==0){
@@ -831,7 +1313,7 @@ if($_POST){
             
             $("#carda_sabor_extra_id_"+quebra[0]+"_"+num).attr("value",quebra[1]);
             
-            preco_unitario = parseInt($("#carda_sabor_extra_preco_"+qual).attr("value"));
+            preco_unitario = parseFloat($("#carda_sabor_extra_preco_"+qual).attr("value"));
             $("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_"+num).attr("value",preco_unitario);
             
  
@@ -841,8 +1323,8 @@ if($_POST){
             limite = <?= $restaurante->qtd_max_sabores - 1 ?>;
             
             for(i=0;i<limite;i++){
-                if(preco_total<parseInt($("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_"+(i+2)).attr("value"))){
-                    preco_total = parseInt($("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_"+(i+2)).attr("value"));
+                if(preco_total<parseFloat($("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_"+(i+2)).attr("value"))){
+                    preco_total = parseFloat($("#carda_sabor_extra_preco_incluso_"+quebra[0]+"_"+(i+2)).attr("value"));
                 }
             }
             
@@ -939,6 +1421,10 @@ if($_POST){
                 $(this).empty();
             });
             
+            $("#link_extra_"+qual).css("color","#F90");
+            $("#link_extra_"+qual).html(" +extras");
+            $("#link_extra_"+qual).css("font-size","9px");
+            
 
             $("#carda_extr_total_"+quebra[0]).html("+ R$ 0,00");
                           
@@ -946,6 +1432,11 @@ if($_POST){
         $(".confirmar_extr").click( function(){
             qual = $(this).attr("produto");
             quebra = qual.split("_");
+            valor = $("#carda_extr_total_"+quebra[0]).html();
+            
+            $("#link_extra_"+qual).css("color","#0F0");
+            $("#link_extra_"+qual).html(" +extras ("+valor+")");
+            $("#link_extra_"+qual).css("font-size","12px");
             
             $(".carda_extr_"+qual).each(function(){
                 $(this).hide();
@@ -983,13 +1474,13 @@ if($_POST){
         carrinho.removeChild(qual);
         
         valor_total = 0;
-        taxa_entrega = parseInt($("#taxa_de_entrega").attr("value"));
+        taxa_entrega = parseFloat($("#taxa_de_entrega").attr("value"));
  
         vet = getElementByClass("preco_carrinho");
         
         for(var i in vet){
             preco = vet[i].value;
-            valor_total += parseInt(preco);
+            valor_total += parseFloat(preco);
         }
         
         document.getElementById("subtotal_carrinho").innerHTML = "R$ "+number_format(valor_total, 2, ',', '.');
@@ -999,7 +1490,7 @@ if($_POST){
         $("#form_carrinho").submit();
     }
     function obter_preco2(x){
-        preco = parseInt(document.getElementById("carda_preco_"+x).value);
+        preco = parseFloat(document.getElementById("carda_preco_"+x).value);
         
         precoa = 0;        
         $(".carda_destaque_acomp_qtd_"+x).each(function(){
@@ -1008,7 +1499,7 @@ if($_POST){
             y = y.split("_");
             y = y[5];
             for(i=0;i<qtda;i++){
-                precoa += parseInt($("#carda_destaque_acomp_preco_"+x+"_"+y).attr("value"));
+                precoa += parseFloat($("#carda_destaque_acomp_preco_"+x+"_"+y).attr("value"));
             }
         });
         
@@ -1018,18 +1509,18 @@ if($_POST){
         
     }
     function obter_preco(x){
-        preco = parseInt(document.getElementById("carda_preco_"+x).value);
+        preco = parseFloat(document.getElementById("carda_preco_"+x).value);
         
         if(parseInt($("#aceita_seg_sab_"+x).attr("value"))){
-            m1 = parseInt($("#carda_sabor_extra_preco_incluso_"+x+"_2").attr("value"));
+            m1 = parseFloat($("#carda_sabor_extra_preco_incluso_"+x+"_2").attr("value"));
             acrescimo = m1;
             <? if($restaurante->qtd_max_sabores>2){ ?>
-                m2 = parseInt($("#carda_sabor_extra_preco_incluso_"+x+"_3").attr("value"));
+                m2 = parseFloat($("#carda_sabor_extra_preco_incluso_"+x+"_3").attr("value"));
                 acrescimo = Math.max(acrescimo,m2);
             <? }
                if($restaurante->qtd_max_sabores>3){
             ?>
-               m3 = parseInt($("#carda_sabor_extra_preco_incluso_"+x+"_4").attr("value"));
+               m3 = parseFloat($("#carda_sabor_extra_preco_incluso_"+x+"_4").attr("value"));
                acrescimo = Math.max(acrescimo,m3);
             <?
                }
@@ -1045,7 +1536,7 @@ if($_POST){
             y = y.split("_");
             y = y[4];
             for(i=0;i<qtda;i++){
-                precoa += parseInt($("#carda_acomp_preco_"+x+"_"+y).attr("value"));
+                precoa += parseFloat($("#carda_acomp_preco_"+x+"_"+y).attr("value"));
             }
         });
         
@@ -1055,7 +1546,7 @@ if($_POST){
             y = y.split("_");
             y = y[4];
             for(i=0;i<qtda;i++){
-                precoa += parseInt($("#carda_extr_preco_"+x+"_"+y).attr("value"));
+                precoa += parseFloat($("#carda_extr_preco_"+x+"_"+y).attr("value"));
             }
         });
         
@@ -1356,7 +1847,11 @@ if($_POST){
 
 </script>    
 
-<?php include "menu2.php" ?>
+<?php if($_SESSION['usuario']){
+        include "menu_user.php";
+    }else{
+        include "menu2.php"; 
+    } ?>
 <div id="central" class="span-24">
     <div class="span-6">
 	<div id="barra_esquerda">
@@ -1370,17 +1865,26 @@ if($_POST){
                     <img src="images/restaurante/<?= $restaurante->imagem ?>">
                 </div>
 
-		<div id="formas_pagamento"><div class="abreformapagamento" >Formas de pagamento</div>
+		<div id="formas_pagamento"> 
+        <span class="tool">&nbsp;Formas de pagamento
+                <?
+                     $width = sizeof($restaurante->restaurante_pagamentos) * 42;
+                        if($width>140){
+                            $width = 140;
+                        }
+                ?>
+                        <span class="tip" style="background:#EEE; width:<?= $width ?>px">
 		    <? $fps = RestauranteAceitaFormaPagamento::all(array("conditions" => array("restaurante_id=?", $restaurante->id)));
 		    if ($fps) { ?>
-    		    <div id="formapagamento" style="display:none; z-index:3; background:#DDD; position:absolute;"><table>
+            
+    		    
 				<? foreach ($fps as $fp) { ?>
-				    <tr><th><?= $fp->forma_pagamento->nome ?></th></tr>							
+                <img src="background/<?= $fp->forma_pagamento->url ?>" style="margin-left:3px" title="<?= $fp->forma_pagamento->nome ?>">					
 				<? } ?>
-    			</table></div>
+    			
 		    <? } ?>
 
-
+</span></span>
 		</div>
 		<div id="tempo_entrega">Tempo de entrega:<img src="background/relogio.gif" width="20" height="19" style="position:relative; top:6px; left:4px;">&nbsp;&nbsp;&nbsp;<?
 		    
@@ -1443,9 +1947,13 @@ if($_POST){
 			echo "style='margin:0 16px;'";
 		    } ?> >
 			<div class="avatar_destaque">
+                            <? if($dest->imagem!=""){ ?>
+                            <img  src="images/produto/<?= $dest->imagem ?>" >
+                            <? } ?>    
 			</div>
 			<div class="titulo_destaque">
-			    <?= $dest->nome ?> 
+			    <?= $dest->nome ?>
+                            <?= $dest->tamanho ? $dest->tamanho : "" ?>
 			</div>
 			<div class="descricao_destaque">
 	<?= $dest->descricao ?>
@@ -1523,7 +2031,7 @@ if($_POST){
                                       <td colspan="6" style="color:#F90; text-align:center;">Voc&ecirc; tem direito a <span id="acomp_destaque_direito_<?= $dest->id ?>" valor="<?= $dest->qtd_produto_adicional ?>"><?= $dest->qtd_produto_adicional ?></span> por&ccedil;&otilde;es</td>
                                         </tr>
                                     <tr>
-                                        <td colspan="6" style="text-align:center;"><img class="poe_destaque_carrinho" quemsou="botao_add_acomp" style="cursor:pointer" produto="<?= $dest->id ?>" src="background/avancar.png"></td>
+                                        <td colspan="6" style="text-align:center;"><img class="poe_destaque_carrinho" quemsou="botao_add_acomp" style="cursor:pointer" produto="<?= $dest->id ?>" src="background/concluir.png"></td>
                                     </tr>
                                 </table>
 
@@ -1541,8 +2049,12 @@ if($_POST){
 $categorias = TipoProduto::find_by_sql("SELECT TP.* FROM tipo_produto TP INNER JOIN restaurante_tem_tipo_produto RTTP ON TP.id = RTTP.tipoproduto_id WHERE RTTP.restaurante_id = " . $_GET['id']." ORDER BY ordem");
 if ($categorias) {
     foreach ($categorias as $cat) {
-	?>  <div id="box_box_categoria_<?= $cat->id ?>">    
+        $catmur = RestauranteTemTipoProduto::find(array("conditions"=>array("tipoproduto_id = ? AND restaurante_id = ?",$cat->id,$_GET['id'])));
+	?>  <div id="box_box_categoria_<?= $cat->id ?>">
 		<div class="titulo_box_categoria"><?= $cat->nome ?>
+                    <? if($catmur->mural!=""){ ?>
+                        <span style="font-size:9px;">*<?= $catmur->mural ?></span>
+                    <? } ?>
 		</div>
 
 		<div id="box_categoria" class="radios" >
@@ -1550,315 +2062,47 @@ if ($categorias) {
 		    $produtos = Produto::find_by_sql("SELECT P.* FROM produto P INNER JOIN produto_tem_tipo PTT ON P.id = PTT.produto_id WHERE PTT.tipoproduto_id = " . $cat->id . " AND ativo = 1 AND disponivel = 1 AND P.restaurante_id = " . $_GET['id']." ORDER BY ordem");
 		    if ($produtos) {
 			$c = 1;
+                        $maior=0;
+                        $menor=0;
 			foreach ($produtos as $prod) {
-			    ?>   
-                            <div id="box_produto_<?= $prod->id ?>" class="produto" <? if ($c % 2 == 1) {
-				echo"style='background:#F0F0F0;'";
-			    } ?>>
+                            if($prod->tamanho!=""){
                                 
-                                
-				<div class="titulo_produto">
-                                    <? 
-                                    echo $prod->nome;
-                                    $tem_extr = 0;
-                                        if($prod->produto_tem_produtos_adicionais){
-                                            foreach($prod->produto_tem_produtos_adicionais as $aaa){
-                                                if(($aaa->produto_adicional->quantas_unidades_ocupa==0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
-                                                    $tem_extr = 1;
-                                                }
+                                $irmaos=Produto::all(array("order"=>"preco desc","conditions"=>array("nome = ? AND ativo = ? AND disponivel = ? AND restaurante_id = ?",$prod->nome,1,1,$_GET['id'])));
+                                if($irmaos){
+                                    if($irmaos[0]->id==$prod->id){
+                                        $irmao_maior = 1;
+                                        foreach($irmaos as $key=>$irmao){
+                                            if($key>0){
+                                                $maior = $irmaos[$key-1]->id;
+                                            }else{
+                                                $maior = 0;
                                             }
-                                        }
-                                        if($tem_extr){
-                                        ?>
-                                    <div class="link_extra mostra_extra" produto="<?= $prod->id ?>"> +extras</div>
-                                    <? } ?>
-                                    
-                                    <?
-                                        if($prod->aceita_segundo_sabor){
-                                            ?>
-                                                <input type="hidden" id="aceita_seg_sab_<?= $prod->id ?>" value="1">
-                                                <div class="link_extra mostra_sabor_extra" style="font-size:17px;" produto="<?= $prod->id ?>">M</div>
-                                            <?
-                                        }else{
-                                            ?>
-                                                <input type="hidden" id="aceita_seg_sab_<?= $prod->id ?>" value="0">
-                                            <?    
-                                        }
-                                    ?>
-				</div>
-                                
-                                
-
-				<div class="sup_produto">	        
-				    <div class="define_quantidade">
-					<div style="float:right">
-					    <img src="background/seta_down.gif" class="down" qual="<?= $prod->id ?>" width="10" height="10" style="cursor:pointer" />
-					</div>
-					<div style="float:right; margin:0 3px;">
-					    <input type="hidden" value="1" name="qtd_<?= $prod->id ?>" id="qtd_<?= $prod->id ?>" /><div id="qtd2_<?= $prod->id ?>">1</div>
-					</div> 
-					<div style="float:right">
-					    <img src="background/seta_up.gif" class="up" qual="<?= $prod->id ?>" width="10" height="10" style="cursor:pointer" />
-					</div>
-				    </div>
-
-				    <div class="preco_produto" ><? if($prod->esta_em_promocao){ ?>
-                                        <span style="color:#666; font-size:10px; text-decoration: line-through;"><?= StringUtil::doubleToCurrency($prod->preco); ?></span>
-                                            &nbsp;&nbsp;<span><?= StringUtil::doubleToCurrency($prod->preco_promocional); ?></span>
-                                            
-                                        <? }else{ ?>
-                                            <span><?= StringUtil::doubleToCurrency($prod->preco); ?></span>
-                                        <? } ?>
-				    </div>
-                                    <input type="hidden" id="carda_preco_<?= $prod->id ?>" value="<? 
-                                        if($prod->esta_em_promocao){ 
-                                            echo $prod->preco_promocional;
-                                        }else{
-                                            echo $prod->preco;
-                                        }    
-                                        ?>">
-				</div>
-
-				<div class="texto_produto">
-		<?= $prod->descricao ?>
-                            <? if($prod->esta_em_promocao){ ?>
-                                <div style="color:#E51B21;"><?= $prod->texto_promocao ?></div>
-                            <? } ?>
-				</div>
-
-				<div style="width:230px; height:21px; float:right;  padding-top:10px;">
-
-				    <div style="float:right; position:relative;">
-                                        <input type="hidden" id="carda_id_<?= $prod->id ?>" value="<?= $prod->id ?>">
-                                        <input type="hidden" id="carda_nome_<?= $prod->id ?>" value="<?= $prod->nome ?>">
-                                        <?
-                                        if($prod->aceita_segundo_sabor){
-                                            $sss=Produto::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND disponivel = ? AND aceita_segundo_sabor = ? AND tamanho = ?",$restaurante->id,1,1,1,$prod->tamanho)));
-                                            if($sss){ 
-                                                if($restaurante->qtd_max_sabores==2){
-                                                    $titulo = "Selecione o outro sabor";
-                                                }else{
-                                                    $titulo = "Selecione os outros sabores";
-                                                }
-                                                ?>
-                                            
-                                                <div class="carda_segundosabor_<?= $prod->id ?> pop-follow" style="position:absolute; z-index:999; left:-500px; top:-200px; display:none;">
-                                                    <img src="background/logo_noback.png" height="48" width="46" style="position:absolute; top:2px; left:4px; z-index:2; "> <img class="fechar_segundosabor"  produto="<?= $prod->id ?>" src="background/close.png" height="22" width="22" style="position:absolute; top:6px; right:3px; z-index:2; cursor:pointer;">
-                                                    <div style="width:264px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">
-                                                      <div class="titulo_follow"><?= $titulo ?></div>
-                                                      </div>
-                                                      <table>
-                                                          <? 
-                                                            $vezes = $restaurante->qtd_max_sabores - 1;
-                                                            for($i=0;$i<$vezes;$i++){
-                                                                $sabor = "";
-                                                                switch($i){
-                                                                    case 0: $sabor="Segundo sabor:"; break;
-                                                                    case 1: $sabor="Terceiro sabor:"; break;
-                                                                    case 2: $sabor="Quarto sabor:"; break;
-                                                                }
-                                                                ?>
-                                                                    <input type="hidden" id="carda_sabor_extra_preco_incluso_<?= $prod->id ?>_<?= ($i + 2) ?>" value="0">
-                                                                    <tr><th><?= $sabor ?><input type="hidden" id="carda_sabor_extra_id_<?= $prod->id ?>_<?= ($i + 2) ?>" value="0"></th><th class="carda_sabor_extra_tabelinha_<?= $prod->id ?>" id="carda_sabor_extra_<?= $prod->id ?>_<?= ($i + 2) ?>">Nenhum</th></tr>
-                                                                <?
-                                                            }
-                                                          ?>
-                                                      </table>
-                                                      <table style="background:#F4F4F4; font-size:12px; width:264px; color:#999; float:left; position:relative; margin-top:10px;">
-               
-                                        <?
-                                                foreach($sss as $ss){
-                                                        if($prod->esta_em_promocao){
-                                                            $precop = $prod->preco_promocional;
-                                                        }else{
-                                                            $precop = $prod->preco;
-                                                        }
-                                                        if($ss->esta_em_promocao){
-                                                            $precos = $ss->preco_promocional;
-                                                        }else{
-                                                            $precos = $ss->preco;
-                                                        }
-                                                        $precoss = $precos - $precop;
-                                                        if($precoss<0){
-                                                            $precoss=0;
-                                                        }
-                                         ?>           
-                                                                    <input type="hidden" class="carda_sabor_extra_preco_<?= $prod->id ?>" id="carda_sabor_extra_preco_<?= $prod->id ?>_<?= $ss->id ?>" value="<?= $precoss ?>">
-                                                                    
-                                                                    <tr>
-                                                                                                                                             
-                                                                      <td>
-                                                                          <img src="background/botao_add.gif" id="carda_sabor_extra_add_<?= $prod->id ?>_<?= $ss->id ?>" height="16" width="20" class="poe_segundo" produto="<?= $prod->id ?>_<?= $ss->id ?>" style="cursor:pointer;" />
-                                                                      </td>
-                                                                      <td colspan="2" id="carda_sabor_extra_nome_<?= $prod->id ?>_<?= $ss->id ?>"><?= $ss->nome ?> </td>
-                                                                    
-                                                                      <td></td>
-                                                                      <td></td> 
-                                                                      <td></td>
-                                                                      
-                                                                      
-                                                                      
-                                                                    </tr>
-                                               <? 
-                                               
-                                               }
-                                               ?>
-                                                        <tr>
-                                                          <td></td>
-                                                          <td  colspan="1" style="color:#E51B21;">Total</td>
-                                                          <td></td>
-                                                          <td id="carda_sabor_extra_total_<?= $prod->id ?>" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>
-                                                          <td></td>
-                                                            </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                        </tr>
-                                                         <tr>
-                                                            <td></td>
-                                                        </tr>
-                                                        
-                                                        <tr>
-                                                            <td colspan="6" style="text-align:center;"><img class="confirmar_sabor_extra" style="cursor:pointer" produto="<?= $prod->id ?>" src="background/avancar.png"></td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                               <?
+                                            if($key<sizeof($irmaos)-1){
+                                                $menor = $irmaos[$key+1]->id;
+                                            }else{
+                                                $menor = 0;
                                             }
-                                        }
-                                        $tem_acomp = 0;
-                                        $tem_extr = 0;
-                                        if($prod->produto_tem_produtos_adicionais){
-                                            foreach($prod->produto_tem_produtos_adicionais as $aaa){
-                                                if(($aaa->produto_adicional->quantas_unidades_ocupa>0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
-                                                    $tem_acomp = 1;
-                                                }
-                                                if(($aaa->produto_adicional->quantas_unidades_ocupa==0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
-                                                    $tem_extr = 1;
-                                                }
+                                            if($irmao_maior==1){
+                                                $display = 1;
+                                                $irmao_maior = 0;
+                                            }else{
+                                                $display = 0;
                                             }
+                                            echo invoca_produto($irmao,$c,$display,$menor,$maior);
+                                            
                                         }
-                                        if($tem_acomp){ ?>
-                                        <div class="carda_acomp_<?= $prod->id ?> pop-follow" style="position:absolute; z-index:10; left:-500px; top:-200px; display:none;">
-                                            <img src="background/logo_noback.png" height="48" width="46" style="position:absolute; top:2px; left:4px; z-index:2; "> <img class="fechar_acomp"  produto="<?= $prod->id ?>" src="background/close.png" height="22" width="22" style="position:absolute; top:6px; right:3px; z-index:2; cursor:pointer;">
-                                                    <div style="width:264px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">
-                                              <div class="titulo_follow">Acompanhamentos</div>
-                                              </div>
-                                              <table style="background:#F4F4F4; font-size:12px; width:264px; color:#999; float:left; position:relative; margin-top:10px;">
-                                                
-                                                <? foreach($prod->produto_tem_produtos_adicionais as $aaa){ 
-                                                    if(($aaa->produto_adicional->quantas_unidades_ocupa>0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
-                                                    ?>
-                                            
-                                            
-                                            
-
-	
-                                                                <input type="hidden" class="carda_acomp_preco_<?= $prod->id ?>" id="carda_acomp_preco_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>" value="<?= $aaa->produto_adicional->preco_adicional ?>">
-                                                                <input type="hidden" id="carda_acomp_ocupa_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>" value="<?= $aaa->produto_adicional->quantas_unidades_ocupa ?>">
-                                                                <tr>
-                                                                  <td><img src="background/botao_add.gif" height="16" width="20" class="poe_acomp" produto="<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>" style="cursor:pointer;" /></td>
-                                                                  <td id="carda_acomp_nome_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>"><?= $aaa->produto_adicional->nome ?> </td>
-                                                                  <td class="carda_acomp_qtd_<?= $prod->id ?>" id="carda_acomp_qtd_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>"></td>
-                                                                  <td class="carda_acomp_preco_unitario_<?= $prod->id ?>" id="carda_acomp_preco_unitario_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>"></td>
-                                                                  <td></td> <!-- aqui -->
-                                                                  <td></td>
-                                                                </tr>
-             
-  		
-
-                                            <? }} ?>
-                                                    <tr>
-                                                  <td></td>
-                                                  <td  colspan="1" style="color:#E51B21;">Total</td>
-                                                  <td></td>
-                                                  <td id="carda_acomp_total_<?= $prod->id ?>" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>
-                                                  <td></td>
-                                                    </tr>
-                                                <tr>
-                                                    <td></td>
-                                                </tr>
-                                                 <tr>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                  <td colspan="6" style="color:#F90; text-align:center;">Voc&ecirc; tem direito a <span id="acomp_direito_<?= $prod->id ?>" valor="<?= $prod->qtd_produto_adicional ?>"><?= $prod->qtd_produto_adicional ?></span> por&ccedil;&otilde;es</td>
-                                                    </tr>
-                                                <tr>
-                                                    <td colspan="6" style="text-align:center;"><img class="poe_carrinho" quemsou="botao_add_acomp" style="cursor:pointer" produto="<?= $prod->id ?>" src="background/avancar.png"></td>
-                                                </tr>
-                                            </table>
-                                            
-                                        </div>
-					<? } 
-                                        if($tem_extr){
-                                            ?>
-                                        <div class="carda_extr_<?= $prod->id ?> pop-follow" style="position:absolute; z-index:10; left:-500px; top:-200px; display:none;">
-                                           <img src="background/logo_noback.png" height="48" width="46" style="position:absolute; top:2px; left:4px; z-index:2; "> <img class="fechar_extr"  produto="<?= $prod->id ?>" src="background/close.png" height="22" width="22" style="position:absolute; top:6px; right:3px; z-index:2; cursor:pointer;">
-                                                    <div style="width:264px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">
-                                              <div class="titulo_follow">Extras</div>
-                                              </div>
-                                              <table style="background:#F4F4F4; font-size:12px; width:264px; color:#999; float:left; position:relative; margin-top:10px;">
-                                                
-                                                <? foreach($prod->produto_tem_produtos_adicionais as $aaa){ 
-                                                    if(($aaa->produto_adicional->quantas_unidades_ocupa==0)&&($aaa->produto_adicional->ativo==1)&&($aaa->produto_adicional->disponivel==1)){
-                                                    ?>
-                                            
-                                            
-                                            
-
-	
-                                                                <input type="hidden" class="carda_extr_preco_<?= $prod->id ?>" id="carda_extr_preco_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>" value="<?= $aaa->produto_adicional->preco_adicional ?>">
-                                                                <input type="hidden" id="carda_extr_ocupa_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>" value="<?= $aaa->produto_adicional->quantas_unidades_ocupa ?>">
-                                                                <tr>
-                                                                  <td><img src="background/botao_add.gif" height="16" width="20" class="poe_extr" produto="<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>" style="cursor:pointer;" /></td>
-                                                                  <td id="carda_extr_nome_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>"><?= $aaa->produto_adicional->nome ?> </td>
-                                                                  <td class="carda_extr_qtd_<?= $prod->id ?>" id="carda_extr_qtd_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>"></td>
-                                                                  <td class="carda_extr_preco_unitario_<?= $prod->id ?>" id="carda_extr_preco_unitario_<?= $prod->id ?>_<?= $aaa->produto_adicional->id ?>"></td>
-                                                                  <td></td> <!-- aqui -->
-                                                                  <td></td>
-                                                                </tr>
-             
-  		
-
-                                            <? }} ?>
-                                                    <tr>
-                                                  <td></td>
-                                                  <td  colspan="1" style="color:#E51B21;">Total</td>
-                                                  <td></td>
-                                                  <td id="carda_extr_total_<?= $prod->id ?>" colspan="2" style="color:#E51B21; font-size:9px;">+ R$0,00</td>
-                                                  <td></td>
-                                                    </tr>
-                                                <tr>
-                                                    <td></td>
-                                                </tr>
-                                                 <tr>
-                                                    <td></td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="6" style="text-align:center;"><img class="confirmar_extr" style="cursor:pointer" produto="<?= $prod->id ?>" src="background/avancar.png"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="6" style="text-align:center;"></td>
-                                                </tr>
-                                            </table>
-                                            
-                                        </div>
-					<? } ?>
-                                        <img class="poe_carrinho" quemsou="botao_add" produto="<?= $prod->id ?>" src="background/botao_add.gif" width="25" height="21" style="margin:0 8px; cursor:pointer;"/>
-				    </div>
-				    <div style="float:right; width:50px; margin-right:19px; height:21px; background:#B2B2B2; border:0;" class="radios" onclick="show('carda_obs_<?= $prod->id ?>')">
-				    </div>
-				</div> 
-                                <div id="obs_box_<?= $prod->id ?>">
-                                    <textarea id="carda_obs_<?= $prod->id ?>" style="width:300px; height:40px; display:none;"></textarea>
-                                </div>
+                                    }
+                                }
                                 
-                                
-			    </div>
-			<?
-			$c++;
+                                $c++;
+                            }else{
+                                $display = 1;
+                                echo invoca_produto($prod,$c,$display,$menor,$maior);
+                                $c++;
+                            }
+                        }
 		    }
-		}
+		
 		?>
 		</div>
         </div>
@@ -1874,5 +2118,14 @@ if ($categorias) {
 <form id="form_carrinho" action="" method="post">
     <input type="hidden" name="action" id="action" value="finaliza_carrinho">
 <?php include "carrinho.php" ?>
-</form>    
+</form>
+<? if($mensagem_fechado){ ?>
+<script>
+    $(function() {
+        $("body").delay(1000,function(){
+            alert("Desculpe, este restaurante est\u00e1 fechado ou fora do ar.");
+        });
+    });
+</script>
+<? } ?>
 <? include("include/footer.php"); ?>

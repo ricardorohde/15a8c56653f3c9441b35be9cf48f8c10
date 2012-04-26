@@ -30,7 +30,8 @@ class Produto extends ActiveRecord\Model {
 	array('preco', 'greater_than' => 0, 'message' => 'obrigatório')
     );
     static $after_save = array('save_relationships');
-    var $image_x = 100;
+    var $image_x = 212;
+    var $image_y = 136;
 
     public function getUrlImagem() {
 	return PATH_IMAGE_UPLOAD . '/' . strtolower(get_class($this)) . '/' . $this->imagem;
@@ -59,26 +60,30 @@ class Produto extends ActiveRecord\Model {
 	    }
 	}
 
-	//Produtos adicionais
-	if ($this->__request_attributes['edita_produtos_adicionais']) {
-	    // Criando objeto se ele já não existir
-	    if ($this->__request_attributes['produtos_adicionais']) {
-		foreach ($this->__request_attributes['produtos_adicionais'] as $id_produto_adicional) {
-		    if (!$this->temProdutoAdicional($id_produto_adicional)) {
-			ProdutoTemProdutoAdicional::create(array('produtoadicional_id' => $id_produto_adicional, 'produto_id' => $this->id));
-		    }
-		}
-	    }
+        if($this->__request_attributes['nao_altere_adicionais']){
+            //nao acontece nada
+        }else{
+            //Produtos adicionais
+            if ($this->__request_attributes['edita_produtos_adicionais']) {
+                // Criando objeto se ele já não existir
+                if ($this->__request_attributes['produtos_adicionais']) {
+                    foreach ($this->__request_attributes['produtos_adicionais'] as $id_produto_adicional) {
+                        if (!$this->temProdutoAdicional($id_produto_adicional)) {
+                            ProdutoTemProdutoAdicional::create(array('produtoadicional_id' => $id_produto_adicional, 'produto_id' => $this->id));
+                        }
+                    }
+                }
 
-	    //Excluindo o objeto se ele for desmarcado do formulário
-	    if ($this->produto_tem_produtos_adicionais) {
-		foreach ($this->produto_tem_produtos_adicionais as $ppa) {
-		    if (!$this->__request_attributes['produtos_adicionais'] || !in_array($ppa->produtoadicional_id, $this->__request_attributes['produtos_adicionais'])) {
-			$ppa->delete();
-		    }
-		}
-	    }
-	}
+                //Excluindo o objeto se ele for desmarcado do formulário
+                if ($this->produto_tem_produtos_adicionais) {
+                    foreach ($this->produto_tem_produtos_adicionais as $ppa) {
+                        if (!$this->__request_attributes['produtos_adicionais'] || !in_array($ppa->produtoadicional_id, $this->__request_attributes['produtos_adicionais'])) {
+                            $ppa->delete();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function temTipo($id) {

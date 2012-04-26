@@ -1,0 +1,1038 @@
+ @charset "utf-8";
+/* CSS Document */
+
+a:link{
+	color:#FFF;
+	text-decoration:none;
+	}
+a:visited{
+	color:#FFF;
+	text-decoration:none;
+	}
+a:hover{color:#CCC}
+
+#background_container{
+	background:url(../background/bg_container.jpg) no-repeat;
+	width:950px;
+	height:851px;
+	}
+	
+@font-face {
+    font-family:'BebasNeueRegular';
+    src: url(../fontes/BebasNeue-webfont.eot);
+    src: url(../fontes/BebasNeue-webfont.eot?#iefix) format('embedded-opentype'),
+         url(../fontes/BebasNeue-webfont.woff) format('woff'),
+         url(../fontes/BebasNeue-webfont.ttf) format('truetype'),
+         url(../fontes/BebasNeue-webfont.svg#BebasNeueRegular) format('svg');
+		 
+
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/*Menu*/
+
+#menu{
+	width:950px;
+	height:63px;
+	background:url(../background/menu.jpg);
+	font-family:'BebasNeueRegular'; 
+	font-size:20px;
+	color:#FFF;	
+	position:relative;
+}
+
+#itens_menu{
+	background: url(../background/itens_menu.jpg);
+	width:514px;
+	height:63px;
+	float:right;
+	}
+	
+#login{
+	height:63px;
+	width:180px;
+	padding-left:18px;
+	float:right;
+	}
+	
+.radios{
+	border:1px solid #bcbec0;  
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	}
+
+
+/* Index.php */
+
+.transparencia {
+   opacity: .25;
+   -moz-opacity: .25;
+   filter:alpha(opacity=25);
+   float: left;
+} 
+
+#central_principal{
+	background:#730815;
+	height:743px;
+	box-shadow: 1px 1px 3px #AE6D1A;
+	-webkit-box-shadow:2px 1px 3px #AE6D1A;
+    -moz-box-shadow: 1px 1px 3px #333;
+	-moz-border-radius-topleft:0;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-top-left-radius:0;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	}
+	
+#lateral_esquerda{
+	float:left;
+	width:156px;
+	height:743px;
+	}
+
+#lateral_direita{	
+	float:left;
+	width:794px;
+	height:743px;
+	
+	}
+
+#direita_interna{
+	float:left;
+	padding:25px 16px;
+	width:762px;
+	height:693px;
+	}
+
+#banner_dinamico{
+	width:762px;
+	height:412px;
+	}
+
+#botoes{
+	width:762px;
+	height:162px;
+	padding:25px 0;
+	}
+
+.botao_principal{
+	height:162px;
+	width:240px;
+	float:left;
+	}
+	
+.fonte_lateral{
+	font-family:'BebasNeueRegular';
+	color:#FFE500;
+	font-size:27px;
+	}
+	
+.fonte_cep{
+	font-family:Arial, Helvetica, sans-serif;
+	color:#FFF;
+	font-size:11px;
+	}
+
+	
+
+	
+/*Restaurante.php */ 
+
+#central{
+	box-shadow: 1px 1px 3px #AE6D1A;
+	-webkit-box-shadow:2px 1px 3px #AE6D1A;
+    -moz-box-shadow: 1px 1px 3px #333;
+	background:#FFF;
+	border-top:o;
+	border-bottom:1px solid #bcbec0; 
+	border-left:1px solid #bcbec0;
+	border-right:1px solid #bcbec0;     
+	-moz-border-radius-topleft:0;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-top-left-radius:0;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	padding-bottom:20px;
+	}
+
+#barra_esquerda{
+	border-top:o;
+	border-bottom:1px solid #bcbec0; 
+	border-left:1px solid #bcbec0;
+	border-right:1px solid #bcbec0;     
+	-moz-border-radius-topleft:0;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-top-left-radius:0;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	background-color:#f1f1f2;
+	width:220px;
+	float:right; 
+    height:1160px;
+	position:relative;
+	z-index:3;
+	}
+	
+#seleciona_endereco{
+	width:220px;
+	height:90px;
+	float:left;
+	margin-top:96px;
+	}
+	
+#busca{	
+	width:220px;
+	height:70px;
+	float:left;
+	}
+	
+#caixa_sup{
+	width:685px; 
+	height:30px;
+	position:relative;
+	margin-top:27px;  
+	padding-left:13px;
+	}
+
+#rest_titulo{
+	width:180px; 
+	float:left;
+	font-family:Arial; 
+	font-size:29px;
+	color:#E51B21;
+	font-weight:normal;
+	}
+	
+#contagem_pag{
+	height:20px; 
+	float:right; 
+	margin-right:12px;
+	margin-top:8px;
+	color:#E51B21;
+	font:Arial;
+	font-size:11px; 
+	}
+	
+#box_restaurante{
+	width:698px; 
+	height:128px;
+	position:relative;
+	}
+	
+#box_interno{
+	padding:15px;
+	width:670px;
+	height:98px; 
+	}
+	
+#box_avatar{
+	height:98px;
+	width:130px;
+	float:left;
+	border:thin #bcbec0 solid;
+	}	
+	
+#box_textos{
+	width:426px;
+	height:100px;
+	float:left;
+	}
+	
+#box_botoes{
+	width:110px;
+	height:100px;
+	float:left;
+	}
+	
+#status{
+	width:700px;
+	height:45px;
+	}	
+		
+#numero_rest{
+	width:145px; 
+	height:45px; 
+	float:left;
+	}	
+
+#status_pedido{
+	width:540px; 
+	height:45px; 
+	float:right; 
+	}
+	
+.texto_box{
+	padding:2px; 
+	margin-left:10px;
+	font-family:Arial, Helvetica, sans-serif;	
+	}
+	
+#b1{
+	padding-left:2px; 
+	margin-left:10px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	font-weight:bold;
+	color:#6E7072;
+	height:10px;
+	}
+#b2{
+	font-size:18px;
+	color:#E51B21;
+	height:30px;
+	}
+#b3{
+	font-size:12px;
+	font-weight:normal;
+	color:#6E7072;
+	height:22px;
+	}
+#b4{
+	font-size:12px;
+	font-weight:normal;
+	color:#6E7072;
+	height:26px;
+	}
+
+#rodape{
+	width:700px; 
+	height:69px;
+	position:relative;
+	z-index:2;
+	}
+	
+.texti{
+	font-family:'BebasNeueRegular';; 
+   	font-size: 31px; /* optional. just to increase the font size. */ 
+	display: block; 
+    line-height: 1em; 
+    color:transparent; /* shadow color */ 
+    background-color: transparent; 
+    white-space: nowrap; /* wrapping breaks the effect */ 
+} 
+
+.texti:before, 
+.texti:after{ 
+   content: "Restaurantes"; /* O mesmo texto que queremos mostrar sombreado */ 
+   display: block; 
+} 
+
+.texti:before{ 
+   margin-bottom: -1.00em; 
+   margin-left: 0.0001ex;
+   color:#D6D7D8; /* shadow color */ 
+   background-color: transparent; 
+} 
+
+.texti:after{ 
+   margin-top: -1.05em; 
+   margin-left: -0.1ex; 
+   color:#E51B21; /* text color */ 
+   background-color: transparent; 
+}
+
+
+
+/* Cardapio */ 
+
+#info_restaurante{
+	position:relative;
+	width:172px; 
+	height:250px; 
+	margin-top:96px; 
+	padding:0 24px;
+	}
+	
+#categoria_rest{
+	width:172px; 
+	height:14px; 
+	font:Arial;
+	font-size:13px;
+	color:#6E7072;
+	}
+	
+#nome_rest{
+	width:172px; 
+	height:26px; 
+	font:Arial;
+	font-size:20px;
+	color:#E51B21;
+	}
+		
+#avatar_rest{
+	width:172px; 
+	height:135px; 
+	margin-top:6px;
+	}
+
+#formas_pagamento{
+	width:172px; 
+	height:28px; 
+	margin-top:3px;
+	font:Arial;
+	font-size:14px;
+	color:#E51B21;
+	}
+
+	
+#tempo_entrega{
+	width:172px; 
+	height:33px;
+	font:Arial;
+	font-size:11px;
+	color:#6E7072;
+	}
+
+
+/* Box_destaque */ 
+
+#box_destaque{
+	margin-top:8px;
+	background-color:;
+	width:674px; 
+	height:283px;
+	padding:12px 12px;
+	position:relative;
+	}
+
+#titulo_box_destaque{
+	height:30px; 
+	width:686px; 
+	margin-top:27px; 
+	color:#E51B21; 
+	font:Arial; 
+	font-size:28px; 
+	padding-left:12px;
+	}
+
+.destaque{
+	height:292px;
+	width:214px;
+	float:left;
+	}
+
+.avatar_destaque{
+	height:136px;
+	width:212px;
+	border:thin solid #bcbec0; 
+	float:left;
+	}
+
+.titulo_destaque{
+	height:20px;
+	width:212px;
+    padding:0 1px; 
+	font:Arial;
+	font-size:12px;
+	font-weight:bold;
+	color:#666;
+	float:left;
+	margin-top:4px;
+	}
+	
+.descricao_destaque{
+	height:80px;
+	width:212px;
+    padding:0 1px;
+	margin:6px 0;
+	text-align:justify; 
+	font:Arial;
+	font-size:11px;
+	float:left;
+	color:#999;
+	}
+	
+.preco_destaque{
+	height:28px;
+	width:212px;
+    padding:0 1px;
+	float:left;
+	font:Arial;
+	/*text-decoration:overline;*/
+	font-size:14px;
+	color:#E51B21;
+	}
+
+/* Box_categoria */
+
+.titulo_box_categoria{
+	height:30px; 
+	width:500px; 
+	margin-top:14px; 
+	color:#E51B21; 
+	font:Arial; 
+	font-size:24px; 
+	padding-left:12px; 
+	}
+
+#box_categoria{
+	margin-top:4px;
+	background-color:;
+	width:698px; 
+	padding:12px 0px;
+	position:relative;
+	} 
+	
+
+/* Carrinho */
+#carrinho{
+	cursor:pointer; 
+	width:325px; 
+	height:360px; 
+	bottom:30px; 
+	position:fixed;
+	}
+
+#aba_carrinho{
+	box-shadow:2px 2px 1px #AE6D1A;
+	-webkit-box-shadow:2px 2px 1px #AE6D1A;
+    -moz-box-shadow:2px 2px 1px #AE6D1A;
+	-moz-border-radius-topleft:7px;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright:0;
+	-moz-border-radius-bottomleft:7px;
+	-webkit-border-top-left-radius:7px;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius:7px;
+	-webkit-border-bottom-right-radius:0;
+	width:320px; 
+	height:33px; 
+	background:#E51B21;
+	float:left;
+	z-index:5;
+	position:relative;
+}
+
+#topo_carrinho{
+	width:92px; 
+	height:24px; 
+	margin:5px; 
+	float:left; 
+	background:#EE646B; 
+	-moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright:0;
+	-moz-border-radius-bottomleft:5px;
+	-webkit-border-top-left-radius:5px;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius:5px;
+	-webkit-border-bottom-right-radius:0;
+	z-index:5;
+
+	}
+        
+#borda_carrinho{
+	width:32px; 
+	height:362px; 
+	background:#E51B21; 
+	top:0px; 
+	left:110px;  
+	position:absolute;
+	z-index:5;
+	}
+    
+#corpo_carrinho{
+	width:210px; 
+	height:360px; 
+	background:#FFE500; 
+	top:0px; 
+	left:115px;  
+	position:absolute;
+	border:#E51B21 1px solid;
+	z-index:5;
+	}
+	
+#info_pedido{
+	width:200px; 
+	height:59px; 
+	margin:0 5px; 
+	font-family:Arial; 
+	font-weight:bold; 
+	font-size:11px; 
+	color:#FFF;
+	z-index:5;
+	}
+	
+#voucher_promocional{
+	width:200px; 
+	height:26px; 
+	margin:5px;
+	z-index:5;
+	}
+	
+#id_promo{
+	width:160px; 
+	height:26px; 
+	background:#FFF; 
+	float:left; 
+	opacity:0.65;
+	-moz-opacity: 0.65;
+	filter: alpha(opacity=65);
+	z-index:5;
+	}
+
+#ok_buton{
+	width:35px; 
+	height:26px; 
+	background:#E51B21; 
+	float:left; 
+	margin-left:5px; 
+	font-family:'BebasNeueRegular'; 
+	font-size:20px; 
+	color:#FFF;
+	z-index:5;
+	}
+	
+#campo_pedido_detalhado{
+	width:200px; 
+	height:228px; 
+	margin:5px; 
+	background:#FFF; 
+	opacity:0.65;
+	-moz-opacity: 0.65;
+	filter: alpha(opacity=65);
+	z-index:5;
+	}
+	
+.radios_10{
+	-moz-border-radius-topleft:10px; 
+	-moz-border-radius-topright:0;
+	-moz-border-radius-bottomright:0;
+	-moz-border-radius-bottomleft:10px;
+	-webkit-border-top-left-radius:10px;
+	-webkit-border-top-right-radius:0;
+	-webkit-border-bottom-left-radius:10px;
+	-webkit-border-bottom-right-radius:0;
+	}
+	
+.radios_5{
+	-moz-border-radius-topleft:5px; 
+	-moz-border-radius-topright:5px;
+	-moz-border-radius-bottomright:5px;
+	-moz-border-radius-bottomleft:5px;
+	-webkit-border-top-left-radius:5px;
+	-webkit-border-top-right-radius:5px;
+	-webkit-border-bottom-left-radius:5px;
+	-webkit-border-bottom-right-radius:5px;
+	}
+	
+/* Produto */
+
+.produto{
+	width:674px; 
+	padding:6px 12px; 
+	height:60px;
+	z-index:3;
+	position:relative;
+	}
+
+.titulo_produto{
+	width:444px;
+	float:left; 
+	font:Arial; 
+	font-size:14px; 
+	font-weight:bold; 
+	color:#666;
+	}
+	
+.sup_produto{
+	width:230px; 
+	height:21px; 
+	float:right;
+	}
+	
+.define_quantidade{
+	float:right; 
+	width:47px; 
+	height:19px; 
+	padding-top:2px; 
+	margin:0 4px; 
+	}
+	
+.preco_produto{
+	font:arial; 
+	color:#E51B21; 
+	font-size:14px; 
+	float:right; 
+	margin:0 4px;
+	}
+	
+.texto_produto{
+	width:444px; 
+	float:left; 
+	font:Arial; 
+	font-size:11px; 
+	color:#999; 
+	}
+	
+/*Pagamento*/
+.box_pedido{
+	width:674px; 
+	-moz-border-radius:10px;
+	-webkit-border-radius:10px;
+	padding:12px 12px;
+	position:relative;
+	border:1px solid #bcbec0;  
+	}
+	
+.titulo_box_pedido{
+	margin-top:10px;
+	color:#777;
+	font:Arial; 
+	font-size:18px;
+	padding:2px 12px; 
+	}
+	
+.tabela_pedido{
+	width:340px;
+	
+	}
+	
+/*Concluir*/
+
+#box_concluir{
+	background-color:;
+	width:674px; 
+	padding:12px 12px;
+	position:relative;
+	border-top:1px solid #bcbec0;
+	}
+
+.titulo_box_concluir{
+	margin-top:10px;
+	color:#777;
+	font:Arial; 
+	font-size:15px;
+	padding:2px 12px; 
+	}
+	
+.espaco_status{
+	width:220px;
+	height:63px; 
+	float:left;
+	background:#F7F7F7;
+	}
+	
+.box_status{
+	width:50px; 
+	height:50px; 
+	}
+
+.descricao_status{
+	width:220px; 
+	background:#999; 
+	color:#FFF; 
+	font:Arial; 
+	font-size:12px; 
+	text-align:center;
+	}
+	
+/*Cadastro*/
+
+form { } 
+label { font-size:12px; font-family: Arial, Helvetica, sans-serif; color:#666; display: block; font-weight:bold; } 
+.campo { width:220px; height:26px; margin-bottom: 20px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#FF9930; } 
+#botao_enviar{width:36px; height:26px; border:2px Solid #F04047; background:#F04047; font-size:16px; font-weight:bold; margin-top:1px; color:#FFF; cursor:pointer;}  
+	
+
+/*Dados usuário*/
+#dados_cliente{
+	position:relative;
+	width:172px; 
+	height:31px; 
+	}
+
+.desloca{
+	cursor:pointer;
+	}
+	
+.exc{ border:#FFF solid 1px; text-align:center; background:#CCC; color:#FFF; cursor:pointer }
+.alt{ color:#FF9930; cursor:pointer; text-align:center; }	
+
+/*Gerente*/
+
+#gerente_menu{
+	background: url(../background/gerente_menu.jpg);
+	width:514px;
+	height:63px;
+	float:right;
+	}
+	
+/*Gerente - cardapio */
+
+.titulo_cat{
+	font-family:arial; 
+	color:#E51B21; 
+	font-size:17px;
+	text-align:center;
+	font-weight:normal;
+	}
+	
+.botoes_cat{
+	width:18px; 
+	height:18px; 
+	float:left; 
+	position:relative;
+	text-align:center;
+	border:#bcbec0 solid 1px;
+	color:#FFF; 
+	cursor:pointer;
+	font-weight:normal;
+	}
+	
+.titulo_item{
+	font-family:arial; 
+	color:#666; 
+	font-size:14px;
+	text-align:center;
+	font-weight:normal;
+	}
+	
+.inp_ger{
+	background:#fff;
+	width:94px;
+	height:18px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0;
+	}
+	
+.sel_ger{
+	background:#fff;
+	width:96px;
+	height:20px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0;
+	}
+	
+/*pop - up*/
+
+#pop-up{
+	box-shadow: 1px 1px 2px #333;
+	-webkit-box-shadow:1px 1px 2px #333;
+    -moz-box-shadow: 1px 1px 2px #333;
+	position:absolute;
+	margin:0 auto;
+	width:564px;
+	background:#f1f1f2;
+	-moz-border-radius:8px; 
+	-webkit-border-radius:8px;
+	border:0;
+	padding:20px;
+	font-family:Arial, Helvetica, sans-serif;
+	}
+	
+.titulo_pop{
+	font-family:arial; 
+	color:#E51B21; 
+	font-size:28px;
+	text-align:center;
+	font-weight:normal;
+	margin-top:24px;
+	}	
+	
+/*Extras*/
+
+.box_extra{
+	width:330px;  
+	float:left; 
+	position:relative;
+	background:#f1f1f2;
+	font-family:Arial;
+	font-size:12px;
+	}
+
+.titulo_extra{
+	font-family:arial; 
+	color:#666; 
+	font-size:13px;
+	text-align:center;
+	font-weight:normal;
+	}
+	
+.inp_ext{
+	background:#fff;
+	width:52px;
+	height:18px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0 auto;
+	}
+	
+/*Principal*/
+
+.inp_pri{
+	background:#fff;
+	width:96px;
+	height:18px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0 auto;
+	}
+	
+/*Acompanhamentos*/
+
+.pop-follow{
+	box-shadow: 1px 1px 2px #333;
+	-webkit-box-shadow:1px 1px 2px #333;
+    -moz-box-shadow: 1px 1px 2px #333;
+	position:absolute;
+	margin:0 auto;
+	width:264px;
+	background:#f1f1f2;
+	-moz-border-radius:8px; 
+	-webkit-border-radius:8px;
+	border:0;
+	padding:20px;
+	font-family:Arial, Helvetica, sans-serif;
+	}
+	
+.titulo_follow{
+	font-family:arial; 
+	color:#E51B21; 
+	font-size:18px;
+	text-align:center;
+	font-weight:normal;
+	}
+	
+.inp_fol{
+	background:#fff;
+	width:36px;
+	height:16px;
+	font-family:Arial;
+	color:#666;
+	font-size:11px;
+	border:#999 solid 1px;
+	padding:0;
+	margin:0 auto;
+	}
+.link_extra{
+        display:inline;
+        font-family:arial;
+        font-size:9px;
+        font-weight:normal;
+        color:#F90;
+        cursor:pointer;
+        }
+        
+/* css/tooltip.css -- fancy tooltips */
+
+div.tool {
+  position: relative;   /* this is key */
+  cursor: help;
+}
+ 
+div.tool div.tip{
+  display: none;        /* so is this */
+}
+
+div.tool div.log{
+  display: none;        /* so is this */
+}
+/* tooltip will display on :hover event */
+
+div.tool:hover div.tip {
+  display: block;
+  z-index: 100;
+  position: absolute;
+  top: 1.6em;
+  left: 0;
+  width: auto;
+  padding: 3px 7px 4px 6px;
+  border: 1px dashed #F90;
+  background-color: transparent;
+  font: normal 0.9em/1.2em arial, helvetica, sans-serif;
+  text-align: left;
+  color: #000;
+}
+
+div.tool:hover div.log {
+  display: block;
+  z-index: 100;
+  position: absolute;
+  top: 44px;
+  left: -8px;
+  width: auto;
+  padding: 3px 7px 4px 6px;
+  border: 1px dashed #F90;
+  background-color: transparent;
+  font: normal 0.9em/1.2em arial, helvetica, sans-serif;
+  text-align: left;
+  color: #000;
+}
+
+#content div.tool::after {
+  padding-left: 2px;            /* eye candy */
+  content: url(/img/bubble.gif);
+}
+
+/* css/tooltip.css */
+
+/* css/tooltip.css -- fancy tooltips */
+
+span.tool {
+  position: relative;   /* this is key */
+  cursor: help;
+}
+ 
+span.tool span.tip {
+  display: none;        /* so is this */
+}
+
+/* tooltip will display on :hover event */
+
+span.tool:hover span.tip {
+  display: block;
+  z-index: 100;
+  position: absolute;
+  top: 1.6em;
+  left: 0;
+  width: auto;
+  padding: 3px 7px 4px 6px;
+  border: 1px dashed #F90;
+  background-color: transparent;
+  font: normal 0.9em/1.2em arial, helvetica, sans-serif;
+  text-align: left;
+  color: #000;
+}
+
+#content span.tool::after {
+  padding-left: 2px;            /* eye candy */
+  content: url(/img/bubble.gif);
+}
+
+/* Espaço Cep */
+
+cep{
+	width:142px;
+	height:30px;
+	color:#f90;
+	font-family:Arial;
+	font-size:14px;
+	background:#63C;
+	
+	}

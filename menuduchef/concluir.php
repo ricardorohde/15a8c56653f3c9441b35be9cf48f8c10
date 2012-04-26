@@ -2,6 +2,7 @@
     include("include/header.php");
     
     unset($_SESSION['pedido_id']);
+
     $usuario_obj = unserialize($_SESSION['usuario_obj']);
     $pedido = Pedido::find($_GET['ped']);
     $_SESSION['conf_pedido'] = $_GET['ped']; //esta variavel serve para o php/controller/confere_situacao_pedido saber de qual pedido se trata
@@ -31,7 +32,11 @@
 </script>
 <div class="container">
 	<div id="background_container">
-    	<?php include "menu2.php" ?>
+    	<?php if($_SESSION['usuario']){
+        include "menu_user.php";
+    }else{
+        include "menu2.php"; 
+    } ?>
         <div id="central" class="span-24">
 			<div class="span-6">
             	<div id="barra_esquerda">
@@ -43,9 +48,8 @@
                         <div id="avatar_rest">
                             <img src="images/restaurante/<?= $restaurante->imagem ?>">
                         </div>
-                        <div id="formas_pagamento">Formas de pagamento
-                        </div>
-                        <div style="color:#E51B21; font:Arial; font-size:24px; display:inline;">(84)3206-7888
+                        
+                        <div style="color:#E51B21; font:Arial; font-size:24px; display:inline;"><?= $restaurante->telefone ?>
                         </div>
                       <div id="tempo_entrega">Tempo de entrega:<img src="background/relogio.gif" width="20" height="19" style="position:relative; top:6px; left:4px;">&nbsp;&nbsp;&nbsp; <?= $rxb->tempo_entrega ?>min
                         </div>
@@ -60,7 +64,8 @@
                         <div id="numero_rest" style="color:#FFF" ><span style="margin-left:8px;"> </span>
                         </div> 
                         <div id="status_pedido">
-                        	<img src="background/passo4.png" alt="passo1" width="541" height="43" border="0" >
+                        	<img src="background/passo4.png" alt="passo1" width="541" height="43" border="0" usemap="#Map" >
+<map name="Map" id="Map"><area shape="rect" coords="2,2,131,42" href="restaurantes" /></map>
                       </div>
               </div>
              <div id="div_situacao_pedido">      
@@ -79,7 +84,7 @@
                                     echo $pedido->consumidor->nome;
                                 ?>
                                 
-                       		<img src="background/update.png" width="16" height="16" title="Atualizar" style="margin-left:4px; cursor:pointer;">
+                       		
                         </div>
 					</div>
                     <div id="box_concluir">
@@ -97,7 +102,7 @@
                                     <? if(($pedido->situacao==Pedido::$PREPARACAO)||($pedido->situacao==Pedido::$CONCLUIDO)||($pedido->situacao==Pedido::$CANCELADO)){ ?>
                                         <img src="background/fine.png" width="40" height="38" style="margin-top:6px;">
                                     <? }else{ ?>
-                                        <img src="background/wait.png" width="40" height="38" style="margin-top:6px;">
+                                        <img src="background/Progresso.gif" width="40" height="38" style="margin-top:6px;">
                                     <? } ?>    
                                 </div>
                                 <div class="descricao_status">
@@ -142,7 +147,19 @@
                                         }
                                         ?>
                                 </td>
-                                <td style="color:#E51B21"><?= StringUtil::doubleToCurrency($pedido->getTotal() + $pedido->preco_entrega) ?></td>
+                                <td style="color:#E51B21">
+                                        <? 
+                                            if($pedido->cupom->valor){
+                                                $desconto = $pedido->cupom->valor;
+                                            }else{
+                                                $desconto = 0;
+                                            }
+                                            $total = $pedido->getTotal();
+                                            $total -= $desconto;
+                                            if($total<0){
+                                                $total=0;
+                                            } ?>
+                                        <?= StringUtil::doubleToCurrency($total + $pedido->preco_entrega) ?></td>
                                 <td style="color:#E51B21"><?= 
                                                 $sit = "";
                                                 switch($pedido->situacao){
@@ -160,7 +177,7 @@
                             <table>
                                 <tr><td style="width:330px; height:43px; background:#e5ecf9; border:1px solid #c5ccf9; padding-left:4px;">Para qualquer informa&ccedil;&atilde;o adicional voc&ecirc; pode entrar em contato diretamente com o <b><?= $restaurante->nome ?></b> no telefone ao lado.</td></tr>
                                 <tr style="height:10px;"></tr>
-                                <tr><td style="width:330px; background:#e5ecf9; border:1px solid #c5ccf9; padding-left:4px;">Lembramos que todas solicita&ccedil;&otilde;es e contatos do Delivery du Chef ser&atilde;o enviadas para o e-mail <?= $pedido->consumidor->email ?>.<br/><br/><b>Se voc&ecirc; possui sistema anti-spam em sua caixa postal, favor desativa-lo para os endere&ccedil;os @deliveryduchef.com.br.</td><tr>
+                                <tr><td style="width:330px; background:#e5ecf9; border:1px solid #c5ccf9; padding-left:4px;">Lembramos que todas solicita&ccedil;&otilde;es e contatos do Delivery du Chef ser&atilde;o enviadas para o e-mail <?= $pedido->consumidor->email ?>.<br/><br/><b>Se voc&ecirc; possui sistema anti-spam em sua caixa postal, favor desativ&aacute;-lo para os endere&ccedil;os @deliveryduchef.com.br.</td><tr>
                             </table>
                             <img src="background/takefriend.png" width="330" height="50">
                         	<div style="font:Arial; color:#E51B21; font-size:11px; margin-top:4px;">

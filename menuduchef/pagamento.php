@@ -9,12 +9,21 @@
     $apaga_pagamento['num_cartao'] = NULL;
     $apaga_pagamento['validade_cartao'] = NULL;
     $apaga_pagamento['cod_seguranca_cartao'] = NULL;
+    if($_SESSION['cupom_id']){
+        $apaga_pagamento['cupom_id'] = $_SESSION['cupom_id'];
+        $cupom=Cupom::find($_SESSION['cupom_id']);
+        if($cupom){
+            $atucup['pedido_id'] = $_SESSION['pedido_id'];
+            $cupom->update_attributes($atucup);
+        }
+    }
     $pedido->update_attributes($apaga_pagamento);
     
     $restaurante = Restaurante::find($pedido->restaurante_id);
+    $endcon=EnderecoConsumidor::find($pedido->endereco_id);
     $telefones = TelefoneConsumidor::all(array("conditions"=>array("consumidor_id = ?",$pedido->consumidor_id)));
-    
-    
+    $rxb = RestauranteAtendeBairro::find(array("conditions"=>array("restaurante_id = ? AND bairro_id = ?",$pedido->restaurante_id,$endcon->bairro_id)));
+    $cuidado_apertar_minha_conta = 1;
 ?>
 <script>
     $(function() {
@@ -42,6 +51,7 @@
         });
     });
 </script>
+<script type="text/javascript" src="js/mask.js"></script>
 <style>
 u{
     color:#FF9930;
@@ -51,7 +61,11 @@ u{
 <body>
 <div class="container">
 	<div id="background_container">
-    	<?php include "menu2.php" ?>
+    	<?php if($_SESSION['usuario']){
+        include "menu_user.php";
+    }else{
+        include "menu2.php"; 
+    } ?>
         <div id="central" class="span-24">
 			<div class="span-6">
             	<div id="barra_esquerda">
@@ -63,9 +77,9 @@ u{
                         <div id="avatar_rest">
                             <img src="images/restaurante/<?= $restaurante->imagem ?>">
                         </div>
-                        <div id="formas_pagamento">Formas de pagamento
-                        </div>
-                        <div style="color:#E51B21; font:Arial; font-size:24px; display:inline;">(84)3206-7888
+
+                        <div style="color:#E51B21; font:Arial; font-size:24px; display:inline; margin-top:4px;">
+                            <?= $restaurante->telefone ?>
                         </div>
                       <div id="tempo_entrega">Tempo de entrega:<img src="background/relogio.gif" width="20" height="19" style="position:relative; top:6px; left:4px;">&nbsp;&nbsp;&nbsp; <?= $rxb->tempo_entrega ?>min
                         </div>
@@ -86,7 +100,7 @@ u{
               </div>
                     
                     <div id="titulo_box_destaque" >
-                    Forma de pagamento
+                    Confirma&ccedil;&atilde;o e pagamento
                     </div>
                     <div class="titulo_box_pedido" style="margin-top:4px;">Pedido
 					</div>
@@ -118,6 +132,10 @@ u{
                                             }else{
                                           
                                                 echo $ptp->produto->nome;
+                                            }
+                                            
+                                            if($ptp->produto->tamanho!=""){
+                                                echo " ".$ptp->produto->tamanho;
                                             }
                                            
                                     
@@ -179,6 +197,15 @@ u{
                             } ?>
                             
                             <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td></td><td></td><th style="text-align:right; color:#E51B21;">Desconto:</th><th><?
+                                    if($pedido->cupom->valor==0){
+                                        echo "R$ 0,00";
+                                        $desconto = 0;
+                                    }else{
+                                        echo StringUtil::doubleToCurrency($pedido->cupom->valor);
+                                        $desconto = $pedido->cupom->valor;
+                                    }    
+                                    ?></th></tr>
                             <tr><td></td><td></td><th style="text-align:right; color:#E51B21;">Taxa de entrega:</th><th><?
                                     if($pedido->preco_entrega==0){
                                         echo "R$ 0,00";
@@ -186,7 +213,14 @@ u{
                                         echo StringUtil::doubleToCurrency($pedido->preco_entrega);
                                     }    
                                     ?></th></tr>
-                            <tr><td style="text-align:right; color:#E51B21; text-align:left; cursor:pointer;" onClick="location.href='cardapio?id=<?= $restaurante->id ?>'">&nbsp;&nbsp;Voltar para o carrinho<img src="background/carrinho_dark.png" width="20" height="15" style="float:left;"></td><td></td><th style="text-align:right; color:#E51B21;">Total:</th><th><?= StringUtil::doubleToCurrency($pedido->preco_entrega + $pedido->getTotal()) ?></th></tr>
+                            <?
+                                $total = $pedido->getTotal();
+                                $total -= $desconto;
+                                if($total<0){
+                                    $total=0;
+                                }
+                            ?>
+                            <tr><td style="text-align:right; color:#E51B21; text-align:left; cursor:pointer;" onClick="location.href='cardapio?id=<?= $restaurante->id ?>'">&nbsp;&nbsp;Voltar para o carrinho<img src="background/carrinho_dark.png" width="20" height="15" style="float:left;"></td><td></td><th style="text-align:right; color:#E51B21;">Total:</th><th><?= StringUtil::doubleToCurrency($pedido->preco_entrega + $total) ?></th></tr>
                         </table>
                     </div>
                     <div class="titulo_box_pedido">Dados para entrega
@@ -224,17 +258,17 @@ u{
                     	<?
                             if($restaurante->restaurante_pagamentos){
                                 foreach($restaurante->restaurante_pagamentos as $rp){ ?>
-                                    <tr><td>
-                                            <div><input class="select_pag" id="fpag_<?= $rp->forma_pagamento->id ?>" type="radio" name="forma_pagamento" value="<?= $rp->forma_pagamento->id ?>"> <img src="<?= $rp->forma_pagamento->url ?>"> <?= $rp->forma_pagamento->nome ?> </div>
+                                    <tr><td style="height:32px;">
+                                            <div title="<?= $rp->forma_pagamento->nome ?>"><input class="select_pag" id="fpag_<?= $rp->forma_pagamento->id ?>" type="radio" name="forma_pagamento" value="<?= $rp->forma_pagamento->id ?>">&nbsp; <img src="background/<?= $rp->forma_pagamento->url ?>">  </div>
                                             <div class="aux_select_pag" id="aux_fpag_<?= $rp->forma_pagamento->id ?>" style="display:none;">
                                                 <? if($rp->forma_pagamento->nome=="Dinheiro"){ ?>
-                                                    <input type="text" name="troco" placeholder="Troco para...">
+                                                    <input type="text" name="troco" onkeyup="mask_moeda(this)" placeholder="Troco para...">
                                                 <? }else{ ?>
                                                     <table>
                                                     <tr><td><input type="text" name="nome_cartao" placeholder="Nome no cart&atilde;o"></td></tr>
-                                                    <tr><td><input type="text" name="num_cartao" placeholder="N&uacute;mero cart&atilde;o"></td></tr>
-                                                    <tr><td><input type="text" name="validade_cartao" placeholder="Validade cart&atilde;o"></td></tr>
-                                                    <tr><td><input type="text" name="cod_seguranca_cartao" placeholder="C&oacute;digo seguran&ccedil; cart&atilde;o"></td></tr>
+                                                    <tr><td><input type="text" name="num_cartao" placeholder="N&uacute;mero cart&atilde;o" maxlength="19" onkeyup="mask_card(this)"></td></tr>
+                                                    <tr><td><input type="text" name="validade_cartao" placeholder="Validade cart&atilde;o" maxlength="5" onkeyup="mask_valcard(this)"></td></tr>
+                                                    <tr><td><input type="text" name="cod_seguranca_cartao" placeholder="C&oacute;digo seguran&ccedil; cart&atilde;o" maxlength="3"></td></tr>
                                                     </table>
                                                 <? } ?>
                                             </div>
@@ -242,6 +276,7 @@ u{
                               <?  }
                             }
                         ?>
+                                    
                     </table>
 
                     <img src="background/botao_fin.png" id="confirma_pagamento" width="121" height="33" style="float:right; cursor:pointer; position:absolute; margin-top:-38px; margin-left:534px">

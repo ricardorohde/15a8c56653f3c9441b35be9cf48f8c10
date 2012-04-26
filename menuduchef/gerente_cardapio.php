@@ -3,6 +3,7 @@ session_start();
 
 include("include/header4.php");
 
+
 if($_SESSION['restaurante_id']){
     $restaurante = $_SESSION['restaurante_id'];
     $usuario = unserialize($_SESSION['usuario']);
@@ -10,6 +11,11 @@ if($_SESSION['restaurante_id']){
 	$rest= Restaurante::find($restaurante);
 }
 ?>
+<style>
+    .tabela_com_checks td{
+        vertical-align:top;
+    }
+</style>    
 <script type="text/javascript" src="js/jquery-1.6.4.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="js/mask.js"></script>
@@ -19,20 +25,22 @@ $(document).ready(function() {
         
     $("#botao_salvar_novo_item").click(function(){
         
-        if($("#novoproduto_esta_em_promocao").attr("value")){
-            preco = $("#novoproduto_preco_promocional").attr("value");  
-        }else{
-            preco = $("#novoproduto_preco").attr("value");
-        }
+
+        preco = $("#novoproduto_preco").attr("value");
+        $("#novoproduto_preco_promocional").attr("value",preco);
         
         //if(preco==""){
         //    alert("O novo item deve conter um preço.");
         //}else{
-            if(confirm("O preço do novo item é R$"+preco+", você confirma?")){
+            if(confirm("O preço do novo item é R$"+preco+" , você confirma?")){
                 $("#criar_novo_item").submit();
             }
         //}
     });
+    $("#botao_salvar_nova_categoria").click(function(){
+          $("#criar_nova_categoria").submit();
+    });
+    
     $(".promocao").change( function(){
         
         qual = $(this).attr("name");
@@ -187,6 +195,13 @@ $(document).ready(function() {
         
     });
     
+    $("#botao_cancelar").click(function(){
+        con = confirm("Tem certeza que deseja cancelar?");
+        if(con){
+            location.href=('gerente_cardapio');
+        }
+    });
+    
 });
 
 function show(x){
@@ -245,7 +260,7 @@ $(document).ready( function (){
               <div id="dados_cliente" style="padding-top:62px;"> <img class="desloca" src="background/add_item.png" onclick="novo_item()" /> </div>
               <div id="dados_cliente"> <img class="desloca" src="background/add_cat.png" onclick="nova_categoria()" /> </div>
               <div id="dados_cliente" title="Acompanhamentos e porções extras"> <a href="gerente_extras.php"> <img class="desloca" src="background/add_extras.png" /> </a> </div>
-              <div id="dados_cliente"> <img width="110" height="30" src="background/cancel.png" style="cursor:pointer;" onclick="location.href=('gerente_cardapio');" /> </div>
+              <div id="dados_cliente"> <img width="110" height="30" id="botao_cancelar" src="background/cancel.png" style="cursor:pointer;"  /> </div>
               <div id="dados_cliente" style="margin-top:8px; margin-left:0;">
                 <input style="margin-left:0; padding:0;" type="image" value="submit" width="110" height="30" src="background/salvar.png" />
               </div>
@@ -274,12 +289,13 @@ $(document).ready( function (){
                       <div style="width:60px; height:20px; float:right; position:relative; background:#bcbec0;">
                         <div class="botoes_cat subirc sdc"> ▲ </div>
                         <div class="botoes_cat descerc sdc"> ▼ </div>
-                        <div class="botoes_cat desativarc" qual="<?= $categoria->tipoproduto_id ?>" > Х </div>
+                        <div class="botoes_cat desativarc" qual="<?= $categoria->tipoproduto_id ?>" nome="<?= $categoria->tipo_produto->nome ?>" > Х </div>
                       </div>
                       <input type="hidden" id="categoria_ativa_<?= $categoria->tipoproduto_id ?>" name="categoria!ativa-<?= $categoria->tipoproduto_id ?>" value="0">
                       <input type="hidden" id="categoria_ordem_<?= $categoria->tipoproduto_id ?>" name="categoria!ordem-<?= $categoria->tipoproduto_id ?>" value="<?= $contador_categoria ?>">
                       <tr>
-                        <th class="titulo_cat"> <?= $categoria->tipo_produto->nome ?>
+                        <th class="titulo_cat"> <?= $categoria->tipo_produto->nome ?><br/>
+                            <textarea name="categoria!mural-<?= $categoria->tipoproduto_id ?>" style="height:40px;"><?= $categoria->mural ?></textarea>
                         </th>
                       </tr>
                       <? //N temos ctz do Tbody a baixo (posicao) ?>
@@ -299,10 +315,10 @@ $(document).ready( function (){
                               <div style="width:60px; height:20px; float:right; position:relative; background:#bcbec0;">
                                 <div class="botoes_cat subir sd" qual="<?= $categoria->id ?>_<?= $item->id ?>_<?= $num_linhas ?>"> ▲ </div>
                                 <div class="botoes_cat descer sd" qual="<?= $categoria->id ?>_<?= $item->id ?>_<?= $num_linhas ?>"> ▼ </div>
-                                <div class="botoes_cat desativar" qual="<?= $item->id ?>"> Х </div>
+                                <div class="botoes_cat desativar" qual="<?= $item->id ?>" nome="<?= $item->nome ?>"> Х </div>
                               </div>
                               <tr>
-                                <td  class="titulo_item" colspan="6"><?= $item->nome ?></td>
+                                <td  class="titulo_item" colspan="6"><?= $item->nome ?> <?= $item->tamanho ? "<b>[".$item->tamanho."]</b>" : "" ?></td>
                               </tr>
                               <tr>
                                 <td> Codigo: </td>
@@ -340,10 +356,10 @@ $(document).ready( function (){
                                 <td><div id="div_label_preco_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "none" : "block" ?>;">Pre&ccedil;o(R$):</div>
                                   <div id="div_label_preco_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>;">Pre&ccedil;o Promocional(R$):</div></td>
                                 <td><div id="div_preco_promocional_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "block" : "none" ?>;">
-                                    <input onkeyup="mask_moeda(this)"  class="inp_ger preco" type="text" name="produto!preco_promocional-<?= $item->id ?>" value="<?= $item->preco_promocional ?>">
+                                    <input onkeyup="mask_moeda(this)" class="inp_ger preco" type="text" name="produto!preco_promocional-<?= $item->id ?>" value="<?= number_format($item->preco_promocional, 2, ',', '.') ?>">
                                   </div>
                                   <div id="div_preco_<?= $item->id ?>" style="display:<?= $item->esta_em_promocao ? "none" : "block" ?>;">
-                                    <input type="text" onkeyup="mask_moeda(this)" class="inp_ger preco" name="produto!preco-<?= $item->id ?>" value="<?= $item->preco ?>">
+                                    <input type="text" onkeyup="mask_moeda(this)" class="inp_ger preco" name="produto!preco-<?= $item->id ?>" value="<?= number_format($item->preco, 2, ',', '.') ?>">
                                   </div></td>
                               </tr>
                               <tr>
@@ -359,9 +375,9 @@ $(document).ready( function (){
                               </tr>
                               <tr style=" background:#F8F8F8;">
                                 <td colspan="6"><div id="div_adicionais_<?= $item->id ?>" style="display:none;">
-                                    <table>
+                                    <table  class="tabela_com_checks">
                                       <tr>
-                                        <td><table style="background:#E8F3FF; width:316px">
+                                        <td><table  class="tabela_com_checks" style="background:#E8F3FF; width:316px">
                                             <tr>
                                               <?     
                                                         $acos = ProdutoAdicional::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND quantas_unidades_ocupa > ?",$restaurante,1,0)));
@@ -378,7 +394,7 @@ $(document).ready( function (){
                                                                 if($item->temProdutoAdicional($aco->id)){
                                                                     $sel="checked";
                                                                 }
-                                                                echo "<td><input type='checkbox' name='produto!adicional-".$aco->id."-".$item->id."' value='1' ".$sel.">".$aco->nome."</td>";
+                                                                echo "<td><input type='checkbox' name='produto!adicional-".$aco->id."-".$item->id."' value='1' ".$sel.">&nbsp;".$aco->nome."</td>";
 																$c++;
                                                             }
                                                         }
@@ -394,7 +410,7 @@ $(document).ready( function (){
                                                                 if($item->temProdutoAdicional($ext->id)){
                                                                     $sel="checked";
                                                                 }
-                                                                echo "<td><input type='checkbox' name='produto!adicional-".$ext->id."-".$item->id."' value='1' ".$sel.">".$ext->nome."</td>";				
+                                                                echo "<td><input type='checkbox' name='produto!adicional-".$ext->id."-".$item->id."' value='1' ".$sel.">&nbsp;".$ext->nome."</td>";				
 																$c++;
                                                             }
                                                         }
@@ -424,147 +440,143 @@ $(document).ready( function (){
         </div>
       </div>
     </form>
-    <div id="novo_item" style="display:none; position:absolute; padding:10px; background: #CCF; z-index:50; left:40%; top:45%;">
+    <div id="novo_item" class="pop-up" style="display:none; position:absolute; z-index:50; left:35%; top:25%;">
       <form id="criar_novo_item" action="php/controller/salva_cardapio" method="post">
-        Novo Item:
+        <div style="width:564px;; height:80px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">  
+        <div class="titulo_pop">Criar novo item</div>
+        <img src="background/logo_noback.png" height="97" width="101" style="position:absolute; top:-24px; left:-10px;"> <img src="background/close.png" onclick="show('novo_item')" height="28" width="28" style="position:absolute; cursor:pointer; top:-16px; left:548px;">
+        </div>
         <input type="hidden" name="novoproduto!ordem" value="<?= $contador ?>">
-        <table border="0" cellspacing="0" style="width:650px; padding: 0px;">
-          <input type="hidden" name="novoproduto!ativo" value="1">
-          <tr>
-            <td><table>
-                <tr>
-                  <td>Categoria:</td>
-                  <td><select name="novoproduto!categoria" >
-                      <? foreach($categorias as $categoria){ echo "<option value='".$categoria->tipo_produto->id."'>".$categoria->tipo_produto->nome."</option>"; } ?>
+        <input type="hidden" name="novoproduto!ativo" value="1">
+        <table style="background:#F4F4F4; font-size:12px; width:564px; color:#999; float:left; position:relative;">
+            <tr>
+                <td>Categoria:</td>
+                <td><select class="sel_ger" name="novoproduto!categoria" >
+                          <? foreach($categorias as $categoria){ echo "<option value='".$categoria->tipo_produto->id."'>".$categoria->tipo_produto->nome."</option>"; } ?>
                     </select></td>
-                </tr>
-              </table></td>
-          </tr>
-          <tr>
-            <td><table>
-                <tr>
-                  <td style="background:#F00;">Dispon&iacute;vel no momento: </td>
-                  <td style="width:45px; background:#FF0;"><select name="novoproduto!disponivel">
+                <td></td>
+                <td></td> 
+                <td></td> 
+                <td></td> 
+            </tr>    
+            <tr>
+                  <td>Dispon&iacute;vel: </td>
+                  <td><select class="sel_ger" name="novoproduto!disponivel">
                       <option value="1" selected> Sim </option>
                       <option value="0" > N&atilde;o </option>
                     </select></td>
-                  <td style="background:#F00;">ASS: </td>
-                  <td style="width:45px; background:#FF0;"><select name="novoproduto!aceita_segundo_sabor">
+                  <td>Segundo Sabor: </td>
+                  <td><select class="sel_ger" name="novoproduto!aceita_segundo_sabor">
                       <option value="1" > Sim </option>
                       <option value="0" selected> N&atilde;o </option>
                     </select></td>
-                  <td style="background:#F00;">DEST: </td>
-                  <td style="width:45px; background:#FF0;"><select name="novoproduto!destaque">
+                  <td>Destaque: </td>
+                  <td><select class="sel_ger" name="novoproduto!destaque">
                       <option value="1"> Sim </option>
                       <option value="0" selected> N&atilde;o </option>
                     </select></td>
-                </tr>
-              </table></td>
-          </tr>
-          <tr>
-            <td><table>
-                <tr>
+            </tr>
+            <tr>
                   <td>C&oacute;digo: </td>
-                  <td><input style="width:27px;" type="text" name="novoproduto!codigo" value=""></td>
+                  <td><input class="inp_ger" name="novoproduto!codigo" value=""></td>
                   <td>Nome: </td>
-                  <td><input type="text" name="novoproduto!nome" value=""></td>
+                  <td><input class="inp_ger" name="novoproduto!nome" value=""></td>
                   <td>Tamanho: </td>
-                  <td><input type="text" style="width:80px;" name="novoproduto!tamanho" value=""></td>
-                </tr>
-              </table></td>
-          </tr>
-          <tr>
-            <td><table>
-                <tr>
+                  <td><input class="inp_ger" name="novoproduto!tamanho" value=""></td>
+            </tr>    
+            <tr>
                   <td>Descri&ccedil;&atilde;o:</td>
-                  <td><input style="width:300px;" type="text"  name="novoproduto!descricao" value=""></td>
-                </tr>
-              </table></td>
-          </tr>
-          <tr>
-            <td><table>
-                <tr>
-                  <td>Qtd Acompanhamentos:</td>
-                  <td><input class="inp_ger" type="text" name="novoproduto!qtd_produto_adicional" style="width:20px;" value="0"></td>
-                  <td><input class="inp_ger" type="button" onclick="show('div_adicionais')" value="Acompanhamentos e Por&ccedil;&otilde;es Extras">
-                    <div id="div_adicionais" style="background:#0A6; display: none;">
-                      <table>
-                        <tr>
-                          <td><?     
-                $acos = ProdutoAdicional::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND quantas_unidades_ocupa > ?",$restaurante,1,0)));
-                $exts = ProdutoAdicional::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND quantas_unidades_ocupa = ?",$restaurante,1,0)));
-                if($acos){
-                    echo "Acompanhamentos:<br/>";
-                    foreach($acos as $aco){
-                        echo "<input type='checkbox' name='novoproduto!adicional-".$aco->id."' value='1'>".$aco->nome."<br/>";
-                    }
-                }
-                echo "</td><td>";
-                if($exts){
-                    echo "Por&ccedil;&otilde;es extras:<br/>";
-                    foreach($exts as $ext){
-                        echo "<input type='checkbox' name='novoproduto!adicional-".$ext->id."' value='1' >".$ext->nome."<br/>";
-                    }
-                }
-                     ?></td>
-                        </tr>
-                      </table>
-                    </div></td>
-                </tr>
-              </table></td>
-          </tr>
-          <tr>
-            <td><table>
-                <tr>
-                  <td style="width:68px;">Est&aacute; em promo&ccedil;&atilde;o:</td>
-                  <td style="width:45px; background:#AAA;"><select onchange="show('div_texto_promocional')" class="promocao" id="novoproduto_esta_em_promocao" name="novoproduto!esta_em_promocao">
+                  <td colspan="3"><input class="inp_ger" name="novoproduto!descricao" value="" style="width:300px;"></td>
+                  <td>Qtd. Acomp.:</td>
+                  <td><input class="inp_ger" name="novoproduto!qtd_produto_adicional" value=""></td>
+                  
+            </tr>    
+            <tr>
+                  <td>Promocional:</td>
+                  <td><select class="sel_ger promocao" onchange="show('div_texto_promocional');show('div_label_promocional')" id="novoproduto_esta_em_promocao" name="novoproduto!esta_em_promocao">
                       <option value="1" > Sim </option>
                       <option value="0" selected> N&atilde;o </option>
                     </select></td>
-                  <td style="background:#09f; width:130px;"><div id="div_label_preco" style="display:block; position:relative; float:right;">Pre&ccedil;o:</div>
-                    <div id="div_label_preco_promocional" style="display:none;">Pre&ccedil;o Promocional:</div></td>
-                  <td style="width:10px; background: #006;">R$</td>
-                  <td><div id="div_preco_promocional" style="display:none;">
-                      <input onkeyup="mask_moeda(this)"  class="preco" style="width:50px;" type="text" id="novoproduto_preco_promocional" name="novoproduto!preco_promocional" value="">
-                    </div>
-                    <div id="div_preco" style="display:block;">
-                      <input style="width:50px;" type="text" onkeyup="mask_moeda(this)" class="preco" id="novoproduto_preco" name="novoproduto!preco" value="">
-                    </div></td>
-                </tr>
-              </table></td>
-          </tr>
-          <tr>
-            <td><div id="div_texto_promocional" style="display:none">
-                <table>
-                  <tr>
-                    <td style="width:68px;">Texto da promo&ccedil;&atilde;o:</td>
-                    <td><input type="text" style="width:300px;" name="novoproduto!texto_promocao" value=""></td>
-                  </tr>
-                </table>
-                
-                  <tr>
-                    <td><input type="button" id="botao_salvar_novo_item" value="Salvar">
-                      <input type="button" onclick="show('novo_item')" value="Cancelar"></td>
-                  </tr>
-              </div></td>
-          </tr>
+                    <td><div id="div_label_preco" style="display:block; position:relative;">Pre&ccedil;o:</div>
+                      <div id="div_label_preco_promocional" style="display:none;">Pre&ccedil;o Promocional:</div></td>
+                    
+                      <td>
+                          <input  onkeyup="mask_moeda(this)" class="inp_ger preco" id="novoproduto_preco" name="novoproduto!preco" value="">
+                          <input type="hidden" id="novoproduto_preco_promocional" name="novoproduto!preco_promocional">
+                        </td>
+
+                            <td><div id="div_label_promocional" style="display:none;">Texto promo:</div></td>
+                            <td><div id="div_texto_promocional" style="display:none;"><input class="inp_ger" name="novoproduto!texto_promocao" value=""></div></td>
+
+            </tr>
+            <tr>
+              <td colspan="3" onclick="show('div_adicionais')" style="text-align:right; background:#F8F8F8; cursor:pointer; color:#F90"> Acompanhamentos </td>
+              <td colspan="3" onclick="show('div_adicionais')" style="text-align:left; background:#F8F8F8; cursor:pointer; color:#F90"> | &nbsp;Porções Extras </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div id="div_adicionais" style="display:none;">
+                    <table  class="tabela_com_checks">
+                        <tr>
+                            <td><table class="tabela_com_checks" style="background:#E8F3FF; width:265px;"><tr>
+                          <?     
+                                    $acos = ProdutoAdicional::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND quantas_unidades_ocupa > ?",$restaurante,1,0)));
+                                    $exts = ProdutoAdicional::all(array("conditions"=>array("restaurante_id = ? AND ativo = ? AND quantas_unidades_ocupa = ?",$restaurante,1,0)));
+                                                                                            $c=0;
+
+                                    if($acos){
+                                        foreach($acos as $aco){
+                                                                                                            if($c==2){
+                                                                                                                    echo "</tr><tr>";
+                                                                                                                    $c=0;
+                                                                                                                    }
+                                            echo "<td><input type='checkbox' name='produto!adicional-".$aco->id."' value='1'>&nbsp;".$aco->nome."</td>";
+                                                                                                            $c++;
+                                        }
+                                    }
+                                    echo "</tr></table></td><td><table style='background:#FFF2E6; width:265px'><tr>";
+                                                                                            $c=0;
+                                    if($exts){
+                                        foreach($exts as $ext){
+                                                                                                            if($c==2){
+                                                                                                                    echo "</tr><tr>";
+                                                                                                                    $c=0;
+                                                                                                                    }
+                                            echo "<td><input type='checkbox' name='novoproduto!adicional-".$ext->id."' value='1'>&nbsp;".$ext->nome."</td>";				
+                                                                                                            $c++;
+                                        }
+                                    }
+                                         ?>
+                            </tr></table></td>      
+                        </tr>
+                      </table>
+                    </div>   
+                </td>
+           </tr>
+
         </table>
+        <div style="width:564px; height:30px; position:relative; float:left; margin:8px 0;"> 
+            <img src="background/salvar.png" id="botao_salvar_novo_item" style="cursor:pointer" width="110" height="30"> </div>
+        </div>
       </form>
     </div>
-    <div id="nova_categoria" style="display:none; position:absolute; padding:10px; background: #CCF; z-index:50; left:40%; top:45%;">
-      <form action="php/controller/salva_cardapio" method="post">
-        Nova Categoria:
-        <input type="hidden" name="novacategoria!ordem" value="<?= $contador_categoria ?>">
-        <table border="0" cellspacing="0" style="width:650px; padding: 0px;">
-          <tr>
-            <td>Nome: </td>
-            <td><input type="text" name="novacategoria!nome" value=""></td>
-          </tr>
-          <tr>
-            <td><input type="submit" value="Salvar">
-              <input type="button" onclick="show('nova_categoria')" value="Cancelar"></td>
-          </tr>
-        </table>
+    <div id="nova_categoria" class="pop-cat" style="display:none; position:absolute; padding:10px; z-index:50; left:40%; top:30%;">
+      <form id="criar_nova_categoria" action="php/controller/salva_cardapio" method="post">
+        <div style="width:364px; height:80px; position:relative; float:left; margin:8px 0; background:#F4F4F4;">
+        <div class="titulo_pop">Nova categoria</div>
+        <img src="background/logo_noback.png" height="68" width="71" style="position:absolute; top:-24px; left:-10px;"> <img src="background/close.png" height="28" width="28" onclick="show('nova_categoria')" style="position:absolute; cursor:pointer; top:-16px; left:346px;"> 
+    	</div>
+          <div>  
+                <input type="hidden" name="novacategoria!ordem" value="<?= $contador_categoria ?>">
+                <table style="background:#F4F4F4; font-size:12px; width:364px; color:#999; float:left; position:relative;">
+                  <tr>
+                    <td style="text-align:right">Nome: </td>
+                    <td style="padding-left:22px; "><input name="novacategoria!nome" class="inp_res" style="width:220px;" value=""></td>
+                  </tr>
+
+                </table>
+          </div>
+        <div style="width:364px; height:30px; position:relative; float:left; margin:8px 0;"> <img id="botao_salvar_nova_categoria" style="cursor:pointer" src="background/salvar.png" width="110" height="30"> </div>
       </form>
     </div>
   </div>

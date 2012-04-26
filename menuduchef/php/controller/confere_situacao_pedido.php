@@ -4,6 +4,17 @@
         $pedido = Pedido::find($_SESSION['conf_pedido']);   
         $restaurante = Restaurante::find($pedido->restaurante_id);
         
+        $hora_atual = date("U");
+        if(($hora_atual - $restaurante->online)>30){
+            if($pedido->situacao=="novo_pedido"){
+                $pedatu['situacao'] = "cancelado";
+                $pedatu['texto_cancelamento'] = "systemautomsg#!#O pedido foi cancelado, pois o restaurante est&aacute; fora do ar.";
+                $pedido->update_attributes($pedatu);
+                
+                echo "<script>alert('O pedido foi cancelado, pois o restaurante est\u00e1 fora do ar.')</script>";
+            }
+        }
+        
         ?>
         <div id="titulo_box_destaque" >
             Acompanhamento do pedido
@@ -20,7 +31,7 @@
                             echo $pedido->consumidor->nome;
                         ?>
 
-                        <img src="background/update.png" width="16" height="16" title="Atualizar" style="margin-left:4px; cursor:pointer;">
+                        
                 </div>
                                 </div>
             <div id="box_concluir">
@@ -35,10 +46,12 @@
                     </div>
                     <div class="espaco_status radios_5" style="margin:0 7px;">
                         <div class="box_status" style="padding:0 85px;">
-                            <? if(($pedido->situacao==Pedido::$PREPARACAO)||($pedido->situacao==Pedido::$CONCLUIDO)||($pedido->situacao==Pedido::$CANCELADO)){ ?>
+                            <? if(($pedido->situacao==Pedido::$PREPARACAO)||($pedido->situacao==Pedido::$CONCLUIDO)||($pedido->situacao==Pedido::$CANCELADO&&$pedido->quando_confirmado)){ ?>
                                 <img src="background/fine.png" width="40" height="38" style="margin-top:6px;">
+                            <? }else if($pedido->situacao==Pedido::$CANCELADO){ ?>
+                                <img src="background/bad.png" width="40" height="38" style="margin-top:6px;">   
                             <? }else{ ?>
-                                <img src="background/wait.png" width="40" height="38" style="margin-top:6px;">
+                                <img src="background/Progresso.gif" width="40" height="38" style="margin-top:6px;">
                             <? } ?>    
                         </div>
                         <div class="descricao_status">
@@ -47,9 +60,11 @@
                     </div>
                     <div class="espaco_status radios_5">
                         <div class="box_status" style="padding:0 85px;">
-                            <? if(($pedido->situacao==Pedido::$CONCLUIDO)||($pedido->situacao==Pedido::$CANCELADO)){ ?>
+                            <? if($pedido->situacao==Pedido::$CONCLUIDO){ ?>
                                 <img src="background/fine.png" width="40" height="38" style="margin-top:6px;">
-                            <? }else{ ?>
+                            <? }else if($pedido->situacao==Pedido::$CANCELADO){ ?>
+                                <img src="background/bad.png" width="40" height="38" style="margin-top:6px;">
+                            <?}else{ ?>
                                 <img src="background/wait.png" width="40" height="38" style="margin-top:6px;">
                             <? } ?>
                         </div>
@@ -79,7 +94,11 @@
                                     $hms = $quando[0];
                                     echo $dma." &agrave;s ".$hms;
                                 }else{
-                                    echo "Em aguardo...";
+                                    if($pedido->situacao==Pedido::$CANCELADO){
+                                        echo "Sem resposta do restaurante.";
+                                    }else{
+                                        echo "Em aguardo...";
+                                    }
                                 }
                                 ?>
                         </td>

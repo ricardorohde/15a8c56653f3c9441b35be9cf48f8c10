@@ -1,7 +1,8 @@
 <?
 ob_start();
 
-include('include/header3.php');
+include('include/header.php');
+
 
 if ($consumidorSession) {
 
@@ -22,6 +23,7 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
 <script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
 <script type="text/javascript" src="js/util.js"></script>
 <script type='text/javascript' src="js/quickmenu.js"></script>
+<script type="text/javascript" src="js/mask.js"></script>
 <link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet" type="text/css" href="css/menu.css" />
 <link rel="stylesheet" type="text/css" href="css/custom-theme/jquery-ui-1.8.16.custom.css" />
@@ -148,6 +150,7 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
         
     });
 </script>
+<div class="container">
 <div>
     <input type="button" onclick="show('dados_cadastrais')" value="Alterar Dados Cadastrais">
 </div>
@@ -158,11 +161,11 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
     <?
         if($obj->pedidos){
             foreach($obj->pedidos as $pedido){
-                    if($pedido->situacao==Pedido::$NOVO){
+                    if($pedido->situacao=="novo_pedido"){
                         $cor = "#FFD700";
-                    }else if($pedido->situacao==Pedido::$CANCELADO){
+                    }else if($pedido->situacao=="cancelado"){
                         $cor = "#DD6666";
-                    }else if($pedido->situacao==Pedido::$PREPARACAO){
+                    }else if($pedido->situacao=="pedido_preparacao"){
                         $cor = "#3CB371";
                     }else{
                         $cor = "#4682B4";
@@ -187,10 +190,10 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
     <input class="formfield w50" type="text" name="nome" value="<?= $obj->nome ?>" maxlength="100" />
 
     <label class="normal">CPF:</label>
-    <input class="formfield w15" type="text" name="cpf" value="<?= $obj->cpf ?>" maxlength="100" />
+    <input class="formfield w15" type="text" name="cpf" value="<?= $obj->cpf ?>"  maxlength="14" onkeyup="mask_cpf(this)" />
 
     <label class="normal">Data de Nascimento:</label>
-    <input class="formfield w15" type="text" name="data_nascimento" value="<?= $obj->data_nascimento ?>" maxlength="100" />
+    <input class="formfield w15" type="text" name="data_nascimento" value="<?= $obj->data_nascimento ?>" maxlength="10" onkeyup="mask_data(this)" />
 
     <label class="normal">Sexo:</label>
     <input class="formfield w15" type="text" name="sexo" value="<?= $obj->sexo ?>" maxlength="100" />
@@ -284,6 +287,7 @@ $_SESSION[$hash_consumidor2] = json_decode($telefonesJson, true);
     </div>
 </form>
 </div>
+</div>    
 <?
 }
 else{

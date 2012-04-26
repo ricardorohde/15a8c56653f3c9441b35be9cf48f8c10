@@ -10,6 +10,7 @@ class Pedido extends ActiveRecord\Model {
     static $belongs_to = array(
 	array('consumidor'),
 	array('restaurante'),
+        array('cupom'),
 	array('endereco_consumidor', 'foreign_key' => 'endereco_id')
     );
     static $has_many = array(
@@ -52,7 +53,15 @@ class Pedido extends ActiveRecord\Model {
     }
 
     public function quandoFormatado() {
-	return $this->quando->format('d/m/Y - H:i');
+	return $this->quando ? $this->quando->format('d/m/Y - H:i') : null;
+    }
+
+    public function quandoConfirmadoFormatado() {
+	return $this->quando_confirmado ? $this->quando_confirmado->format('d/m/Y - H:i') : null;
+    }
+
+    public function quandoConcluiuFormatado() {
+	return $this->quando_concluiu ? $this->quando_concluiu->format('d/m/Y - H:i') : null;
     }
 
     public function __toString() {

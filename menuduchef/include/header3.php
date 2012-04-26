@@ -44,7 +44,7 @@ if (HttpUtil::isLocalhost()) {
 	    .pedidos#preparacao ul li { background-color: green; color: #fff; }
 	    .pedidos#finalizados ul li { background-color: red; color: #fff; }
 	    #controles-pedido { float: left; width: 98%; padding: 1%; background-color: #ccc; }
-	    #controles-pedido input { padding: 0.5%; width: 19.5%; margin-left: 10%; border: #000 solid 1px; color: #fff; font-size: 14px; cursor: pointer; }
+	    #controles-pedido input { padding: 0.5%; width: 19.5%; margin-left: 10%; border: #000 solid 1px; color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; }
 	    #controles-pedido input#btn-retornar { background-color: orange; }
 	    #controles-pedido input#btn-avancar { background-color: green; }
 	    #controles-pedido input#btn-cancelar { background-color: red; }
